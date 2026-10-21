@@ -1,0 +1,2 @@
+{"ref_id":"CFX-REQ-F64EC8","timestamp":"2026-10-19 10:54:00","ip":"::1","name":"Dev Test","email":"dev@cloudflox.com","service":"Dedicated Server Fleet","budget":"- ,000 \/mo","requirements":"High traffic web app cluster"}
+{"ref_id":"CFX-REQ-B8DF93","timestamp":"2026-10-19 11:24:41","ip":"::1","name":"Danial Sterling","email":"danial.sterling@enterprise-cloud.io","service":"Custom Bare-Metal Dedicated","budget":"$100 - $300 \/mo","requirements":"Need 64 CPU Cores, 256GB RAM, 4TB NVMe RAID-10 storage, 10Gbps unmetered uplinks, and HIPAA compliance."}
