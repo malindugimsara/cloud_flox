@@ -10,7 +10,7 @@
                             <span>Enterprise Infrastructure</span>
                         </span>
                         <h2 class="cf-subpage-cta-title">
-                            Power Your Digital Growth with CloudFlox
+                            
                         </h2>
                         <p class="cf-subpage-cta-desc mb-0">
                             From high-performance NVMe VPS and Dedicated Bare-Metal Servers to secure Cloud Hosting and domain registration — CloudFlox delivers scalable, ultra-reliable infrastructure engineered for speed.
@@ -83,7 +83,7 @@
         </div>
 
         <!-- Main Footer Navigation & Columns -->
-        <div class="container pt-5 pb-4">
+        <div class="container pt-5 pb-4 footer-responsive">
             <div class="row g-4 g-lg-5">
                 
                 <!-- Brand Column -->

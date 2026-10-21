@@ -215,7 +215,7 @@ header .dropdown-menu,
 /* ---------- Hero ---------- */
 .modern-hero-section {
     position: relative;
-    padding: 140px 0 65px !important;
+    padding: 70px 40px 65px !important;
     background: #FFFFFF !important;
     overflow: hidden;
 }
@@ -437,7 +437,7 @@ header .dropdown-menu,
    ========================================================================= */
 .modern-domain-section {
     position: relative;
-    padding: 30px 0 60px !important;
+    padding: 30px 20px 60px !important;
     background: #FFFFFF !important;
 }
 
@@ -1078,7 +1078,7 @@ header .dropdown-menu,
     border-radius: 32px;
     background: linear-gradient(145deg, #0A1128 0%, #0F172A 50%, #060B17 100%) !important;
     border: 1px solid rgba(59, 130, 246, 0.25);
-    padding: 85px 0 80px !important;
+    padding: 85px 80px 80px !important;
     box-shadow: 0 25px 60px -15px rgba(2, 6, 23, 0.5), 0 0 1px rgba(59, 130, 246, 0.3);
 }
 
@@ -1474,38 +1474,37 @@ header .dropdown-menu,
 
 /* =========================================================================
    4. HOSTING PACKAGES & PRICING SECTION (Modern High-Conversion SaaS Grid)
+   Full-Width Background & Ambient Texture Section
    ========================================================================= */
 .modern-pricing-section {
     position: relative;
     overflow: hidden;
-    margin: 25px 24px 50px;
-    border-radius: 32px;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: 1px solid #dce8e6 !important;
+    border-bottom: 1px solid #dce8e6 !important;
     background: #edf5f4 !important;
-    border: 1px solid #dce8e6;
-    padding: 85px 0 80px !important;
+    padding: 85px 0 85px !important;
     scroll-margin-top: 90px;
-    box-shadow: 0 10px 40px -15px rgba(15, 23, 42, 0.04);
-}
-
-@media (min-width: 1540px) {
-    .modern-pricing-section {
-        margin: 25px auto 50px;
-        max-width: 1480px;
-    }
+    box-shadow: none !important;
 }
 
 @media (max-width: 991px) {
     .modern-pricing-section {
-        margin: 15px 12px 35px;
-        border-radius: 24px;
-        padding: 60px 0 55px !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        padding: 55px 0 50px !important;
     }
 }
 
 @media (max-width: 575px) {
     .modern-pricing-section {
-        margin: 10px 8px 30px;
-        border-radius: 20px;
+        margin: 0 !important;
+        border-radius: 0 !important;
         padding: 45px 0 40px !important;
     }
 }
@@ -2446,7 +2445,7 @@ header .dropdown-menu,
 
 /* ---------- OS & Panels Matrix (Modern Redesign) ---------- */
 .modern-tech-section {
-    padding: 70px 0 85px !important;
+    padding: 70px 80px 85px !important;
     background: #F8FAFC !important;
 }
 
@@ -2779,7 +2778,7 @@ header .dropdown-menu,
 
 /* ---------- 8. Modern Reviews & Social Proof (Reference Layout) ---------- */
 .modern-reviews-section {
-    padding: 45px 0 95px !important;
+    padding: 45px 80px 95px !important;
     background: #FFFFFF !important;
     position: relative;
     overflow: hidden;
@@ -3274,7 +3273,7 @@ header .dropdown-menu,
 
 /* ---------- 9. Modern FAQ Section (Knowledge & Support Hub) ---------- */
 .modern-faq-section {
-    padding: 85px 0 95px !important;
+    padding: 85px 80px 95px !important;
     background: #F8FAFC !important;
     position: relative;
     overflow: hidden;
@@ -3613,7 +3612,6 @@ header .dropdown-menu,
    10. HIGH-IMPACT BOTTOM CALL TO ACTION BANNER (Cloud Launchpad)
    ========================================================================== */
 .modern-cta-section {
-    background: #F8FAFC !important;
     padding: 84px 0 100px !important;
     position: relative;
     overflow: hidden;
@@ -4207,7 +4205,7 @@ footer .border-top {
    5. COMPARISON TABLE SECTION (Modern, Clean & Easy-to-Scan)
    ========================================================================= */
 .cf-comparison-section {
-    padding: 85px 0 90px;
+    padding: 85px 60px 90px;
     background: #FFFFFF;
     position: relative;
     border-top: 1px solid #E2E8F0;
@@ -4339,14 +4337,22 @@ footer .border-top {
     box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
-@media (max-width: 991px) {
-    .cf-comp-controls-bar {
-        justify-content: center;
-    }
+.cf-table-swipe-hint {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #F1F5F9;
+    padding: 4px 14px;
+    border-radius: 999px;
+    border: 1px solid #E2E8F0;
+}
 
-    .cf-tier-tabs {
-        justify-content: flex-start;
-    }
+.cf-table-swipe-hint i {
+    font-size: 14px;
+    color: #2563EB;
 }
 
 .cf-bill-label {
@@ -4805,7 +4811,7 @@ footer .border-top {
 }
 
 .cf-custom-bar-text h4 {
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 6px;
@@ -4862,7 +4868,7 @@ footer .border-top {
    6. WHY CHOOSE CLOUDFLOX & TECHNOLOGIES WE WORK WITH (SEO Enhanced Bento Grid)
    ========================================================================= */
 .modern-why-section {
-    padding: 95px 0 100px;
+    padding: 95px 120px 100px !important;
     background: #F8FAFC;
     position: relative;
     border-top: 1px solid #E2E8F0;
@@ -5251,7 +5257,7 @@ footer .border-top {
         linear-gradient(135deg, #EEF6FF 0%, #F5F3FF 45%, #EEF2FF 75%, #E0F2FE 100%) !important;
     background-size: 24px 24px, 100% 100% !important;
     border: 1.5px solid #D5E4F9;
-    padding: 85px 0 95px !important;
+    padding: 85px 20px 95px !important;
     scroll-margin-top: 90px;
     box-shadow: 0 20px 50px -15px rgba(37, 99, 235, 0.12), 0 2px 6px rgba(15, 23, 42, 0.03);
 }
@@ -5414,7 +5420,7 @@ footer .border-top {
     box-shadow: 0 20px 60px -15px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(37, 99, 235, 0.08);
     position: relative;
     z-index: 2;
-    max-width: 1120px;
+    max-width: 1250px;
     margin: 0 auto;
 }
 
@@ -6095,7 +6101,7 @@ footer .border-top {
    8. CUSTOM INFRASTRUCTURE CTA & SHORT FORM (Enterprise Lead Generation)
    ========================================================================= */
 .modern-custom-quote-section {
-    padding: 100px 0 105px !important;
+    padding: 100px 80px 105px !important;
     margin-top: 0 !important;
     background: linear-gradient(180deg, #0B1120 0%, #0F172A 100%) !important;
     background-color: #0B1120 !important;
@@ -6534,7 +6540,7 @@ footer .border-top {
 
 .modern-stats-section {
     position: relative;
-    padding: 34px 0 36px !important;
+    padding: 34px 20px 36px !important;
     overflow: hidden;
     color: #FFFFFF;
     background: #0B1120;
@@ -6941,7 +6947,7 @@ footer .border-top {
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border-bottom: 1px solid rgba(226, 232, 240, 0.85);
-    padding: 13px 0 !important;
+    padding: 13px 30px !important;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -7210,7 +7216,7 @@ footer .border-top {
 /* Subpage Bottom CTA Banner */
 .cf-subpage-cta-banner {
     position: relative;
-    padding: 70px 0 30px;
+    padding: 70px 30px;
     background: #060B14;
     overflow: hidden;
 }
@@ -7889,8 +7895,81 @@ html, body {
     overflow-x: clip !important;
 }
 
-/* 2. Tablet Responsiveness (<= 991.98px) */
+/* 1.5 Desktop Container Paddings (min-width: 992px) */
+@media (min-width: 992px) {
+    .modern-pricing-section > .container {
+        padding-left: 100px !important;
+        padding-right: 100px !important;
+    }
+    .cf-footer-status-ribbon {
+        padding-left: 80px !important;
+        padding-right: 80px !important;
+    }
+    .footer-responsive {
+        padding-left: 100px !important;
+        padding-right: 100px !important;
+        padding-top: 40px !important;
+        padding-bottom: 40px !important;
+    }
+}
+
+/* 2. Tablet & Mobile Responsive Normalization (<= 991.98px) */
 @media (max-width: 991.98px) {
+    /* Safe Mobile Container Padding (Eliminates Desktop Squeeze) */
+    .modern-pricing-section > .container,
+    .footer-responsive {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        padding-top: 24px !important;
+        padding-bottom: 24px !important;
+    }
+    .cf-footer-status-ribbon {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    /* Reset large desktop section paddings on tablets & mobile */
+    .modern-hero-section {
+        padding: 85px 16px 40px !important;
+    }
+    .modern-domain-section {
+        padding: 24px 16px 40px !important;
+    }
+    .cf-department-cards-grid {
+        padding: 32px 16px 28px !important;
+    }
+    .modern-tech-section {
+        padding: 40px 16px !important;
+    }
+    .modern-reviews-section {
+        padding: 40px 16px !important;
+    }
+    .modern-faq-section {
+        padding: 40px 16px !important;
+    }
+    .cf-comparison-section {
+        padding: 40px 16px !important;
+    }
+    .modern-why-section {
+        padding: 40px 16px !important;
+    }
+    .modern-custom-quote-section {
+        padding: 45px 16px !important;
+    }
+    .cf-subpage-cta-banner {
+        padding: 40px 16px !important;
+    }
+    .modern-navbar {
+        padding: 10px 16px !important;
+    }
+    .cf-matchmaker-card {
+        padding: 32px 16px 36px !important;
+        max-width: 100% !important;
+    }
+    .modern-stats-section {
+        padding: 20px 12px !important;
+    }
+
     /* Pricing Category Tabs Horizontal Smooth Swipe */
     .pricing-category-nav-wrapper {
         width: 100%;
@@ -7908,6 +7987,23 @@ html, body {
     .pricing-category-tabs {
         flex-shrink: 0;
         display: inline-flex;
+        gap: 8px !important;
+        padding: 5px !important;
+    }
+    .category-tab-btn {
+        padding: 10px 14px !important;
+        gap: 10px !important;
+    }
+    .cat-tab-icon {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 18px !important;
+    }
+    .cat-tab-title {
+        font-size: 13.5px !important;
+    }
+    .cat-tab-sub {
+        font-size: 11.5px !important;
     }
 
     /* Subpage CTA Card */
@@ -7923,8 +8019,35 @@ html, body {
         text-align: center !important;
         margin-top: 10px;
     }
-    .cf-footer-col {
-        margin-bottom: 24px;
+    /* Comparison Table Tablet Responsiveness */
+    .cf-comp-controls-bar {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
+    .cf-tier-tabs {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        justify-content: flex-start !important;
+        scrollbar-width: none !important;
+    }
+    .cf-tier-tabs::-webkit-scrollbar {
+        display: none !important;
+    }
+    .cf-tier-btn {
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+    }
+    .cf-sticky-feature-th,
+    .cf-sticky-feature-cell {
+        width: 190px !important;
+        min-width: 180px !important;
+        max-width: 200px !important;
+    }
+    .cf-plan-header-cell {
+        min-width: 160px !important;
     }
 }
 
@@ -8045,19 +8168,177 @@ html, body {
         font-size: 11px !important;
     }
 
-    /* Comparison Section Mobile */
+    /* Comparison Section Mobile (Deep Responsive Optimization) */
     .cf-comparison-section {
-        padding: 40px 0 !important;
+        padding: 42px 0 46px !important;
     }
-    .cf-comparison-title {
-        font-size: 24px !important;
+    .cf-comp-header {
+        margin-bottom: 20px !important;
+        padding: 0 4px !important;
     }
-    .cf-comparison-subtitle {
-        font-size: 13.5px !important;
+    .cf-comp-badge {
+        font-size: 11px !important;
+        padding: 4px 12px !important;
+        margin-bottom: 10px !important;
+    }
+    .cf-comp-title {
+        font-size: 23px !important;
+        line-height: 1.25 !important;
+        margin-bottom: 10px !important;
+    }
+    .cf-comp-subtitle {
+        font-size: 13px !important;
+        line-height: 1.55 !important;
+        margin-bottom: 16px !important;
+    }
+    .cf-comp-controls-bar {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 12px !important;
+        margin-bottom: 16px !important;
+    }
+    .cf-tier-tabs {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 4px !important;
+        gap: 4px !important;
+        scrollbar-width: none !important;
+        display: flex !important;
+        justify-content: flex-start !important;
+        border-radius: 12px !important;
+    }
+    .cf-tier-tabs::-webkit-scrollbar {
+        display: none !important;
+    }
+    .cf-tier-btn {
+        padding: 7px 11px !important;
+        font-size: 12px !important;
+        gap: 5px !important;
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+        border-radius: 8px !important;
+    }
+    .cf-tier-btn .tab-count-pill {
+        font-size: 9.5px !important;
+        padding: 1px 6px !important;
+    }
+    .cf-billing-switch-wrap {
+        padding: 4px 12px !important;
+        gap: 8px !important;
+    }
+    .cf-bill-label {
+        font-size: 12px !important;
+    }
+    .cf-save-pill {
+        font-size: 9.5px !important;
+        padding: 1px 5px !important;
+    }
+    .cf-toggle-switch {
+        width: 38px !important;
+        height: 20px !important;
+    }
+    .cf-toggle-slider::before {
+        width: 14px !important;
+        height: 14px !important;
+        left: 3px !important;
+        bottom: 3px !important;
+    }
+    .cf-toggle-switch input:checked+.cf-toggle-slider::before {
+        transform: translateX(18px) !important;
+    }
+
+    /* Mobile Table Card & Scroll */
+    .cf-table-card {
+        border-radius: 14px !important;
+        margin-bottom: 20px !important;
+        border: 1px solid #CBD5E1 !important;
     }
     .cf-table-scroll-container {
-        max-height: 520px !important;
-        -webkit-overflow-scrolling: touch;
+        max-height: 480px !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* Sticky Feature Column Mobile Optimization (135px width vs 240px) */
+    .cf-sticky-feature-th {
+        width: 135px !important;
+        min-width: 130px !important;
+        max-width: 140px !important;
+        padding: 12px 8px !important;
+        border-right: 2px solid #CBD5E1 !important;
+    }
+    .cf-feature-heading span {
+        font-size: 12px !important;
+        line-height: 1.2 !important;
+    }
+    .cf-feature-heading small {
+        font-size: 9.5px !important;
+        margin-top: 2px !important;
+    }
+    .cf-sticky-feature-cell {
+        width: 135px !important;
+        min-width: 130px !important;
+        max-width: 140px !important;
+        padding: 9px 8px !important;
+        font-size: 11px !important;
+        line-height: 1.35 !important;
+        border-right: 2px solid #CBD5E1 !important;
+    }
+    .cf-sticky-feature-cell .feat-subtext {
+        font-size: 9px !important;
+        line-height: 1.25 !important;
+    }
+
+    /* Plan Header Cells Mobile */
+    .cf-plan-header-cell {
+        min-width: 165px !important;
+        max-width: 180px !important;
+        padding: 14px 10px 12px !important;
+    }
+    .cf-popular-tag {
+        font-size: 8px !important;
+        padding: 2px 7px !important;
+        letter-spacing: 0.03em !important;
+    }
+    .cf-tier-pill-small {
+        font-size: 8.5px !important;
+        padding: 1px 6px !important;
+    }
+    .cf-plan-title {
+        font-size: 15.5px !important;
+        margin: 2px 0 4px !important;
+    }
+    .cf-price-num {
+        font-size: 22px !important;
+    }
+    .cf-price-period {
+        font-size: 11.5px !important;
+    }
+    .cf-plan-billing-note {
+        font-size: 10px !important;
+        min-height: 14px !important;
+        margin-bottom: 8px !important;
+    }
+    .cf-table-cta-btn {
+        font-size: 12px !important;
+        padding: 7px 10px !important;
+        border-radius: 7px !important;
+    }
+
+    /* Table Body Cells Mobile */
+    .cf-comparison-table tbody td {
+        padding: 9px 8px !important;
+        font-size: 11.5px !important;
+        min-width: 165px !important;
+    }
+    .cf-cat-header-row td {
+        padding: 8px 10px !important;
+        font-size: 10.5px !important;
+    }
+    .cf-check-icon,
+    .cf-cross-icon {
+        font-size: 14px !important;
     }
 
     /* Matchmaker Section Mobile */

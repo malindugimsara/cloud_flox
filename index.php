@@ -164,8 +164,7 @@
                         <!-- Main 3D Cloud Infrastructure Graphic -->
                         <div class="hero-image-wrapper">
                             <picture>
-                                <source srcset="assets/imgs/banners/banner.jfif"
-                                    type="image/webp">
+                                <source srcset="assets/imgs/banners/banner.jfif" type="image/webp">
                                 <img src="assets/imgs/banners/banner.jfif"
                                     alt="CloudFlox Next-Gen High-Speed Cloud Hosting Infrastructure with NVMe Gen4 Storage and Global Network"
                                     class="hero-main-img img-fluid" width="1024" height="768" fetchpriority="high"
@@ -339,19 +338,21 @@
         </div>
     </section>
 
-    
 
 
-<!-- =========================================================================
+
+    <!-- =========================================================================
          3. HOSTING PACKAGES & PRICING SECTION
          ========================================================================= -->
     <section class="modern-pricing-section" id="pricingSection">
         <!-- Ambient Decorative Pattern Backgrounds -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true">
-            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager"
+                decoding="async">
         </div>
         <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true">
-            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager"
+                decoding="async">
         </div>
 
         <div class="container position-relative z-2">
@@ -367,14 +368,16 @@
                     High-Performance Hosting <span class="text-accent-blue">Built for Every Stage</span>
                 </h2>
                 <p class="pricing-section-subtitle">
-                    Enterprise NVMe Gen4 storage, CloudLinux resource isolation, and automated daily backups — tailored from personal blogs to demanding business platforms.
+                    Enterprise NVMe Gen4 storage, CloudLinux resource isolation, and automated daily backups — tailored
+                    from personal blogs to demanding business platforms.
                 </p>
 
                 <!-- High-Impact Category Selector Tabs (Budget / Business / Premium) -->
                 <div class="pricing-category-nav-wrapper">
                     <div class="pricing-category-tabs" role="tablist" aria-label="Hosting Category Tabs">
                         <!-- Budget Hosting Tab -->
-                        <button type="button" class="category-tab-btn tab-budget-btn" id="tab-budget" onclick="switchPricingCategory('budget', this)" role="tab" aria-selected="false">
+                        <button type="button" class="category-tab-btn tab-budget-btn" id="tab-budget"
+                            onclick="switchPricingCategory('budget', this)" role="tab" aria-selected="false">
                             <div class="cat-tab-icon icon-budget">
                                 <i class="las la-feather-alt" aria-hidden="true"></i>
                             </div>
@@ -390,7 +393,8 @@
                         </button>
 
                         <!-- Business Web Hosting Tab (Active by Default) -->
-                        <button type="button" class="category-tab-btn active tab-business-btn" id="tab-business" onclick="switchPricingCategory('business', this)" role="tab" aria-selected="true">
+                        <button type="button" class="category-tab-btn active tab-business-btn" id="tab-business"
+                            onclick="switchPricingCategory('business', this)" role="tab" aria-selected="true">
                             <div class="cat-tab-icon icon-business">
                                 <i class="las la-briefcase" aria-hidden="true"></i>
                             </div>
@@ -406,14 +410,16 @@
                         </button>
 
                         <!-- Premium Managed Tab -->
-                        <button type="button" class="category-tab-btn tab-premium-btn" id="tab-premium" onclick="switchPricingCategory('premium', this)" role="tab" aria-selected="false">
+                        <button type="button" class="category-tab-btn tab-premium-btn" id="tab-premium"
+                            onclick="switchPricingCategory('premium', this)" role="tab" aria-selected="false">
                             <div class="cat-tab-icon icon-premium">
                                 <i class="las la-crown" aria-hidden="true"></i>
                             </div>
                             <div class="cat-tab-content">
                                 <div class="cat-tab-header">
                                     <span class="cat-tab-title">Premium Managed</span>
-                                    <span class="cat-tab-pill pill-premium"><i class="las la-gem me-1"></i>Dedicated</span>
+                                    <span class="cat-tab-pill pill-premium"><i
+                                            class="las la-gem me-1"></i>Dedicated</span>
                                 </div>
                                 <div class="cat-tab-price">
                                     From <strong>$75.00</strong><small>/mo</small>
@@ -426,7 +432,8 @@
                 <!-- Modern Segmented Interactive Billing Switcher -->
                 <div class="pricing-switch-container">
                     <div class="pricing-switch-pill">
-                        <button type="button" class="switch-opt active" id="btnMonthly" onclick="setBillingToggle(false)">
+                        <button type="button" class="switch-opt active" id="btnMonthly"
+                            onclick="setBillingToggle(false)">
                             Monthly Billing
                         </button>
                         <button type="button" class="switch-opt" id="btnYearly" onclick="setBillingToggle(true)">
@@ -440,7 +447,8 @@
             <!-- ==========================================
                  PANE 1: BUDGET HOSTING (3 PLANS)
                  ========================================== -->
-            <div class="pricing-category-pane row g-4 align-items-stretch justify-content-center" id="categoryPane-budget" style="display: none;">
+            <div class="pricing-category-pane row g-4 align-items-stretch justify-content-center"
+                id="categoryPane-budget" style="display: none;">
                 <!-- Budget Mini -->
                 <div class="col-lg-4 col-md-6">
                     <div class="modern-pricing-card">
@@ -460,20 +468,28 @@
                                 <span class="price-val" data-monthly="$3.00" data-yearly="$2.40">$3.00</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext" data-monthly="Billed $3.00 monthly" data-yearly="Billed $28.80 yearly (Save 20%)">Billed $3.00 monthly</div>
+                            <div class="price-subtext" data-monthly="Billed $3.00 monthly"
+                                data-yearly="Billed $28.80 yearly (Save 20%)">Billed $3.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly" data-pid="101" class="plan-cta-btn btn-plan-outline">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly" data-pid="101"
+                            class="plan-cta-btn btn-plan-outline">
                             Choose Mini Plan
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM: <strong>1 Core / 1 GB RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>5 GB NVMe Gen4 SSD</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity: <strong>1 Website • 50 GB Bandwidth</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Email Inboxes: <strong>5 Professional Accounts</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Security: <strong>Free AutoSSL &amp; ImunifyAV</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Control Panel: <strong>cPanel + 24/7 Expert Support</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM:
+                                    <strong>1 Core / 1 GB RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>5 GB NVMe Gen4 SSD</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity:
+                                    <strong>1 Website • 50 GB Bandwidth</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Email Inboxes:
+                                    <strong>5 Professional Accounts</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Security:
+                                    <strong>Free AutoSSL &amp; ImunifyAV</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Control Panel:
+                                    <strong>cPanel + 24/7 Expert Support</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -500,21 +516,29 @@
                                 <span class="price-val" data-monthly="$4.50" data-yearly="$3.60">$4.50</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext text-orange-sub" data-monthly="Billed $4.50 monthly" data-yearly="Billed $43.20 yearly (Save 20%)">Billed $4.50 monthly</div>
+                            <div class="price-subtext text-orange-sub" data-monthly="Billed $4.50 monthly"
+                                data-yearly="Billed $43.20 yearly (Save 20%)">Billed $4.50 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly" data-pid="102" class="plan-cta-btn btn-plan-featured">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly" data-pid="102"
+                            class="plan-cta-btn btn-plan-featured">
                             <span>Choose Basic Plan</span>
                             <i class="las la-arrow-right ms-2"></i>
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM: <strong>2 Cores / 2 GB RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>15 GB NVMe Gen4 SSD</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity: <strong>3 Websites • 150 GB Bandwidth</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Email Inboxes: <strong>15 Professional Accounts</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Security: <strong>Free AutoSSL &amp; ImunifyAV</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Backups &amp; Support: <strong>Daily Backups + 24/7 Support</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM:
+                                    <strong>2 Cores / 2 GB RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>15 GB NVMe Gen4 SSD</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity:
+                                    <strong>3 Websites • 150 GB Bandwidth</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Email Inboxes:
+                                    <strong>15 Professional Accounts</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Security:
+                                    <strong>Free AutoSSL &amp; ImunifyAV</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Backups &amp;
+                                    Support: <strong>Daily Backups + 24/7 Support</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -538,20 +562,28 @@
                                 <span class="price-val" data-monthly="$6.00" data-yearly="$4.80">$6.00</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext" data-monthly="Billed $6.00 monthly" data-yearly="Billed $57.60 yearly (Save 20%)">Billed $6.00 monthly</div>
+                            <div class="price-subtext" data-monthly="Billed $6.00 monthly"
+                                data-yearly="Billed $57.60 yearly (Save 20%)">Billed $6.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly" data-pid="103" class="plan-cta-btn btn-plan-outline">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly" data-pid="103"
+                            class="plan-cta-btn btn-plan-outline">
                             Choose Plus Plan
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM: <strong>2 High Cores / 3 GB RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>30 GB NVMe Gen4 SSD</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity: <strong>10 Websites • 300 GB Bandwidth</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Email Inboxes: <strong>Unlimited Professional Accounts</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Protection: <strong>ImunifyAV &amp; Automated Daily Backups</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Tools: <strong>cPanel + Staging Tools + 24/7 Support</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM:
+                                    <strong>2 High Cores / 3 GB RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>30 GB NVMe Gen4 SSD</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity:
+                                    <strong>10 Websites • 300 GB Bandwidth</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Email Inboxes:
+                                    <strong>Unlimited Professional Accounts</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Protection:
+                                    <strong>ImunifyAV &amp; Automated Daily Backups</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Tools:
+                                    <strong>cPanel + Staging Tools + 24/7 Support</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -560,7 +592,8 @@
             <!-- ==========================================
                  PANE 2: BUSINESS WEB HOSTING (4 PLANS) - ACTIVE DEFAULT
                  ========================================== -->
-            <div class="pricing-category-pane active row g-4 align-items-stretch justify-content-center" id="categoryPane-business">
+            <div class="pricing-category-pane active row g-4 align-items-stretch justify-content-center"
+                id="categoryPane-business">
                 <!-- Business Starter -->
                 <div class="col-xl-3 col-md-6">
                     <div class="modern-pricing-card">
@@ -580,20 +613,28 @@
                                 <span class="price-val" data-monthly="$7.50" data-yearly="$6.00">$7.50</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext" data-monthly="Billed $7.50 monthly" data-yearly="Billed $72.00 yearly (Save 20%)">Billed $7.50 monthly</div>
+                            <div class="price-subtext" data-monthly="Billed $7.50 monthly"
+                                data-yearly="Billed $72.00 yearly (Save 20%)">Billed $7.50 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" data-pid="201" class="plan-cta-btn btn-plan-outline">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" data-pid="201"
+                            class="plan-cta-btn btn-plan-outline">
                             Choose Starter
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM: <strong>2 Cores / 2 GB RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>20 GB NVMe Gen4 SSD</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity: <strong>2 Websites • 500 GB Bandwidth</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Email Inboxes: <strong>25 Business Accounts</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Security: <strong>Free Wildcard SSL &amp; Imunify360</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Support: <strong>Daily Backups + 24/7 Business Support</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM:
+                                    <strong>2 Cores / 2 GB RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>20 GB NVMe Gen4 SSD</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity:
+                                    <strong>2 Websites • 500 GB Bandwidth</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Email Inboxes:
+                                    <strong>25 Business Accounts</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Security:
+                                    <strong>Free Wildcard SSL &amp; Imunify360</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Support:
+                                    <strong>Daily Backups + 24/7 Business Support</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -620,21 +661,29 @@
                                 <span class="price-val" data-monthly="$15.00" data-yearly="$12.00">$15.00</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext text-orange-sub" data-monthly="Billed $15.00 monthly" data-yearly="Billed $144.00 yearly (Save 20%)">Billed $15.00 monthly</div>
+                            <div class="price-subtext text-orange-sub" data-monthly="Billed $15.00 monthly"
+                                data-yearly="Billed $144.00 yearly (Save 20%)">Billed $15.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" data-pid="202" class="plan-cta-btn btn-plan-featured">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" data-pid="202"
+                            class="plan-cta-btn btn-plan-featured">
                             <span>Choose Business</span>
                             <i class="las la-arrow-right ms-2"></i>
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM: <strong>3 High-Perf Cores / 4 GB RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>40 GB NVMe Gen4 SSD</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity: <strong>10 Websites • Unlimited Bandwidth</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Web Server: <strong>LiteSpeed Enterprise + LSCache</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Protection: <strong>Imunify360 AI Defense + AutoSSL</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Support: <strong>Daily Backups + Priority Support</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM:
+                                    <strong>3 High-Perf Cores / 4 GB RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>40 GB NVMe Gen4 SSD</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity:
+                                    <strong>10 Websites • Unlimited Bandwidth</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Web Server:
+                                    <strong>LiteSpeed Enterprise + LSCache</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Protection:
+                                    <strong>Imunify360 AI Defense + AutoSSL</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Support:
+                                    <strong>Daily Backups + Priority Support</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -658,20 +707,28 @@
                                 <span class="price-val" data-monthly="$27.00" data-yearly="$21.60">$27.00</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext" data-monthly="Billed $27.00 monthly" data-yearly="Billed $259.20 yearly (Save 20%)">Billed $27.00 monthly</div>
+                            <div class="price-subtext" data-monthly="Billed $27.00 monthly"
+                                data-yearly="Billed $259.20 yearly (Save 20%)">Billed $27.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" data-pid="203" class="plan-cta-btn btn-plan-outline">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" data-pid="203"
+                            class="plan-cta-btn btn-plan-outline">
                             Choose Professional
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM: <strong>4 High-Perf Cores / 6 GB RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>80 GB NVMe Gen4 SSD</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity: <strong>25 Websites • Unlimited Bandwidth</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Web Server: <strong>LiteSpeed + LSCache Accelerator</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Security: <strong>Imunify360 + Web App Firewall (WAF)</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Support: <strong>Priority Queue Support + Staging Tools</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM:
+                                    <strong>4 High-Perf Cores / 6 GB RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>80 GB NVMe Gen4 SSD</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity:
+                                    <strong>25 Websites • Unlimited Bandwidth</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Web Server:
+                                    <strong>LiteSpeed + LSCache Accelerator</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Security:
+                                    <strong>Imunify360 + Web App Firewall (WAF)</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Support:
+                                    <strong>Priority Queue Support + Staging Tools</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -695,20 +752,28 @@
                                 <span class="price-val" data-monthly="$48.00" data-yearly="$38.40">$48.00</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext" data-monthly="Billed $48.00 monthly" data-yearly="Billed $460.80 yearly (Save 20%)">Billed $48.00 monthly</div>
+                            <div class="price-subtext" data-monthly="Billed $48.00 monthly"
+                                data-yearly="Billed $460.80 yearly (Save 20%)">Billed $48.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" data-pid="204" class="plan-cta-btn btn-plan-outline">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" data-pid="204"
+                            class="plan-cta-btn btn-plan-outline">
                             Choose Enterprise
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM: <strong>6 VIP Cores / 8 GB Dedicated RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>150 GB NVMe Gen4 SSD</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity: <strong>Unlimited Websites &amp; Bandwidth</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Developer: <strong>Isolated SSH &amp; WP-CLI Enabled</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Protection: <strong>Imunify360 WAF + Twice-Daily Backups</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Support: <strong>VIP Senior SysAdmin Direct Support</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>CPU &amp; RAM:
+                                    <strong>6 VIP Cores / 8 GB Dedicated RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>150 GB NVMe Gen4 SSD</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Capacity:
+                                    <strong>Unlimited Websites &amp; Bandwidth</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Developer:
+                                    <strong>Isolated SSH &amp; WP-CLI Enabled</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Protection:
+                                    <strong>Imunify360 WAF + Twice-Daily Backups</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Support:
+                                    <strong>VIP Senior SysAdmin Direct Support</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -717,7 +782,8 @@
             <!-- ==========================================
                  PANE 3: PREMIUM MANAGED HOSTING (4 PLANS)
                  ========================================== -->
-            <div class="pricing-category-pane row g-4 align-items-stretch justify-content-center" id="categoryPane-premium" style="display: none;">
+            <div class="pricing-category-pane row g-4 align-items-stretch justify-content-center"
+                id="categoryPane-premium" style="display: none;">
                 <!-- Premium Starter -->
                 <div class="col-xl-3 col-md-6">
                     <div class="modern-pricing-card">
@@ -737,20 +803,28 @@
                                 <span class="price-val" data-monthly="$75.00" data-yearly="$60.00">$75.00</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext" data-monthly="Billed $75.00 monthly" data-yearly="Billed $720.00 yearly (Save 20%)">Billed $75.00 monthly</div>
+                            <div class="price-subtext" data-monthly="Billed $75.00 monthly"
+                                data-yearly="Billed $720.00 yearly (Save 20%)">Billed $75.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly" data-pid="301" class="plan-cta-btn btn-plan-outline">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly" data-pid="301"
+                            class="plan-cta-btn btn-plan-outline">
                             Choose Starter
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Dedicated vCPU &amp; RAM: <strong>4 Cores / 16 GB RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>100 GB Gen4 NVMe</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Traffic: <strong>5 TB Monthly (1 Gbps Port)</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Management: <strong>100% Fully Managed</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Snapshots: <strong>Hourly &amp; Daily Backups</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Support SLA: <strong>24/7 Priority L3 (99.95% SLA)</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Dedicated vCPU
+                                    &amp; RAM: <strong>4 Cores / 16 GB RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>100 GB Gen4 NVMe</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Traffic:
+                                    <strong>5 TB Monthly (1 Gbps Port)</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Management:
+                                    <strong>100% Fully Managed</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Snapshots:
+                                    <strong>Hourly &amp; Daily Backups</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Support SLA:
+                                    <strong>24/7 Priority L3 (99.95% SLA)</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -777,21 +851,29 @@
                                 <span class="price-val" data-monthly="$120.00" data-yearly="$96.00">$120.00</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext text-orange-sub" data-monthly="Billed $120.00 monthly" data-yearly="Billed $1,152.00 yearly (Save 20%)">Billed $120.00 monthly</div>
+                            <div class="price-subtext text-orange-sub" data-monthly="Billed $120.00 monthly"
+                                data-yearly="Billed $1,152.00 yearly (Save 20%)">Billed $120.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly" data-pid="302" class="plan-cta-btn btn-plan-featured">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly" data-pid="302"
+                            class="plan-cta-btn btn-plan-featured">
                             <span>Choose Business</span>
                             <i class="las la-arrow-right ms-2"></i>
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Dedicated vCPU &amp; RAM: <strong>6 Cores / 24 GB RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>200 GB Gen4 NVMe</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Traffic: <strong>10 TB Monthly (1 Gbps Port)</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Specialist: <strong>Assigned L3 Tech Specialist</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Hardening: <strong>Kernel &amp; Server Optimization</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Guarantee: <strong>15-Min Response • 99.99% SLA</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Dedicated vCPU
+                                    &amp; RAM: <strong>6 Cores / 24 GB RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>200 GB Gen4 NVMe</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Traffic:
+                                    <strong>10 TB Monthly (1 Gbps Port)</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Specialist:
+                                    <strong>Assigned L3 Tech Specialist</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Hardening:
+                                    <strong>Kernel &amp; Server Optimization</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Guarantee:
+                                    <strong>15-Min Response • 99.99% SLA</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -815,20 +897,28 @@
                                 <span class="price-val" data-monthly="$210.00" data-yearly="$168.00">$210.00</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext" data-monthly="Billed $210.00 monthly" data-yearly="Billed $2,016.00 yearly (Save 20%)">Billed $210.00 monthly</div>
+                            <div class="price-subtext" data-monthly="Billed $210.00 monthly"
+                                data-yearly="Billed $2,016.00 yearly (Save 20%)">Billed $210.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly" data-pid="303" class="plan-cta-btn btn-plan-outline">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly" data-pid="303"
+                            class="plan-cta-btn btn-plan-outline">
                             Choose Pro
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Dedicated vCPU &amp; RAM: <strong>8 Cores / 32 GB RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>400 GB Gen4 NVMe</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Traffic: <strong>20 TB Monthly (1 Gbps Port)</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>VIP Channels: <strong>Private Slack &amp; Direct Phone</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Architecture: <strong>Senior SysAdmin Assigned Lead</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Security: <strong>Custom DDoS Rules • 99.99% SLA</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Dedicated vCPU
+                                    &amp; RAM: <strong>8 Cores / 32 GB RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>400 GB Gen4 NVMe</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Traffic:
+                                    <strong>20 TB Monthly (1 Gbps Port)</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>VIP Channels:
+                                    <strong>Private Slack &amp; Direct Phone</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Architecture:
+                                    <strong>Senior SysAdmin Assigned Lead</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Security:
+                                    <strong>Custom DDoS Rules • 99.99% SLA</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -852,20 +942,28 @@
                                 <span class="price-val" data-monthly="$350.00" data-yearly="$280.00">$350.00</span>
                                 <span class="price-cycle" data-monthly="/mo" data-yearly="/mo">/mo</span>
                             </div>
-                            <div class="price-subtext" data-monthly="Billed $350.00 monthly" data-yearly="Billed $3,360.00 yearly (Save 20%)">Billed $350.00 monthly</div>
+                            <div class="price-subtext" data-monthly="Billed $350.00 monthly"
+                                data-yearly="Billed $3,360.00 yearly (Save 20%)">Billed $350.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly" data-pid="304" class="plan-cta-btn btn-plan-outline">
+                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly" data-pid="304"
+                            class="plan-cta-btn btn-plan-outline">
                             Choose Enterprise
                         </a>
 
                         <ul class="plan-features-list">
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Dedicated vCPU &amp; RAM: <strong>16 Cores / 64 GB RAM</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage: <strong>800 GB Gen4 NVMe</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Traffic: <strong>Unmetered 1 Gbps Dedicated Port</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>DevOps: <strong>Dedicated 24/7 Lead Engineer</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Resilience: <strong>Multi-DC Instant Failover</strong></span></li>
-                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Guarantee: <strong>99.99% Financially-Backed SLA</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Dedicated vCPU
+                                    &amp; RAM: <strong>16 Cores / 64 GB RAM</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Storage:
+                                    <strong>800 GB Gen4 NVMe</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Traffic:
+                                    <strong>Unmetered 1 Gbps Dedicated Port</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>DevOps:
+                                    <strong>Dedicated 24/7 Lead Engineer</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Resilience:
+                                    <strong>Multi-DC Instant Failover</strong></span></li>
+                            <li><span class="feat-icon-circle"><i class="las la-check"></i></span><span>Guarantee:
+                                    <strong>99.99% Financially-Backed SLA</strong></span></li>
                         </ul>
                     </div>
                 </div>
@@ -873,7 +971,8 @@
 
             <!-- VPS & Dedicated Quick Discovery Banner -->
             <div class="cat-quick-discovery text-center mt-4" data-sal="fade" data-sal-duration="600">
-                <span class="text-muted">Need root access, bare metal, or custom compute?</span>
+                <span class="text-muted" style="color: 
+                ;">Need root access, bare metal, or custom compute?</span>
                 <a href="/vps-hosting/" class="cat-sublink ms-2">
                     <i class="las la-server"></i> Linux VPS from $7.99/mo &rarr;
                 </a>
@@ -912,93 +1011,93 @@
             </div>
         </div>
     </section>
-    
-<!-- =========================================================================
+
+    <!-- =========================================================================
      3. LIVE NETWORK & GLOBAL METRICS STATS BAR (COMPACT VIDEO HUD)
      ========================================================================= -->
-<section class="modern-stats-section" id="network-metrics">
-    <!-- Background Video -->
-    <video autoplay loop muted playsinline class="stats-bg-video" preload="auto">
-        <source src="assets/video/countup-bg.mp4" type="video/mp4">
-    </video>
+    <section class="modern-stats-section" id="network-metrics">
+        <!-- Background Video -->
+        <video autoplay loop muted playsinline class="stats-bg-video" preload="auto">
+            <source src="assets/video/countup-bg.mp4" type="video/mp4">
+        </video>
 
-    <!-- Deep Ambient Glow Overlay -->
-    <div class="stats-video-overlay"></div>
+        <!-- Deep Ambient Glow Overlay -->
+        <div class="stats-video-overlay"></div>
 
-    <!-- Live Telemetry Content -->
-    <div class="container position-relative stats-content-wrapper">
-        <div class="row g-3 g-lg-4 justify-content-center">
-            
-            <!-- Stat 1: Uptime -->
-            <div class="col-6 col-lg-3">
-                <div class="modern-stat-card">
-                    <div class="stat-icon-wrap icon-green">
-                        <i class="las la-shield-alt"></i>
-                    </div>
-                    <div class="stat-details">
-                        <div class="stat-number">99.99%</div>
-                        <div class="stat-label">Uptime SLA</div>
-                        <div class="stat-meta">
-                            <span class="live-pulse-dot pulse-green"></span> High Availability
+        <!-- Live Telemetry Content -->
+        <div class="container position-relative stats-content-wrapper">
+            <div class="row g-3 g-lg-4 justify-content-center">
+
+                <!-- Stat 1: Uptime -->
+                <div class="col-6 col-lg-3">
+                    <div class="modern-stat-card">
+                        <div class="stat-icon-wrap icon-green">
+                            <i class="las la-shield-alt"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-number">99.99%</div>
+                            <div class="stat-label">Uptime SLA</div>
+                            <div class="stat-meta">
+                                <span class="live-pulse-dot pulse-green"></span> High Availability
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Stat 2: Datacenters -->
-            <div class="col-6 col-lg-3">
-                <div class="modern-stat-card">
-                    <div class="stat-icon-wrap icon-blue">
-                        <i class="las la-globe-americas"></i>
-                    </div>
-                    <div class="stat-details">
-                        <div class="stat-number">6 Regions</div>
-                        <div class="stat-label">Global Datacenters</div>
-                        <div class="stat-meta">
-                            <span class="live-pulse-dot pulse-blue"></span> Tier-3+ Facilities
+                <!-- Stat 2: Datacenters -->
+                <div class="col-6 col-lg-3">
+                    <div class="modern-stat-card">
+                        <div class="stat-icon-wrap icon-blue">
+                            <i class="las la-globe-americas"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-number">6 Regions</div>
+                            <div class="stat-label">Global Datacenters</div>
+                            <div class="stat-meta">
+                                <span class="live-pulse-dot pulse-blue"></span> Tier-3+ Facilities
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Stat 3: Deployments -->
-            <div class="col-6 col-lg-3">
-                <div class="modern-stat-card">
-                    <div class="stat-icon-wrap icon-cyan">
-                        <i class="las la-server"></i>
-                    </div>
-                    <div class="stat-details">
-                        <div class="stat-number">250k+</div>
-                        <div class="stat-label">Active Workloads</div>
-                        <div class="stat-meta">
-                            <span class="live-pulse-dot pulse-cyan"></span> Enterprise NVMe
+                <!-- Stat 3: Deployments -->
+                <div class="col-6 col-lg-3">
+                    <div class="modern-stat-card">
+                        <div class="stat-icon-wrap icon-cyan">
+                            <i class="las la-server"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-number">250k+</div>
+                            <div class="stat-label">Active Workloads</div>
+                            <div class="stat-meta">
+                                <span class="live-pulse-dot pulse-cyan"></span> Enterprise NVMe
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Stat 4: Support Response -->
-            <div class="col-6 col-lg-3">
-                <div class="modern-stat-card">
-                    <div class="stat-icon-wrap icon-orange">
-                        <i class="las la-bolt"></i>
-                    </div>
-                    <div class="stat-details">
-                        <div class="stat-number">&lt; 15 min</div>
-                        <div class="stat-label">Response Time</div>
-                        <div class="stat-meta">
-                            <span class="live-pulse-dot pulse-orange"></span> 24/7/365 SysAdmins
+                <!-- Stat 4: Support Response -->
+                <div class="col-6 col-lg-3">
+                    <div class="modern-stat-card">
+                        <div class="stat-icon-wrap icon-orange">
+                            <i class="las la-bolt"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-number">&lt; 15 min</div>
+                            <div class="stat-label">Response Time</div>
+                            <div class="stat-meta">
+                                <span class="live-pulse-dot pulse-orange"></span> 24/7/365 SysAdmins
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
-        <!-- ==========================================
+    <!-- ==========================================
      START: HOSTING PACKAGE COMPARISON TABLE SECTION
      Place this directly below the High-Speed NVMe cPanel Web Hosting section
      ========================================== -->
@@ -1010,23 +1109,29 @@
                 <span class="cf-comp-badge"><i class="feather-sliders"></i> Full Specifications</span>
                 <h2 class="cf-comp-title">Compare Shared &amp; Managed <span>Hosting Plans</span></h2>
                 <p class="cf-comp-subtitle">
-                    Transparent CloudLinux LVE limits, NVMe storage allocations, and technical capabilities side-by-side. No hidden throttles or surprise renewal fees.
+                    Transparent CloudLinux LVE limits, NVMe storage allocations, and technical capabilities
+                    side-by-side. No hidden throttles or surprise renewal fees.
                 </p>
 
                 <!-- Interactive Controls: Category Tabs & Billing Switcher -->
                 <div class="cf-comp-controls-bar">
                     <!-- Tier Filter Tabs -->
                     <div class="cf-tier-tabs" role="tablist" aria-label="Hosting Tier Selector">
-                        <button type="button" class="cf-tier-btn active" data-target="business" onclick="switchComparisonCategory('business', this)">
+                        <button type="button" class="cf-tier-btn active" data-target="business"
+                            onclick="switchComparisonCategory('business', this)">
                             <i class="feather-briefcase"></i> Business Web <span class="tab-count-pill">4 Plans</span>
                         </button>
-                        <button type="button" class="cf-tier-btn" data-target="budget" onclick="switchComparisonCategory('budget', this)">
-                            <i class="las la-feather-alt"></i> Budget Hosting <span class="tab-count-pill">3 Plans</span>
+                        <button type="button" class="cf-tier-btn" data-target="budget"
+                            onclick="switchComparisonCategory('budget', this)">
+                            <i class="las la-feather-alt"></i> Budget Hosting <span class="tab-count-pill">3
+                                Plans</span>
                         </button>
-                        <button type="button" class="cf-tier-btn" data-target="premium" onclick="switchComparisonCategory('premium', this)">
+                        <button type="button" class="cf-tier-btn" data-target="premium"
+                            onclick="switchComparisonCategory('premium', this)">
                             <i class="feather-server"></i> Premium Managed <span class="tab-count-pill">4 Plans</span>
                         </button>
-                        <button type="button" class="cf-tier-btn" data-target="all" onclick="switchComparisonCategory('all', this)">
+                        <button type="button" class="cf-tier-btn" data-target="all"
+                            onclick="switchComparisonCategory('all', this)">
                             <i class="feather-grid"></i> All 11 Plans Matrix
                         </button>
                     </div>
@@ -1034,7 +1139,8 @@
                     <!-- Monthly / Yearly Billing Toggle -->
                     <div class="cf-billing-switch-wrap">
                         <span class="cf-bill-label active" id="cfCompLblMonthly">Monthly</span>
-                        <label class="cf-toggle-switch" for="cfCompBillingToggle" aria-label="Toggle Monthly or Yearly Billing">
+                        <label class="cf-toggle-switch" for="cfCompBillingToggle"
+                            aria-label="Toggle Monthly or Yearly Billing">
                             <input type="checkbox" id="cfCompBillingToggle">
                             <span class="cf-toggle-slider"></span>
                         </label>
@@ -1043,6 +1149,13 @@
                         </span>
                     </div>
                 </div>
+            </div>
+
+            <!-- Mobile Horizontal Swipe Helper Hint -->
+            <div class="cf-table-swipe-hint-wrapper text-center d-md-none mb-3">
+                <span class="cf-table-swipe-hint">
+                    <i class="las la-arrows-alt-h"></i> Swipe table horizontally to compare
+                </span>
             </div>
 
             <!-- ==========================================
@@ -1064,80 +1177,102 @@
                                         <span class="cf-tier-pill-small pill-tier-business">Business Tier</span>
                                         <h4 class="cf-plan-title">Starter</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$7.50" data-yearly="$6.00">$7.50</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$7.50"
+                                                data-yearly="$6.00">$7.50</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $72/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="201">Choose Starter</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $72/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="201">Choose Starter</a>
                                     </th>
                                     <th class="cf-plan-header-cell popular-col">
                                         <span class="cf-popular-tag">MOST POPULAR</span>
                                         <span class="cf-tier-pill-small pill-tier-business">Business Tier</span>
                                         <h4 class="cf-plan-title">Business</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$15.00" data-yearly="$12.00">$15.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$15.00"
+                                                data-yearly="$12.00">$15.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $144/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" class="cf-table-cta-btn btn-cta-featured" data-pid="202">Choose Business</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $144/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-featured" data-pid="202">Choose Business</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-business">Business Tier</span>
                                         <h4 class="cf-plan-title">Professional</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$27.00" data-yearly="$21.60">$27.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$27.00"
+                                                data-yearly="$21.60">$27.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $259.20/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="203">Choose Pro</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $259.20/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="203">Choose Pro</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-business">Business Tier</span>
                                         <h4 class="cf-plan-title">Enterprise</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$48.00" data-yearly="$38.40">$48.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$48.00"
+                                                data-yearly="$38.40">$48.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $460.80/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="204">Choose Enterprise</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $460.80/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="204">Choose Enterprise</a>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!-- Group 1: Compute & LVE -->
                                 <tr class="cf-cat-header-row">
-                                    <td colspan="5"><i class="feather-cpu"></i> Compute &amp; CloudLinux LVE Resources</td>
+                                    <td colspan="5"><i class="feather-cpu"></i> Compute &amp; CloudLinux LVE Resources
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">CPU Cores<span class="feat-subtext">Isolated CloudLinux LVE</span></th>
+                                    <th class="cf-sticky-feature-cell">CPU Cores<span class="feat-subtext">Isolated
+                                            CloudLinux LVE</span></th>
                                     <td><strong>1 Core</strong> (100%)</td>
                                     <td class="popular-col"><strong>2 Cores</strong> (200%)</td>
                                     <td><strong>3 Cores</strong> (300%)</td>
                                     <td><strong>4 Cores</strong> (400%)</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Physical RAM<span class="feat-subtext">Dedicated memory pool</span></th>
+                                    <th class="cf-sticky-feature-cell">Physical RAM<span class="feat-subtext">Dedicated
+                                            memory pool</span></th>
                                     <td>2 GB DDR4/5</td>
                                     <td class="popular-col"><strong>4 GB DDR4/5</strong></td>
                                     <td>6 GB DDR4/5</td>
                                     <td>8 GB DDR4/5</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">I/O Speed &amp; IOPS<span class="feat-subtext">Disk read/write limits</span></th>
+                                    <th class="cf-sticky-feature-cell">I/O Speed &amp; IOPS<span
+                                            class="feat-subtext">Disk read/write limits</span></th>
                                     <td>30 MB/s &bull; 2,048 IOPS</td>
                                     <td class="popular-col"><strong>50 MB/s &bull; 4,096 IOPS</strong></td>
                                     <td>80 MB/s &bull; 8,192 IOPS</td>
                                     <td>100 MB/s &bull; 10,240 IOPS</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Entry Processes (EP)<span class="feat-subtext">Concurrent PHP workers</span></th>
+                                    <th class="cf-sticky-feature-cell">Entry Processes (EP)<span
+                                            class="feat-subtext">Concurrent PHP workers</span></th>
                                     <td>30 EP (100 NPROC)</td>
                                     <td class="popular-col"><strong>50 EP (150 NPROC)</strong></td>
                                     <td>80 EP (250 NPROC)</td>
                                     <td>120 EP (400 NPROC)</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Inode Limit<span class="feat-subtext">Total file &amp; folder count</span></th>
+                                    <th class="cf-sticky-feature-cell">Inode Limit<span class="feat-subtext">Total file
+                                            &amp; folder count</span></th>
                                     <td>300,000 Inodes</td>
                                     <td class="popular-col"><strong>600,000 Inodes</strong></td>
                                     <td>1,000,000 Inodes</td>
@@ -1146,31 +1281,36 @@
 
                                 <!-- Group 2: Storage & Domains -->
                                 <tr class="cf-cat-header-row">
-                                    <td colspan="5"><i class="feather-hard-drive"></i> Storage, Domains &amp; Bandwidth</td>
+                                    <td colspan="5"><i class="feather-hard-drive"></i> Storage, Domains &amp; Bandwidth
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">NVMe SSD Storage<span class="feat-subtext">Enterprise Gen4 NVMe</span></th>
+                                    <th class="cf-sticky-feature-cell">NVMe SSD Storage<span
+                                            class="feat-subtext">Enterprise Gen4 NVMe</span></th>
                                     <td><strong>15 GB</strong> NVMe</td>
                                     <td class="popular-col"><strong>35 GB</strong> NVMe</td>
                                     <td><strong>75 GB</strong> NVMe</td>
                                     <td><strong>150 GB</strong> NVMe</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Hosted Websites<span class="feat-subtext">Domain names allowed</span></th>
+                                    <th class="cf-sticky-feature-cell">Hosted Websites<span class="feat-subtext">Domain
+                                            names allowed</span></th>
                                     <td>1 Website</td>
                                     <td class="popular-col"><strong>5 Websites</strong></td>
                                     <td>15 Websites</td>
                                     <td><span class="cf-badge-tag badge-tag-green">Unlimited</span></td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Monthly Bandwidth<span class="feat-subtext">1Gbps Redundant Uplink</span></th>
+                                    <th class="cf-sticky-feature-cell">Monthly Bandwidth<span class="feat-subtext">1Gbps
+                                            Redundant Uplink</span></th>
                                     <td>Unmetered</td>
                                     <td class="popular-col">Unmetered</td>
                                     <td>Unmetered</td>
                                     <td>Unmetered</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Dedicated IPv4<span class="feat-subtext">Isolated IP reputation</span></th>
+                                    <th class="cf-sticky-feature-cell">Dedicated IPv4<span class="feat-subtext">Isolated
+                                            IP reputation</span></th>
                                     <td>Add-on ($3/mo)</td>
                                     <td class="popular-col">Add-on ($3/mo)</td>
                                     <td>Add-on ($3/mo)</td>
@@ -1179,59 +1319,71 @@
 
                                 <!-- Group 3: Features & Acceleration -->
                                 <tr class="cf-cat-header-row">
-                                    <td colspan="5"><i class="las la-shield-alt"></i> Platform Stack, Security &amp; Backups</td>
+                                    <td colspan="5"><i class="las la-shield-alt"></i> Platform Stack, Security &amp;
+                                        Backups</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Web Server &amp; Caching<span class="feat-subtext">Ultra-low TTFB</span></th>
+                                    <th class="cf-sticky-feature-cell">Web Server &amp; Caching<span
+                                            class="feat-subtext">Ultra-low TTFB</span></th>
                                     <td>LiteSpeed + LSCache</td>
                                     <td class="popular-col">LiteSpeed + LSCache</td>
                                     <td>LiteSpeed + LSCache</td>
                                     <td>LiteSpeed + LSCache</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">cPanel Control Panel<span class="feat-subtext">Official cPanel License</span></th>
+                                    <th class="cf-sticky-feature-cell">cPanel Control Panel<span
+                                            class="feat-subtext">Official cPanel License</span></th>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td class="popular-col"><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                    <td class="popular-col"><span class="cf-check-icon"><i
+                                                class="feather-check"></i></span></td>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Automated Backups<span class="feat-subtext">JetBackup snapshot recovery</span></th>
+                                    <th class="cf-sticky-feature-cell">Automated Backups<span
+                                            class="feat-subtext">JetBackup snapshot recovery</span></th>
                                     <td>Daily (30-day retention)</td>
                                     <td class="popular-col"><strong>Daily (30-day retention)</strong></td>
                                     <td>Daily (30-day retention)</td>
                                     <td>2x Daily + Off-site S3</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Imunify360 + AI WAF<span class="feat-subtext">Proactive malware defense</span></th>
+                                    <th class="cf-sticky-feature-cell">Imunify360 + AI WAF<span
+                                            class="feat-subtext">Proactive malware defense</span></th>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td class="popular-col"><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <th class="cf-sticky-feature-cell">Free SSL &amp; HTTP/3<span class="feat-subtext">Automated Let's Encrypt</span></th>
-                                    <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td class="popular-col"><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                    <td class="popular-col"><span class="cf-check-icon"><i
+                                                class="feather-check"></i></span></td>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Business Mailboxes<span class="feat-subtext">Anti-spam protection</span></th>
+                                    <th class="cf-sticky-feature-cell">Free SSL &amp; HTTP/3<span
+                                            class="feat-subtext">Automated Let's Encrypt</span></th>
+                                    <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                    <td class="popular-col"><span class="cf-check-icon"><i
+                                                class="feather-check"></i></span></td>
+                                    <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                    <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                </tr>
+                                <tr>
+                                    <th class="cf-sticky-feature-cell">Business Mailboxes<span
+                                            class="feat-subtext">Anti-spam protection</span></th>
                                     <td>5 Accounts</td>
                                     <td class="popular-col"><strong>25 Accounts</strong></td>
                                     <td>Unlimited</td>
                                     <td>Unlimited</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Free Site Migration<span class="feat-subtext">Zero-downtime transfer</span></th>
+                                    <th class="cf-sticky-feature-cell">Free Site Migration<span
+                                            class="feat-subtext">Zero-downtime transfer</span></th>
                                     <td>1 Website</td>
                                     <td class="popular-col">Up to 3 Websites</td>
                                     <td>Up to 5 Websites</td>
                                     <td>Unlimited Websites</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Support &amp; SLA Guarantee<span class="feat-subtext">Response time commitment</span></th>
+                                    <th class="cf-sticky-feature-cell">Support &amp; SLA Guarantee<span
+                                            class="feat-subtext">Response time commitment</span></th>
                                     <td>Standard 24/7 Ticket</td>
                                     <td class="popular-col"><strong>24/7 Priority Support</strong></td>
                                     <td>24/7 Priority Support</td>
@@ -1262,32 +1414,44 @@
                                         <span class="cf-tier-pill-small pill-tier-budget">Budget Tier</span>
                                         <h4 class="cf-plan-title">Mini</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$3.00" data-yearly="$2.40">$3.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$3.00"
+                                                data-yearly="$2.40">$3.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $28.80/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="101">Choose Mini</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $28.80/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="101">Choose Mini</a>
                                     </th>
                                     <th class="cf-plan-header-cell popular-col">
                                         <span class="cf-popular-tag">BEST VALUE</span>
                                         <span class="cf-tier-pill-small pill-tier-budget">Budget Tier</span>
                                         <h4 class="cf-plan-title">Basic</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$4.50" data-yearly="$3.60">$4.50</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$4.50"
+                                                data-yearly="$3.60">$4.50</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $43.20/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly" class="cf-table-cta-btn btn-cta-featured" data-pid="102">Choose Basic</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $43.20/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-featured" data-pid="102">Choose Basic</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-budget">Budget Tier</span>
                                         <h4 class="cf-plan-title">Plus</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$6.00" data-yearly="$4.80">$6.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$6.00"
+                                                data-yearly="$4.80">$6.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $57.60/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="103">Choose Plus</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $57.60/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="103">Choose Plus</a>
                                     </th>
                                 </tr>
                             </thead>
@@ -1297,31 +1461,36 @@
                                     <td colspan="4"><i class="feather-cpu"></i> Hardware &amp; Performance Limits</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">CPU Allocation<span class="feat-subtext">CloudLinux Virtual Cores</span></th>
+                                    <th class="cf-sticky-feature-cell">CPU Allocation<span
+                                            class="feat-subtext">CloudLinux Virtual Cores</span></th>
                                     <td>1 Core (100%)</td>
                                     <td class="popular-col"><strong>1 Core</strong> (100%)</td>
                                     <td><strong>1.5 Cores</strong> (150%)</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Physical RAM<span class="feat-subtext">Dedicated memory pool</span></th>
+                                    <th class="cf-sticky-feature-cell">Physical RAM<span class="feat-subtext">Dedicated
+                                            memory pool</span></th>
                                     <td>1 GB RAM</td>
                                     <td class="popular-col"><strong>1.5 GB RAM</strong></td>
                                     <td>2 GB RAM</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">I/O Speed &amp; IOPS<span class="feat-subtext">Disk read/write</span></th>
+                                    <th class="cf-sticky-feature-cell">I/O Speed &amp; IOPS<span
+                                            class="feat-subtext">Disk read/write</span></th>
                                     <td>15 MB/s &bull; 1,024 IOPS</td>
                                     <td class="popular-col"><strong>20 MB/s &bull; 1,024 IOPS</strong></td>
                                     <td>30 MB/s &bull; 2,048 IOPS</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Entry Processes (EP)<span class="feat-subtext">Concurrent PHP workers</span></th>
+                                    <th class="cf-sticky-feature-cell">Entry Processes (EP)<span
+                                            class="feat-subtext">Concurrent PHP workers</span></th>
                                     <td>20 EP (50 NPROC)</td>
                                     <td class="popular-col"><strong>25 EP (75 NPROC)</strong></td>
                                     <td>30 EP (100 NPROC)</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Inode Limit<span class="feat-subtext">Total file count</span></th>
+                                    <th class="cf-sticky-feature-cell">Inode Limit<span class="feat-subtext">Total file
+                                            count</span></th>
                                     <td>150,000 Inodes</td>
                                     <td class="popular-col"><strong>250,000 Inodes</strong></td>
                                     <td>350,000 Inodes</td>
@@ -1329,34 +1498,40 @@
 
                                 <!-- Group 2: Storage & Domains -->
                                 <tr class="cf-cat-header-row">
-                                    <td colspan="4"><i class="feather-hard-drive"></i> Storage, Domains &amp; Bandwidth</td>
+                                    <td colspan="4"><i class="feather-hard-drive"></i> Storage, Domains &amp; Bandwidth
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">NVMe SSD Storage<span class="feat-subtext">Enterprise NVMe</span></th>
+                                    <th class="cf-sticky-feature-cell">NVMe SSD Storage<span
+                                            class="feat-subtext">Enterprise NVMe</span></th>
                                     <td><strong>5 GB</strong> NVMe</td>
                                     <td class="popular-col"><strong>10 GB</strong> NVMe</td>
                                     <td><strong>20 GB</strong> NVMe</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Websites Allowed<span class="feat-subtext">Hosted domains</span></th>
+                                    <th class="cf-sticky-feature-cell">Websites Allowed<span class="feat-subtext">Hosted
+                                            domains</span></th>
                                     <td>1 Website</td>
                                     <td class="popular-col"><strong>2 Websites</strong></td>
                                     <td>5 Websites</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Bandwidth<span class="feat-subtext">Monthly traffic</span></th>
+                                    <th class="cf-sticky-feature-cell">Bandwidth<span class="feat-subtext">Monthly
+                                            traffic</span></th>
                                     <td>250 GB</td>
                                     <td class="popular-col"><strong>500 GB</strong></td>
                                     <td>Unmetered</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Email Accounts<span class="feat-subtext">Custom domain mail</span></th>
+                                    <th class="cf-sticky-feature-cell">Email Accounts<span class="feat-subtext">Custom
+                                            domain mail</span></th>
                                     <td>2 Accounts</td>
                                     <td class="popular-col"><strong>5 Accounts</strong></td>
                                     <td>10 Accounts</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">MySQL Databases<span class="feat-subtext">MariaDB databases</span></th>
+                                    <th class="cf-sticky-feature-cell">MySQL Databases<span class="feat-subtext">MariaDB
+                                            databases</span></th>
                                     <td>1 Database</td>
                                     <td class="popular-col"><strong>3 Databases</strong></td>
                                     <td>5 Databases</td>
@@ -1367,37 +1542,47 @@
                                     <td colspan="4"><i class="las la-shield-alt"></i> Control Panel &amp; Security</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">cPanel Control Panel<span class="feat-subtext">Standard cPanel GUI</span></th>
+                                    <th class="cf-sticky-feature-cell">cPanel Control Panel<span
+                                            class="feat-subtext">Standard cPanel GUI</span></th>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td class="popular-col"><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <th class="cf-sticky-feature-cell">LiteSpeed Web Server<span class="feat-subtext">LSCache WordPress plugin</span></th>
-                                    <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td class="popular-col"><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                    <td class="popular-col"><span class="cf-check-icon"><i
+                                                class="feather-check"></i></span></td>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Free SSL Certificate<span class="feat-subtext">AutoSSL Let's Encrypt</span></th>
+                                    <th class="cf-sticky-feature-cell">LiteSpeed Web Server<span
+                                            class="feat-subtext">LSCache WordPress plugin</span></th>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td class="popular-col"><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                    <td class="popular-col"><span class="cf-check-icon"><i
+                                                class="feather-check"></i></span></td>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Automated Backups<span class="feat-subtext">JetBackup snapshots</span></th>
+                                    <th class="cf-sticky-feature-cell">Free SSL Certificate<span
+                                            class="feat-subtext">AutoSSL Let's Encrypt</span></th>
+                                    <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                    <td class="popular-col"><span class="cf-check-icon"><i
+                                                class="feather-check"></i></span></td>
+                                    <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                </tr>
+                                <tr>
+                                    <th class="cf-sticky-feature-cell">Automated Backups<span
+                                            class="feat-subtext">JetBackup snapshots</span></th>
                                     <td>Weekly</td>
                                     <td class="popular-col"><strong>Weekly</strong></td>
                                     <td>Weekly</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Imunify360 Malware Scan<span class="feat-subtext">Automated cleanup</span></th>
+                                    <th class="cf-sticky-feature-cell">Imunify360 Malware Scan<span
+                                            class="feat-subtext">Automated cleanup</span></th>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td class="popular-col"><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                    <td class="popular-col"><span class="cf-check-icon"><i
+                                                class="feather-check"></i></span></td>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Support Scope<span class="feat-subtext">Assistance level</span></th>
+                                    <th class="cf-sticky-feature-cell">Support Scope<span
+                                            class="feat-subtext">Assistance level</span></th>
                                     <td>Standard 24/7 Ticket</td>
                                     <td class="popular-col">Standard 24/7 Ticket</td>
                                     <td>Standard 24/7 Ticket</td>
@@ -1427,80 +1612,102 @@
                                         <span class="cf-tier-pill-small pill-tier-premium">Managed Tier</span>
                                         <h4 class="cf-plan-title">Starter</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$75.00" data-yearly="$60.00">$75.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$75.00"
+                                                data-yearly="$60.00">$75.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $720/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="301">Choose Starter</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $720/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="301">Choose Starter</a>
                                     </th>
                                     <th class="cf-plan-header-cell popular-col">
                                         <span class="cf-popular-tag">MOST POPULAR</span>
                                         <span class="cf-tier-pill-small pill-tier-premium">Managed Tier</span>
                                         <h4 class="cf-plan-title">Business</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$120.00" data-yearly="$96.00">$120.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$120.00"
+                                                data-yearly="$96.00">$120.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $1,152/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly" class="cf-table-cta-btn btn-cta-featured" data-pid="302">Choose Business</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $1,152/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-featured" data-pid="302">Choose Business</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-premium">Managed Tier</span>
                                         <h4 class="cf-plan-title">Pro</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$210.00" data-yearly="$168.00">$210.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$210.00"
+                                                data-yearly="$168.00">$210.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $2,016/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="303">Choose Pro</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $2,016/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="303">Choose Pro</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-premium">Managed Tier</span>
                                         <h4 class="cf-plan-title">Enterprise</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$350.00" data-yearly="$280.00">$350.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$350.00"
+                                                data-yearly="$280.00">$350.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note" data-monthly-note="Billed monthly" data-yearly-note="Billed $3,360/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="304">Choose Enterprise</a>
+                                        <span class="cf-plan-billing-note cf-comp-billing-note"
+                                            data-monthly-note="Billed monthly"
+                                            data-yearly-note="Billed $3,360/yr (Save 20%)">Billed monthly</span>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="304">Choose Enterprise</a>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!-- Group 1: Dedicated Compute -->
                                 <tr class="cf-cat-header-row">
-                                    <td colspan="5"><i class="feather-server"></i> Dedicated Cloud Infrastructure &amp; RAM</td>
+                                    <td colspan="5"><i class="feather-server"></i> Dedicated Cloud Infrastructure &amp;
+                                        RAM</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Dedicated vCPU Cores<span class="feat-subtext">Guaranteed isolated compute</span></th>
+                                    <th class="cf-sticky-feature-cell">Dedicated vCPU Cores<span
+                                            class="feat-subtext">Guaranteed isolated compute</span></th>
                                     <td><strong>4 vCPU</strong></td>
                                     <td class="popular-col"><strong>8 vCPU</strong></td>
                                     <td><strong>12 vCPU</strong></td>
                                     <td><strong>16 vCPU</strong></td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Dedicated ECC RAM<span class="feat-subtext">No resource contention</span></th>
+                                    <th class="cf-sticky-feature-cell">Dedicated ECC RAM<span class="feat-subtext">No
+                                            resource contention</span></th>
                                     <td><strong>16 GB</strong> RAM</td>
                                     <td class="popular-col"><strong>32 GB</strong> RAM</td>
                                     <td><strong>64 GB</strong> RAM</td>
                                     <td><strong>128 GB</strong> RAM</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">I/O Speed &amp; IOPS<span class="feat-subtext">Enterprise NVMe throughput</span></th>
+                                    <th class="cf-sticky-feature-cell">I/O Speed &amp; IOPS<span
+                                            class="feat-subtext">Enterprise NVMe throughput</span></th>
                                     <td>250 MB/s &bull; 25K IOPS</td>
                                     <td class="popular-col"><strong>500 MB/s &bull; 50K IOPS</strong></td>
                                     <td>1,000 MB/s &bull; 100K IOPS</td>
                                     <td>1,500 MB/s &bull; Uncapped IOPS</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Entry Processes (EP)<span class="feat-subtext">Concurrent heavy app tasks</span></th>
+                                    <th class="cf-sticky-feature-cell">Entry Processes (EP)<span
+                                            class="feat-subtext">Concurrent heavy app tasks</span></th>
                                     <td>250 EP (800 NPROC)</td>
                                     <td class="popular-col"><strong>500 EP (1,500 NPROC)</strong></td>
                                     <td>1,000 EP (3,000 NPROC)</td>
                                     <td>2,000 EP (5,000 NPROC)</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Inode Limits<span class="feat-subtext">Enterprise file volumes</span></th>
+                                    <th class="cf-sticky-feature-cell">Inode Limits<span class="feat-subtext">Enterprise
+                                            file volumes</span></th>
                                     <td>5,000,000</td>
                                     <td class="popular-col"><strong>10,000,000</strong></td>
                                     <td><span class="cf-badge-tag badge-tag-green">Unlimited</span></td>
@@ -1509,31 +1716,37 @@
 
                                 <!-- Group 2: Storage & Networking -->
                                 <tr class="cf-cat-header-row">
-                                    <td colspan="5"><i class="feather-hard-drive"></i> NVMe Allocations, IPs &amp; Network</td>
+                                    <td colspan="5"><i class="feather-hard-drive"></i> NVMe Allocations, IPs &amp;
+                                        Network</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Enterprise NVMe<span class="feat-subtext">High-redundancy RAID-10</span></th>
+                                    <th class="cf-sticky-feature-cell">Enterprise NVMe<span
+                                            class="feat-subtext">High-redundancy RAID-10</span></th>
                                     <td><strong>100 GB</strong> NVMe</td>
                                     <td class="popular-col"><strong>250 GB</strong> NVMe</td>
                                     <td><strong>500 GB</strong> NVMe</td>
                                     <td><strong>1,000 GB (1TB)</strong> NVMe</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Dedicated IPv4<span class="feat-subtext">Clean dedicated IPs</span></th>
+                                    <th class="cf-sticky-feature-cell">Dedicated IPv4<span class="feat-subtext">Clean
+                                            dedicated IPs</span></th>
                                     <td>1 Dedicated IP</td>
                                     <td class="popular-col"><strong>1 Dedicated IP</strong></td>
                                     <td>2 Dedicated IPs</td>
                                     <td>4 Dedicated IPs</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Websites &amp; Databases<span class="feat-subtext">Multi-domain hosting</span></th>
+                                    <th class="cf-sticky-feature-cell">Websites &amp; Databases<span
+                                            class="feat-subtext">Multi-domain hosting</span></th>
                                     <td><span class="cf-badge-tag badge-tag-green">Unlimited</span></td>
-                                    <td class="popular-col"><span class="cf-badge-tag badge-tag-green">Unlimited</span></td>
+                                    <td class="popular-col"><span class="cf-badge-tag badge-tag-green">Unlimited</span>
+                                    </td>
                                     <td><span class="cf-badge-tag badge-tag-green">Unlimited</span></td>
                                     <td><span class="cf-badge-tag badge-tag-green">Unlimited</span></td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Network Backbone<span class="feat-subtext">Anti-DDoS protected</span></th>
+                                    <th class="cf-sticky-feature-cell">Network Backbone<span
+                                            class="feat-subtext">Anti-DDoS protected</span></th>
                                     <td>10Gbps Redundant Uplink</td>
                                     <td class="popular-col">10Gbps Redundant Uplink</td>
                                     <td>10Gbps Redundant Uplink</td>
@@ -1542,40 +1755,48 @@
 
                                 <!-- Group 3: Managed Services & SLA -->
                                 <tr class="cf-cat-header-row">
-                                    <td colspan="5"><i class="feather-settings"></i> Fully Managed Operations &amp; Support</td>
+                                    <td colspan="5"><i class="feather-settings"></i> Fully Managed Operations &amp;
+                                        Support</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Control Panel Stack<span class="feat-subtext">WHM + cPanel Licensing</span></th>
+                                    <th class="cf-sticky-feature-cell">Control Panel Stack<span class="feat-subtext">WHM
+                                            + cPanel Licensing</span></th>
                                     <td>cPanel / WHM Included</td>
                                     <td class="popular-col"><strong>cPanel / WHM Included</strong></td>
                                     <td>cPanel / WHM Included</td>
                                     <td>cPanel / WHM Included</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Dedicated Redis Cache<span class="feat-subtext">In-memory database accelerator</span></th>
+                                    <th class="cf-sticky-feature-cell">Dedicated Redis Cache<span
+                                            class="feat-subtext">In-memory database accelerator</span></th>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
-                                    <td class="popular-col"><span class="cf-check-icon"><i class="feather-check"></i></span></td>
+                                    <td class="popular-col"><span class="cf-check-icon"><i
+                                                class="feather-check"></i></span></td>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
                                     <td><span class="cf-check-icon"><i class="feather-check"></i></span></td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Automated Backups<span class="feat-subtext">Real-time snapshots</span></th>
+                                    <th class="cf-sticky-feature-cell">Automated Backups<span
+                                            class="feat-subtext">Real-time snapshots</span></th>
                                     <td>2x Daily + AWS S3</td>
                                     <td class="popular-col"><strong>2x Daily + AWS S3</strong></td>
                                     <td>2x Daily + AWS S3</td>
                                     <td>Continuous + AWS S3</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Proactive System Tuning<span class="feat-subtext">DB, PHP-FPM &amp; MySQL optimization</span></th>
+                                    <th class="cf-sticky-feature-cell">Proactive System Tuning<span
+                                            class="feat-subtext">DB, PHP-FPM &amp; MySQL optimization</span></th>
                                     <td>Monthly Audit</td>
                                     <td class="popular-col"><strong>Bi-weekly Audit</strong></td>
                                     <td>Continuous Tuning</td>
                                     <td>Continuous Tuning</td>
                                 </tr>
                                 <tr>
-                                    <th class="cf-sticky-feature-cell">Support SLA Guarantee<span class="feat-subtext">Dedicated response time</span></th>
+                                    <th class="cf-sticky-feature-cell">Support SLA Guarantee<span
+                                            class="feat-subtext">Dedicated response time</span></th>
                                     <td><span class="cf-badge-tag badge-tag-blue">&lt; 15 Min SLA</span></td>
-                                    <td class="popular-col"><span class="cf-badge-tag badge-tag-blue">&lt; 10 Min SLA</span></td>
+                                    <td class="popular-col"><span class="cf-badge-tag badge-tag-blue">&lt; 10 Min
+                                            SLA</span></td>
                                     <td><span class="cf-badge-tag badge-tag-orange">Senior SysAdmin SLA</span></td>
                                     <td><span class="cf-badge-tag badge-tag-orange">Dedicated DevOps SLA</span></td>
                                 </tr>
@@ -1605,103 +1826,125 @@
                                         <span class="cf-tier-pill-small pill-tier-budget">Budget</span>
                                         <h4 class="cf-plan-title">Mini</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$3.00" data-yearly="$2.40">$3.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$3.00"
+                                                data-yearly="$2.40">$3.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="101">Order Mini</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="101">Order Mini</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-budget">Budget</span>
                                         <h4 class="cf-plan-title">Basic</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$4.50" data-yearly="$3.60">$4.50</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$4.50"
+                                                data-yearly="$3.60">$4.50</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="102">Order Basic</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="102">Order Basic</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-budget">Budget</span>
                                         <h4 class="cf-plan-title">Plus</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$6.00" data-yearly="$4.80">$6.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$6.00"
+                                                data-yearly="$4.80">$6.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="103">Order Plus</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="103">Order Plus</a>
                                     </th>
                                     <!-- Business 4 -->
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-business">Business</span>
                                         <h4 class="cf-plan-title">Starter</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$7.50" data-yearly="$6.00">$7.50</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$7.50"
+                                                data-yearly="$6.00">$7.50</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="201">Order Starter</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="201">Order Starter</a>
                                     </th>
                                     <th class="cf-plan-header-cell popular-col">
                                         <span class="cf-popular-tag">FEATURED</span>
                                         <span class="cf-tier-pill-small pill-tier-business">Business</span>
                                         <h4 class="cf-plan-title">Business</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$15.00" data-yearly="$12.00">$15.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$15.00"
+                                                data-yearly="$12.00">$15.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" class="cf-table-cta-btn btn-cta-featured" data-pid="202">Order Business</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-featured" data-pid="202">Order Business</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-business">Business</span>
                                         <h4 class="cf-plan-title">Pro</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$27.00" data-yearly="$21.60">$27.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$27.00"
+                                                data-yearly="$21.60">$27.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="203">Order Pro</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="203">Order Pro</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-business">Business</span>
                                         <h4 class="cf-plan-title">Enterprise</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$48.00" data-yearly="$38.40">$48.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$48.00"
+                                                data-yearly="$38.40">$48.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="204">Order Ent.</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="204">Order Ent.</a>
                                     </th>
                                     <!-- Premium 4 -->
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-premium">Managed</span>
                                         <h4 class="cf-plan-title">Starter</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$75.00" data-yearly="$60.00">$75.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$75.00"
+                                                data-yearly="$60.00">$75.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="301">Order Managed</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="301">Order Managed</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-premium">Managed</span>
                                         <h4 class="cf-plan-title">Business</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$120.00" data-yearly="$96.00">$120.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$120.00"
+                                                data-yearly="$96.00">$120.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="302">Order Managed</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="302">Order Managed</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-premium">Managed</span>
                                         <h4 class="cf-plan-title">Pro</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$210.00" data-yearly="$168.00">$210.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$210.00"
+                                                data-yearly="$168.00">$210.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="303">Order Managed</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="303">Order Managed</a>
                                     </th>
                                     <th class="cf-plan-header-cell">
                                         <span class="cf-tier-pill-small pill-tier-premium">Managed</span>
                                         <h4 class="cf-plan-title">Enterprise</h4>
                                         <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$350.00" data-yearly="$280.00">$350.00</span>
+                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$350.00"
+                                                data-yearly="$280.00">$350.00</span>
                                             <span class="cf-price-period">/mo</span>
                                         </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly" class="cf-table-cta-btn btn-cta-subtle" data-pid="304">Order Managed</a>
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly"
+                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="304">Order Managed</a>
                                     </th>
                                 </tr>
                             </thead>
@@ -1816,8 +2059,10 @@
             <!-- Custom Solution Banner -->
             <div class="cf-custom-solution-bar">
                 <div class="cf-custom-bar-text">
-                    <h4>Need dedicated CPU cores, root VPS access, or custom server clustering?</h4>
-                    <p>Explore our KVM Linux/Windows VPS plans (starting from $7.99/mo) or request a tailored infrastructure quote from our engineering team.</p>
+                    <h4 style="color: #ffffff !important;">Need dedicated CPU cores, root VPS access, or custom server
+                        clustering?</h4>
+                    <p>Explore our KVM Linux/Windows VPS plans (starting from $7.99/mo) or request a tailored
+                        infrastructure quote from our engineering team.</p>
                 </div>
                 <div class="cf-custom-bar-actions">
                     <a href="/vps-hosting/" class="cf-bar-btn btn-secondary-light">Explore VPS Plans</a>
@@ -1847,7 +2092,8 @@
                     Not Sure Which Plan Fits? <span>Let's Match Your Workload</span>
                 </h2>
                 <p class="matchmaker-subtitle">
-                    Answer 3 quick questions about your project scale, visitor volume, and technical preferences. We'll instantly recommend the optimal infrastructure tier and explain exactly why it fits your workload.
+                    Answer 3 quick questions about your project scale, visitor volume, and technical preferences. We'll
+                    instantly recommend the optimal infrastructure tier and explain exactly why it fits your workload.
                 </p>
 
                 <!-- Fast-Track Presets -->
@@ -1898,7 +2144,8 @@
                     <div class="wizard-question-box">
                         <span class="question-step-badge">Question 1 of 3</span>
                         <h3 class="question-heading">What type of website or platform are you hosting?</h3>
-                        <p class="question-subtext">Select the category that best describes your project's architecture and nature.</p>
+                        <p class="question-subtext">Select the category that best describes your project's architecture
+                            and nature.</p>
                     </div>
 
                     <div class="wizard-options-grid">
@@ -1909,17 +2156,20 @@
                                 <span class="option-tag-pill">Starter</span>
                             </div>
                             <h4 class="option-title">Personal Website / Blog / Portfolio</h4>
-                            <p class="option-desc">Portfolios, personal blogs, resumes, hobby projects, student showcases.</p>
+                            <p class="option-desc">Portfolios, personal blogs, resumes, hobby projects, student
+                                showcases.</p>
                         </div>
 
                         <!-- Option 2: Business -->
-                        <div class="wizard-option-card selected" onclick="selectMatchmakerOption('project', 'business', this)">
+                        <div class="wizard-option-card selected"
+                            onclick="selectMatchmakerOption('project', 'business', this)">
                             <div class="option-card-top">
                                 <div class="option-icon-circle"><i class="las la-briefcase"></i></div>
                                 <span class="option-tag-pill">Popular</span>
                             </div>
                             <h4 class="option-title">Growing Business / Corporate Site</h4>
-                            <p class="option-desc">SMEs, corporate platforms, agency client sites, lead-gen and marketing portals.</p>
+                            <p class="option-desc">SMEs, corporate platforms, agency client sites, lead-gen and
+                                marketing portals.</p>
                         </div>
 
                         <!-- Option 3: E-Commerce -->
@@ -1929,7 +2179,8 @@
                                 <span class="option-tag-pill">High Traffic</span>
                             </div>
                             <h4 class="option-title">Demanding Apps / E-Commerce Store</h4>
-                            <p class="option-desc">WooCommerce, high-transaction shops, SaaS apps, LMS, and heavy media sites.</p>
+                            <p class="option-desc">WooCommerce, high-transaction shops, SaaS apps, LMS, and heavy media
+                                sites.</p>
                         </div>
 
                         <!-- Option 4: VPS / Dev -->
@@ -1939,7 +2190,8 @@
                                 <span class="option-tag-pill">Developer</span>
                             </div>
                             <h4 class="option-title">Developer Stacks / APIs / Microservices</h4>
-                            <p class="option-desc">Node.js, Python, Go, Docker containers, cron daemons, and custom Linux stacks.</p>
+                            <p class="option-desc">Node.js, Python, Go, Docker containers, cron daemons, and custom
+                                Linux stacks.</p>
                         </div>
 
                         <!-- Option 5: Dedicated -->
@@ -1949,13 +2201,16 @@
                                 <span class="option-tag-pill">Enterprise</span>
                             </div>
                             <h4 class="option-title">Mission-Critical Enterprise / Big DB</h4>
-                            <p class="option-desc">Massive unshared databases, strict regulatory compliance, private bare-metal.</p>
+                            <p class="option-desc">Massive unshared databases, strict regulatory compliance, private
+                                bare-metal.</p>
                         </div>
                     </div>
 
                     <div class="wizard-footer-nav">
-                        <span class="wizard-step-hint"><i class="las la-mouse-pointer"></i> Click an option to continue to Step 2</span>
-                        <button type="button" class="btn btn-sm btn-primary px-3 py-2 fw-bold" onclick="goToMatchmakerStep(2)">
+                        <span class="wizard-step-hint"><i class="las la-mouse-pointer"></i> Click an option to continue
+                            to Step 2</span>
+                        <button type="button" class="btn btn-sm btn-primary px-3 py-2 fw-bold"
+                            onclick="goToMatchmakerStep(2)">
                             Next Question <i class="las la-arrow-right"></i>
                         </button>
                     </div>
@@ -1966,7 +2221,8 @@
                     <div class="wizard-question-box">
                         <span class="question-step-badge">Question 2 of 3</span>
                         <h3 class="question-heading">What is your estimated monthly traffic volume?</h3>
-                        <p class="question-subtext">This helps calculate the required memory, CPU thread isolation, and bandwidth capacity.</p>
+                        <p class="question-subtext">This helps calculate the required memory, CPU thread isolation, and
+                            bandwidth capacity.</p>
                     </div>
 
                     <div class="wizard-options-grid">
@@ -1977,17 +2233,20 @@
                                 <span class="option-tag-pill">&lt; 10k /mo</span>
                             </div>
                             <h4 class="option-title">Starter Traffic (&lt; 10,000 visits)</h4>
-                            <p class="option-desc">Baseline traffic with steady, predictable visitors and minimal concurrent load.</p>
+                            <p class="option-desc">Baseline traffic with steady, predictable visitors and minimal
+                                concurrent load.</p>
                         </div>
 
                         <!-- Option 2: Moderate -->
-                        <div class="wizard-option-card selected" onclick="selectMatchmakerOption('traffic', 'moderate', this)">
+                        <div class="wizard-option-card selected"
+                            onclick="selectMatchmakerOption('traffic', 'moderate', this)">
                             <div class="option-card-top">
                                 <div class="option-icon-circle"><i class="las la-users"></i></div>
                                 <span class="option-tag-pill">10k &ndash; 100k</span>
                             </div>
                             <h4 class="option-title">Moderate Scale (10,000 &ndash; 100,000 visits)</h4>
-                            <p class="option-desc">Consistent commercial visitors, active daily inquiries, and content consumption.</p>
+                            <p class="option-desc">Consistent commercial visitors, active daily inquiries, and content
+                                consumption.</p>
                         </div>
 
                         <!-- Option 3: Heavy -->
@@ -1997,17 +2256,20 @@
                                 <span class="option-tag-pill">100k &ndash; 500k+</span>
                             </div>
                             <h4 class="option-title">High Traffic &amp; Surges (100,000+)</h4>
-                            <p class="option-desc">Flash promotions, checkout concurrency, database intensive browsing spikes.</p>
+                            <p class="option-desc">Flash promotions, checkout concurrency, database intensive browsing
+                                spikes.</p>
                         </div>
 
                         <!-- Option 4: API / Dev -->
-                        <div class="wizard-option-card" onclick="selectMatchmakerOption('traffic', 'api_traffic', this)">
+                        <div class="wizard-option-card"
+                            onclick="selectMatchmakerOption('traffic', 'api_traffic', this)">
                             <div class="option-card-top">
                                 <div class="option-icon-circle"><i class="las la-network-wired"></i></div>
                                 <span class="option-tag-pill">APIs &amp; Cron</span>
                             </div>
                             <h4 class="option-title">Continuous API Calls &amp; Dev Workloads</h4>
-                            <p class="option-desc">High-frequency REST/GraphQL requests, background jobs, worker queues.</p>
+                            <p class="option-desc">High-frequency REST/GraphQL requests, background jobs, worker queues.
+                            </p>
                         </div>
 
                         <!-- Option 5: Massive -->
@@ -2017,7 +2279,8 @@
                                 <span class="option-tag-pill">Multi-TB</span>
                             </div>
                             <h4 class="option-title">Massive Scale &amp; Unmetered Throughput</h4>
-                            <p class="option-desc">Huge global audience, heavy video/media streaming, unmetered gigabit channels.</p>
+                            <p class="option-desc">Huge global audience, heavy video/media streaming, unmetered gigabit
+                                channels.</p>
                         </div>
                     </div>
 
@@ -2025,7 +2288,8 @@
                         <button type="button" class="btn-wizard-back" onclick="goToMatchmakerStep(1)">
                             <i class="las la-arrow-left"></i> Previous Question
                         </button>
-                        <button type="button" class="btn btn-sm btn-primary px-3 py-2 fw-bold" onclick="goToMatchmakerStep(3)">
+                        <button type="button" class="btn btn-sm btn-primary px-3 py-2 fw-bold"
+                            onclick="goToMatchmakerStep(3)">
                             Next Question <i class="las la-arrow-right"></i>
                         </button>
                     </div>
@@ -2036,38 +2300,45 @@
                     <div class="wizard-question-box">
                         <span class="question-step-badge">Question 3 of 3</span>
                         <h3 class="question-heading">What level of control, management &amp; backups do you need?</h3>
-                        <p class="question-subtext">Choose between zero-hassle automated managed hosting or full root terminal sovereignty.</p>
+                        <p class="question-subtext">Choose between zero-hassle automated managed hosting or full root
+                            terminal sovereignty.</p>
                     </div>
 
                     <div class="wizard-options-grid">
                         <!-- Option 1: cPanel Basic -->
-                        <div class="wizard-option-card" onclick="selectMatchmakerOption('control', 'cpanel_basic', this)">
+                        <div class="wizard-option-card"
+                            onclick="selectMatchmakerOption('control', 'cpanel_basic', this)">
                             <div class="option-card-top">
                                 <div class="option-icon-circle"><i class="las la-sliders-h"></i></div>
                                 <span class="option-tag-pill">Easy cPanel</span>
                             </div>
                             <h4 class="option-title">Hassle-Free cPanel &amp; 1-Click Installs</h4>
-                            <p class="option-desc">Zero server maintenance. Free AutoSSL, Webmail, Softaculous 1-click WordPress.</p>
+                            <p class="option-desc">Zero server maintenance. Free AutoSSL, Webmail, Softaculous 1-click
+                                WordPress.</p>
                         </div>
 
                         <!-- Option 2: Business Backup -->
-                        <div class="wizard-option-card selected" onclick="selectMatchmakerOption('control', 'cpanel_backup', this)">
+                        <div class="wizard-option-card selected"
+                            onclick="selectMatchmakerOption('control', 'cpanel_backup', this)">
                             <div class="option-card-top">
                                 <div class="option-icon-circle"><i class="las la-shield-alt"></i></div>
                                 <span class="option-tag-pill">Daily Backups</span>
                             </div>
                             <h4 class="option-title">Business Managed + Daily JetBackup</h4>
-                            <p class="option-desc">Automated 30-day snapshot restore, CloudLinux LVE isolation, priority support.</p>
+                            <p class="option-desc">Automated 30-day snapshot restore, CloudLinux LVE isolation, priority
+                                support.</p>
                         </div>
 
                         <!-- Option 3: Redis / Isolated -->
-                        <div class="wizard-option-card" onclick="selectMatchmakerOption('control', 'cpanel_redis', this)">
+                        <div class="wizard-option-card"
+                            onclick="selectMatchmakerOption('control', 'cpanel_redis', this)">
                             <div class="option-card-top">
                                 <div class="option-icon-circle"><i class="las la-tachometer-alt"></i></div>
                                 <span class="option-tag-pill">Isolated + Redis</span>
                             </div>
                             <h4 class="option-title">Dedicated Redis + 15m SysAdmin SLA</h4>
-                            <p class="option-desc">In-memory caching for sub-second database queries and proactive server management.</p>
+                            <p class="option-desc">In-memory caching for sub-second database queries and proactive
+                                server management.</p>
                         </div>
 
                         <!-- Option 4: Root SSH -->
@@ -2077,7 +2348,8 @@
                                 <span class="option-tag-pill">Root Access</span>
                             </div>
                             <h4 class="option-title">100% Root Access &amp; SSH Terminal</h4>
-                            <p class="option-desc">Total Linux administrative freedom. Install custom software, firewalls, and OS reloads.</p>
+                            <p class="option-desc">Total Linux administrative freedom. Install custom software,
+                                firewalls, and OS reloads.</p>
                         </div>
 
                         <!-- Option 5: Bare-Metal -->
@@ -2087,7 +2359,8 @@
                                 <span class="option-tag-pill">100% Private</span>
                             </div>
                             <h4 class="option-title">Bare-Metal Hardware &amp; Hardware RAID</h4>
-                            <p class="option-desc">Single-tenant physical server. Zero virtualization overhead and dedicated unshared CPU/RAM.</p>
+                            <p class="option-desc">Single-tenant physical server. Zero virtualization overhead and
+                                dedicated unshared CPU/RAM.</p>
                         </div>
                     </div>
 
@@ -2095,7 +2368,8 @@
                         <button type="button" class="btn-wizard-back" onclick="goToMatchmakerStep(2)">
                             <i class="las la-arrow-left"></i> Previous Question
                         </button>
-                        <button type="button" class="btn btn-sm btn-success px-4 py-2 fw-bold" onclick="calculateAndShowMatch()">
+                        <button type="button" class="btn btn-sm btn-success px-4 py-2 fw-bold"
+                            onclick="calculateAndShowMatch()">
                             Calculate My Match <i class="las la-magic"></i>
                         </button>
                     </div>
@@ -2103,7 +2377,7 @@
 
                 <!-- RESULT PANEL: Tailored Recommendation & Why It's Suitable -->
                 <div class="matchmaker-result-wrapper" id="matchmaker-result-panel" style="display: none;">
-                    
+
                     <!-- Result Top Banner -->
                     <div class="result-header-banner">
                         <div class="result-banner-left">
@@ -2112,7 +2386,8 @@
                             </div>
                             <div>
                                 <h3 class="result-banner-title">Here is Your Recommended Hosting Solution</h3>
-                                <p class="result-banner-sub">Calculated specifically from your workload profile and infrastructure requirements.</p>
+                                <p class="result-banner-sub">Calculated specifically from your workload profile and
+                                    infrastructure requirements.</p>
                             </div>
                         </div>
                         <div class="result-score-badge">
@@ -2123,14 +2398,20 @@
                     <!-- Selected Answers Quick Summary (Clickable to edit) -->
                     <div class="result-selection-pills">
                         <span class="result-pills-label"><i class="las la-sliders-h"></i> Your Workload Profile:</span>
-                        <span class="selection-crumb-badge" onclick="jumpToMatchmakerStep(1)" title="Click to change project type">
-                            Project: <strong id="crumb-project-text">Growing Business</strong> <i class="las la-edit"></i>
+                        <span class="selection-crumb-badge" onclick="jumpToMatchmakerStep(1)"
+                            title="Click to change project type">
+                            Project: <strong id="crumb-project-text">Growing Business</strong> <i
+                                class="las la-edit"></i>
                         </span>
-                        <span class="selection-crumb-badge" onclick="jumpToMatchmakerStep(2)" title="Click to change traffic volume">
-                            Traffic: <strong id="crumb-traffic-text">10k &ndash; 100k /mo</strong> <i class="las la-edit"></i>
+                        <span class="selection-crumb-badge" onclick="jumpToMatchmakerStep(2)"
+                            title="Click to change traffic volume">
+                            Traffic: <strong id="crumb-traffic-text">10k &ndash; 100k /mo</strong> <i
+                                class="las la-edit"></i>
                         </span>
-                        <span class="selection-crumb-badge" onclick="jumpToMatchmakerStep(3)" title="Click to change management control">
-                            Control: <strong id="crumb-control-text">Business Managed</strong> <i class="las la-edit"></i>
+                        <span class="selection-crumb-badge" onclick="jumpToMatchmakerStep(3)"
+                            title="Click to change management control">
+                            Control: <strong id="crumb-control-text">Business Managed</strong> <i
+                                class="las la-edit"></i>
                         </span>
                     </div>
 
@@ -2140,9 +2421,10 @@
                         <!-- Left Column: Matched Plan Card -->
                         <div class="result-plan-card">
                             <div>
-                                <span class="result-plan-tag tag-orange" id="res-plan-badge">Businesses &amp; Corporate</span>
+                                <span class="result-plan-tag tag-orange" id="res-plan-badge">Businesses &amp;
+                                    Corporate</span>
                                 <h3 class="result-plan-name" id="res-plan-name">Business Web Hosting</h3>
-                                
+
                                 <div class="result-plan-price-row">
                                     <span class="result-plan-price-label">Recommended Starting Tier:</span>
                                     <span class="result-plan-price-val" id="res-plan-price">$7.50</span>
@@ -2150,16 +2432,22 @@
                                 </div>
 
                                 <ul class="result-specs-checklist" id="res-specs-list">
-                                    <li><i class="las la-check-circle"></i> <span id="res-spec-storage">15 &ndash; 150 GB Enterprise NVMe Gen4</span></li>
-                                    <li><i class="las la-check-circle"></i> <span id="res-spec-cpu">1 &ndash; 4 Cores &amp; 2 &ndash; 8 GB RAM</span></li>
-                                    <li><i class="las la-check-circle"></i> <span id="res-spec-backup">Automated Daily JetBackup (30-day restore)</span></li>
-                                    <li><i class="las la-check-circle"></i> <span id="res-spec-panel">Official cPanel + Priority 24/7 Support</span></li>
+                                    <li><i class="las la-check-circle"></i> <span id="res-spec-storage">15 &ndash; 150
+                                            GB Enterprise NVMe Gen4</span></li>
+                                    <li><i class="las la-check-circle"></i> <span id="res-spec-cpu">1 &ndash; 4 Cores
+                                            &amp; 2 &ndash; 8 GB RAM</span></li>
+                                    <li><i class="las la-check-circle"></i> <span id="res-spec-backup">Automated Daily
+                                            JetBackup (30-day restore)</span></li>
+                                    <li><i class="las la-check-circle"></i> <span id="res-spec-panel">Official cPanel +
+                                            Priority 24/7 Support</span></li>
                                 </ul>
                             </div>
 
                             <div class="result-plan-actions">
-                                <a href="javascript:void(0)" id="res-primary-btn" onclick="handleMatchmakerCta()" class="btn-result-cta">
-                                    <span id="res-btn-label">View Business Plans</span> <i class="las la-arrow-right"></i>
+                                <a href="javascript:void(0)" id="res-primary-btn" onclick="handleMatchmakerCta()"
+                                    class="btn-result-cta">
+                                    <span id="res-btn-label">View Business Plans</span> <i
+                                        class="las la-arrow-right"></i>
                                 </a>
                                 <button type="button" class="btn-result-retake" onclick="restartMatchmaker()">
                                     <i class="las la-redo"></i> Retake Questionnaire
@@ -2175,7 +2463,8 @@
                                 </div>
                                 <div>
                                     <h4 class="why-main-heading">Why This Plan Is Your Ideal Match</h4>
-                                    <p class="why-sub-heading">Detailed infrastructure justification based on your exact answers</p>
+                                    <p class="why-sub-heading">Detailed infrastructure justification based on your exact
+                                        answers</p>
                                 </div>
                             </div>
 
@@ -2186,9 +2475,12 @@
                                         <i class="las la-laptop-code"></i>
                                     </div>
                                     <div class="why-item-content">
-                                        <div class="why-item-title" id="why-title-1">Workload &amp; Architecture Match</div>
+                                        <div class="why-item-title" id="why-title-1">Workload &amp; Architecture Match
+                                        </div>
                                         <p class="why-item-text" id="why-text-1">
-                                            Engineered specifically for corporate websites, SMEs, and digital agencies that require steady uptime, professional webmail, and zero maintenance headaches.
+                                            Engineered specifically for corporate websites, SMEs, and digital agencies
+                                            that require steady uptime, professional webmail, and zero maintenance
+                                            headaches.
                                         </p>
                                     </div>
                                 </div>
@@ -2199,9 +2491,12 @@
                                         <i class="las la-tachometer-alt"></i>
                                     </div>
                                     <div class="why-item-content">
-                                        <div class="why-item-title" id="why-title-2">Traffic &amp; Concurrency Capacity</div>
+                                        <div class="why-item-title" id="why-title-2">Traffic &amp; Concurrency Capacity
+                                        </div>
                                         <p class="why-item-text" id="why-text-2">
-                                            Easily accommodates your expected 10,000 to 100,000 monthly visitors. CloudLinux LVE ensures your CPU and RAM allocations remain 100% isolated and unaffected by neighbors.
+                                            Easily accommodates your expected 10,000 to 100,000 monthly visitors.
+                                            CloudLinux LVE ensures your CPU and RAM allocations remain 100% isolated and
+                                            unaffected by neighbors.
                                         </p>
                                     </div>
                                 </div>
@@ -2212,9 +2507,12 @@
                                         <i class="las la-shield-alt"></i>
                                     </div>
                                     <div class="why-item-content">
-                                        <div class="why-item-title" id="why-title-3">Management, Backups &amp; Peace of Mind</div>
+                                        <div class="why-item-title" id="why-title-3">Management, Backups &amp; Peace of
+                                            Mind</div>
                                         <p class="why-item-text" id="why-text-3">
-                                            Includes automated off-site daily JetBackup with a 30-day historical snapshot archive, free AutoSSL certificates, and priority 24/7 technical assistance.
+                                            Includes automated off-site daily JetBackup with a 30-day historical
+                                            snapshot archive, free AutoSSL certificates, and priority 24/7 technical
+                                            assistance.
                                         </p>
                                     </div>
                                 </div>
@@ -2225,9 +2523,12 @@
                                         <i class="las la-coins"></i>
                                     </div>
                                     <div class="why-item-content">
-                                        <div class="why-item-title" id="why-title-4">Optimal Cost-to-Performance Ratio</div>
+                                        <div class="why-item-title" id="why-title-4">Optimal Cost-to-Performance Ratio
+                                        </div>
                                         <p class="why-item-text" id="why-text-4">
-                                            At just $7.50/mo, this provides the perfect commercial balance &mdash; giving your business high-availability cloud infrastructure without paying for costly unneeded dedicated server capacity.
+                                            At just $7.50/mo, this provides the perfect commercial balance &mdash;
+                                            giving your business high-availability cloud infrastructure without paying
+                                            for costly unneeded dedicated server capacity.
                                         </p>
                                     </div>
                                 </div>
@@ -2249,7 +2550,7 @@
             <!-- Ecosystem Tag Pill -->
             <div class="ecosystem-tag-pill">
                 <span class="pulse-dot-blue"></span>
-                <span>Global Infrastructure & Technology Stack</span>
+                <span style="color: #ffffff;">Global Infrastructure & Technology Stack</span>
                 <span class="ecosystem-pill-sub">Tier-1 Network</span>
             </div>
 
@@ -2258,7 +2559,8 @@
                 Technologies We Work With &amp; <span class="text-accent-blue">Global Infrastructure</span>
             </h2>
             <p class="ecosystem-subtitle">
-                Built on world-leading cloud datacenters, Tier-1 optical transit networks, and industry-standard software stacks to
+                Built on world-leading cloud datacenters, Tier-1 optical transit networks, and industry-standard
+                software stacks to
                 guarantee ultra-low latency, 99.9% uptime, and transparent hosting.
             </p>
         </div>
@@ -2560,18 +2862,20 @@
     </section>
 
 
-        <!-- =========================================================================
+    <!-- =========================================================================
          4. WHY CHOOSE CLOUDFLOX: ARCHITECTURE & ACTUAL FEATURES (SEO ENHANCED)
          ========================================================================= -->
     <section class="modern-why-section" id="why-cloudflox">
         <div class="container">
             <div class="why-header-box text-center">
-                <span class="why-badge-pill" data-sal="slide-down"><i class="las la-award"></i> The CloudFlox Advantage</span>
+                <span class="why-badge-pill" data-sal="slide-down"><i class="las la-award"></i> The CloudFlox
+                    Advantage</span>
                 <h2 class="why-main-title" data-sal="slide-up">
                     Engineered for Speed, Isolation &amp; <span>Proven Reliability</span>
                 </h2>
                 <p class="why-subtitle" data-sal="slide-up">
-                    We present the actual enterprise hardware, CloudLinux kernel resource isolation, official cPanel management, 
+                    We present the actual enterprise hardware, CloudLinux kernel resource isolation, official cPanel
+                    management,
                     and proactive AI defenses powering your websites. No unverified partnerships or hidden throttles.
                 </p>
             </div>
@@ -2591,8 +2895,10 @@
                             </div>
                             <h3 class="bento-seo-title">Ultra PCIe Gen4 NVMe Enterprise Storage</h3>
                             <p class="bento-seo-desc">
-                                Equipped with pure PCIe 4.0 NVMe solid state drives delivering sustained read/write speeds over <strong>7,000 MB/s</strong>. 
-                                Instant database queries, lightning-fast WordPress execution, and maximum scores on Google Core Web Vitals (LCP &amp; INP).
+                                Equipped with pure PCIe 4.0 NVMe solid state drives delivering sustained read/write
+                                speeds over <strong>7,000 MB/s</strong>.
+                                Instant database queries, lightning-fast WordPress execution, and maximum scores on
+                                Google Core Web Vitals (LCP &amp; INP).
                             </p>
 
                             <!-- Speed Benchmark Visual -->
@@ -2619,8 +2925,10 @@
                         </div>
 
                         <ul class="bento-feature-checklist">
-                            <li><i class="las la-check-circle"></i> <span><strong>Hardware RAID-10 Redundancy:</strong> Continuous zero-loss disk mirroring and fail-safe parity.</span></li>
-                            <li><i class="las la-check-circle"></i> <span><strong>Low Latency MySQL I/O:</strong> Eliminates disk queue delays during high-concurrency checkout traffic.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>Hardware RAID-10 Redundancy:</strong>
+                                    Continuous zero-loss disk mirroring and fail-safe parity.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>Low Latency MySQL I/O:</strong>
+                                    Eliminates disk queue delays during high-concurrency checkout traffic.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -2637,8 +2945,10 @@
                             </div>
                             <h3 class="bento-seo-title">CloudLinux LVE Limits &amp; Kernel Isolation</h3>
                             <p class="bento-seo-desc">
-                                Every shared cPanel hosting account runs within a dedicated Lightweight Virtualized Environment (LVE). 
-                                Fixed CPU, physical RAM, and IOPS allocations guarantee that other accounts never steal your server power.
+                                Every shared cPanel hosting account runs within a dedicated Lightweight Virtualized
+                                Environment (LVE).
+                                Fixed CPU, physical RAM, and IOPS allocations guarantee that other accounts never steal
+                                your server power.
                             </p>
 
                             <!-- LVE Resource Grid -->
@@ -2663,8 +2973,10 @@
                         </div>
 
                         <ul class="bento-feature-checklist">
-                            <li><i class="las la-check-circle"></i> <span><strong>CageFS Sandboxing:</strong> Virtualized file system prevents cross-tenant script snooping.</span></li>
-                            <li><i class="las la-check-circle"></i> <span><strong>MySQL Governor:</strong> Automatically throttles runaway database spikes in real time.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>CageFS Sandboxing:</strong>
+                                    Virtualized file system prevents cross-tenant script snooping.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>MySQL Governor:</strong> Automatically
+                                    throttles runaway database spikes in real time.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -2681,14 +2993,18 @@
                             </div>
                             <h3 class="bento-seo-title">Official cPanel &amp; WHM Control Interface</h3>
                             <p class="bento-seo-desc">
-                                The world’s leading web hosting control panel. Enjoy full graphical management over DNS zones, domains, email accounts, and MariaDB databases without complex terminal commands.
+                                The world’s leading web hosting control panel. Enjoy full graphical management over DNS
+                                zones, domains, email accounts, and MariaDB databases without complex terminal commands.
                             </p>
                         </div>
 
                         <ul class="bento-feature-checklist">
-                            <li><i class="las la-check-circle"></i> <span><strong>1-Click Softaculous Apps:</strong> Deploy WordPress, Laravel, or WooCommerce in seconds.</span></li>
-                            <li><i class="las la-check-circle"></i> <span><strong>Multi-PHP Selector:</strong> Seamlessly toggle between PHP 7.4, 8.1, 8.2 &amp; 8.3+.</span></li>
-                            <li><i class="las la-check-circle"></i> <span><strong>WHM Management:</strong> Full multi-account server management on managed nodes.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>1-Click Softaculous Apps:</strong>
+                                    Deploy WordPress, Laravel, or WooCommerce in seconds.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>Multi-PHP Selector:</strong>
+                                    Seamlessly toggle between PHP 7.4, 8.1, 8.2 &amp; 8.3+.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>WHM Management:</strong> Full
+                                    multi-account server management on managed nodes.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -2705,14 +3021,19 @@
                             </div>
                             <h3 class="bento-seo-title">Multi-Layer Imunify360 &amp; DDoS Defense</h3>
                             <p class="bento-seo-desc">
-                                Enterprise cybersecurity active 24/7. Automated machine-learning Web Application Firewall (WAF) inspects incoming requests, filters malicious botnets, and neutralizes exploits.
+                                Enterprise cybersecurity active 24/7. Automated machine-learning Web Application
+                                Firewall (WAF) inspects incoming requests, filters malicious botnets, and neutralizes
+                                exploits.
                             </p>
                         </div>
 
                         <ul class="bento-feature-checklist">
-                            <li><i class="las la-check-circle"></i> <span><strong>Automated Real-Time Cleanup:</strong> Neutralizes infected files the instant they are uploaded.</span></li>
-                            <li><i class="las la-check-circle"></i> <span><strong>Free AutoSSL (Let's Encrypt):</strong> Instant automated HTTPS encryption on all domains.</span></li>
-                            <li><i class="las la-check-circle"></i> <span><strong>Edge DDoS Mitigation:</strong> Absorbs high-volume volumetric attacks before reaching your site.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>Automated Real-Time Cleanup:</strong>
+                                    Neutralizes infected files the instant they are uploaded.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>Free AutoSSL (Let's Encrypt):</strong>
+                                    Instant automated HTTPS encryption on all domains.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>Edge DDoS Mitigation:</strong> Absorbs
+                                    high-volume volumetric attacks before reaching your site.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -2729,23 +3050,27 @@
                             </div>
                             <h3 class="bento-seo-title">24/7/365 Certified Human SysAdmin Care</h3>
                             <p class="bento-seo-desc">
-                                Zero automated robot runarounds. Real Linux sysadmins and certified hosting engineers ready to troubleshoot code, database queries, and server configurations immediately.
+                                Zero automated robot runarounds. Real Linux sysadmins and certified hosting engineers
+                                ready to troubleshoot code, database queries, and server configurations immediately.
                             </p>
                         </div>
 
                         <ul class="bento-feature-checklist">
-                            <li><i class="las la-check-circle"></i> <span><strong>Free Zero-Downtime Migration:</strong> Complete white-glove site, database, and email transfer.</span></li>
-                            <li><i class="las la-check-circle"></i> <span><strong>Multi-Channel Assistance:</strong> Fast help via ticket, live chat, and support portal.</span></li>
-                            <li><i class="las la-check-circle"></i> <span><strong>99.9% Uptime SLA:</strong> Backed by enforceable uptime service level commitments.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>Free Zero-Downtime Migration:</strong>
+                                    Complete white-glove site, database, and email transfer.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>Multi-Channel Assistance:</strong>
+                                    Fast help via ticket, live chat, and support portal.</span></li>
+                            <li><i class="las la-check-circle"></i> <span><strong>99.9% Uptime SLA:</strong> Backed by
+                                    enforceable uptime service level commitments.</span></li>
                         </ul>
                     </div>
                 </div>
 
-            </div>            
+            </div>
         </div>
     </section>
 
-    
+
 
     <!-- =========================================================================
          6. OPERATING SYSTEMS & CONTROL PANELS MATRIX (Modern Redesign)
@@ -2764,14 +3089,16 @@
                         Supported <span class="text-accent-blue">Operating Systems</span> &amp; Control Panels
                     </h2>
                     <p class="tech-matrix-subtitle">
-                        Deploy your cloud instance with your preferred Linux distribution, Windows Server, or turnkey management panel in seconds.
+                        Deploy your cloud instance with your preferred Linux distribution, Windows Server, or turnkey
+                        management panel in seconds.
                     </p>
 
                     <!-- Segmented Tab Switcher -->
                     <ul class="nav modern-tech-tabs" id="techTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="os-tab" data-bs-toggle="tab" data-bs-target="#os-content"
-                                type="button" role="tab" aria-controls="os-content" aria-selected="true">
+                            <button class="nav-link active" id="os-tab" data-bs-toggle="tab"
+                                data-bs-target="#os-content" type="button" role="tab" aria-controls="os-content"
+                                aria-selected="true">
                                 <i class="las la-server"></i>
                                 <span>Operating Systems</span>
                                 <span class="nav-tab-badge">8 OS Options</span>
@@ -2806,7 +3133,8 @@
                                             <span class="tech-card-tag">Popular</span>
                                         </div>
                                         <span class="tech-card-version">24.04 &amp; 22.04 LTS</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Kernel 6.8+ • Daily Patches</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Kernel
+                                            6.8+ • Daily Patches</span>
                                     </div>
                                 </div>
                             </div>
@@ -2823,7 +3151,8 @@
                                             <span class="tech-card-tag">Stable</span>
                                         </div>
                                         <span class="tech-card-version">12 Bookworm / 11</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Rock-Solid Reliability</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i>
+                                            Rock-Solid Reliability</span>
                                     </div>
                                 </div>
                             </div>
@@ -2840,7 +3169,8 @@
                                             <span class="tech-card-tag">RHEL 1:1</span>
                                         </div>
                                         <span class="tech-card-version">9.x &amp; 8.x Enterprise</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> 100% Binary Compatible</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> 100%
+                                            Binary Compatible</span>
                                     </div>
                                 </div>
                             </div>
@@ -2857,7 +3187,8 @@
                                             <span class="tech-card-tag">Enterprise</span>
                                         </div>
                                         <span class="tech-card-version">9.x Cloud Ready</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Community Enterprise</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i>
+                                            Community Enterprise</span>
                                     </div>
                                 </div>
                             </div>
@@ -2874,7 +3205,8 @@
                                             <span class="tech-card-tag">Standard</span>
                                         </div>
                                         <span class="tech-card-version">2025 / 2022 / 2019</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Full RDP &amp; Admin Rights</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Full
+                                            RDP &amp; Admin Rights</span>
                                     </div>
                                 </div>
                             </div>
@@ -2891,7 +3223,8 @@
                                             <span class="tech-card-tag">DevOps</span>
                                         </div>
                                         <span class="tech-card-version">Leap 15.6 / Tumbleweed</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> YaST System Configurator</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> YaST
+                                            System Configurator</span>
                                     </div>
                                 </div>
                             </div>
@@ -2908,7 +3241,8 @@
                                             <span class="tech-card-tag">BSD Unix</span>
                                         </div>
                                         <span class="tech-card-version">14.1 &amp; 13.3 Release</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> High-Speed ZFS Storage</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i>
+                                            High-Speed ZFS Storage</span>
                                     </div>
                                 </div>
                             </div>
@@ -2925,7 +3259,8 @@
                                             <span class="tech-card-tag text-primary">BYO ISO</span>
                                         </div>
                                         <span class="tech-card-version">Upload Any x86_64 Image</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Instant Mount via Console</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i>
+                                            Instant Mount via Console</span>
                                     </div>
                                 </div>
                             </div>
@@ -2947,7 +3282,8 @@
                                             <span class="tech-card-tag">Official Partner</span>
                                         </div>
                                         <span class="tech-card-version">1-Click Auto-Provisioning</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Full Multi-Domain Management</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Full
+                                            Multi-Domain Management</span>
                                     </div>
                                 </div>
                             </div>
@@ -2964,7 +3300,8 @@
                                             <span class="tech-card-tag">WP Toolkit</span>
                                         </div>
                                         <span class="tech-card-version">Linux &amp; Windows Ready</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Automated Staging &amp; Git Sync</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i>
+                                            Automated Staging &amp; Git Sync</span>
                                     </div>
                                 </div>
                             </div>
@@ -2981,7 +3318,8 @@
                                             <span class="tech-card-tag">DevOps</span>
                                         </div>
                                         <span class="tech-card-version">Containerization Stack</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Microservices Ready Out of Box</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i>
+                                            Microservices Ready Out of Box</span>
                                     </div>
                                 </div>
                             </div>
@@ -2990,7 +3328,8 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/imgs/providers/directadmin.png" alt="DirectAdmin" loading="lazy">
+                                        <img src="assets/imgs/providers/directadmin.png" alt="DirectAdmin"
+                                            loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -2998,7 +3337,8 @@
                                             <span class="tech-card-tag">Lightweight</span>
                                         </div>
                                         <span class="tech-card-version">Low Resource Footprint</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Blazing Fast Server Admin</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i>
+                                            Blazing Fast Server Admin</span>
                                     </div>
                                 </div>
                             </div>
@@ -3015,7 +3355,8 @@
                                             <span class="tech-card-tag">Open Source</span>
                                         </div>
                                         <span class="tech-card-version">Free Web SysAdmin Console</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Zero License Costs</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> Zero
+                                            License Costs</span>
                                     </div>
                                 </div>
                             </div>
@@ -3032,7 +3373,8 @@
                                             <span class="tech-card-tag">Hypervisor</span>
                                         </div>
                                         <span class="tech-card-version">Bare-Metal Virtualization</span>
-                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> KVM &amp; LXC Cluster Support</span>
+                                        <span class="tech-card-feature"><i class="las la-check text-success"></i> KVM
+                                            &amp; LXC Cluster Support</span>
                                     </div>
                                 </div>
                             </div>
@@ -3049,7 +3391,8 @@
                         </div>
                         <div class="tech-strip-content">
                             <strong>1-Click Instant Reinstall</strong>
-                            <small>Switch distributions anytime in under 60 seconds with automated root credential delivery.</small>
+                            <small>Switch distributions anytime in under 60 seconds with automated root credential
+                                delivery.</small>
                         </div>
                     </div>
                     <div class="tech-strip-item">
@@ -3058,7 +3401,8 @@
                         </div>
                         <div class="tech-strip-content">
                             <strong>HTML5 Out-of-Band VNC</strong>
-                            <small>Emergency rescue console accessible directly from browser if SSH configuration breaks.</small>
+                            <small>Emergency rescue console accessible directly from browser if SSH configuration
+                                breaks.</small>
                         </div>
                     </div>
                     <div class="tech-strip-item">
@@ -3067,7 +3411,8 @@
                         </div>
                         <div class="tech-strip-content">
                             <strong>Automated SSH Key Injection</strong>
-                            <small>Deploy with pre-hardened public keys and customized cloud-init automation scripts.</small>
+                            <small>Deploy with pre-hardened public keys and customized cloud-init automation
+                                scripts.</small>
                         </div>
                     </div>
                     <div class="tech-strip-item">
@@ -3076,7 +3421,8 @@
                         </div>
                         <div class="tech-strip-content">
                             <strong>Kernel-Level Security</strong>
-                            <small>Hardware virtualization isolation with always-on Tbps Anti-DDoS network filtering.</small>
+                            <small>Hardware virtualization isolation with always-on Tbps Anti-DDoS network
+                                filtering.</small>
                         </div>
                     </div>
                 </div>
@@ -3085,7 +3431,7 @@
         </div>
     </section>
 
-    
+
 
     <!-- =========================================================================
          8. CUSTOMER REVIEWS & SOCIAL PROOF (Reference-Matched Layout)
@@ -3102,7 +3448,8 @@
                     Proven Results. <span class="text-highlight-gold">Real Impact.</span>
                 </h2>
                 <p class="review-section-subtitle" data-sal="slide-up" data-sal-duration="600" data-sal-delay="100">
-                    Real feedback from CTOs, SaaS founders, and dev leads who transformed their cloud operations with CloudFlox.
+                    Real feedback from CTOs, SaaS founders, and dev leads who transformed their cloud operations with
+                    CloudFlox.
                 </p>
             </div>
 
@@ -3114,7 +3461,8 @@
                     <div class="review-visual-card">
                         <!-- Parallax Background Image Wrapper -->
                         <div class="review-visual-bg-wrapper">
-                            <img src="assets/imgs/testimonials-team.jpg" alt="CloudFlox Infrastructure Team" class="review-parallax-img" id="reviewParallaxImg" loading="lazy">
+                            <img src="assets/imgs/testimonials-team.jpg" alt="CloudFlox Infrastructure Team"
+                                class="review-parallax-img" id="reviewParallaxImg" loading="lazy">
                         </div>
 
                         <!-- Top Tag on Image -->
@@ -3138,7 +3486,9 @@
                                     </div>
                                     <div class="rating-stars-col">
                                         <div class="rating-stars">
-                                            <i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i>
+                                            <i class="las la-star"></i><i class="las la-star"></i><i
+                                                class="las la-star"></i><i class="las la-star"></i><i
+                                                class="las la-star"></i>
                                         </div>
                                         <div class="rating-label">Over 98% Client Satisfaction Rate</div>
                                     </div>
@@ -3182,7 +3532,9 @@
                                                     <span>FMCG &amp; Retail eCommerce</span>
                                                 </div>
                                                 <div class="review-card-stars">
-                                                    <i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i>
+                                                    <i class="las la-star"></i><i class="las la-star"></i><i
+                                                        class="las la-star"></i><i class="las la-star"></i><i
+                                                        class="las la-star"></i>
                                                 </div>
                                             </div>
 
@@ -3191,13 +3543,18 @@
                                             </div>
 
                                             <p class="review-quote-text">
-                                                &ldquo;The NVMe storage speed on CloudFlox made an immediate difference. Our WooCommerce site load times dropped from 3.2s down to 420ms after migrating from our previous host. Their automated cPanel migration was completely seamless without a minute of downtime during our peak sales promotion.&rdquo;
+                                                &ldquo;The NVMe storage speed on CloudFlox made an immediate difference.
+                                                Our WooCommerce site load times dropped from 3.2s down to 420ms after
+                                                migrating from our previous host. Their automated cPanel migration was
+                                                completely seamless without a minute of downtime during our peak sales
+                                                promotion.&rdquo;
                                             </p>
 
                                             <div class="review-impact-strip">
                                                 <div class="impact-icon"><i class="las la-chart-line"></i></div>
                                                 <div class="impact-text">
-                                                    <strong>Key Impact:</strong> <span>Page Load Dropped to 420ms &amp; 100% Black Friday Uptime</span>
+                                                    <strong>Key Impact:</strong> <span>Page Load Dropped to 420ms &amp;
+                                                        100% Black Friday Uptime</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -3209,7 +3566,8 @@
                                                 </div>
                                                 <div>
                                                     <h4 class="author-name">Marcus Reynolds</h4>
-                                                    <p class="author-meta">Head of Digital Infrastructure &bull; Apex Retail Tech</p>
+                                                    <p class="author-meta">Head of Digital Infrastructure &bull; Apex
+                                                        Retail Tech</p>
                                                 </div>
                                             </div>
                                             <div class="verified-client-pill">
@@ -3230,7 +3588,9 @@
                                                     <span>SaaS &amp; FinTech Platforms</span>
                                                 </div>
                                                 <div class="review-card-stars">
-                                                    <i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i>
+                                                    <i class="las la-star"></i><i class="las la-star"></i><i
+                                                        class="las la-star"></i><i class="las la-star"></i><i
+                                                        class="las la-star"></i>
                                                 </div>
                                             </div>
 
@@ -3239,13 +3599,18 @@
                                             </div>
 
                                             <p class="review-quote-text">
-                                                &ldquo;We run 16 high-concurrency client VPS instances on CloudFlox across their US and Frankfurt datacenters. Uptime has been a rock-solid 100% over the last 11 months. Whenever we have a complex routing or firewall query, their senior Linux team answers on live chat in under 4 minutes.&rdquo;
+                                                &ldquo;We run 16 high-concurrency client VPS instances on CloudFlox
+                                                across their US and Frankfurt datacenters. Uptime has been a rock-solid
+                                                100% over the last 11 months. Whenever we have a complex routing or
+                                                firewall query, their senior Linux team answers on live chat in under 4
+                                                minutes.&rdquo;
                                             </p>
 
                                             <div class="review-impact-strip">
                                                 <div class="impact-icon"><i class="las la-chart-line"></i></div>
                                                 <div class="impact-text">
-                                                    <strong>Key Impact:</strong> <span>100% Measured Uptime Across 16 Production VPS Clusters</span>
+                                                    <strong>Key Impact:</strong> <span>100% Measured Uptime Across 16
+                                                        Production VPS Clusters</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -3257,7 +3622,8 @@
                                                 </div>
                                                 <div>
                                                     <h4 class="author-name">Sanjay Lakshman</h4>
-                                                    <p class="author-meta">Lead DevOps Engineer &bull; CloudLab Analytics</p>
+                                                    <p class="author-meta">Lead DevOps Engineer &bull; CloudLab
+                                                        Analytics</p>
                                                 </div>
                                             </div>
                                             <div class="verified-client-pill">
@@ -3278,7 +3644,9 @@
                                                     <span>Enterprise Media &amp; Big Data</span>
                                                 </div>
                                                 <div class="review-card-stars">
-                                                    <i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i>
+                                                    <i class="las la-star"></i><i class="las la-star"></i><i
+                                                        class="las la-star"></i><i class="las la-star"></i><i
+                                                        class="las la-star"></i>
                                                 </div>
                                             </div>
 
@@ -3287,13 +3655,18 @@
                                             </div>
 
                                             <p class="review-quote-text">
-                                                &ldquo;Our dedicated bare-metal servers were provisioned with custom hardware RAID-10 NVMe and AlmaLinux in less than 3 hours. The IPMI interface gives complete out-of-band management. CloudFlox delivers enterprise-tier reliability and network throughput at very competitive pricing.&rdquo;
+                                                &ldquo;Our dedicated bare-metal servers were provisioned with custom
+                                                hardware RAID-10 NVMe and AlmaLinux in less than 3 hours. The IPMI
+                                                interface gives complete out-of-band management. CloudFlox delivers
+                                                enterprise-tier reliability and network throughput at very competitive
+                                                pricing.&rdquo;
                                             </p>
 
                                             <div class="review-impact-strip">
                                                 <div class="impact-icon"><i class="las la-chart-line"></i></div>
                                                 <div class="impact-text">
-                                                    <strong>Key Impact:</strong> <span>Sub-3-Hour Hardware Provisioning &amp; 10Gbps Uplink SLA</span>
+                                                    <strong>Key Impact:</strong> <span>Sub-3-Hour Hardware Provisioning
+                                                        &amp; 10Gbps Uplink SLA</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -3305,7 +3678,8 @@
                                                 </div>
                                                 <div>
                                                     <h4 class="author-name">David Peterson</h4>
-                                                    <p class="author-meta">Chief Technology Officer &bull; Apex Media Networks</p>
+                                                    <p class="author-meta">Chief Technology Officer &bull; Apex Media
+                                                        Networks</p>
                                                 </div>
                                             </div>
                                             <div class="verified-client-pill">
@@ -3326,7 +3700,9 @@
                                                     <span>Digital Agency &amp; Multi-Client</span>
                                                 </div>
                                                 <div class="review-card-stars">
-                                                    <i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i>
+                                                    <i class="las la-star"></i><i class="las la-star"></i><i
+                                                        class="las la-star"></i><i class="las la-star"></i><i
+                                                        class="las la-star"></i>
                                                 </div>
                                             </div>
 
@@ -3335,13 +3711,18 @@
                                             </div>
 
                                             <p class="review-quote-text">
-                                                &ldquo;Managing over 60 client WordPress websites was a nightmare on our previous host with constant PHP memory timeouts. Moving to CloudFlox LiteSpeed caching and CloudLinux account isolation completely eliminated resource bottlenecks. Our client satisfaction score is at an all-time high.&rdquo;
+                                                &ldquo;Managing over 60 client WordPress websites was a nightmare on our
+                                                previous host with constant PHP memory timeouts. Moving to CloudFlox
+                                                LiteSpeed caching and CloudLinux account isolation completely eliminated
+                                                resource bottlenecks. Our client satisfaction score is at an all-time
+                                                high.&rdquo;
                                             </p>
 
                                             <div class="review-impact-strip">
                                                 <div class="impact-icon"><i class="las la-chart-line"></i></div>
                                                 <div class="impact-text">
-                                                    <strong>Key Impact:</strong> <span>60+ Agency Sites Migrated with Zero Bottlenecks</span>
+                                                    <strong>Key Impact:</strong> <span>60+ Agency Sites Migrated with
+                                                        Zero Bottlenecks</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -3353,7 +3734,8 @@
                                                 </div>
                                                 <div>
                                                     <h4 class="author-name">Elena Rostova</h4>
-                                                    <p class="author-meta">Managing Director &bull; HyperPixel Creative Agency</p>
+                                                    <p class="author-meta">Managing Director &bull; HyperPixel Creative
+                                                        Agency</p>
                                                 </div>
                                             </div>
                                             <div class="verified-client-pill">
@@ -3374,7 +3756,8 @@
 
                             <!-- Swiper Arrows -->
                             <div class="review-nav-arrows">
-                                <button class="review-nav-btn review-prev-btn" aria-label="Previous Review" type="button">
+                                <button class="review-nav-btn review-prev-btn" aria-label="Previous Review"
+                                    type="button">
                                     <i class="las la-arrow-left"></i>
                                 </button>
                                 <button class="review-nav-btn review-next-btn" aria-label="Next Review" type="button">
@@ -3403,7 +3786,10 @@
                         Need Custom Infrastructure? <span>Get a Tailored Architecture Quote</span>
                     </h2>
                     <p class="custom-cta-desc">
-                        Standard packages don't always fit enterprise workloads. Whether you require multi-server high-availability clusters, dedicated bare-metal nodes, private virtualization, or strict regulatory compliance &mdash; our senior systems engineers will architect the exact solution your platform demands.
+                        Standard packages don't always fit enterprise workloads. Whether you require multi-server
+                        high-availability clusters, dedicated bare-metal nodes, private virtualization, or strict
+                        regulatory compliance &mdash; our senior systems engineers will architect the exact solution
+                        your platform demands.
                     </p>
 
                     <!-- Highlights List -->
@@ -3414,7 +3800,8 @@
                             </div>
                             <div>
                                 <div class="cq-highlight-title">Custom Hardware Provisioning</div>
-                                <p class="cq-highlight-text">Tailored AMD EPYC / Intel Xeon configurations, NVMe RAID-10 arrays, and dedicated 10Gbps unmetered uplinks.</p>
+                                <p class="cq-highlight-text">Tailored AMD EPYC / Intel Xeon configurations, NVMe RAID-10
+                                    arrays, and dedicated 10Gbps unmetered uplinks.</p>
                             </div>
                         </div>
 
@@ -3424,7 +3811,8 @@
                             </div>
                             <div>
                                 <div class="cq-highlight-title">Zero-Downtime White-Glove Migration</div>
-                                <p class="cq-highlight-text">Full hands-off migration of databases, containers, and web assets orchestrated by certified Linux sysadmins.</p>
+                                <p class="cq-highlight-text">Full hands-off migration of databases, containers, and web
+                                    assets orchestrated by certified Linux sysadmins.</p>
                             </div>
                         </div>
 
@@ -3434,7 +3822,8 @@
                             </div>
                             <div>
                                 <div class="cq-highlight-title">Guaranteed 2 &ndash; 4 Hour Response SLA</div>
-                                <p class="cq-highlight-text">Zero automated robot runarounds. A human Enterprise Solutions Architect directly reviews your specifications.</p>
+                                <p class="cq-highlight-text">Zero automated robot runarounds. A human Enterprise
+                                    Solutions Architect directly reviews your specifications.</p>
                             </div>
                         </div>
                     </div>
@@ -3461,47 +3850,60 @@
                         <form id="customQuoteForm" onsubmit="submitCustomQuote(event)">
                             <div class="cq-card-header">
                                 <h3 class="cq-card-title">Request Infrastructure Quote</h3>
-                                <p class="cq-card-sub">Share your workload specifications for a tailored topology and pricing.</p>
+                                <p class="cq-card-sub">Share your workload specifications for a tailored topology and
+                                    pricing.</p>
                             </div>
 
                             <!-- Name -->
                             <div class="cq-form-group">
-                                <label class="cq-label" for="cq_name">Full Name <span class="text-danger">*</span></label>
+                                <label class="cq-label" for="cq_name">Full Name <span
+                                        class="text-danger">*</span></label>
                                 <div class="cq-input-wrap">
                                     <i class="las la-user"></i>
-                                    <input type="text" id="cq_name" name="name" class="cq-input" placeholder="e.g. Alex Henderson" required>
+                                    <input type="text" id="cq_name" name="name" class="cq-input"
+                                        placeholder="e.g. Alex Henderson" required>
                                 </div>
                             </div>
 
                             <!-- Business Email -->
                             <div class="cq-form-group">
-                                <label class="cq-label" for="cq_email">Business Email <span class="text-danger">*</span></label>
+                                <label class="cq-label" for="cq_email">Business Email <span
+                                        class="text-danger">*</span></label>
                                 <div class="cq-input-wrap">
                                     <i class="las la-envelope"></i>
-                                    <input type="email" id="cq_email" name="email" class="cq-input" placeholder="alex@company.com" required>
+                                    <input type="email" id="cq_email" name="email" class="cq-input"
+                                        placeholder="alex@company.com" required>
                                 </div>
                             </div>
 
                             <!-- Row: Service & Budget -->
                             <div class="row g-3">
                                 <div class="col-md-6 cq-form-group">
-                                    <label class="cq-label" for="cq_service">Service Needed <span class="text-danger">*</span></label>
+                                    <label class="cq-label" for="cq_service">Service Needed <span
+                                            class="text-danger">*</span></label>
                                     <div class="cq-input-wrap">
                                         <i class="las la-layer-group"></i>
                                         <select id="cq_service" name="service" class="cq-select" required>
                                             <option value="" disabled selected>Select service type...</option>
-                                            <option value="Custom Bare-Metal Dedicated">Custom Bare-Metal Server</option>
-                                            <option value="High-Availability Multi-Server Cluster">High-Availability Cluster</option>
-                                            <option value="Private Cloud / Virtual Datacenter">Private Cloud / Virtual DC</option>
-                                            <option value="High-Traffic E-Commerce Cluster">High-Traffic E-Commerce</option>
-                                            <option value="Disaster Recovery & Replication">Disaster Recovery Cluster</option>
-                                            <option value="Enterprise Hybrid & Migration">Hybrid Cloud & Migration</option>
+                                            <option value="Custom Bare-Metal Dedicated">Custom Bare-Metal Server
+                                            </option>
+                                            <option value="High-Availability Multi-Server Cluster">High-Availability
+                                                Cluster</option>
+                                            <option value="Private Cloud / Virtual Datacenter">Private Cloud / Virtual
+                                                DC</option>
+                                            <option value="High-Traffic E-Commerce Cluster">High-Traffic E-Commerce
+                                            </option>
+                                            <option value="Disaster Recovery & Replication">Disaster Recovery Cluster
+                                            </option>
+                                            <option value="Enterprise Hybrid & Migration">Hybrid Cloud & Migration
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6 cq-form-group">
-                                    <label class="cq-label" for="cq_budget">Estimated Monthly Budget <span class="text-danger">*</span></label>
+                                    <label class="cq-label" for="cq_budget">Estimated Monthly Budget <span
+                                            class="text-danger">*</span></label>
                                     <div class="cq-input-wrap">
                                         <i class="las la-coins"></i>
                                         <select id="cq_budget" name="budget" class="cq-select" required>
@@ -3518,12 +3920,16 @@
 
                             <!-- Requirements -->
                             <div class="cq-form-group">
-                                <label class="cq-label" for="cq_requirements">Workload &amp; Server Requirements <span class="text-danger">*</span></label>
-                                <textarea id="cq_requirements" name="requirements" class="cq-textarea" rows="3" placeholder="Specify required CPU cores, RAM, NVMe storage, traffic volume, software stack, or compliance needs..." required></textarea>
+                                <label class="cq-label" for="cq_requirements">Workload &amp; Server Requirements <span
+                                        class="text-danger">*</span></label>
+                                <textarea id="cq_requirements" name="requirements" class="cq-textarea" rows="3"
+                                    placeholder="Specify required CPU cores, RAM, NVMe storage, traffic volume, software stack, or compliance needs..."
+                                    required></textarea>
                             </div>
 
                             <!-- Anti-spam Honeypot (Hidden) -->
-                            <input type="text" name="cf_hp_field" id="cq_hp" style="display:none;" tabindex="-1" autocomplete="off">
+                            <input type="text" name="cf_hp_field" id="cq_hp" style="display:none;" tabindex="-1"
+                                autocomplete="off">
 
                             <!-- Submit Buttons -->
                             <button type="submit" id="cq_submit_btn" class="btn-cq-submit">
@@ -3537,7 +3943,8 @@
                             </button>
 
                             <div class="cq-security-note">
-                                <i class="las la-shield-alt"></i> 256-bit encrypted delivery directly to senior enterprise sales mailbox.
+                                <i class="las la-shield-alt"></i> 256-bit encrypted delivery directly to senior
+                                enterprise sales mailbox.
                             </div>
                         </form>
 
@@ -3548,7 +3955,8 @@
                             </div>
                             <h3 class="cq-success-title">Quote Request Received!</h3>
                             <p class="cq-success-desc">
-                                Thank you, <strong id="cq_res_name" class="text-white"></strong>. Your enterprise requirements have been securely delivered to our sales engineering mailbox.
+                                Thank you, <strong id="cq_res_name" class="text-white"></strong>. Your enterprise
+                                requirements have been securely delivered to our sales engineering mailbox.
                             </p>
 
                             <div class="cq-ref-pill">
@@ -3560,7 +3968,9 @@
                                     <i class="las la-bolt"></i> 2 &ndash; 4 Hour Response Commitment
                                 </div>
                                 <p class="cq-sla-text">
-                                    A Senior Infrastructure Architect is currently reviewing your workload topology. A formal architecture proposal will be sent to <strong id="cq_res_email" class="text-white"></strong> shortly.
+                                    A Senior Infrastructure Architect is currently reviewing your workload topology. A
+                                    formal architecture proposal will be sent to <strong id="cq_res_email"
+                                        class="text-white"></strong> shortly.
                                 </p>
                             </div>
 
@@ -3591,7 +4001,8 @@
                     Clear Answers. <span class="text-accent-blue">Zero Guesswork.</span>
                 </h2>
                 <p class="faq-section-subtitle" data-sal="slide-up" data-sal-duration="600" data-sal-delay="100">
-                    Everything you need to know about instant activation, free migrations, NVMe performance, security, and global datacenter operations.
+                    Everything you need to know about instant activation, free migrations, NVMe performance, security,
+                    and global datacenter operations.
                 </p>
 
                 <!-- Category Filter Switcher -->
@@ -3622,7 +4033,9 @@
                         </div>
                         <h3 class="faq-help-title">Have a Different Question?</h3>
                         <p class="faq-help-desc">
-                            Can't find the exact technical specifications or plan configuration you're looking for? Our certified tier-3 systems engineers are online 24/7/365 to guide your migration and deployment.
+                            Can't find the exact technical specifications or plan configuration you're looking for? Our
+                            certified tier-3 systems engineers are online 24/7/365 to guide your migration and
+                            deployment.
                         </p>
 
                         <div class="faq-help-actions">
@@ -3664,7 +4077,8 @@
                                         <div class="faq-q-icon icon-blue-soft">
                                             <i class="las la-bolt"></i>
                                         </div>
-                                        <span class="faq-q-text">How fast is my hosting account activated after purchase?</span>
+                                        <span class="faq-q-text">How fast is my hosting account activated after
+                                            purchase?</span>
                                     </div>
                                     <div class="faq-chevron-pill">
                                         <i class="las la-angle-down"></i>
@@ -3674,7 +4088,10 @@
                             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
                                 data-bs-parent="#faqAccordion">
                                 <div class="faq-modern-body">
-                                    All shared hosting and cloud VPS accounts are activated <strong>automatically within 60 seconds</strong> upon payment confirmation. You will immediately receive your cPanel, DirectAdmin, or root VPS credentials via your welcome email and inside your client portal, allowing you to deploy applications without waiting.
+                                    All shared hosting and cloud VPS accounts are activated <strong>automatically within
+                                        60 seconds</strong> upon payment confirmation. You will immediately receive your
+                                    cPanel, DirectAdmin, or root VPS credentials via your welcome email and inside your
+                                    client portal, allowing you to deploy applications without waiting.
                                 </div>
                             </div>
                         </div>
@@ -3688,7 +4105,8 @@
                                         <div class="faq-q-icon icon-green-soft">
                                             <i class="las la-exchange-alt"></i>
                                         </div>
-                                        <span class="faq-q-text">Do you offer free website &amp; database migration from my current host?</span>
+                                        <span class="faq-q-text">Do you offer free website &amp; database migration from
+                                            my current host?</span>
                                     </div>
                                     <div class="faq-chevron-pill">
                                         <i class="las la-angle-down"></i>
@@ -3698,7 +4116,11 @@
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                                 data-bs-parent="#faqAccordion">
                                 <div class="faq-modern-body">
-                                    <strong>Yes, 100% free white-glove migration!</strong> We transfer all cPanel, DirectAdmin, Plesk, and WordPress websites. Simply open a migration ticket after signup with your old host details, and our senior systems engineers will transfer your files, databases, SSL certificates, and email inboxes with <strong>zero downtime</strong>.
+                                    <strong>Yes, 100% free white-glove migration!</strong> We transfer all cPanel,
+                                    DirectAdmin, Plesk, and WordPress websites. Simply open a migration ticket after
+                                    signup with your old host details, and our senior systems engineers will transfer
+                                    your files, databases, SSL certificates, and email inboxes with <strong>zero
+                                        downtime</strong>.
                                 </div>
                             </div>
                         </div>
@@ -3712,7 +4134,8 @@
                                         <div class="faq-q-icon icon-orange-soft">
                                             <i class="las la-level-up-alt"></i>
                                         </div>
-                                        <span class="faq-q-text">Can I upgrade my plan seamlessly as my website traffic surges?</span>
+                                        <span class="faq-q-text">Can I upgrade my plan seamlessly as my website traffic
+                                            surges?</span>
                                     </div>
                                     <div class="faq-chevron-pill">
                                         <i class="las la-angle-down"></i>
@@ -3722,7 +4145,10 @@
                             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
                                 data-bs-parent="#faqAccordion">
                                 <div class="faq-modern-body">
-                                    Seamlessly! You can upgrade from Starter to Turbo, Business, Enterprise, or transition directly to an isolated Cloud VPS or Dedicated Server from your client portal. All upgrades are <strong>automated and prorated instantly</strong> with zero downtime and no manual data migration required.
+                                    Seamlessly! You can upgrade from Starter to Turbo, Business, Enterprise, or
+                                    transition directly to an isolated Cloud VPS or Dedicated Server from your client
+                                    portal. All upgrades are <strong>automated and prorated instantly</strong> with zero
+                                    downtime and no manual data migration required.
                                 </div>
                             </div>
                         </div>
@@ -3736,7 +4162,8 @@
                                         <div class="faq-q-icon icon-purple-soft">
                                             <i class="las la-shield-alt"></i>
                                         </div>
-                                        <span class="faq-q-text">What security features, firewall, and DDoS defense are included?</span>
+                                        <span class="faq-q-text">What security features, firewall, and DDoS defense are
+                                            included?</span>
                                     </div>
                                     <div class="faq-chevron-pill">
                                         <i class="las la-angle-down"></i>
@@ -3746,7 +4173,11 @@
                             <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
                                 data-bs-parent="#faqAccordion">
                                 <div class="faq-modern-body">
-                                    Every CloudFlox account is fortified with <strong>Imunify360 AI-driven malware detection</strong>, Web Application Firewall (WAF), proactive brute-force shielding, free auto-renewing Let's Encrypt SSL certificates, and always-on <strong>multi-terabit Anti-DDoS mitigation</strong> that scrub malicious traffic before it reaches your server.
+                                    Every CloudFlox account is fortified with <strong>Imunify360 AI-driven malware
+                                        detection</strong>, Web Application Firewall (WAF), proactive brute-force
+                                    shielding, free auto-renewing Let's Encrypt SSL certificates, and always-on
+                                    <strong>multi-terabit Anti-DDoS mitigation</strong> that scrub malicious traffic
+                                    before it reaches your server.
                                 </div>
                             </div>
                         </div>
@@ -3760,7 +4191,8 @@
                                         <div class="faq-q-icon icon-teal-soft">
                                             <i class="las la-globe-americas"></i>
                                         </div>
-                                        <span class="faq-q-text">Where are CloudFlox servers located, and can I choose my region?</span>
+                                        <span class="faq-q-text">Where are CloudFlox servers located, and can I choose
+                                            my region?</span>
                                     </div>
                                     <div class="faq-chevron-pill">
                                         <i class="las la-angle-down"></i>
@@ -3770,7 +4202,11 @@
                             <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
                                 data-bs-parent="#faqAccordion">
                                 <div class="faq-modern-body">
-                                    We operate enterprise Tier-4 datacenter facilities in key geographical hubs: <strong>United States (East &amp; West Coast), Germany (Frankfurt), United Kingdom (London), France, and Singapore</strong>. You can choose your preferred deployment region during checkout to guarantee lowest ping and latency for your audience.
+                                    We operate enterprise Tier-4 datacenter facilities in key geographical hubs:
+                                    <strong>United States (East &amp; West Coast), Germany (Frankfurt), United Kingdom
+                                        (London), France, and Singapore</strong>. You can choose your preferred
+                                    deployment region during checkout to guarantee lowest ping and latency for your
+                                    audience.
                                 </div>
                             </div>
                         </div>
@@ -3784,7 +4220,8 @@
                                         <div class="faq-q-icon icon-blue-soft">
                                             <i class="las la-history"></i>
                                         </div>
-                                        <span class="faq-q-text">How are automated backups handled, and how quickly can I restore?</span>
+                                        <span class="faq-q-text">How are automated backups handled, and how quickly can
+                                            I restore?</span>
                                     </div>
                                     <div class="faq-chevron-pill">
                                         <i class="las la-angle-down"></i>
@@ -3794,7 +4231,11 @@
                             <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
                                 data-bs-parent="#faqAccordion">
                                 <div class="faq-modern-body">
-                                    We maintain automated daily point-in-time snapshots powered by <strong>JetBackup</strong>, replicated to dedicated off-site backup storage. You can restore your entire account, single files, emails, or specific MySQL databases independently with <strong>1-click self-service</strong> right from your cPanel control panel.
+                                    We maintain automated daily point-in-time snapshots powered by
+                                    <strong>JetBackup</strong>, replicated to dedicated off-site backup storage. You can
+                                    restore your entire account, single files, emails, or specific MySQL databases
+                                    independently with <strong>1-click self-service</strong> right from your cPanel
+                                    control panel.
                                 </div>
                             </div>
                         </div>
@@ -3808,7 +4249,8 @@
                                         <div class="faq-q-icon icon-green-soft">
                                             <i class="las la-award"></i>
                                         </div>
-                                        <span class="faq-q-text">Do you offer a money-back guarantee if I am not completely satisfied?</span>
+                                        <span class="faq-q-text">Do you offer a money-back guarantee if I am not
+                                            completely satisfied?</span>
                                     </div>
                                     <div class="faq-chevron-pill">
                                         <i class="las la-angle-down"></i>
@@ -3818,7 +4260,10 @@
                             <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven"
                                 data-bs-parent="#faqAccordion">
                                 <div class="faq-modern-body">
-                                    <strong>Absolutely!</strong> All CloudFlox shared hosting and WordPress cloud plans include an unconditional <strong>30-Day Money-Back Guarantee</strong>. If for any reason you are not completely satisfied with our performance or support, request a cancellation within 30 days for a full, prompt refund.
+                                    <strong>Absolutely!</strong> All CloudFlox shared hosting and WordPress cloud plans
+                                    include an unconditional <strong>30-Day Money-Back Guarantee</strong>. If for any
+                                    reason you are not completely satisfied with our performance or support, request a
+                                    cancellation within 30 days for a full, prompt refund.
                                 </div>
                             </div>
                         </div>
@@ -3832,7 +4277,8 @@
                                         <div class="faq-q-icon icon-orange-soft">
                                             <i class="las la-sliders-h"></i>
                                         </div>
-                                        <span class="faq-q-text">Which control panels and developer environments are supported?</span>
+                                        <span class="faq-q-text">Which control panels and developer environments are
+                                            supported?</span>
                                     </div>
                                     <div class="faq-chevron-pill">
                                         <i class="las la-angle-down"></i>
@@ -3842,7 +4288,10 @@
                             <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight"
                                 data-bs-parent="#faqAccordion">
                                 <div class="faq-modern-body">
-                                    We support official <strong>cPanel &amp; WHM, Plesk Obsidian, DirectAdmin, and Webmin</strong>. Full root SSH access, Git version control, multi-PHP selector (7.4 to 8.4), Node.js, Python app managers, and Docker container support are pre-integrated for modern DevOps workflows.
+                                    We support official <strong>cPanel &amp; WHM, Plesk Obsidian, DirectAdmin, and
+                                        Webmin</strong>. Full root SSH access, Git version control, multi-PHP selector
+                                    (7.4 to 8.4), Node.js, Python app managers, and Docker container support are
+                                    pre-integrated for modern DevOps workflows.
                                 </div>
                             </div>
                         </div>
@@ -3897,7 +4346,8 @@
 
                     <!-- Compelling Subtitle -->
                     <p class="cta-banner-desc">
-                        Deploy your ultra-fast NVMe cloud hosting or VPS server today. Backed by 24/7 expert human support,
+                        Deploy your ultra-fast NVMe cloud hosting or VPS server today. Backed by 24/7 expert human
+                        support,
                         free zero-downtime migrations, and an ironclad 99.99% uptime guarantee.
                     </p>
 
@@ -3941,9 +4391,9 @@
     </section>
 
     <!-- =========== Footer Area =========== -->
-    <?php 
+    <?php
     $hide_footer_cta = true;
-    include 'include/footer.inc.php'; 
+    include 'include/footer.inc.php';
     ?>
     <!-- =========== Footer Area =========== -->
 
