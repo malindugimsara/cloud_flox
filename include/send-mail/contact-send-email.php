@@ -13,12 +13,12 @@ $subject = $_POST["subject"];
 $message = $_POST["message"];
 
 // Check if required fields are filled
-if ($name == "" || $email == "" || $phone == "" || $subject == "" || $message == "") {
+if ($name == "" || $email == "" || $subject == "" || $message == "") {
     echo "Fill in the all fields!";
-} else  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+} else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo "Invalid email address!";
-} else if (!preg_match("/^[0-9]{10,15}$/", $phone)) {
-    echo "Invalid phone number! Enter only digits (10-15 numbers).";
+} else if (!empty($phone) && !preg_match("/^[0-9\+\-\s\(\)\.]{7,25}$/", $phone)) {
+    echo "Invalid phone number! Please enter a valid telephone number.";
 } else {
 
     $recaptchaSecret = "6Le_PGssAAAAAJi3rY9BgtOBDe8VZ4NmR0loBkNX";

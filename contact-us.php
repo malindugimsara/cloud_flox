@@ -123,9 +123,9 @@
                             <span>Send Us a Message</span>
                             <i class="las la-arrow-down ms-2"></i>
                         </a>
-                        <a href="tel:0112617664" class="cf-btn-contact-outline text-center">
-                            <i class="las la-phone-alt me-2"></i>
-                            <span>0112 617 664</span>
+                        <a href="https://my.cloudflox.com/submitticket.php" class="cf-btn-contact-outline text-center">
+                            <i class="las la-ticket-alt me-2"></i>
+                            <span>Open Support Ticket</span>
                         </a>
                     </div>
                 </div>
@@ -181,24 +181,26 @@
                 <div class="col-12 col-sm-6 col-lg-3">
                     <div class="cf-contact-info-card">
                         <div class="cf-contact-info-icon bg-blue-subtle text-blue">
-                            <i class="las la-phone-alt"></i>
+                            <i class="las la-headset"></i>
                         </div>
-                        <h3 class="fs-15 fw-bold text-slate-900 mb-1">Phone</h3>
-                        <p class="fs-13 text-muted mb-0">0112 617 664</p>
-                        <p class="fs-13 text-muted mb-0">070 211 59 38</p>
-                        <p class="fs-13 text-muted mb-0">070 211 59 37</p>
+                        <h3 class="fs-15 fw-bold text-slate-900 mb-1">Global Support</h3>
+                        <p class="fs-13 text-muted mb-0">24/7/365 Expert NOC</p>
+                        <p class="fs-13 text-muted mb-0">Response Time &lt; 15 Mins</p>
+                        <p class="fs-13 text-muted mb-0">
+                            <a href="https://my.cloudflox.com/submitticket.php" class="text-blue fw-semibold">Client Portal &rarr;</a>
+                        </p>
                     </div>
                 </div>
 
                 <div class="col-12 col-sm-6 col-lg-3">
                     <div class="cf-contact-info-card">
                         <div class="cf-contact-info-icon bg-blue-subtle text-blue">
-                            <i class="las la-map-marker-alt"></i>
+                            <i class="las la-building"></i>
                         </div>
-                        <h3 class="fs-15 fw-bold text-slate-900 mb-1">Office</h3>
-                        <p class="fs-13 text-muted mb-0">BeesPoint (Pvt) Ltd</p>
-                        <p class="fs-13 text-muted mb-0">140/1, Moratuwa Rd</p>
-                        <p class="fs-13 text-muted mb-0">Piliyandala, Sri Lanka</p>
+                        <h3 class="fs-15 fw-bold text-slate-900 mb-1">Headquarters</h3>
+                        <p class="fs-13 text-muted mb-0">CloudFlox LLC</p>
+                        <p class="fs-13 text-muted mb-0">2709 N Hayden Island Dr</p>
+                        <p class="fs-13 text-muted mb-0">Portland, OR 97217, USA</p>
                     </div>
                 </div>
 
@@ -208,8 +210,12 @@
                             <i class="las la-envelope"></i>
                         </div>
                         <h3 class="fs-15 fw-bold text-slate-900 mb-1">Email</h3>
-                        <p class="fs-13 text-muted mb-0">support@cloudflox.com</p>
-                        <p class="fs-13 text-muted mb-0">sales@cloudflox.com</p>
+                        <p class="fs-13 text-muted mb-0">
+                            <a href="mailto:support@cloudflox.com" class="text-slate-700">support@cloudflox.com</a>
+                        </p>
+                        <p class="fs-13 text-muted mb-0">
+                            <a href="mailto:sales@cloudflox.com" class="text-slate-700">sales@cloudflox.com</a>
+                        </p>
                     </div>
                 </div>
 
@@ -218,10 +224,10 @@
                         <div class="cf-contact-info-icon bg-blue-subtle text-blue">
                             <i class="las la-clock"></i>
                         </div>
-                        <h3 class="fs-15 fw-bold text-slate-900 mb-1">Working Hours</h3>
-                        <p class="fs-13 text-muted mb-0">Mon - Fri: 9am - 6pm</p>
-                        <p class="fs-13 text-muted mb-0">Sat: 9am - 1pm</p>
-                        <p class="fs-13 text-muted mb-0">Support: 24/7 Online</p>
+                        <h3 class="fs-15 fw-bold text-slate-900 mb-1">Operations</h3>
+                        <p class="fs-13 text-muted mb-0">Cloud Hosting: 24/7/365</p>
+                        <p class="fs-13 text-muted mb-0">Billing: Mon - Fri (UTC)</p>
+                        <p class="fs-13 text-muted mb-0">Incident Desk: Always Active</p>
                     </div>
                 </div>
 
@@ -284,7 +290,7 @@
                                             Phone <span class="text-muted fw-normal">(Optional)</span>
                                         </label>
                                         <input type="tel" id="phone"
-                                            placeholder="XX XXX XXXX"
+                                            placeholder="+1 (555) 000-0000"
                                             class="cf-form-input">
                                     </div>
                                 </div>

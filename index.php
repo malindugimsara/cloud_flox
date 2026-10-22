@@ -1162,73 +1162,37 @@
                  PANE 1: BUSINESS WEB HOSTING (DEFAULT)
                  ========================================== -->
             <div class="cf-comp-pane" id="compPane-business">
-                <div class="cf-table-card">
-                    <div class="cf-table-scroll-container">
-                        <table class="cf-comparison-table">
+                <div class="cf-comparison-table-wrapper rounded-4 border bg-white shadow-sm mb-4">
+                    <div class="table-responsive">
+                        <table class="table cf-comparison-table align-middle mb-0">
                             <thead>
                                 <tr>
                                     <th class="cf-sticky-feature-th">
                                         <div class="cf-feature-heading">
-                                            <span>Business Specs</span>
-                                            <small>NVMe &amp; LVE Limits</small>
+                                            <span>Plan Specifications</span>
+                                            <small>Detailed limits &amp; features</small>
                                         </div>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-business">Business Tier</span>
-                                        <h4 class="cf-plan-title">Starter</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$7.50"
-                                                data-yearly="$6.00">$7.50</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $72/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="201">Choose Starter</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-16 text-slate-900">Starter</span>
+                                        <span class="fs-14 text-indigo fw-extrabold cf-comp-price-val" data-monthly="$7.50/mo"
+                                            data-yearly="$6.00/mo">$7.50/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell popular-col">
-                                        <span class="cf-popular-tag">MOST POPULAR</span>
-                                        <span class="cf-tier-pill-small pill-tier-business">Business Tier</span>
-                                        <h4 class="cf-plan-title">Business</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$15.00"
-                                                data-yearly="$12.00">$15.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $144/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-featured" data-pid="202">Choose Business</a>
+                                    <th class="cf-plan-header-cell popular-col-business text-center">
+                                        <span class="cf-popular-tag-business">MOST POPULAR</span>
+                                        <span class="d-block fw-bold fs-16 text-indigo mt-2">Business</span>
+                                        <span class="fs-14 text-indigo fw-extrabold cf-comp-price-val" data-monthly="$15.00/mo"
+                                            data-yearly="$12.00/mo">$15.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-business">Business Tier</span>
-                                        <h4 class="cf-plan-title">Professional</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$27.00"
-                                                data-yearly="$21.60">$27.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $259.20/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="203">Choose Pro</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-16 text-slate-900">Professional</span>
+                                        <span class="fs-14 text-indigo fw-extrabold cf-comp-price-val" data-monthly="$27.00/mo"
+                                            data-yearly="$21.60/mo">$27.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-business">Business Tier</span>
-                                        <h4 class="cf-plan-title">Enterprise</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$48.00"
-                                                data-yearly="$38.40">$48.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $460.80/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="204">Choose Enterprise</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-16 text-slate-900">Enterprise</span>
+                                        <span class="fs-14 text-indigo fw-extrabold cf-comp-price-val" data-monthly="$48.00/mo"
+                                            data-yearly="$38.40/mo">$48.00/mo</span>
                                     </th>
                                 </tr>
                             </thead>
@@ -1399,59 +1363,32 @@
                  PANE 2: BUDGET HOSTING
                  ========================================== -->
             <div class="cf-comp-pane" id="compPane-budget" style="display: none;">
-                <div class="cf-table-card">
-                    <div class="cf-table-scroll-container">
-                        <table class="cf-comparison-table">
+                <div class="cf-comparison-table-wrapper rounded-4 border bg-white shadow-sm mb-4">
+                    <div class="table-responsive">
+                        <table class="table cf-comparison-table align-middle mb-0">
                             <thead>
                                 <tr>
                                     <th class="cf-sticky-feature-th">
                                         <div class="cf-feature-heading">
-                                            <span>Budget Specs</span>
-                                            <small>Essential Hosting</small>
+                                            <span>Plan Specifications</span>
+                                            <small>Detailed limits &amp; features</small>
                                         </div>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-budget">Budget Tier</span>
-                                        <h4 class="cf-plan-title">Mini</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$3.00"
-                                                data-yearly="$2.40">$3.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $28.80/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="101">Choose Mini</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-16 text-slate-900">Mini</span>
+                                        <span class="fs-14 text-emerald fw-extrabold cf-comp-price-val" data-monthly="$3.00/mo"
+                                            data-yearly="$2.40/mo">$3.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell popular-col">
-                                        <span class="cf-popular-tag">BEST VALUE</span>
-                                        <span class="cf-tier-pill-small pill-tier-budget">Budget Tier</span>
-                                        <h4 class="cf-plan-title">Basic</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$4.50"
-                                                data-yearly="$3.60">$4.50</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $43.20/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-featured" data-pid="102">Choose Basic</a>
+                                    <th class="cf-plan-header-cell popular-col-budget text-center">
+                                        <span class="cf-popular-tag-budget">MOST POPULAR</span>
+                                        <span class="d-block fw-bold fs-16 text-emerald mt-2">Basic</span>
+                                        <span class="fs-14 text-emerald fw-extrabold cf-comp-price-val" data-monthly="$4.50/mo"
+                                            data-yearly="$3.60/mo">$4.50/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-budget">Budget Tier</span>
-                                        <h4 class="cf-plan-title">Plus</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$6.00"
-                                                data-yearly="$4.80">$6.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $57.60/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="103">Choose Plus</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-16 text-slate-900">Plus</span>
+                                        <span class="fs-14 text-emerald fw-extrabold cf-comp-price-val" data-monthly="$6.00/mo"
+                                            data-yearly="$4.80/mo">$6.00/mo</span>
                                     </th>
                                 </tr>
                             </thead>
@@ -1597,73 +1534,37 @@
                  PANE 3: PREMIUM MANAGED HOSTING
                  ========================================== -->
             <div class="cf-comp-pane" id="compPane-premium" style="display: none;">
-                <div class="cf-table-card">
-                    <div class="cf-table-scroll-container">
-                        <table class="cf-comparison-table">
+                <div class="cf-comparison-table-wrapper rounded-4 border bg-white shadow-sm mb-4">
+                    <div class="table-responsive">
+                        <table class="table cf-comparison-table align-middle mb-0">
                             <thead>
                                 <tr>
                                     <th class="cf-sticky-feature-th">
                                         <div class="cf-feature-heading">
-                                            <span>Premium Specs</span>
-                                            <small>Dedicated Isolated Nodes</small>
+                                            <span>Plan Specifications</span>
+                                            <small>Detailed limits &amp; features</small>
                                         </div>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-premium">Managed Tier</span>
-                                        <h4 class="cf-plan-title">Starter</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$75.00"
-                                                data-yearly="$60.00">$75.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $720/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="301">Choose Starter</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-16 text-slate-900">Starter</span>
+                                        <span class="fs-14 text-orange fw-extrabold cf-comp-price-val" data-monthly="$75.00/mo"
+                                            data-yearly="$60.00/mo">$75.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell popular-col">
-                                        <span class="cf-popular-tag">MOST POPULAR</span>
-                                        <span class="cf-tier-pill-small pill-tier-premium">Managed Tier</span>
-                                        <h4 class="cf-plan-title">Business</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$120.00"
-                                                data-yearly="$96.00">$120.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $1,152/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-featured" data-pid="302">Choose Business</a>
+                                    <th class="cf-plan-header-cell popular-col-premium text-center">
+                                        <span class="cf-popular-tag-premium">MOST POPULAR</span>
+                                        <span class="d-block fw-bold fs-16 text-orange mt-2">Business</span>
+                                        <span class="fs-14 text-orange fw-extrabold cf-comp-price-val" data-monthly="$120.00/mo"
+                                            data-yearly="$96.00/mo">$120.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-premium">Managed Tier</span>
-                                        <h4 class="cf-plan-title">Pro</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$210.00"
-                                                data-yearly="$168.00">$210.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $2,016/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="303">Choose Pro</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-16 text-slate-900">Pro</span>
+                                        <span class="fs-14 text-orange fw-extrabold cf-comp-price-val" data-monthly="$210.00/mo"
+                                            data-yearly="$168.00/mo">$210.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-premium">Managed Tier</span>
-                                        <h4 class="cf-plan-title">Enterprise</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$350.00"
-                                                data-yearly="$280.00">$350.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <span class="cf-plan-billing-note cf-comp-billing-note"
-                                            data-monthly-note="Billed monthly"
-                                            data-yearly-note="Billed $3,360/yr (Save 20%)">Billed monthly</span>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="304">Choose Enterprise</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-16 text-slate-900">Enterprise</span>
+                                        <span class="fs-14 text-orange fw-extrabold cf-comp-price-val" data-monthly="$350.00/mo"
+                                            data-yearly="$280.00/mo">$350.00/mo</span>
                                     </th>
                                 </tr>
                             </thead>
@@ -1810,9 +1711,9 @@
                  PANE 4: ALL 11 PLANS MATRIX (DEEP DIVE)
                  ========================================== -->
             <div class="cf-comp-pane" id="compPane-all" style="display: none;">
-                <div class="cf-table-card">
-                    <div class="cf-table-scroll-container">
-                        <table class="cf-comparison-table">
+                <div class="cf-comparison-table-wrapper rounded-4 border bg-white shadow-sm mb-4">
+                    <div class="table-responsive">
+                        <table class="table cf-comparison-table align-middle mb-0">
                             <thead>
                                 <tr>
                                     <th class="cf-sticky-feature-th">
@@ -1822,129 +1723,63 @@
                                         </div>
                                     </th>
                                     <!-- Budget 3 -->
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-budget">Budget</span>
-                                        <h4 class="cf-plan-title">Mini</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$3.00"
-                                                data-yearly="$2.40">$3.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="101">Order Mini</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-15 text-slate-900">Mini</span>
+                                        <span class="fs-13 text-emerald fw-extrabold cf-comp-price-val" data-monthly="$3.00/mo"
+                                            data-yearly="$2.40/mo">$3.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-budget">Budget</span>
-                                        <h4 class="cf-plan-title">Basic</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$4.50"
-                                                data-yearly="$3.60">$4.50</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="102">Order Basic</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-15 text-slate-900">Basic</span>
+                                        <span class="fs-13 text-emerald fw-extrabold cf-comp-price-val" data-monthly="$4.50/mo"
+                                            data-yearly="$3.60/mo">$4.50/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-budget">Budget</span>
-                                        <h4 class="cf-plan-title">Plus</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$6.00"
-                                                data-yearly="$4.80">$6.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="103">Order Plus</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-15 text-slate-900">Plus</span>
+                                        <span class="fs-13 text-emerald fw-extrabold cf-comp-price-val" data-monthly="$6.00/mo"
+                                            data-yearly="$4.80/mo">$6.00/mo</span>
                                     </th>
                                     <!-- Business 4 -->
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-business">Business</span>
-                                        <h4 class="cf-plan-title">Starter</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$7.50"
-                                                data-yearly="$6.00">$7.50</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="201">Order Starter</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-15 text-slate-900">Starter</span>
+                                        <span class="fs-13 text-indigo fw-extrabold cf-comp-price-val" data-monthly="$7.50/mo"
+                                            data-yearly="$6.00/mo">$7.50/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell popular-col">
-                                        <span class="cf-popular-tag">FEATURED</span>
-                                        <span class="cf-tier-pill-small pill-tier-business">Business</span>
-                                        <h4 class="cf-plan-title">Business</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$15.00"
-                                                data-yearly="$12.00">$15.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-featured" data-pid="202">Order Business</a>
+                                    <th class="cf-plan-header-cell popular-col-business text-center">
+                                        <span class="cf-popular-tag-business">FEATURED</span>
+                                        <span class="d-block fw-bold fs-15 text-indigo mt-2">Business</span>
+                                        <span class="fs-13 text-indigo fw-extrabold cf-comp-price-val" data-monthly="$15.00/mo"
+                                            data-yearly="$12.00/mo">$15.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-business">Business</span>
-                                        <h4 class="cf-plan-title">Pro</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$27.00"
-                                                data-yearly="$21.60">$27.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="203">Order Pro</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-15 text-slate-900">Pro</span>
+                                        <span class="fs-13 text-indigo fw-extrabold cf-comp-price-val" data-monthly="$27.00/mo"
+                                            data-yearly="$21.60/mo">$27.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-business">Business</span>
-                                        <h4 class="cf-plan-title">Enterprise</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$48.00"
-                                                data-yearly="$38.40">$48.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="204">Order Ent.</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-15 text-slate-900">Enterprise</span>
+                                        <span class="fs-13 text-indigo fw-extrabold cf-comp-price-val" data-monthly="$48.00/mo"
+                                            data-yearly="$38.40/mo">$48.00/mo</span>
                                     </th>
                                     <!-- Premium 4 -->
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-premium">Managed</span>
-                                        <h4 class="cf-plan-title">Starter</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$75.00"
-                                                data-yearly="$60.00">$75.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="301">Order Managed</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-15 text-slate-900">Starter</span>
+                                        <span class="fs-13 text-orange fw-extrabold cf-comp-price-val" data-monthly="$75.00/mo"
+                                            data-yearly="$60.00/mo">$75.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-premium">Managed</span>
-                                        <h4 class="cf-plan-title">Business</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$120.00"
-                                                data-yearly="$96.00">$120.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="302">Order Managed</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-15 text-slate-900">Business</span>
+                                        <span class="fs-13 text-orange fw-extrabold cf-comp-price-val" data-monthly="$120.00/mo"
+                                            data-yearly="$96.00/mo">$120.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-premium">Managed</span>
-                                        <h4 class="cf-plan-title">Pro</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$210.00"
-                                                data-yearly="$168.00">$210.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="303">Order Managed</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-15 text-slate-900">Pro</span>
+                                        <span class="fs-13 text-orange fw-extrabold cf-comp-price-val" data-monthly="$210.00/mo"
+                                            data-yearly="$168.00/mo">$210.00/mo</span>
                                     </th>
-                                    <th class="cf-plan-header-cell">
-                                        <span class="cf-tier-pill-small pill-tier-premium">Managed</span>
-                                        <h4 class="cf-plan-title">Enterprise</h4>
-                                        <div class="cf-price-display">
-                                            <span class="cf-price-num cf-comp-price-val" data-monthly="$350.00"
-                                                data-yearly="$280.00">$350.00</span>
-                                            <span class="cf-price-period">/mo</span>
-                                        </div>
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly"
-                                            class="cf-table-cta-btn btn-cta-subtle" data-pid="304">Order Managed</a>
+                                    <th class="cf-plan-header-cell text-center">
+                                        <span class="d-block fw-bold fs-15 text-slate-900">Enterprise</span>
+                                        <span class="fs-13 text-orange fw-extrabold cf-comp-price-val" data-monthly="$350.00/mo"
+                                            data-yearly="$280.00/mo">$350.00/mo</span>
                                     </th>
                                 </tr>
                             </thead>
@@ -4402,7 +4237,7 @@
     <!-- =========== JS Area =========== -->
 
     <!-- CloudFlox Homepage Interactive Scripts (Pricing, Comparison, Matchmaker, Quotes) -->
-    <script src="assets/js/cloudflox-home.js?v=4"></script>
+    <script src="assets/js/cloudflox-home.js?v=5"></script>
 
 </body>
 

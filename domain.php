@@ -562,25 +562,51 @@
                                 </td>
                             </tr>
 
-                            <!-- .lk -->
+                            <!-- .us -->
                             <tr data-cat="regional">
                                 <td>
                                     <div class="tld-ext-pill">
-                                        <span>.lk</span>
-                                        <span class="tld-tag tld-tag-regional">Sri Lanka</span>
+                                        <span>.us</span>
+                                        <span class="tld-tag tld-tag-regional">United States</span>
                                     </div>
                                 </td>
-                                <td><span class="text-muted fs-13">Country Code (LK)</span></td>
-                                <td><strong class="text-blue fs-15">$29.00</strong></td>
-                                <td><span class="text-slate-700">$29.00</span></td>
-                                <td><span class="text-slate-700">$29.00</span></td>
+                                <td><span class="text-muted fs-13">Official US Domain</span></td>
+                                <td><strong class="text-blue fs-15">$9.99</strong></td>
+                                <td><span class="text-slate-700">$12.99</span></td>
+                                <td><span class="text-slate-700">$9.99</span></td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>Managed DNS</span>
+                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
+                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
                                     </div>
                                 </td>
                                 <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.lk" class="btn-tld-register">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.us" class="btn-tld-register">
+                                        <span>Register</span> <i class="las la-arrow-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <!-- .io -->
+                            <tr data-cat="tech">
+                                <td>
+                                    <div class="tld-ext-pill">
+                                        <span>.io</span>
+                                        <span class="tld-tag tld-tag-popular">Tech &amp; AI</span>
+                                    </div>
+                                </td>
+                                <td><span class="text-muted fs-13">Startups &amp; Developers</span></td>
+                                <td><strong class="text-blue fs-15">$38.99</strong></td>
+                                <td><span class="text-slate-700">$42.99</span></td>
+                                <td><span class="text-slate-700">$38.99</span></td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
+                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
+                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
+                                    </div>
+                                </td>
+                                <td class="text-end">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.io" class="btn-tld-register">
                                         <span>Register</span> <i class="las la-arrow-right"></i>
                                     </a>
                                 </td>
