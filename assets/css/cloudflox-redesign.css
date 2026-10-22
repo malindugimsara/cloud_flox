@@ -2107,6 +2107,16 @@ header .dropdown-menu,
     background: rgba(249, 115, 22, 0.1);
 }
 
+#managedPlans .price-subtext {
+    color: #7C3AED;
+    background: rgba(124, 58, 237, 0.09);
+}
+
+#budgetPlans .price-subtext {
+    color: #059669;
+    background: rgba(16, 185, 129, 0.09);
+}
+
 /* Plan CTA Buttons */
 .plan-cta-btn {
     width: 100%;
@@ -4474,8 +4484,8 @@ footer .border-top {
 /* Header Columns: STICKY AT TOP */
 .cf-comparison-table thead th {
     position: sticky;
-    top: 0;
-    z-index: 15;
+    top: var(--cf-header-h, 110px);
+    z-index: 25;
     background: #FFFFFF !important;
     padding: 22px 16px;
     vertical-align: top;
@@ -4491,9 +4501,9 @@ footer .border-top {
 /* Top-Left Corner Header (Sticky both vertically and horizontally) */
 .cf-sticky-feature-th {
     position: sticky;
-    top: 0;
+    top: var(--cf-header-h, 110px);
     left: 0;
-    z-index: 30 !important;
+    z-index: 35 !important;
     background: #FFFFFF !important;
     text-align: left !important;
     width: 260px;
@@ -7477,10 +7487,88 @@ footer .border-top {
 /* Global Mobile Overflow Containment */
 .partners-marquee-container,
 .marquee-track-wrapper,
-.modern-stats-section,
-.cf-comparison-table-wrapper {
+.modern-stats-section {
     max-width: 100vw !important;
     overflow-x: hidden !important;
+}
+
+.cf-comparison-table-wrapper {
+    max-width: 100%;
+    position: relative;
+    background: #FFFFFF;
+}
+
+/* Desktop (992px+): Enable seamless page-level sticky docking below the fixed header */
+@media (min-width: 992px) {
+    .cf-comparison-table-wrapper {
+        overflow: visible !important;
+    }
+
+    .cf-comparison-table-wrapper .table-responsive {
+        overflow: visible !important;
+    }
+
+    .cf-comparison-table thead th {
+        position: sticky;
+        top: var(--cf-header-h, 110px) !important;
+        z-index: 25 !important;
+        background: #FFFFFF !important;
+        box-shadow: 0 4px 12px -3px rgba(15, 23, 42, 0.08);
+    }
+
+    .cf-comparison-table thead th.cf-sticky-feature-th {
+        position: sticky;
+        top: var(--cf-header-h, 110px) !important;
+        left: 0 !important;
+        z-index: 35 !important;
+        background: #FFFFFF !important;
+    }
+
+    /* Keep top corners neatly curved when scrolled past */
+    .cf-comparison-table thead tr th:first-child {
+        border-top-left-radius: 16px;
+    }
+
+    .cf-comparison-table thead tr th:last-child {
+        border-top-right-radius: 16px;
+    }
+}
+
+/* Tablet & Mobile (<= 991.98px): Internal scroll container with frozen header and sticky left column */
+@media (max-width: 991.98px) {
+    .cf-comparison-table-wrapper {
+        overflow: hidden !important;
+    }
+
+    .cf-comparison-table-wrapper .table-responsive {
+        max-height: 68vh;
+        overflow-y: auto !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .cf-comparison-table thead th {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 25 !important;
+        background: #FFFFFF !important;
+        box-shadow: 0 3px 8px -2px rgba(15, 23, 42, 0.08);
+    }
+
+    .cf-comparison-table thead th.cf-sticky-feature-th {
+        position: sticky !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 35 !important;
+        background: #FFFFFF !important;
+    }
+
+    .cf-comparison-table tbody th.cf-sticky-feature-cell {
+        position: sticky !important;
+        left: 0 !important;
+        z-index: 20 !important;
+        background: #FFFFFF !important;
+    }
 }
 
 /* ==========================================================================
@@ -7592,6 +7680,31 @@ footer .border-top {
     color: #FFFFFF !important;
     border-color: rgba(255, 255, 255, 0.25);
     transform: translateY(-1px);
+}
+
+.cf-btn-secondary-light {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 26px;
+    border-radius: 12px;
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    font-size: 14.5px;
+    font-weight: 600;
+    text-decoration: none !important;
+    border: 1.5px solid #CBD5E1 !important;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    transition: all 0.25s ease;
+}
+
+.cf-btn-secondary-light:hover {
+    border-color: #2563EB !important;
+    color: #2563EB !important;
+    background: #F8FAFC !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
 }
 
 /* ==========================================================================
@@ -8171,10 +8284,6 @@ html, body {
 
 /* 1.5 Desktop Container Paddings (min-width: 992px) */
 @media (min-width: 992px) {
-    .modern-pricing-section > .container {
-        padding-left: 100px !important;
-        padding-right: 100px !important;
-    }
     .cf-footer-status-ribbon {
         padding-left: 80px !important;
         padding-right: 80px !important;
@@ -8841,14 +8950,237 @@ html, body {
 }
 
 /* ==========================================================================
-   BUDGET HOSTING PAGE STYLING (budget-hosting.php)
+   BUDGET HOSTING PAGE RESPONSIVE SPACING & STYLING (budget-hosting.php)
    ========================================================================== */
+
+/* 0. Budget, Business, Premium, Dedicated, Domain, Contact, VPS & Home Unified Responsive Container System (Desktop & Mobile) */
+body.cf-budget-page .container,
+body.cf-business-page .container,
+body.cf-premium-page .container,
+body.cf-dedicated-page .container,
+body.cf-domain-page .container,
+body.cf-contact-page .container,
+body.cf-vps-page .container,
+body.cf-home-page .container {
+    max-width: 1320px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+@media (min-width: 576px) {
+    body.cf-budget-page .container,
+    body.cf-business-page .container,
+    body.cf-premium-page .container,
+    body.cf-dedicated-page .container,
+    body.cf-domain-page .container,
+    body.cf-contact-page .container,
+    body.cf-vps-page .container,
+    body.cf-home-page .container {
+        padding-left: 28px !important;
+        padding-right: 28px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    body.cf-budget-page .container,
+    body.cf-business-page .container,
+    body.cf-premium-page .container,
+    body.cf-dedicated-page .container,
+    body.cf-domain-page .container,
+    body.cf-contact-page .container,
+    body.cf-vps-page .container,
+    body.cf-home-page .container {
+        padding-left: 36px !important;
+        padding-right: 36px !important;
+    }
+}
+
+@media (min-width: 992px) {
+    body.cf-budget-page .container,
+    body.cf-business-page .container,
+    body.cf-premium-page .container,
+    body.cf-dedicated-page .container,
+    body.cf-domain-page .container,
+    body.cf-contact-page .container,
+    body.cf-vps-page .container,
+    body.cf-home-page .container {
+        padding-left: 44px !important;
+        padding-right: 44px !important;
+    }
+
+    /* Harmonize pricing section container with hero and comparison */
+    body.cf-budget-page .modern-pricing-section > .container,
+    body.cf-business-page .modern-pricing-section > .container,
+    body.cf-premium-page .modern-pricing-section > .container,
+    body.cf-dedicated-page .modern-pricing-section > .container,
+    body.cf-domain-page .modern-pricing-section > .container,
+    body.cf-vps-page .modern-pricing-section > .container,
+    body.cf-home-page .modern-pricing-section > .container {
+        padding-left: 44px !important;
+        padding-right: 44px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    body.cf-budget-page .container,
+    body.cf-business-page .container,
+    body.cf-premium-page .container,
+    body.cf-dedicated-page .container,
+    body.cf-domain-page .container,
+    body.cf-contact-page .container,
+    body.cf-vps-page .container,
+    body.cf-home-page .container {
+        max-width: 1360px !important;
+        padding-left: 54px !important;
+        padding-right: 54px !important;
+    }
+
+    body.cf-budget-page .modern-pricing-section > .container,
+    body.cf-business-page .modern-pricing-section > .container,
+    body.cf-premium-page .modern-pricing-section > .container,
+    body.cf-dedicated-page .modern-pricing-section > .container,
+    body.cf-domain-page .modern-pricing-section > .container,
+    body.cf-vps-page .modern-pricing-section > .container,
+    body.cf-home-page .modern-pricing-section > .container {
+        padding-left: 54px !important;
+        padding-right: 54px !important;
+    }
+}
+
+@media (min-width: 1800px) {
+    body.cf-budget-page .container,
+    body.cf-business-page .container,
+    body.cf-premium-page .container,
+    body.cf-dedicated-page .container,
+    body.cf-domain-page .container,
+    body.cf-contact-page .container,
+    body.cf-vps-page .container,
+    body.cf-home-page .container {
+        max-width: 1440px !important;
+        padding-left: 64px !important;
+        padding-right: 64px !important;
+    }
+
+    body.cf-budget-page .modern-pricing-section > .container,
+    body.cf-business-page .modern-pricing-section > .container,
+    body.cf-premium-page .modern-pricing-section > .container,
+    body.cf-dedicated-page .modern-pricing-section > .container,
+    body.cf-domain-page .modern-pricing-section > .container,
+    body.cf-vps-page .modern-pricing-section > .container,
+    body.cf-home-page .modern-pricing-section > .container {
+        padding-left: 64px !important;
+        padding-right: 64px !important;
+    }
+}
+
+/* 1. Hero Section Fluid Spacing */
 .cf-budget-hero {
     background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
-    padding-top: 24px;
-    padding-bottom: 20px;
+    padding-top: 40px;
+    padding-bottom: 36px;
     border-bottom: 1px solid #E2E8F0;
     overflow: hidden;
+    position: relative;
+}
+
+.cf-budget-hero .hero-ambient-glow {
+    position: absolute;
+    top: -15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1150px;
+    height: 480px;
+    background: radial-gradient(ellipse 65% 55% at 50% 0%, rgba(16, 185, 129, 0.14) 0%, rgba(5, 150, 105, 0.05) 50%, rgba(255, 255, 255, 0) 80%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.text-gradient-budget-green {
+    background: linear-gradient(135deg, #065F46 0%, #059669 45%, #10B981 80%, #34D399 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cf-budget-hero-title {
+    font-size: clamp(26px, 4vw, 44px);
+    line-height: 1.18;
+}
+
+.cf-budget-hero-lead {
+    font-size: clamp(14.5px, 1.6vw, 17px);
+    max-width: 620px;
+}
+
+/* Budget Green CTA Glow Button */
+.cf-btn-budget-glow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 26px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    border: 1px solid #047857;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.38);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.cf-btn-budget-glow:hover {
+    background: linear-gradient(135deg, #047857 0%, #059669 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -4px rgba(16, 185, 129, 0.5);
+    color: #FFFFFF !important;
+}
+
+/* Pulse Dot in Green */
+.cf-pulse-dot-green {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+    animation: cfPulseGreen 2s infinite ease-in-out;
+}
+
+@keyframes cfPulseGreen {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35); }
+    50% { box-shadow: 0 0 0 7px rgba(16, 185, 129, 0.05); }
+}
+
+/* Green Subtle Utility Classes */
+.bg-emerald-subtle {
+    background: rgba(16, 185, 129, 0.12) !important;
+}
+
+.text-emerald {
+    color: #059669 !important;
+}
+
+.text-emerald-sub {
+    color: #10B981 !important;
+}
+
+.border-emerald-subtle {
+    border-color: rgba(16, 185, 129, 0.25) !important;
+}
+
+.btn-outline-emerald {
+    color: #059669 !important;
+    border: 1.5px solid #10B981 !important;
+    background: transparent !important;
+    transition: all 0.25s ease;
+}
+
+.btn-outline-emerald:hover {
+    background: #059669 !important;
+    color: #FFFFFF !important;
+    border-color: #059669 !important;
 }
 
 .cf-feature-chip {
@@ -8865,17 +9197,109 @@ html, body {
     box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
-.cf-budget-hero-card {
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 24px !important;
-    background: #FFFFFF !important;
-    box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.08) !important;
+/* 1.1 Hero Visual Showcase & Floating Badges */
+.cf-budget-hero-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.cf-hero-img-wrap {
+    position: relative;
+    max-width: 530px;
+    width: 100%;
+    border-radius: 24px;
+    background: transparent;
+    transition: transform 0.35s ease;
+}
+
+.cf-hero-img-wrap:hover {
+    transform: translateY(-4px);
+}
+
+.cf-hero-illustration {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 22px;
+    filter: drop-shadow(0 20px 35px rgba(15, 23, 42, 0.09));
+    transition: filter 0.35s ease;
+}
+
+.cf-hero-img-wrap:hover .cf-hero-illustration {
+    filter: drop-shadow(0 25px 45px rgba(16, 185, 129, 0.16));
+}
+
+/* Floating Telemetry Chips */
+.cf-hero-float-chip {
+    position: absolute;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 15px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 14px;
+    box-shadow: 0 12px 28px -5px rgba(15, 23, 42, 0.12);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.cf-budget-hero-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 25px 55px -12px rgba(15, 23, 42, 0.12) !important;
+.cf-hero-float-chip:hover {
+    transform: scale(1.04);
+    box-shadow: 0 16px 34px -6px rgba(15, 23, 42, 0.16);
+}
+
+.float-chip-top {
+    top: 6%;
+    left: -2%;
+}
+
+.float-chip-bottom {
+    bottom: 5%;
+    right: -2%;
+}
+
+.cf-chip-pulse {
+    width: 9px;
+    height: 9px;
+    min-width: 9px;
+    background: #10B981;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+    animation: cfPulse 2s infinite ease-in-out;
+}
+
+@keyframes cfPulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3); }
+    50% { box-shadow: 0 0 0 7px rgba(16, 185, 129, 0.05); }
+}
+
+.cf-chip-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+}
+
+.cf-chip-sub {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748B;
+    line-height: 1.2;
+}
+
+.cf-chip-val {
+    font-size: 14.5px;
+    font-weight: 800;
+    line-height: 1.2;
 }
 
 .cf-card-icon-bubble {
@@ -8887,12 +9311,6 @@ html, body {
     align-items: center;
     justify-content: center;
     font-size: 22px;
-}
-
-.text-gradient-primary {
-    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #38BDF8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .hover-shadow {
@@ -8907,3 +9325,2651 @@ html, body {
 .max-w-750 {
     max-width: 750px;
 }
+
+/* 2. Budget Featured Pricing Card */
+.modern-pricing-card.featured-budget,
+body.cf-budget-page .modern-pricing-card.featured {
+    border: 2px solid #10B981 !important;
+    box-shadow: 0 20px 45px -10px rgba(16, 185, 129, 0.22) !important;
+    position: relative;
+    background: #FFFFFF;
+    transform: translateY(-8px);
+}
+
+.modern-pricing-card.featured-budget .plan-featured-badge,
+body.cf-budget-page .modern-pricing-card.featured .plan-featured-badge {
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-plan-budget-featured {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    border: 1px solid #047857;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.btn-plan-budget-featured:hover {
+    background: linear-gradient(135deg, #047857 0%, #059669 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.45);
+    color: #FFFFFF !important;
+}
+
+/* 3. Popular Column in Budget Comparison Table */
+.popular-col-budget {
+    background: rgba(16, 185, 129, 0.035) !important;
+}
+
+.cf-comparison-table thead th.popular-col-budget {
+    background: #F0FDF4 !important;
+    border-left: 2px solid #10B981 !important;
+    border-right: 2px solid #10B981 !important;
+}
+
+.cf-comparison-table tbody td.popular-col-budget {
+    border-left: 2px solid rgba(16, 185, 129, 0.2) !important;
+    border-right: 2px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+.cf-popular-tag-budget {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    color: #FFFFFF;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 3px 12px;
+    border-radius: 0 0 8px 8px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
+}
+
+/* Feature Boxes / Bento Cards in Why Section */
+.cf-feature-box {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 18px !important;
+    padding: 28px 24px !important;
+    transition: all 0.3s ease;
+}
+
+.cf-feature-box:hover {
+    border-color: #CBD5E1 !important;
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Migration Callout Banner */
+.cf-migration-card {
+    border-radius: 24px !important;
+    padding: 44px 40px !important;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%) !important;
+}
+
+/* Accordion in FAQ */
+.cf-modern-accordion .accordion-item {
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 14px !important;
+    margin-bottom: 12px !important;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02) !important;
+}
+
+.cf-modern-accordion .accordion-button {
+    padding: 18px 22px !important;
+    font-size: 16px !important;
+    background: #FFFFFF !important;
+}
+
+.cf-modern-accordion .accordion-button:not(.collapsed) {
+    background: #F8FAFC !important;
+    color: #2563EB !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+}
+
+body.cf-budget-page .cf-modern-accordion .accordion-button:not(.collapsed) {
+    background: #F0FDF4 !important;
+    color: #059669 !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+.cf-modern-accordion .accordion-body {
+    padding: 18px 22px 22px !important;
+    font-size: 15px !important;
+    background: #FFFFFF !important;
+}
+
+/* 2. Responsive Breakpoint Optimization */
+@media (max-width: 991.98px) {
+    .cf-budget-hero {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .cf-hero-btn-group {
+        margin-bottom: 24px;
+    }
+
+    .cf-hero-img-wrap {
+        max-width: 440px;
+        margin-top: 10px;
+    }
+
+    .float-chip-top {
+        left: 0;
+        top: 2%;
+    }
+
+    .float-chip-bottom {
+        right: 0;
+        bottom: 2%;
+    }
+
+    /* Neutralize featured card translation on stacked tablet */
+    .modern-pricing-card.featured {
+        transform: none !important;
+        margin-top: 14px;
+        margin-bottom: 6px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .modern-pricing-section,
+    #planComparison,
+    .bg-white:has(.cf-feature-box),
+    .bg-white:has(#budgetFaqAccordion) {
+        padding-top: 48px !important;
+        padding-bottom: 48px !important;
+    }
+
+    .cf-migration-card {
+        padding: 30px 22px !important;
+        border-radius: 18px !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    body.cf-budget-page .container,
+    body.cf-business-page .container,
+    body.cf-premium-page .container,
+    body.cf-dedicated-page .container,
+    body.cf-domain-page .container {
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+    }
+
+    .cf-budget-hero {
+        padding-top: 20px;
+        padding-bottom: 22px;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .cf-budget-hero .container {
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+    }
+
+    .cf-budget-hero-title {
+        font-size: 25px !important;
+        line-height: 1.22 !important;
+    }
+
+    .cf-budget-hero-lead {
+        font-size: 14px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .cf-feature-chip {
+        font-size: 11.5px;
+        padding: 4px 10px;
+        gap: 5px;
+    }
+
+    .cf-hero-btn-group .btn,
+    .cf-hero-btn-group a {
+        width: 100% !important;
+        padding: 12px 18px !important;
+        font-size: 14px !important;
+    }
+
+    .cf-hero-img-wrap {
+        max-width: 320px;
+        margin-top: 14px;
+    }
+
+    .cf-hero-float-chip {
+        padding: 6px 11px;
+        border-radius: 11px;
+        gap: 6px;
+    }
+
+    .cf-chip-sub {
+        font-size: 9.5px;
+    }
+
+    .cf-chip-val {
+        font-size: 12.5px;
+    }
+
+    .cf-chip-icon {
+        width: 25px;
+        height: 25px;
+        font-size: 13px;
+    }
+
+    .float-chip-top {
+        left: 2px;
+        top: -6px;
+    }
+
+    .float-chip-bottom {
+        right: 2px;
+        bottom: -6px;
+    }
+
+    /* Pricing Section Mobile */
+    .modern-pricing-section {
+        padding: 38px 0 42px !important;
+    }
+
+    .pricing-switch-container {
+        margin-bottom: 26px !important;
+    }
+
+    .modern-pricing-card {
+        padding: 22px 16px 20px !important;
+        margin-bottom: 0 !important;
+    }
+
+    .pricing-guarantees-wrapper {
+        padding: 14px 12px !important;
+        margin-top: 22px !important;
+        gap: 10px 14px !important;
+    }
+
+    .guarantee-badge {
+        font-size: 12px !important;
+        gap: 6px !important;
+    }
+
+    /* Comparison Table Mobile */
+    .cf-comparison-table thead th.cf-sticky-feature-th,
+    .cf-comparison-table tbody th.cf-sticky-feature-cell {
+        width: 135px !important;
+        min-width: 130px !important;
+        max-width: 140px !important;
+        padding: 10px 8px !important;
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+    }
+
+    .cf-comparison-table thead th.cf-plan-header-cell {
+        min-width: 125px !important;
+        padding: 14px 10px !important;
+    }
+
+    .cf-comparison-table tbody td {
+        padding: 9px 8px !important;
+        font-size: 11.5px !important;
+        min-width: 125px !important;
+    }
+
+    .cf-cat-header-row td {
+        padding: 8px 10px !important;
+        font-size: 10.5px !important;
+    }
+
+    /* Feature Boxes Mobile */
+    .cf-feature-box {
+        padding: 18px 16px !important;
+        border-radius: 14px !important;
+    }
+
+    /* FAQ Mobile */
+    .cf-modern-accordion .accordion-button {
+        padding: 14px 16px !important;
+        font-size: 14px !important;
+    }
+
+    .cf-modern-accordion .accordion-body {
+        padding: 12px 16px 16px !important;
+        font-size: 13.5px !important;
+    }
+}
+
+/* ==========================================================================
+   BUSINESS WEB HOSTING PAGE RESPONSIVE SPACING & STYLING (web-hosting.php)
+   Theme Accent: Royal Indigo (#4F46E5 / #6366F1), Electric Violet (#7C3AED), Enterprise Slate (#0F172A)
+   ========================================================================== */
+
+/* 1. Business Hero Section */
+.cf-business-hero {
+    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+    padding-top: 40px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid #E2E8F0;
+    overflow: hidden;
+    position: relative;
+}
+
+.cf-business-hero .hero-ambient-glow {
+    position: absolute;
+    top: -15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1150px;
+    height: 480px;
+    background: radial-gradient(ellipse 65% 55% at 50% 0%, rgba(99, 102, 241, 0.14) 0%, rgba(6, 182, 212, 0.06) 50%, rgba(255, 255, 255, 0) 80%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.text-gradient-business {
+    background: linear-gradient(135deg, #3730A3 0%, #4F46E5 45%, #6366F1 75%, #06B6D4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cf-business-hero-title {
+    font-size: clamp(26px, 4vw, 44px);
+    line-height: 1.18;
+}
+
+.cf-business-hero-lead {
+    font-size: clamp(14.5px, 1.6vw, 17px);
+    max-width: 640px;
+}
+
+/* Business CTA Glow Button */
+.cf-btn-business-glow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 26px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+    border: 1px solid #4338CA;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px -4px rgba(79, 70, 229, 0.38);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.cf-btn-business-glow:hover {
+    background: linear-gradient(135deg, #4338CA 0%, #4F46E5 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -4px rgba(79, 70, 229, 0.5);
+    color: #FFFFFF !important;
+}
+
+/* Pulse Dot in Indigo */
+.cf-pulse-dot-indigo {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6366F1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+    animation: cfPulseIndigo 2s infinite ease-in-out;
+}
+
+@keyframes cfPulseIndigo {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.35); }
+    50% { box-shadow: 0 0 0 7px rgba(99, 102, 241, 0.05); }
+}
+
+/* Indigo Subtle Utility Classes */
+.bg-indigo-subtle {
+    background: rgba(99, 102, 241, 0.12) !important;
+}
+
+.text-indigo {
+    color: #4F46E5 !important;
+}
+
+.text-indigo-sub {
+    color: #6366F1 !important;
+}
+
+.border-indigo-subtle {
+    border-color: rgba(99, 102, 241, 0.25) !important;
+}
+
+.bg-cyan-subtle {
+    background: rgba(6, 182, 212, 0.12) !important;
+}
+
+.text-cyan {
+    color: #0891B2 !important;
+}
+
+/* 2. Business Featured Pricing Card */
+.modern-pricing-card.featured-business {
+    border: 2px solid #6366F1 !important;
+    box-shadow: 0 20px 45px -10px rgba(99, 102, 241, 0.22) !important;
+    position: relative;
+    background: #FFFFFF;
+    transform: translateY(-8px);
+}
+
+.modern-pricing-card.featured-business .plan-featured-badge {
+    background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-plan-business-featured {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+    border: 1px solid #4338CA;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.btn-plan-business-featured:hover {
+    background: linear-gradient(135deg, #4338CA 0%, #4F46E5 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.45);
+    color: #FFFFFF !important;
+}
+
+/* 3. Popular Column in Business Comparison Table */
+.popular-col-business {
+    background: rgba(99, 102, 241, 0.035) !important;
+}
+
+.cf-comparison-table thead th.popular-col-business {
+    background: #F8F9FE !important;
+    border-left: 2px solid #6366F1 !important;
+    border-right: 2px solid #6366F1 !important;
+}
+
+.cf-comparison-table tbody td.popular-col-business {
+    border-left: 2px solid rgba(99, 102, 241, 0.2) !important;
+    border-right: 2px solid rgba(99, 102, 241, 0.2) !important;
+}
+
+.cf-popular-tag-business {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+    color: #FFFFFF;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 3px 12px;
+    border-radius: 0 0 8px 8px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+}
+
+/* 4. Responsive Optimization for Business Page */
+@media (max-width: 991.98px) {
+    .cf-business-hero {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .modern-pricing-card.featured-business {
+        transform: none !important;
+        margin-top: 14px;
+        margin-bottom: 6px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-business-hero {
+        padding-top: 20px;
+        padding-bottom: 22px;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .cf-business-hero .container {
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+    }
+
+    .cf-business-hero-title {
+        font-size: 25px !important;
+        line-height: 1.22 !important;
+    }
+
+    .cf-business-hero-lead {
+        font-size: 14px !important;
+        margin-bottom: 16px !important;
+    }
+}
+
+/* ==========================================================================
+   PREMIUM MANAGED HOSTING PAGE RESPONSIVE SPACING & STYLING (premium-hosting.php)
+   Theme Accent: Royal Purple (#7C3AED / #6D28D9) & Sunset Orange (#F97316 / #EA580C)
+   ========================================================================== */
+
+/* 1. Premium Hero Section */
+.cf-premium-hero {
+    background: linear-gradient(180deg, #FDFCFE 0%, #FFFFFF 100%);
+    padding-top: 40px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid #E2E8F0;
+    overflow: hidden;
+    position: relative;
+}
+
+.cf-premium-hero .hero-ambient-glow {
+    position: absolute;
+    top: -15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1150px;
+    height: 480px;
+    background: radial-gradient(ellipse 65% 55% at 50% 0%, rgba(124, 58, 237, 0.16) 0%, rgba(249, 115, 22, 0.10) 50%, rgba(255, 255, 255, 0) 80%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.text-gradient-premium {
+    background: linear-gradient(135deg, #5B21B6 0%, #7C3AED 42%, #EA580C 80%, #F97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cf-premium-hero-title {
+    font-size: clamp(26px, 4vw, 44px);
+    line-height: 1.18;
+}
+
+.cf-premium-hero-lead {
+    font-size: clamp(14.5px, 1.6vw, 17px);
+    max-width: 640px;
+}
+
+/* Premium CTA Glow Button */
+.cf-btn-premium-glow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 26px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #7C3AED 0%, #EA580C 100%);
+    border: 1px solid #6D28D9;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px -4px rgba(124, 58, 237, 0.38), 0 4px 12px -2px rgba(234, 88, 12, 0.25);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.cf-btn-premium-glow:hover {
+    background: linear-gradient(135deg, #6D28D9 0%, #C2410C 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -4px rgba(124, 58, 237, 0.5), 0 6px 16px -2px rgba(234, 88, 12, 0.35);
+    color: #FFFFFF !important;
+}
+
+/* Pulse Dot in Purple with Orange Glow */
+.cf-pulse-dot-purple,
+.cf-pulse-dot-premium {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #7C3AED;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.35);
+    animation: cfPulsePurple 2s infinite ease-in-out;
+}
+
+@keyframes cfPulsePurple {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4); }
+    50% { box-shadow: 0 0 0 7px rgba(124, 58, 237, 0.08); }
+}
+
+/* Purple & Orange Subtle Utility Classes */
+.bg-purple-subtle {
+    background: rgba(124, 58, 237, 0.12) !important;
+}
+
+.text-purple {
+    color: #7C3AED !important;
+}
+
+.text-purple-dark {
+    color: #6D28D9 !important;
+}
+
+.border-purple-subtle {
+    border-color: rgba(124, 58, 237, 0.25) !important;
+}
+
+.bg-orange-subtle {
+    background: rgba(249, 115, 22, 0.12) !important;
+}
+
+.text-orange {
+    color: #EA580C !important;
+}
+
+.text-orange-sub {
+    color: #F97316 !important;
+}
+
+.border-orange-subtle {
+    border-color: rgba(249, 115, 22, 0.25) !important;
+}
+
+.btn-outline-purple {
+    color: #7C3AED !important;
+    border: 1.5px solid #7C3AED !important;
+    background: transparent !important;
+    transition: all 0.25s ease;
+}
+
+.btn-outline-purple:hover {
+    background: linear-gradient(135deg, #7C3AED 0%, #EA580C 100%) !important;
+    color: #FFFFFF !important;
+    border-color: transparent !important;
+}
+
+/* 2. Premium Featured Pricing Card */
+.modern-pricing-card.featured-premium {
+    border: 2px solid #7C3AED !important;
+    box-shadow: 0 20px 45px -10px rgba(124, 58, 237, 0.22), 0 10px 25px -5px rgba(249, 115, 22, 0.15) !important;
+    position: relative;
+    background: #FFFFFF;
+    transform: translateY(-8px);
+}
+
+.modern-pricing-card.featured-premium .plan-featured-badge {
+    background: linear-gradient(135deg, #7C3AED 0%, #EA580C 100%) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-plan-premium-featured {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #7C3AED 0%, #EA580C 100%);
+    border: 1px solid #6D28D9;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3), 0 2px 8px rgba(234, 88, 12, 0.2);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.btn-plan-premium-featured:hover {
+    background: linear-gradient(135deg, #6D28D9 0%, #C2410C 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.45), 0 4px 12px rgba(234, 88, 12, 0.3);
+    color: #FFFFFF !important;
+}
+
+/* 3. Popular Column in Premium Comparison Table */
+.popular-col-premium {
+    background: rgba(124, 58, 237, 0.035) !important;
+}
+
+.cf-comparison-table thead th.popular-col-premium {
+    background: #FAF5FF !important;
+    border-left: 2px solid #7C3AED !important;
+    border-right: 2px solid #7C3AED !important;
+}
+
+.cf-comparison-table tbody td.popular-col-premium {
+    border-left: 2px solid rgba(124, 58, 237, 0.2) !important;
+    border-right: 2px solid rgba(124, 58, 237, 0.2) !important;
+}
+
+.cf-popular-tag-premium {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #7C3AED 0%, #EA580C 100%);
+    color: #FFFFFF;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 3px 12px;
+    border-radius: 0 0 8px 8px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.25);
+}
+
+body.cf-premium-page .cf-modern-accordion .accordion-button:not(.collapsed) {
+    background: #FAF5FF !important;
+    color: #7C3AED !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.2) !important;
+}
+
+/* 4. Responsive Optimization for Premium Page */
+@media (max-width: 991.98px) {
+    .cf-premium-hero {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .modern-pricing-card.featured-premium {
+        transform: none !important;
+        margin-top: 14px;
+        margin-bottom: 6px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-premium-hero {
+        padding-top: 20px;
+        padding-bottom: 22px;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .cf-premium-hero .container {
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+    }
+
+    .cf-premium-hero-title {
+        font-size: 25px !important;
+        line-height: 1.22 !important;
+    }
+
+    .cf-premium-hero-lead {
+        font-size: 14px !important;
+        margin-bottom: 16px !important;
+    }
+}
+
+/* ==========================================================================
+   DEDICATED SERVERS PAGE RESPONSIVE SPACING & STYLING (dedicated-server.php)
+   Theme Accent: Electric Crimson / Ruby Flame (#E11D48 / #F43F5E / #BE123C), Obsidian Titanium (#0F172A), Amber Gold (#F59E0B)
+   ========================================================================== */
+
+/* 1. Dedicated Hero Section */
+.cf-dedicated-hero {
+    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+    padding-top: 40px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid #E2E8F0;
+    overflow: hidden;
+    position: relative;
+}
+
+.cf-dedicated-hero .hero-ambient-glow {
+    position: absolute;
+    top: -15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1150px;
+    height: 480px;
+    background: radial-gradient(ellipse 65% 55% at 50% 0%, rgba(225, 29, 72, 0.14) 0%, rgba(245, 158, 11, 0.05) 50%, rgba(255, 255, 255, 0) 80%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.text-gradient-dedicated {
+    background: linear-gradient(135deg, #9F1239 0%, #BE123C 30%, #E11D48 70%, #FB7185 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cf-dedicated-hero-title {
+    font-size: clamp(26px, 4vw, 44px);
+    line-height: 1.18;
+}
+
+.cf-dedicated-hero-lead {
+    font-size: clamp(14.5px, 1.6vw, 17px);
+    max-width: 640px;
+}
+
+/* Dedicated CTA Glow Button */
+.cf-btn-dedicated-glow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 26px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #BE123C 0%, #E11D48 100%);
+    border: 1px solid #9F1239;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px -4px rgba(225, 29, 72, 0.38);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.cf-btn-dedicated-glow:hover {
+    background: linear-gradient(135deg, #9F1239 0%, #BE123C 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -4px rgba(225, 29, 72, 0.5);
+    color: #FFFFFF !important;
+}
+
+/* Pulse Dot in Crimson */
+.cf-pulse-dot-crimson {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #E11D48;
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.3);
+    animation: cfPulseCrimson 2s infinite ease-in-out;
+}
+
+@keyframes cfPulseCrimson {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.35); }
+    50% { box-shadow: 0 0 0 7px rgba(225, 29, 72, 0.05); }
+}
+
+/* Crimson Subtle Utility Classes */
+.bg-crimson-subtle {
+    background: rgba(225, 29, 72, 0.10) !important;
+}
+
+.text-crimson {
+    color: #E11D48 !important;
+}
+
+.text-crimson-sub {
+    color: #BE123C !important;
+}
+
+.border-crimson-subtle {
+    border-color: rgba(225, 29, 72, 0.25) !important;
+}
+
+/* 2. Architecture Switcher (Intel Xeon vs AMD Ryzen) */
+.cf-arch-switch-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 36px;
+}
+
+.cf-arch-switch-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #F1F5F9;
+    padding: 5px;
+    border-radius: 999px;
+    border: 1px solid #E2E8F0;
+    gap: 4px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.cf-arch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    color: #475569;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.cf-arch-btn:hover {
+    color: #0F172A;
+}
+
+.cf-arch-btn.active {
+    background: #FFFFFF;
+    color: #0F172A;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+}
+
+.cf-arch-btn.active.intel-active {
+    color: #0071C5;
+}
+
+.cf-arch-btn.active.amd-active {
+    color: #ED1C24;
+}
+
+.cf-arch-badge-count {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    border-radius: 999px;
+    background: #E2E8F0;
+    color: #475569;
+    letter-spacing: 0.02em;
+}
+
+.cf-arch-btn.active .cf-arch-badge-count {
+    background: #0F172A;
+    color: #FFFFFF;
+}
+
+/* 3. Dedicated Featured Pricing Card */
+.modern-pricing-card.featured-dedicated {
+    border: 2px solid #E11D48 !important;
+    box-shadow: 0 20px 45px -10px rgba(225, 29, 72, 0.22) !important;
+    position: relative;
+    background: #FFFFFF;
+    transform: translateY(-8px);
+}
+
+.modern-pricing-card.featured-dedicated .plan-featured-badge {
+    background: linear-gradient(135deg, #BE123C 0%, #E11D48 100%) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-plan-dedicated-featured {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #BE123C 0%, #E11D48 100%);
+    border: 1px solid #9F1239;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.3);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.btn-plan-dedicated-featured:hover {
+    background: linear-gradient(135deg, #9F1239 0%, #BE123C 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(225, 29, 72, 0.45);
+    color: #FFFFFF !important;
+}
+
+/* 4. Popular Column in Dedicated Comparison Table */
+.popular-col-dedicated {
+    background: rgba(225, 29, 72, 0.035) !important;
+}
+
+.cf-comparison-table thead th.popular-col-dedicated {
+    background: #FFF1F2 !important;
+    border-left: 2px solid #E11D48 !important;
+    border-right: 2px solid #E11D48 !important;
+}
+
+.cf-comparison-table tbody td.popular-col-dedicated {
+    border-left: 2px solid rgba(225, 29, 72, 0.2) !important;
+    border-right: 2px solid rgba(225, 29, 72, 0.2) !important;
+}
+
+.cf-popular-tag-dedicated {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #BE123C 0%, #E11D48 100%);
+    color: #FFFFFF;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 3px 12px;
+    border-radius: 0 0 8px 8px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(225, 29, 72, 0.25);
+}
+
+/* 5. Complete Bare Metal Lineup Table & Search Bar */
+.cf-server-catalog-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+}
+
+.cf-server-search-wrap {
+    display: flex;
+    align-items: center;
+    position: relative;
+    background: #F8FAFC;
+    padding: 16px 20px;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.cf-server-search-icon {
+    position: absolute;
+    left: 36px;
+    color: #94A3B8;
+    font-size: 18px;
+    pointer-events: none;
+}
+
+.cf-server-search-input {
+    width: 100%;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 10px 16px 10px 42px;
+    font-size: 14px;
+    background: #FFFFFF;
+    color: #0F172A;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cf-server-search-input:focus {
+    outline: none;
+    border-color: #E11D48;
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15);
+}
+
+.cf-server-table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.cf-server-table thead th {
+    background: #F8FAFC;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 14px 16px;
+    border-bottom: 1px solid #E2E8F0;
+    white-space: nowrap;
+}
+
+.cf-server-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.cf-server-table tbody tr:hover {
+    background-color: #F8FAFC;
+}
+
+.cf-server-table tbody td {
+    padding: 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 14px;
+}
+
+.cf-server-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.cf-server-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border-radius: 6px;
+}
+
+.cf-server-badge-intel {
+    background: rgba(0, 113, 197, 0.1);
+    color: #0071C5;
+    border: 1px solid rgba(0, 113, 197, 0.2);
+}
+
+.cf-server-badge-amd {
+    background: rgba(237, 28, 36, 0.1);
+    color: #C0141B;
+    border: 1px solid rgba(237, 28, 36, 0.2);
+}
+
+.btn-server-order {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 18px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: #0F172A;
+    border: 1px solid #0F172A;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-server-order:hover {
+    background: #E11D48;
+    border-color: #E11D48;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+}
+
+/* 6. Responsive Optimization for Dedicated Page */
+@media (max-width: 991.98px) {
+    .cf-dedicated-hero {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .modern-pricing-card.featured-dedicated {
+        transform: none !important;
+        margin-top: 14px;
+        margin-bottom: 6px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-dedicated-hero {
+        padding-top: 20px;
+        padding-bottom: 22px;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .cf-dedicated-hero .container {
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+    }
+
+    .cf-dedicated-hero-title {
+        font-size: 25px !important;
+        line-height: 1.22 !important;
+    }
+
+    .cf-dedicated-hero-lead {
+        font-size: 14px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .cf-arch-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+}
+
+/* =============================================================================
+   7. DOMAIN REGISTRATION & MANAGEMENT REDESIGN STYLES (cf-domain-page)
+   ============================================================================= */
+.cf-domain-hero {
+    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+    padding-top: 40px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid #E2E8F0;
+    overflow: hidden;
+    position: relative;
+}
+
+.cf-domain-hero .hero-ambient-glow {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 950px;
+    height: 550px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.12) 0%, rgba(6, 182, 212, 0.08) 50%, rgba(255, 255, 255, 0) 75%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.text-gradient-domain {
+    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #06B6D4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cf-domain-hero-title {
+    font-size: clamp(26px, 3.8vw, 42px);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+}
+
+.cf-domain-hero-lead {
+    font-size: clamp(14.5px, 1.5vw, 16px);
+    max-width: 620px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.cf-pulse-dot-blue {
+    width: 8px;
+    height: 8px;
+    background-color: #2563EB;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+    animation: cfPulseBlue 2s infinite;
+}
+
+@keyframes cfPulseBlue {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(37, 99, 235, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+    }
+}
+
+.bg-blue-subtle {
+    background-color: rgba(37, 99, 235, 0.08) !important;
+}
+
+.text-blue {
+    color: #2563EB !important;
+}
+
+.border-blue-subtle {
+    border-color: rgba(37, 99, 235, 0.22) !important;
+}
+
+.bg-cyan-subtle {
+    background-color: rgba(6, 182, 212, 0.1) !important;
+}
+
+.text-cyan {
+    color: #0891B2 !important;
+}
+
+.border-cyan-subtle {
+    border-color: rgba(6, 182, 212, 0.25) !important;
+}
+
+/* TLD Catalog & Filter Tabs */
+.cf-tld-catalog-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05);
+    overflow: hidden;
+}
+
+.cf-tld-search-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 24px;
+    background: #F8FAFC;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.cf-tld-filter-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.cf-tld-filter-btn {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748B;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cf-tld-filter-btn:hover,
+.cf-tld-filter-btn.active {
+    background: #2563EB;
+    color: #FFFFFF;
+    border-color: #2563EB;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+.cf-tld-search-input-wrap {
+    position: relative;
+    min-width: 260px;
+}
+
+.cf-tld-search-input-wrap input {
+    width: 100%;
+    padding: 8px 14px 8px 36px;
+    border-radius: 999px;
+    border: 1px solid #CBD5E1;
+    font-size: 13.5px;
+    outline: none;
+    background: #FFFFFF;
+    transition: all 0.2s ease;
+}
+
+.cf-tld-search-input-wrap input:focus {
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.cf-tld-search-input-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94A3B8;
+    font-size: 16px;
+}
+
+/* Modern TLD Table */
+.cf-tld-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+}
+
+.cf-tld-table thead th {
+    background: #F8FAFC;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 14px 20px;
+    border-bottom: 1px solid #E2E8F0;
+    white-space: nowrap;
+}
+
+.cf-tld-table tbody td {
+    padding: 16px 20px;
+    font-size: 14px;
+    color: #334155;
+    border-bottom: 1px solid #F1F5F9;
+    vertical-align: middle;
+}
+
+.cf-tld-table tbody tr:hover td {
+    background-color: #F8FAFC;
+}
+
+.cf-tld-table .tld-ext-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0F172A;
+}
+
+.cf-tld-table .tld-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.tld-tag-popular {
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563EB;
+}
+
+.tld-tag-deal {
+    background: rgba(234, 88, 12, 0.12);
+    color: #EA580C;
+}
+
+.tld-tag-regional {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+
+.btn-tld-register {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2563EB !important;
+    background: #EFF6FF;
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-tld-register:hover {
+    background: #2563EB;
+    color: #FFFFFF !important;
+    border-color: #2563EB;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* Domain Transfer Step Cards */
+.cf-transfer-step-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 28px 24px;
+    height: 100%;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+}
+
+.cf-transfer-step-card:hover {
+    transform: translateY(-4px);
+    border-color: #2563EB;
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.1);
+}
+
+.cf-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 800;
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563EB;
+    margin-bottom: 16px;
+}
+
+/* Accordion Active for Domain Page */
+body.cf-domain-page .cf-modern-accordion .accordion-button:not(.collapsed) {
+    background: #EFF6FF !important;
+    color: #2563EB !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.2) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .cf-domain-hero {
+        padding-top: 32px;
+        padding-bottom: 36px;
+    }
+
+    .cf-domain-hero-title {
+        font-size: 32px !important;
+        line-height: 1.18 !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-domain-hero {
+        padding-top: 20px;
+        padding-bottom: 24px;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .cf-domain-hero .container {
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+    }
+
+    .cf-domain-hero-title {
+        font-size: 25px !important;
+        line-height: 1.22 !important;
+    }
+
+    .cf-domain-hero-lead {
+        font-size: 14px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .cf-tld-search-bar {
+        padding: 14px 16px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cf-tld-search-input-wrap {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+/* =============================================================
+   CONTACT PAGE — cf-contact-page
+   ============================================================= */
+
+/* ---------- Hero ---------- */
+.cf-contact-hero {
+    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+    padding-top: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid #E2E8F0;
+    overflow: hidden;
+    position: relative;
+}
+
+.cf-contact-hero .hero-ambient-glow {
+    position: absolute;
+    top: -15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1150px;
+    height: 480px;
+    background: radial-gradient(ellipse 65% 55% at 50% 0%, rgba(37, 99, 235, 0.14) 0%, rgba(124, 58, 237, 0.05) 50%, rgba(255, 255, 255, 0) 80%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cf-contact-hero-title {
+    font-size: clamp(28px, 4.2vw, 48px);
+    line-height: 1.16;
+    letter-spacing: -0.03em;
+    color: #0F172A;
+}
+
+.cf-contact-hero-lead {
+    font-size: clamp(15px, 1.6vw, 17px);
+    max-width: 620px;
+    color: #475569;
+}
+
+.text-gradient-contact {
+    background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Hero visual showcase & glass frame */
+.cf-contact-hero-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 8px;
+}
+
+.cf-contact-hero-visual .cf-hero-img-wrap {
+    position: relative;
+    max-width: 440px;
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 28px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 20px 48px -10px rgba(37, 99, 235, 0.18), 0 4px 14px rgba(15, 23, 42, 0.05);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.cf-contact-hero-visual .cf-hero-img-wrap:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 60px -10px rgba(37, 99, 235, 0.24), 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.cf-contact-hero-visual .cf-hero-illustration {
+    border-radius: 20px;
+    width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 0 10px 28px -6px rgba(15, 23, 42, 0.18);
+}
+
+.cf-contact-hero-visual .float-chip-top {
+    top: 5%;
+    left: -4%;
+}
+
+.cf-contact-hero-visual .float-chip-bottom {
+    bottom: 5%;
+    right: -4%;
+}
+
+/* ---------- Info Cards Section ---------- */
+.cf-contact-cards-section {
+    padding: 56px 0;
+    background: #FFFFFF;
+}
+
+.cf-contact-info-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-align: center;
+    height: 100%;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.cf-contact-info-card:hover {
+    border-color: #2563EB;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(37, 99, 235, 0.1);
+}
+
+.cf-contact-info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    font-size: 22px;
+    margin: 0 auto 14px;
+}
+
+/* ---------- Contact Form Section ---------- */
+.cf-contact-form-section {
+    padding: 72px 0 96px;
+    background: #FFFFFF;
+}
+
+/* Form card */
+.cf-contact-form-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+}
+
+/* Form group */
+.cf-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cf-form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1E293B;
+}
+
+.cf-form-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1E293B;
+    background: #F8FAFC;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    -webkit-appearance: none;
+}
+
+.cf-form-input:focus {
+    border-color: #2563EB;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.cf-form-input::placeholder {
+    color: #94A3B8;
+}
+
+.cf-form-textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+/* Submit button */
+.cf-btn-contact-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 8px 24px -4px rgba(37, 99, 235, 0.35);
+    text-decoration: none;
+}
+
+.cf-btn-contact-submit:hover {
+    background: linear-gradient(135deg, #1D4ED8 0%, #6D28D9 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -4px rgba(37, 99, 235, 0.45);
+}
+
+.cf-btn-contact-submit:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Outline button (thank you state) */
+.cf-btn-contact-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2563EB !important;
+    background: transparent;
+    border: 1.5px solid #2563EB;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.cf-btn-contact-outline:hover {
+    background: #2563EB;
+    color: #FFFFFF !important;
+}
+
+/* Thank you panel */
+.cf-contact-thankyou {
+    padding: 20px 0;
+}
+
+/* ---------- Sidebar ---------- */
+.cf-contact-sidebar-block {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+/* Sidebar list */
+.cf-contact-sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.cf-contact-sidebar-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.cf-sidebar-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 10px;
+    font-size: 17px;
+    margin-top: 1px;
+}
+
+/* Quick links */
+.cf-contact-quick-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1E293B;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.cf-contact-quick-link:hover {
+    border-color: #2563EB;
+    color: #2563EB;
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991.98px) {
+    .cf-contact-hero {
+        padding-top: 36px;
+        padding-bottom: 36px;
+    }
+
+    .cf-contact-hero-title {
+        font-size: 30px !important;
+    }
+
+    .cf-contact-hero-visual .cf-hero-img-wrap {
+        max-width: 380px;
+        margin-top: 10px;
+    }
+
+    .cf-contact-hero-visual .float-chip-top {
+        left: 0;
+        top: 2%;
+    }
+
+    .cf-contact-hero-visual .float-chip-bottom {
+        right: 0;
+        bottom: 2%;
+    }
+
+    .cf-hero-btn-group {
+        margin-bottom: 20px;
+    }
+
+    .cf-contact-form-card {
+        padding: 28px 20px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-contact-hero {
+        padding-top: 24px;
+        padding-bottom: 28px;
+    }
+
+    .cf-contact-hero-title {
+        font-size: 25px !important;
+        line-height: 1.22 !important;
+    }
+
+    .cf-contact-hero-lead {
+        font-size: 14px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .cf-contact-hero-visual .cf-hero-img-wrap {
+        max-width: 320px;
+        padding: 8px;
+        margin-top: 14px;
+    }
+
+    .cf-hero-btn-group a,
+    .cf-hero-btn-group button {
+        width: 100% !important;
+    }
+
+    .cf-contact-form-card {
+        padding: 22px 16px;
+    }
+
+    .cf-contact-cards-section {
+        padding-top: 36px;
+        padding-bottom: 36px;
+    }
+
+    .cf-contact-form-section {
+        padding: 48px 0 64px;
+    }
+}
+
+/* ==========================================================================
+   VPS HOSTING PAGE STYLING & RESPONSIVE SYSTEM (vps-server.php)
+   ========================================================================== */
+
+/* 1. VPS Hero Section */
+.cf-vps-hero {
+    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+    padding-top: 40px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid #E2E8F0;
+    overflow: hidden;
+    position: relative;
+}
+
+.cf-vps-hero .hero-ambient-glow {
+    position: absolute;
+    top: -15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1150px;
+    height: 480px;
+    background: radial-gradient(ellipse 65% 55% at 50% 0%, rgba(6, 182, 212, 0.14) 0%, rgba(37, 99, 235, 0.05) 50%, rgba(255, 255, 255, 0) 80%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.text-gradient-vps {
+    background: linear-gradient(135deg, #0284C7 0%, #06B6D4 45%, #2563EB 85%, #1D4ED8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cf-vps-hero-title {
+    font-size: clamp(26px, 4vw, 44px);
+    line-height: 1.18;
+}
+
+.cf-vps-hero-lead {
+    font-size: clamp(14.5px, 1.6vw, 17px);
+    max-width: 630px;
+}
+
+/* Cyan & Blue Utility Tokens */
+.bg-cyan-subtle {
+    background: rgba(6, 182, 212, 0.12) !important;
+}
+
+.text-cyan {
+    color: #0891B2 !important;
+}
+
+.border-cyan-subtle {
+    border-color: rgba(6, 182, 212, 0.25) !important;
+}
+
+.cf-pulse-dot-cyan {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #06B6D4;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.3);
+    animation: cfPulseCyan 2s infinite ease-in-out;
+}
+
+@keyframes cfPulseCyan {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.35); }
+    50% { box-shadow: 0 0 0 7px rgba(6, 182, 212, 0.05); }
+}
+
+/* VPS Glow Button */
+.cf-btn-vps-glow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 26px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #0284C7 0%, #06B6D4 100%);
+    border: 1px solid #0284C7;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px -4px rgba(6, 182, 212, 0.38);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.cf-btn-vps-glow:hover {
+    background: linear-gradient(135deg, #0369A1 0%, #0284C7 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -4px rgba(6, 182, 212, 0.5);
+    color: #FFFFFF !important;
+}
+
+/* 2. OS Switcher (Linux vs Windows VPS) */
+.cf-vps-os-switch {
+    display: inline-flex;
+    align-items: center;
+    background: #F1F5F9;
+    padding: 5px;
+    border-radius: 999px;
+    border: 1px solid #E2E8F0;
+    gap: 4px;
+}
+
+.cf-vps-os-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #475569;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.cf-vps-os-btn.active {
+    background: #FFFFFF;
+    color: #0F172A;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+}
+
+.cf-vps-os-btn.active.linux-active i,
+.cf-vps-os-btn.active.linux-active .cf-os-tag {
+    color: #EA580C;
+}
+
+.cf-vps-os-btn.active.windows-active i,
+.cf-vps-os-btn.active.windows-active .cf-os-tag {
+    color: #0284C7;
+}
+
+.cf-os-badge-count {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #E2E8F0;
+    color: #475569;
+    transition: all 0.25s ease;
+}
+
+.cf-vps-os-btn.active .cf-os-badge-count {
+    background: rgba(6, 182, 212, 0.15);
+    color: #0891B2;
+}
+
+/* 3. VPS Pricing Cards */
+.cf-vps-card {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+}
+
+.cf-vps-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+    border-color: #06B6D4;
+}
+
+.cf-vps-card.popular {
+    border-color: #06B6D4;
+    box-shadow: 0 12px 32px rgba(6, 182, 212, 0.12);
+}
+
+.cf-vps-popular-badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #0284C7 0%, #06B6D4 100%);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 5px 16px;
+    border-radius: 999px;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.35);
+    white-space: nowrap;
+}
+
+.cf-vps-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.cf-vps-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.cf-vps-card-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 2px;
+}
+
+.cf-vps-card-sub {
+    font-size: 13px;
+    color: #64748B;
+    margin-bottom: 0;
+}
+
+.cf-vps-price-wrap {
+    margin: 20px 0;
+    padding: 16px;
+    background: #F8FAFC;
+    border-radius: 14px;
+    border: 1px solid #F1F5F9;
+    text-align: center;
+}
+
+.cf-vps-amount {
+    font-size: 34px;
+    font-weight: 900;
+    color: #0F172A;
+    letter-spacing: -0.03em;
+}
+
+.cf-vps-period {
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748B;
+}
+
+.cf-vps-specs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-grow: 1;
+}
+
+.cf-vps-specs-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #334155;
+}
+
+.cf-vps-spec-icon {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border-radius: 50%;
+    background: rgba(6, 182, 212, 0.12);
+    color: #0891B2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.cf-btn-vps-order {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    border: 1.5px solid #06B6D4;
+    background: transparent;
+    color: #0891B2;
+}
+
+.cf-btn-vps-order:hover {
+    background: linear-gradient(135deg, #0284C7 0%, #06B6D4 100%);
+    border-color: #0284C7;
+    color: #FFFFFF !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -3px rgba(6, 182, 212, 0.35);
+}
+
+.cf-vps-card.popular .cf-btn-vps-order {
+    background: linear-gradient(135deg, #0284C7 0%, #06B6D4 100%);
+    color: #FFFFFF !important;
+    border-color: #0284C7;
+    box-shadow: 0 6px 18px -2px rgba(6, 182, 212, 0.35);
+}
+
+.cf-vps-card.popular .cf-btn-vps-order:hover {
+    background: linear-gradient(135deg, #0369A1 0%, #0284C7 100%);
+}
+
+/* 4. Interactive VPS Resource Configurator */
+.cf-vps-config-section {
+    background: #F8FAFC;
+    border-top: 1px solid #E2E8F0;
+    border-bottom: 1px solid #E2E8F0;
+    padding: 70px 0;
+}
+
+.cf-vps-config-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.vps-slider--processor.ui-slider {
+    height: 10px;
+    background: #E2E8F0;
+    border: none;
+    border-radius: 999px;
+    position: relative;
+    margin: 28px 12px;
+}
+
+.vps-slider--processor .vps-slider__progress {
+    position: absolute;
+    height: 100%;
+    background: linear-gradient(90deg, #0284C7, #06B6D4);
+    border-radius: 999px;
+    top: 0;
+    left: 0;
+}
+
+.vps-slider--processor .ui-slider-handle {
+    width: 28px;
+    height: 28px;
+    background: #0284C7;
+    border: 3px solid #FFFFFF;
+    border-radius: 50%;
+    top: -9px;
+    margin-left: -14px;
+    cursor: grab;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.45);
+    outline: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vps-slider--processor .ui-slider-handle:active {
+    cursor: grabbing;
+}
+
+.vps-slider__tooltip {
+    position: absolute;
+    bottom: 34px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0F172A;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.vps-slider__tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: #0F172A transparent transparent transparent;
+}
+
+.cf-config-readout-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 24px;
+}
+
+.cf-config-readout-item {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cf-config-readout-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(6, 182, 212, 0.12);
+    color: #0891B2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.cf-config-price-box {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    border-radius: 20px;
+    padding: 32px 28px;
+    color: #FFFFFF;
+    text-align: center;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 5. VPS Comparison Specs Table */
+.cf-vps-table-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.cf-vps-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.cf-vps-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-size: 14px;
+}
+
+.cf-vps-table thead th {
+    background: #F8FAFC;
+    padding: 18px 20px;
+    font-weight: 800;
+    color: #0F172A;
+    border-bottom: 2px solid #E2E8F0;
+    white-space: nowrap;
+}
+
+.cf-vps-table thead th.plan-col {
+    text-align: center;
+    min-width: 180px;
+}
+
+.cf-vps-table tbody tr.cat-header td {
+    background: #F1F5F9;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #475569;
+}
+
+.cf-vps-table tbody tr:not(.cat-header) td {
+    padding: 14px 20px;
+    border-bottom: 1px solid #F1F5F9;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.cf-vps-table tbody tr:not(.cat-header):hover td {
+    background: #F8FAFC;
+}
+
+.cf-vps-table td.plan-val {
+    text-align: center;
+}
+
+/* 6. OS & 1-Click Distro Badges */
+.cf-os-logo-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+    height: 100%;
+}
+
+.cf-os-logo-card:hover {
+    border-color: #06B6D4;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(6, 182, 212, 0.12);
+}
+
+.cf-os-logo-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+/* 7. Responsive Rules */
+@media (max-width: 991.98px) {
+    .cf-vps-hero {
+        padding-top: 36px;
+        padding-bottom: 36px;
+    }
+
+    .cf-vps-hero-title {
+        font-size: 30px !important;
+    }
+
+    .cf-config-readout-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-vps-hero {
+        padding-top: 24px;
+        padding-bottom: 28px;
+    }
+
+    .cf-vps-hero-title {
+        font-size: 25px !important;
+        line-height: 1.22 !important;
+    }
+
+    .cf-vps-hero-lead {
+        font-size: 14px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .cf-vps-hero-visual .cf-hero-img-wrap {
+        max-width: 320px;
+        padding: 8px;
+        margin-top: 14px;
+    }
+
+    .cf-vps-card {
+        padding: 24px 18px;
+    }
+
+    .cf-vps-amount {
+        font-size: 28px;
+    }
+
+    .cf-vps-config-card {
+        padding: 22px 16px;
+    }
+}
+
+/* ==========================================================================
+   HOME PAGE SECTION SPACING & PADDING NORMALIZATION (index.php)
+   Ensures zero rogue horizontal padding on section elements so containers align
+   ========================================================================== */
+body.cf-home-page .modern-hero-section {
+    padding-top: 54px !important;
+    padding-bottom: 50px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.cf-home-page .modern-domain-section {
+    padding-top: 24px !important;
+    padding-bottom: 54px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.cf-home-page .modern-pricing-section {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.cf-home-page .modern-stats-section {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.cf-home-page .cf-comparison-section {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.cf-home-page .cf-matchmaker-section {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+body.cf-home-page .modern-partners-section {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+body.cf-home-page .modern-why-section {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.cf-home-page .modern-tech-section {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.cf-home-page .modern-reviews-section {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.cf-home-page .modern-custom-quote-section {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.cf-home-page .modern-faq-section {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.cf-home-page .modern-cta-section {
+    padding-top: 60px !important;
+    padding-bottom: 72px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Tablet Spacing Normalization for Home Page (<= 991.98px) */
+@media (max-width: 991.98px) {
+    body.cf-home-page .modern-hero-section {
+        padding-top: 40px !important;
+        padding-bottom: 36px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.cf-home-page .modern-domain-section,
+    body.cf-home-page .modern-pricing-section,
+    body.cf-home-page .modern-stats-section,
+    body.cf-home-page .cf-comparison-section,
+    body.cf-home-page .cf-matchmaker-section,
+    body.cf-home-page .modern-partners-section,
+    body.cf-home-page .modern-why-section,
+    body.cf-home-page .modern-tech-section,
+    body.cf-home-page .modern-reviews-section,
+    body.cf-home-page .modern-custom-quote-section,
+    body.cf-home-page .modern-faq-section,
+    body.cf-home-page .modern-cta-section {
+        padding-top: 48px !important;
+        padding-bottom: 48px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
+/* Mobile Spacing Normalization for Home Page (<= 575.98px) */
+@media (max-width: 575.98px) {
+    body.cf-home-page .modern-hero-section {
+        padding-top: 28px !important;
+        padding-bottom: 30px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.cf-home-page .modern-domain-section,
+    body.cf-home-page .modern-pricing-section,
+    body.cf-home-page .modern-stats-section,
+    body.cf-home-page .cf-comparison-section,
+    body.cf-home-page .cf-matchmaker-section,
+    body.cf-home-page .modern-partners-section,
+    body.cf-home-page .modern-why-section,
+    body.cf-home-page .modern-tech-section,
+    body.cf-home-page .modern-reviews-section,
+    body.cf-home-page .modern-custom-quote-section,
+    body.cf-home-page .modern-faq-section,
+    body.cf-home-page .modern-cta-section {
+        padding-top: 36px !important;
+        padding-bottom: 36px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}

@@ -151,7 +151,6 @@
                             <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'vps-server.php' || $cfCurrentPage == 'vps-server') ? 'active' : ''; ?>" href="vps-server">
                                 <i class="las la-server nav-icon-mobile d-lg-none"></i>
                                 <span>VPS Hosting</span>
-                                <span class="cf-nav-hot-pill">HOT</span>
                             </a>
                         </li>
                         <li class="nav-item">

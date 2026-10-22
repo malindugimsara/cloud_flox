@@ -80,7 +80,7 @@
     <!-- =========== CSS Area =========== -->
 </head>
 
-<body class="pure-white-theme">
+<body class="pure-white-theme cf-home-page">
 
     <!-- =========== Header Area =========== -->
     <?php include 'include/header.inc.php'; ?>

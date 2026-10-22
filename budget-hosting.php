@@ -89,7 +89,7 @@
     <!-- =========== CSS Area =========== -->
 </head>
 
-<body class="pure-white-theme">
+<body class="pure-white-theme cf-budget-page">
 
     <!-- =========== Header Area =========== -->
     <?php include 'include/header.inc.php'; ?>
@@ -101,6 +101,14 @@
     <section class="cf-budget-hero position-relative">
         <div class="hero-ambient-glow" aria-hidden="true"></div>
 
+        <!-- Ambient Decorative Pattern Backgrounds -->
+        <!-- <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true" style="opacity: 0.45;">
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+        </div> -->
+        <!-- <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true" style="opacity: 0.45;">
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+        </div> -->
+
         <div class="container position-relative z-2">
             <!-- Breadcrumbs -->
             <nav aria-label="breadcrumb" class="mb-3 pt-2">
@@ -111,114 +119,96 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item text-muted">Hosting</li>
-                    <li class="breadcrumb-item active text-primary fw-semibold" aria-current="page">Budget Hosting</li>
+                    <li class="breadcrumb-item active text-emerald fw-semibold" aria-current="page">Budget Hosting</li>
                 </ol>
             </nav>
 
-            <div class="row align-items-center g-4 g-xl-5 pb-5">
+            <div class="row align-items-center g-4 g-xl-5 pb-lg-3">
                 <!-- Left Column: Copy & Value Proposition -->
                 <div class="col-12 col-lg-7">
-                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-primary-subtle text-primary fw-bold fs-13 mb-3 border border-primary-subtle">
-                        <span class="cf-pulse-dot"></span>
+                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-emerald-subtle text-emerald fw-bold fs-13 mb-3 border border-emerald-subtle">
+                        <span class="cf-pulse-dot-green"></span>
                         <span>ENTRY-LEVEL NVME CPANEL HOSTING</span>
                     </div>
 
-                    <h1 class="display-5 fw-extrabold text-slate-900 tracking-tight mb-3">
+                    <h1 class="cf-budget-hero-title fw-extrabold text-slate-900 tracking-tight mb-3">
                         Affordable, High-Speed <br class="d-none d-sm-inline">
-                        <span class="text-gradient-primary">Budget Web Hosting</span>
+                        <span class="text-gradient-budget-green">Budget Web Hosting</span>
                     </h1>
 
-                    <p class="fs-17 text-slate-600 mb-4 lh-base" style="max-width: 620px;">
+                    <p class="cf-budget-hero-lead text-slate-600 mb-4 lh-base">
                         Launch your personal blog, portfolio, or starter website on ultra-fast <strong>NVMe Gen4 storage</strong> powered by <strong>cPanel</strong>. Get guaranteed resources, free AutoSSL certificates, and standard ticket support starting at just <strong>$3.00/month</strong>.
                     </p>
 
                     <!-- Trust Chips -->
                     <div class="d-flex flex-wrap gap-2 mb-4 pb-2">
                         <span class="cf-feature-chip">
-                            <i class="las la-bolt text-warning"></i> Pure NVMe Gen4 Storage
+                            <i class="las la-bolt text-emerald"></i> Pure NVMe Gen4 Storage
                         </span>
                         <span class="cf-feature-chip">
-                            <i class="las la-shield-alt text-success"></i> CloudLinux CageFS Isolation
+                            <i class="las la-shield-alt text-emerald"></i> CloudLinux CageFS Isolation
                         </span>
                         <span class="cf-feature-chip">
-                            <i class="las la-lock text-primary"></i> Free Automated SSL
+                            <i class="las la-lock text-emerald"></i> Free Automated SSL
                         </span>
                         <span class="cf-feature-chip">
-                            <i class="las la-headset text-info"></i> Standard Ticket Support
+                            <i class="las la-headset text-emerald"></i> Standard Ticket Support
                         </span>
                         <span class="cf-feature-chip">
-                            <i class="las la-check-circle text-success"></i> 99.9% Uptime SLA
+                            <i class="las la-check-circle text-emerald"></i> 99.9% Uptime SLA
                         </span>
                     </div>
 
                     <!-- Hero Action Buttons -->
-                    <div class="d-flex flex-wrap align-items-center gap-3">
-                        <a href="#budgetPlans" class="btn btn-primary-glow btn-lg px-4 py-3 fw-bold rounded-3">
+                    <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-3 cf-hero-btn-group">
+                        <a href="#budgetPlans" class="cf-btn-budget-glow text-center">
                             <span>Explore Budget Plans</span>
                             <i class="las la-arrow-down ms-1"></i>
                         </a>
-                        <a href="#planComparison" class="btn btn-outline-secondary btn-lg px-4 py-3 fw-semibold rounded-3">
+                        <a href="#planComparison" class="cf-btn-secondary-light text-center">
                             <i class="las la-sliders-h me-1"></i>
                             <span>Compare Specifications</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Right Column: Visual Feature Spotlight Card -->
+                <!-- Right Column: Visual Hero Infrastructure Showcase -->
                 <div class="col-12 col-lg-5">
-                    <div class="cf-budget-hero-card p-4 p-sm-5 rounded-4 bg-white border shadow-lg position-relative overflow-hidden">
-                        <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
-                            <div>
-                                <span class="badge bg-success-subtle text-success fw-bold px-3 py-2 rounded-pill">
-                                    <i class="las la-wallet me-1"></i> ECONOMICAL CHOICE
-                                </span>
-                                <h4 class="fw-bold text-slate-900 mt-2 mb-0">CloudFlox Budget Core</h4>
-                            </div>
-                            <div class="cf-hero-stat-price text-end">
-                                <span class="text-muted fs-12 d-block">Starting from</span>
-                                <span class="fs-2 fw-extrabold text-primary">$3.00</span>
-                                <small class="text-muted fs-13">/mo</small>
-                            </div>
-                        </div>
+                    <div class="cf-budget-hero-visual position-relative text-center">
+                        <div class="cf-hero-img-wrap position-relative mx-auto">
+                            <picture>
+                                <source srcset="assets/imgs/banners/cloudflox-hero-infrastructure.webp" type="image/webp">
+                                <img src="assets/imgs/banners/cloudflox-hero-infrastructure.jpg"
+                                     alt="CloudFlox NVMe Budget Web Hosting Infrastructure with cPanel and CloudLinux Isolation"
+                                     class="cf-hero-illustration img-fluid"
+                                     width="900"
+                                     height="675"
+                                     fetchpriority="high"
+                                     loading="eager">
+                            </picture>
 
-                        <!-- Highlights List -->
-                        <div class="d-flex flex-column gap-3 mb-4">
-                            <div class="d-flex align-items-start gap-3">
-                                <div class="cf-card-icon-bubble bg-primary-subtle text-primary">
+                            <!-- Floating Price Tag (Top Left) -->
+                            <div class="cf-hero-float-chip float-chip-top shadow-sm">
+                                <span class="cf-chip-pulse"></span>
+                                <div class="text-start">
+                                    <span class="d-block cf-chip-sub">Budget Core</span>
+                                    <strong class="cf-chip-val text-emerald">$3.00<small class="text-muted fw-normal">/mo</small></strong>
+                                </div>
+                                <span class="badge bg-emerald-subtle text-emerald fw-bold px-2 py-1 rounded-pill ms-2 fs-11">
+                                    cPanel
+                                </span>
+                            </div>
+
+                            <!-- Floating Speed Tag (Bottom Right) -->
+                            <div class="cf-hero-float-chip float-chip-bottom shadow-sm">
+                                <div class="cf-chip-icon bg-emerald-subtle text-emerald">
                                     <i class="las la-tachometer-alt"></i>
                                 </div>
-                                <div>
-                                    <h6 class="fw-bold mb-1 text-slate-900">7,450 MB/s NVMe Read Speed</h6>
-                                    <p class="fs-13 text-muted mb-0">Up to 7x faster than standard SATA SSDs for instant page loads and MySQL queries.</p>
+                                <div class="text-start">
+                                    <span class="d-block cf-chip-sub">NVMe Gen4 Speed</span>
+                                    <strong class="cf-chip-val text-slate-900">7,450 MB/s</strong>
                                 </div>
                             </div>
-
-                            <div class="d-flex align-items-start gap-3">
-                                <div class="cf-card-icon-bubble bg-success-subtle text-success">
-                                    <i class="las la-server"></i>
-                                </div>
-                                <div>
-                                    <h6 class="fw-bold mb-1 text-slate-900">CloudLinux Resource Protection</h6>
-                                    <p class="fs-13 text-muted mb-0">Guaranteed CPU and RAM with CageFS virtualized isolation for your cPanel account.</p>
-                                </div>
-                            </div>
-
-                            <div class="d-flex align-items-start gap-3">
-                                <div class="cf-card-icon-bubble bg-warning-subtle text-warning">
-                                    <i class="las la-magic"></i>
-                                </div>
-                                <div>
-                                    <h6 class="fw-bold mb-1 text-slate-900">Softaculous 1-Click Installer</h6>
-                                    <p class="fs-13 text-muted mb-0">Install WordPress, Joomla, OpenCart, and 400+ scripts in under 60 seconds.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card Footer Guarantee Strip -->
-                        <div class="p-3 rounded-3 bg-light d-flex align-items-center justify-content-between text-muted fs-12">
-                            <span><i class="las la-clock text-primary me-1"></i> Instant Provisioning</span>
-                            <span><i class="las la-shield-alt text-success me-1"></i> Imunify360 Shield</span>
-                            <span><i class="las la-undo text-secondary me-1"></i> 30-Day Guarantee</span>
                         </div>
                     </div>
                 </div>
@@ -230,10 +220,20 @@
          2. PRICING SECTION (Mini $3.00, Basic $4.50, Plus $6.00 with Toggle)
          ========================================================================= -->
     <section class="modern-pricing-section position-relative py-5" id="budgetPlans">
+        <!-- Ambient Decorative Pattern Backgrounds -->
+        <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true">
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager"
+                decoding="async">
+        </div>
+        <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true">
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager"
+                decoding="async">
+        </div>
+
         <div class="container position-relative z-2">
             <!-- Section Header -->
-            <div class="text-center max-w-750 mx-auto mb-4">
-                <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-1 rounded-pill mb-2">
+            <div class="text-center max-w-750 mx-auto mb-4 mb-md-5">
+                <span class="badge bg-emerald-subtle text-emerald fw-bold px-3 py-1 rounded-pill mb-2">
                     TRANSPARENT ENTRY-LEVEL PRICING
                 </span>
                 <h2 class="display-6 fw-extrabold text-slate-900 mb-2">
@@ -245,7 +245,7 @@
             </div>
 
             <!-- Billing Cycle Switcher (Monthly / Annually 15% Off) -->
-            <div class="pricing-switch-container">
+            <div class="pricing-switch-container mb-4 mb-md-5" style="margin-bottom: 60px !important;">
                 <div class="pricing-switch-pill">
                     <button type="button" class="switch-opt active" id="btnMonthly">
                         <span>Monthly</span>
@@ -362,18 +362,18 @@
 
                 <!-- 2. Basic Plan ($4.50 / mo) - FEATURED / MOST POPULAR -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="modern-pricing-card featured position-relative">
+                    <div class="modern-pricing-card featured-budget position-relative">
                         <!-- Featured Badge -->
                         <div class="plan-featured-badge">
                             <i class="las la-fire"></i> MOST POPULAR &bull; BEST VALUE
                         </div>
 
                         <div class="plan-card-header">
-                            <div class="plan-card-icon bg-orange-subtle text-orange">
+                            <div class="plan-card-icon bg-emerald-subtle text-emerald">
                                 <i class="las la-layer-group"></i>
                             </div>
                             <div>
-                                <span class="card-tier-label text-orange">Recommended</span>
+                                <span class="card-tier-label text-emerald">Recommended</span>
                                 <h3 class="plan-name">Basic</h3>
                                 <p class="plan-tagline">Multi-site creator plan</p>
                             </div>
@@ -387,27 +387,27 @@
                         <!-- Price Box -->
                         <div class="price-box">
                             <div class="price-amount">
-                                <span class="fs-4 fw-bold text-orange align-top">$</span>
+                                <span class="fs-4 fw-bold text-emerald align-top">$</span>
                                 <span class="price-val" data-monthly="4.50" data-yearly="3.80">4.50</span>
                                 <span class="price-cycle">/month</span>
                             </div>
-                            <div class="price-subtext text-orange-sub">
+                            <div class="price-subtext text-emerald-sub">
                                 <span class="billing-note" data-monthly="Billed monthly ($4.50/mo)" data-yearly="Billed annually ($45.90/yr) — Save 15%">
-                                    Billed monthly ($4.50/mo)
+                                     Billed monthly ($4.50/mo)
                                 </span>
                             </div>
                         </div>
 
                         <!-- CTA Button -->
                         <div class="plan-cta-btn">
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=2&carttpl=lagom2" class="btn-plan-featured">
+                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=2&carttpl=lagom2" class="btn-plan-budget-featured">
                                 <span>Get Basic Plan</span>
                                 <i class="las la-arrow-right ms-2"></i>
                             </a>
                         </div>
 
                         <!-- Plan Features Heading -->
-                        <div class="plan-features-heading text-orange">
+                        <div class="plan-features-heading text-emerald">
                             <span>Allocated Resources &amp; Limits</span>
                         </div>
 
@@ -568,22 +568,22 @@
             </div>
 
             <!-- Guarantees Ribbon -->
-            <div class="pricing-guarantees-wrapper mt-5">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="las la-undo text-primary fs-20"></i>
-                    <span class="fs-13 fw-semibold text-slate-700">30-Day Money-Back Guarantee</span>
+            <div class="pricing-guarantees-wrapper mt-4 mt-md-5">
+                <div class="guarantee-badge">
+                    <i class="las la-undo text-emerald"></i>
+                    <span><strong>30-Day</strong> Money-Back Guarantee</span>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <i class="las la-bolt text-warning fs-20"></i>
-                    <span class="fs-13 fw-semibold text-slate-700">Instant Automated Provisioning</span>
+                <div class="guarantee-badge">
+                    <i class="las la-bolt text-emerald"></i>
+                    <span><strong>Instant</strong> Automated Provisioning</span>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <i class="las la-shield-alt text-success fs-20"></i>
-                    <span class="fs-13 fw-semibold text-slate-700">99.9% Network Uptime SLA</span>
+                <div class="guarantee-badge">
+                    <i class="las la-shield-alt text-emerald"></i>
+                    <span><strong>99.9%</strong> Network Uptime SLA</span>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <i class="las la-truck-moving text-info fs-20"></i>
-                    <span class="fs-13 fw-semibold text-slate-700">Free cPanel Website Migration</span>
+                <div class="guarantee-badge">
+                    <i class="las la-truck-moving text-emerald"></i>
+                    <span><strong>Free</strong> cPanel Website Migration</span>
                 </div>
             </div>
         </div>
@@ -594,8 +594,8 @@
          ========================================================================= -->
     <section class="py-5 bg-light" id="planComparison">
         <div class="container">
-            <div class="text-center max-w-750 mx-auto mb-5">
-                <span class="badge bg-secondary-subtle text-secondary fw-bold px-3 py-1 rounded-pill mb-2">
+            <div class="text-center max-w-750 mx-auto mb-4 mb-md-5">
+                <span class="badge bg-emerald-subtle text-emerald fw-bold px-3 py-1 rounded-pill mb-2">
                     DETAILED METRICS
                 </span>
                 <h2 class="display-6 fw-extrabold text-slate-900 mb-2">
@@ -606,8 +606,13 @@
                 </p>
             </div>
 
+            <!-- Mobile Swipe Hint -->
+            <div class="d-md-none text-center text-muted fs-12 mb-3">
+                <i class="las la-arrows-alt-h text-emerald me-1"></i> Swipe horizontally to compare all plans
+            </div>
+
             <!-- Responsive Table Container -->
-            <div class="cf-comparison-table-wrapper rounded-4 border bg-white shadow-sm overflow-hidden">
+            <div class="cf-comparison-table-wrapper rounded-4 border bg-white shadow-sm">
                 <div class="table-responsive">
                     <table class="table cf-comparison-table align-middle mb-0">
                         <thead>
@@ -620,218 +625,218 @@
                                 </th>
                                 <th class="cf-plan-header-cell text-center">
                                     <span class="d-block fw-bold fs-16 text-slate-900">Mini</span>
-                                    <span class="fs-14 text-primary fw-extrabold">$3.00/mo</span>
+                                    <span class="fs-14 text-emerald fw-extrabold">$3.00/mo</span>
                                 </th>
-                                <th class="cf-plan-header-cell popular-col text-center">
-                                    <span class="cf-popular-tag">MOST POPULAR</span>
-                                    <span class="d-block fw-bold fs-16 text-orange mt-2">Basic</span>
-                                    <span class="fs-14 text-orange fw-extrabold">$4.50/mo</span>
+                                <th class="cf-plan-header-cell popular-col-budget text-center">
+                                    <span class="cf-popular-tag-budget">MOST POPULAR</span>
+                                    <span class="d-block fw-bold fs-16 text-emerald mt-2">Basic</span>
+                                    <span class="fs-14 text-emerald fw-extrabold">$4.50/mo</span>
                                 </th>
                                 <th class="cf-plan-header-cell text-center">
                                     <span class="d-block fw-bold fs-16 text-slate-900">Plus</span>
-                                    <span class="fs-14 text-primary fw-extrabold">$6.00/mo</span>
+                                    <span class="fs-14 text-emerald fw-extrabold">$6.00/mo</span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- Category 1: Hardware & System Resources -->
-                            <tr class="cf-table-category-row">
-                                <td colspan="4" class="fw-extrabold text-uppercase fs-12 text-muted px-4 py-3 bg-light">
-                                    <i class="las la-microchip me-1 text-primary"></i> 1. CloudLinux Hardware Resources
+                            <tr class="cf-cat-header-row">
+                                <td colspan="4">
+                                    <i class="las la-microchip"></i> 1. CloudLinux Hardware Resources
                                 </td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Pure NVMe Gen4 Storage</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Pure NVMe Gen4 Storage</th>
                                 <td class="text-center">5 GB NVMe</td>
-                                <td class="text-center popular-col fw-bold text-orange">15 GB NVMe</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">15 GB NVMe</td>
                                 <td class="text-center">30 GB NVMe</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">CPU Allocation</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">CPU Allocation</th>
                                 <td class="text-center">1 vCPU Core</td>
-                                <td class="text-center popular-col fw-bold text-orange">1.5 vCPU Cores</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">1.5 vCPU Cores</td>
                                 <td class="text-center">2.0 vCPU Cores</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Guaranteed RAM</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Guaranteed RAM</th>
                                 <td class="text-center">1 GB RAM</td>
-                                <td class="text-center popular-col fw-bold text-orange">1.5 GB RAM</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">1.5 GB RAM</td>
                                 <td class="text-center">2.0 GB RAM</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">I/O Speed Limit</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">I/O Speed Limit</th>
                                 <td class="text-center">5 MB/s</td>
-                                <td class="text-center popular-col fw-bold text-orange">10 MB/s</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">10 MB/s</td>
                                 <td class="text-center">15 MB/s</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">IOPS Limit</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">IOPS Limit</th>
                                 <td class="text-center">1,024 IOPS</td>
-                                <td class="text-center popular-col fw-bold text-orange">2,048 IOPS</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">2,048 IOPS</td>
                                 <td class="text-center">3,072 IOPS</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Entry Processes (EP)</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Entry Processes (EP)</th>
                                 <td class="text-center">20 Concurrent</td>
-                                <td class="text-center popular-col fw-bold text-orange">30 Concurrent</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">30 Concurrent</td>
                                 <td class="text-center">40 Concurrent</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Inodes (File Count)</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Inodes (File Count)</th>
                                 <td class="text-center">250,000</td>
-                                <td class="text-center popular-col fw-bold text-orange">350,000</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">350,000</td>
                                 <td class="text-center">500,000</td>
                             </tr>
 
                             <!-- Category 2: Websites & Domains -->
-                            <tr class="cf-table-category-row">
-                                <td colspan="4" class="fw-extrabold text-uppercase fs-12 text-muted px-4 py-3 bg-light">
-                                    <i class="las la-globe me-1 text-primary"></i> 2. Websites, Domains &amp; Bandwidth
+                            <tr class="cf-cat-header-row">
+                                <td colspan="4">
+                                    <i class="las la-globe"></i> 2. Websites, Domains &amp; Bandwidth
                                 </td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Hosted Websites</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Hosted Websites</th>
                                 <td class="text-center">1 Website</td>
-                                <td class="text-center popular-col fw-bold text-orange">3 Websites</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">3 Websites</td>
                                 <td class="text-center">10 Websites</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Addon Domains</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Addon Domains</th>
                                 <td class="text-center">0</td>
-                                <td class="text-center popular-col fw-bold text-orange">2</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">2</td>
                                 <td class="text-center">9</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Subdomains</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Subdomains</th>
                                 <td class="text-center">5</td>
-                                <td class="text-center popular-col fw-bold text-orange">15</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">15</td>
                                 <td class="text-center">Unlimited</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Monthly Bandwidth</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Monthly Bandwidth</th>
                                 <td class="text-center">50 GB</td>
-                                <td class="text-center popular-col fw-bold text-orange">150 GB</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">150 GB</td>
                                 <td class="text-center">Unmetered Fair-Use</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Free AutoSSL Certificates</td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center popular-col text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Free AutoSSL Certificates</th>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center popular-col-budget"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
                             </tr>
 
                             <!-- Category 3: Email & Databases -->
-                            <tr class="cf-table-category-row">
-                                <td colspan="4" class="fw-extrabold text-uppercase fs-12 text-muted px-4 py-3 bg-light">
-                                    <i class="las la-envelope me-1 text-primary"></i> 3. Business Email &amp; Databases
+                            <tr class="cf-cat-header-row">
+                                <td colspan="4">
+                                    <i class="las la-envelope"></i> 3. Business Email &amp; Databases
                                 </td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Email Accounts</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Email Accounts</th>
                                 <td class="text-center">5 Accounts</td>
-                                <td class="text-center popular-col fw-bold text-orange">15 Accounts</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">15 Accounts</td>
                                 <td class="text-center">50 Accounts</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Webmail &amp; IMAP/SMTP</td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center popular-col text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Webmail &amp; IMAP/SMTP</th>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center popular-col-budget"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">MySQL Databases</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">MySQL Databases</th>
                                 <td class="text-center">2 Databases</td>
-                                <td class="text-center popular-col fw-bold text-orange">5 Databases</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">5 Databases</td>
                                 <td class="text-center">20 Databases</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">phpMyAdmin Database Access</td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center popular-col text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">phpMyAdmin Database Access</th>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center popular-col-budget"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
                             </tr>
 
                             <!-- Category 4: Software, Control Panel & Security -->
-                            <tr class="cf-table-category-row">
-                                <td colspan="4" class="fw-extrabold text-uppercase fs-12 text-muted px-4 py-3 bg-light">
-                                    <i class="las la-shield-alt me-1 text-primary"></i> 4. Control Panel &amp; Security
+                            <tr class="cf-cat-header-row">
+                                <td colspan="4">
+                                    <i class="las la-shield-alt"></i> 4. Control Panel &amp; Security
                                 </td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Control Panel</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Control Panel</th>
                                 <td class="text-center">cPanel Latest</td>
-                                <td class="text-center popular-col fw-bold text-orange">cPanel Latest</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">cPanel Latest</td>
                                 <td class="text-center">cPanel Latest</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">1-Click Softaculous (400+ Apps)</td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center popular-col text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">1-Click Softaculous (400+ Apps)</th>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center popular-col-budget"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">PHP Versions (7.4 &ndash; 8.3)</td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center popular-col text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">PHP Versions (7.4 &ndash; 8.3)</th>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center popular-col-budget"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">CloudLinux CageFS Isolation</td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center popular-col text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">CloudLinux CageFS Isolation</th>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center popular-col-budget"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Imunify360 Malware Defense</td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center popular-col text-success"><i class="las la-check-circle fs-18"></i></td>
-                                <td class="text-center text-success"><i class="las la-check-circle fs-18"></i></td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Imunify360 Malware Defense</th>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center popular-col-budget"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
+                                <td class="text-center"><span class="cf-check-icon"><i class="las la-check"></i></span></td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Automated Backups</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Automated Backups</th>
                                 <td class="text-center">Weekly Offsite</td>
-                                <td class="text-center popular-col fw-bold text-orange">Weekly Automated</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">Weekly Automated</td>
                                 <td class="text-center">Daily Automated</td>
                             </tr>
 
                             <!-- Category 5: Support & SLA -->
-                            <tr class="cf-table-category-row">
-                                <td colspan="4" class="fw-extrabold text-uppercase fs-12 text-muted px-4 py-3 bg-light">
-                                    <i class="las la-headset me-1 text-primary"></i> 5. Support &amp; Guarantees
+                            <tr class="cf-cat-header-row">
+                                <td colspan="4">
+                                    <i class="las la-headset"></i> 5. Support &amp; Guarantees
                                 </td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Support Channel</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Support Channel</th>
                                 <td class="text-center">Standard Ticket Support</td>
-                                <td class="text-center popular-col fw-bold text-orange">Standard Ticket Support</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">Standard Ticket Support</td>
                                 <td class="text-center">Standard Ticket Support</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Network Uptime SLA</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Network Uptime SLA</th>
                                 <td class="text-center">99.9% Uptime</td>
-                                <td class="text-center popular-col fw-bold text-orange">99.9% Uptime</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">99.9% Uptime</td>
                                 <td class="text-center">99.9% Uptime</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Money-Back Guarantee</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Money-Back Guarantee</th>
                                 <td class="text-center">30 Days</td>
-                                <td class="text-center popular-col fw-bold text-orange">30 Days</td>
+                                <td class="text-center popular-col-budget fw-bold text-emerald">30 Days</td>
                                 <td class="text-center">30 Days</td>
                             </tr>
                             <tr>
-                                <td class="cf-sticky-feature-th fw-semibold text-slate-800">Order Action</td>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Order Action</th>
                                 <td class="text-center p-3">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=1&carttpl=lagom2" class="btn btn-outline-primary btn-sm px-3 fw-bold rounded-pill">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=1&carttpl=lagom2" class="btn btn-outline-emerald btn-sm px-3 fw-bold rounded-pill">
                                         Choose Mini
                                     </a>
                                 </td>
-                                <td class="text-center popular-col p-3">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=2&carttpl=lagom2" class="btn btn-plan-featured btn-sm px-4 fw-bold rounded-pill text-white">
+                                <td class="text-center popular-col-budget p-3">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=2&carttpl=lagom2" class="btn btn-plan-budget-featured btn-sm px-4 fw-bold rounded-pill text-white">
                                         Choose Basic
                                     </a>
                                 </td>
                                 <td class="text-center p-3">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=3&carttpl=lagom2" class="btn btn-outline-primary btn-sm px-3 fw-bold rounded-pill">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=3&carttpl=lagom2" class="btn btn-outline-emerald btn-sm px-3 fw-bold rounded-pill">
                                         Choose Plus
                                     </a>
                                 </td>
@@ -847,9 +852,9 @@
          4. CORE VALUE PROPOSITION & ARCHITECTURE (Why CloudFlox Budget Hosting)
          ========================================================================= -->
     <section class="py-5 bg-white">
-        <div class="container py-4">
-            <div class="text-center max-w-750 mx-auto mb-5">
-                <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-1 rounded-pill mb-2">
+        <div class="container">
+            <div class="text-center max-w-750 mx-auto mb-4 mb-md-5">
+                <span class="badge bg-emerald-subtle text-emerald fw-bold px-3 py-1 rounded-pill mb-2">
                     SUPERIOR TECHNOLOGY
                 </span>
                 <h2 class="display-6 fw-extrabold text-slate-900 mb-2">
@@ -860,11 +865,11 @@
                 </p>
             </div>
 
-            <div class="row g-4">
+            <div class="row g-3 g-md-4">
                 <!-- 1. Pure NVMe Storage -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="p-4 rounded-4 border bg-white h-100 shadow-sm hover-shadow transition-all">
-                        <div class="w-12 h-12 rounded-3 bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center fs-24 mb-3">
+                    <div class="cf-feature-box h-100 shadow-sm hover-shadow transition-all">
+                        <div class="cf-card-icon-bubble bg-primary-subtle text-primary mb-3">
                             <i class="las la-hdd"></i>
                         </div>
                         <h4 class="fw-bold text-slate-900 fs-18 mb-2">Gen4 NVMe Solid State Drives</h4>
@@ -876,8 +881,8 @@
 
                 <!-- 2. CloudLinux CageFS -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="p-4 rounded-4 border bg-white h-100 shadow-sm hover-shadow transition-all">
-                        <div class="w-12 h-12 rounded-3 bg-success-subtle text-success d-inline-flex align-items-center justify-content-center fs-24 mb-3">
+                    <div class="cf-feature-box h-100 shadow-sm hover-shadow transition-all">
+                        <div class="cf-card-icon-bubble bg-success-subtle text-success mb-3">
                             <i class="las la-user-shield"></i>
                         </div>
                         <h4 class="fw-bold text-slate-900 fs-18 mb-2">CloudLinux &amp; CageFS Isolation</h4>
@@ -889,8 +894,8 @@
 
                 <!-- 3. cPanel & Softaculous -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="p-4 rounded-4 border bg-white h-100 shadow-sm hover-shadow transition-all">
-                        <div class="w-12 h-12 rounded-3 bg-warning-subtle text-warning d-inline-flex align-items-center justify-content-center fs-24 mb-3">
+                    <div class="cf-feature-box h-100 shadow-sm hover-shadow transition-all">
+                        <div class="cf-card-icon-bubble bg-warning-subtle text-warning mb-3">
                             <i class="las la-cogs"></i>
                         </div>
                         <h4 class="fw-bold text-slate-900 fs-18 mb-2">cPanel with 1-Click Softaculous</h4>
@@ -902,8 +907,8 @@
 
                 <!-- 4. Free AutoSSL -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="p-4 rounded-4 border bg-white h-100 shadow-sm hover-shadow transition-all">
-                        <div class="w-12 h-12 rounded-3 bg-info-subtle text-info d-inline-flex align-items-center justify-content-center fs-24 mb-3">
+                    <div class="cf-feature-box h-100 shadow-sm hover-shadow transition-all">
+                        <div class="cf-card-icon-bubble bg-info-subtle text-info mb-3">
                             <i class="las la-lock"></i>
                         </div>
                         <h4 class="fw-bold text-slate-900 fs-18 mb-2">Free Automated SSL Certificates</h4>
@@ -915,8 +920,8 @@
 
                 <!-- 5. Imunify360 & DDoS Defense -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="p-4 rounded-4 border bg-white h-100 shadow-sm hover-shadow transition-all">
-                        <div class="w-12 h-12 rounded-3 bg-danger-subtle text-danger d-inline-flex align-items-center justify-content-center fs-24 mb-3">
+                    <div class="cf-feature-box h-100 shadow-sm hover-shadow transition-all">
+                        <div class="cf-card-icon-bubble bg-danger-subtle text-danger mb-3">
                             <i class="las la-shield-virus"></i>
                         </div>
                         <h4 class="fw-bold text-slate-900 fs-18 mb-2">Imunify360 &amp; Multi-Tier DDoS</h4>
@@ -928,8 +933,8 @@
 
                 <!-- 6. Standard Ticket Support -->
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="p-4 rounded-4 border bg-white h-100 shadow-sm hover-shadow transition-all">
-                        <div class="w-12 h-12 rounded-3 bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center fs-24 mb-3">
+                    <div class="cf-feature-box h-100 shadow-sm hover-shadow transition-all">
+                        <div class="cf-card-icon-bubble bg-primary-subtle text-primary mb-3">
                             <i class="las la-ticket-alt"></i>
                         </div>
                         <h4 class="fw-bold text-slate-900 fs-18 mb-2">Standard Ticket Helpdesk</h4>
@@ -945,10 +950,9 @@
     <!-- =========================================================================
          5. FREE WEBSITE MIGRATION CALLOUT BANNER
          ========================================================================= -->
-    <section class="py-5 bg-light position-relative">
+    <section class="py-4 py-md-5 bg-light position-relative">
         <div class="container">
-            <div class="p-4 p-lg-5 rounded-4 bg-gradient-primary text-white position-relative overflow-hidden shadow-lg"
-                 style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);">
+            <div class="cf-migration-card text-white position-relative overflow-hidden shadow-lg">
                 <div class="row align-items-center g-4">
                     <div class="col-12 col-lg-8">
                         <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 text-white fs-12 fw-bold mb-3">
@@ -959,8 +963,8 @@
                             We will migrate your cPanel website, files, databases, and emails to CloudFlox for free. Our team ensures zero downtime so your visitors never experience an interruption.
                         </p>
                     </div>
-                    <div class="col-12 col-lg-4 text-lg-end">
-                        <a href="contact-us" class="btn btn-primary-glow btn-lg px-4 py-3 fw-bold rounded-3">
+                    <div class="col-12 col-lg-4 text-start text-lg-end">
+                        <a href="contact-us" class="cf-btn-budget-glow d-inline-block w-100 w-sm-auto text-center">
                             <i class="las la-headset me-1"></i> Request Free Migration
                         </a>
                     </div>
@@ -973,9 +977,9 @@
          6. FREQUENTLY ASKED QUESTIONS (FAQ Accordion)
          ========================================================================= -->
     <section class="py-5 bg-white">
-        <div class="container py-4">
-            <div class="text-center max-w-750 mx-auto mb-5">
-                <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-1 rounded-pill mb-2">
+        <div class="container">
+            <div class="text-center max-w-750 mx-auto mb-4 mb-md-5">
+                <span class="badge bg-emerald-subtle text-emerald fw-bold px-3 py-1 rounded-pill mb-2">
                     GOT QUESTIONS?
                 </span>
                 <h2 class="display-6 fw-extrabold text-slate-900 mb-2">
@@ -1128,6 +1132,19 @@
 
         btnMonthly.addEventListener('click', () => setBillingCycle(false));
         btnYearly.addEventListener('click', () => setBillingCycle(true));
+
+        // Dynamic Sticky Table Header Offset Tracker
+        function updateStickyTableHeader() {
+            const header = document.querySelector('.cf-header-wrapper');
+            if (header) {
+                const rect = header.getBoundingClientRect();
+                const offset = Math.max(0, Math.round(rect.bottom));
+                document.documentElement.style.setProperty('--cf-header-h', offset + 'px');
+            }
+        }
+        window.addEventListener('scroll', updateStickyTableHeader, { passive: true });
+        window.addEventListener('resize', updateStickyTableHeader, { passive: true });
+        updateStickyTableHeader();
     })();
     </script>
 </body>
