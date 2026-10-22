@@ -4531,7 +4531,7 @@ footer .border-top {
 }
 
 /* Most Popular Column Highlight */
-.cf-plan-header-cell.popular-col,
+.popular-col,
 .cf-comparison-table tbody td.popular-col {
     background: rgba(249, 115, 22, 0.025) !important;
 
@@ -7020,6 +7020,207 @@ footer .border-top {
     background: #2563EB;
 }
 
+/* ==========================================================================
+   MODERN CLOUDFLOX HOSTING DROPDOWN MENU
+   ========================================================================== */
+.cf-nav-dropdown {
+    position: relative;
+}
+
+.cf-dropdown-toggle::after {
+    display: none !important;
+}
+
+.cf-dropdown-caret {
+    font-size: 10px;
+    margin-left: 2px;
+    color: #64748B;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+}
+
+.cf-nav-dropdown:hover .cf-dropdown-caret,
+.cf-nav-dropdown.show .cf-dropdown-caret,
+.cf-dropdown-toggle[aria-expanded="true"] .cf-dropdown-caret {
+    transform: rotate(180deg);
+    color: #2563EB;
+}
+
+@media (min-width: 992px) {
+    .cf-dropdown-menu {
+        position: absolute !important;
+        top: calc(100% + 10px) !important;
+        left: 50% !important;
+        transform: translateX(-50%) translateY(8px) !important;
+        min-width: 390px !important;
+        max-width: 420px !important;
+        background: #FFFFFF !important;
+        border-radius: 16px !important;
+        padding: 10px !important;
+        border: 1px solid rgba(226, 232, 240, 0.95) !important;
+        box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.04) !important;
+        display: block !important;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
+        margin: 0 !important;
+        z-index: 1050;
+    }
+
+    .cf-nav-dropdown:hover > .cf-dropdown-menu,
+    .cf-nav-dropdown:focus-within > .cf-dropdown-menu,
+    .cf-dropdown-menu.show {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: translateX(-50%) translateY(0) !important;
+    }
+
+    .cf-dropdown-menu::before {
+        content: '';
+        position: absolute;
+        top: -14px;
+        left: 0;
+        right: 0;
+        height: 14px;
+    }
+}
+
+.cf-dropdown-item {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 13px !important;
+    padding: 12px 14px !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    background: transparent !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: normal !important;
+    cursor: pointer;
+    margin-bottom: 4px;
+    border: 1px solid transparent;
+}
+
+.cf-dropdown-item:last-child {
+    margin-bottom: 0;
+}
+
+.cf-dropdown-item:hover {
+    background: #F8FAFC !important;
+    border-color: rgba(226, 232, 240, 0.7);
+    transform: translateX(3px);
+}
+
+.cf-dropdown-item.active {
+    background: rgba(37, 99, 235, 0.06) !important;
+    border-color: rgba(37, 99, 235, 0.2) !important;
+}
+
+.cf-dd-icon-box {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.cf-dropdown-item:hover .cf-dd-icon-box {
+    transform: scale(1.08);
+}
+
+.cf-dd-icon-budget {
+    background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.22);
+}
+.cf-dropdown-item:hover .cf-dd-icon-budget {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.cf-dd-icon-web {
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+    color: #2563EB;
+    border: 1px solid rgba(37, 99, 235, 0.22);
+}
+.cf-dropdown-item:hover .cf-dd-icon-web {
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.cf-dd-icon-premium {
+    background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%);
+    color: #9333EA;
+    border: 1px solid rgba(147, 51, 234, 0.22);
+}
+.cf-dropdown-item:hover .cf-dd-icon-premium {
+    box-shadow: 0 4px 12px rgba(147, 51, 234, 0.25);
+}
+
+.cf-dd-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.cf-dd-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+
+.cf-dd-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1.25;
+    transition: color 0.15s ease;
+}
+
+.cf-dropdown-item:hover .cf-dd-title {
+    color: #2563EB;
+}
+
+.cf-dd-desc {
+    font-size: 12px;
+    color: #64748B;
+    line-height: 1.45;
+    margin: 0;
+    font-weight: 400;
+}
+
+.cf-dd-badge {
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+.cf-dd-badge-budget {
+    background: #D1FAE5;
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.cf-dd-badge-popular {
+    background: #DBEAFE;
+    color: #1D4ED8;
+    border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+.cf-dd-badge-vip {
+    background: linear-gradient(135deg, #FFEDD5 0%, #FED7AA 100%);
+    color: #C2410C;
+    border: 1px solid rgba(234, 88, 12, 0.3);
+}
+
 /* HOT Badge */
 .cf-nav-hot-pill {
     background: linear-gradient(135deg, #FF6B00 0%, #EA580C 100%);
@@ -7159,6 +7360,79 @@ footer .border-top {
         font-size: 18px;
         color: #2563EB;
         width: 22px;
+    }
+    .cf-nav-dropdown {
+        width: 100%;
+    }
+    .cf-dropdown-toggle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100%;
+        padding-right: 14px !important;
+    }
+    .cf-dropdown-toggle-main {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 7px !important;
+    }
+    .cf-dropdown-menu {
+        position: static !important;
+        float: none !important;
+        width: 100% !important;
+        margin: 6px 0 10px 0 !important;
+        background: #F8FAFC !important;
+        border: 1px solid rgba(226, 232, 240, 0.9) !important;
+        border-radius: 12px !important;
+        padding: 6px !important;
+        box-shadow: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        display: none !important;
+        overflow: hidden;
+    }
+    .cf-dropdown-menu.show {
+        display: block !important;
+    }
+    .cf-dropdown-item {
+        padding: 9px 10px !important;
+        gap: 10px !important;
+        background: #FFFFFF !important;
+        border: 1px solid rgba(226, 232, 240, 0.7) !important;
+        margin-bottom: 6px !important;
+    }
+    .cf-dropdown-item:last-child {
+        margin-bottom: 0 !important;
+    }
+    .cf-dd-icon-box {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 18px;
+        border-radius: 9px;
+    }
+    .cf-dd-title-row {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+        margin-bottom: 2px !important;
+    }
+    .cf-dd-title {
+        font-size: 13.5px !important;
+    }
+    .cf-dd-desc {
+        font-size: 11px !important;
+        line-height: 1.35 !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+    }
+    .cf-dd-badge {
+        font-size: 8.5px !important;
+        padding: 1px 5px !important;
     }
     .cf-btn-client-area {
         width: 100%;
@@ -8564,4 +8838,72 @@ html, body {
         max-width: 190px !important;
         height: 18px !important;
     }
+}
+
+/* ==========================================================================
+   BUDGET HOSTING PAGE STYLING (budget-hosting.php)
+   ========================================================================== */
+.cf-budget-hero {
+    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+    padding-top: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E2E8F0;
+    overflow: hidden;
+}
+
+.cf-feature-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.cf-budget-hero-card {
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 24px !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.08) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cf-budget-hero-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 55px -12px rgba(15, 23, 42, 0.12) !important;
+}
+
+.cf-card-icon-bubble {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.text-gradient-primary {
+    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #38BDF8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hover-shadow {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hover-shadow:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.1) !important;
+}
+
+.max-w-750 {
+    max-width: 750px;
 }

@@ -9,6 +9,12 @@
     <?php
     // Active menu page detection
     $cfCurrentPage = basename($_SERVER['PHP_SELF'] ?? '');
+    $isHostingActive = in_array($cfCurrentPage, [
+        'budget-hosting.php', 'budget-hosting',
+        'web-hosting.php', 'web-hosting',
+        'premium-hosting.php', 'premium-hosting',
+        'shared-hosting.php', 'shared-hosting'
+    ]);
     ?>
 
     <!-- =========================================================================
@@ -78,11 +84,68 @@
                                 <span>Home</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'shared-hosting.php' || $cfCurrentPage == 'shared-hosting') ? 'active' : ''; ?>" href="shared-hosting">
-                                <i class="las la-cloud nav-icon-mobile d-lg-none"></i>
-                                <span>Shared Hosting</span>
+                        <!-- Hosting Dropdown (3 Parts: Budget, Business Web, Premium Managed) -->
+                        <li class="nav-item dropdown cf-nav-dropdown">
+                            <a class="nav-link cf-nav-link cf-dropdown-toggle <?php echo $isHostingActive ? 'active' : ''; ?>" 
+                               href="#" 
+                               id="hostingMenuDropdown" 
+                               role="button" 
+                               data-bs-toggle="dropdown" 
+                               data-bs-auto-close="outside"
+                               aria-expanded="false">
+                                <span class="cf-dropdown-toggle-main d-inline-flex align-items-center gap-2">
+                                    <i class="las la-server nav-icon-mobile d-lg-none"></i>
+                                    <span>Hosting</span>
+                                </span>
+                                <i class="las la-angle-down cf-dropdown-caret" aria-hidden="true"></i>
                             </a>
+                            <ul class="dropdown-menu cf-dropdown-menu" aria-labelledby="hostingMenuDropdown">
+                                <!-- 1. Budget Hosting -->
+                                <li>
+                                    <a class="dropdown-item cf-dropdown-item <?php echo ($cfCurrentPage == 'budget-hosting.php' || $cfCurrentPage == 'budget-hosting') ? 'active' : ''; ?>" href="budget-hosting">
+                                        <div class="cf-dd-icon-box cf-dd-icon-budget">
+                                            <i class="las la-wallet"></i>
+                                        </div>
+                                        <div class="cf-dd-content">
+                                            <div class="cf-dd-title-row">
+                                                <span class="cf-dd-title">Budget Hosting</span>
+                                                <span class="cf-dd-badge cf-dd-badge-budget">Affordable</span>
+                                            </div>
+                                            <p class="cf-dd-desc">Cost-effective, reliable cPanel hosting for starters &amp; personal sites</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <!-- 2. Business Web Hosting -->
+                                <li>
+                                    <a class="dropdown-item cf-dropdown-item <?php echo ($cfCurrentPage == 'web-hosting.php' || $cfCurrentPage == 'web-hosting') ? 'active' : ''; ?>" href="web-hosting">
+                                        <div class="cf-dd-icon-box cf-dd-icon-web">
+                                            <i class="las la-briefcase"></i>
+                                        </div>
+                                        <div class="cf-dd-content">
+                                            <div class="cf-dd-title-row">
+                                                <span class="cf-dd-title">Business Web Hosting</span>
+                                                <span class="cf-dd-badge cf-dd-badge-popular">Popular</span>
+                                            </div>
+                                            <p class="cf-dd-desc">High-speed NVMe cloud hosting optimized for business growth</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <!-- 3. Premium Managed Hosting -->
+                                <li>
+                                    <a class="dropdown-item cf-dropdown-item <?php echo ($cfCurrentPage == 'premium-hosting.php' || $cfCurrentPage == 'premium-hosting') ? 'active' : ''; ?>" href="premium-hosting">
+                                        <div class="cf-dd-icon-box cf-dd-icon-premium">
+                                            <i class="las la-crown"></i>
+                                        </div>
+                                        <div class="cf-dd-content">
+                                            <div class="cf-dd-title-row">
+                                                <span class="cf-dd-title">Premium Managed Hosting</span>
+                                                <span class="cf-dd-badge cf-dd-badge-vip">Turbo</span>
+                                            </div>
+                                            <p class="cf-dd-desc">Enterprise-grade performance with fully managed cloud &amp; VIP support</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'vps-server.php' || $cfCurrentPage == 'vps-server') ? 'active' : ''; ?>" href="vps-server">
