@@ -1,0 +1,71 @@
+# ==========================================
+# CloudFlox Website - .gitignore
+# ==========================================
+
+# 1. Scratch & Local Automated Testing
+/scratch/
+/tests/temp/
+
+# 2. Root-level Temporary Screenshots & Test Media
+/*.png
+/*.jpg
+/*.jpeg
+/*.webp
+!assets/**
+
+# 3. Environment & Configuration Secrets
+.env
+.env.*
+!.env.example
+
+# 4. Logs & Debug Files
+*.log
+error_log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 5. Operating System Files
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# 6. IDEs & Editor Configuration
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*~
+*.bak
+*.backup
+*.tmp
+*.temp
+
+# 7. Dependencies & Vendor Directories
+/node_modules/
+/vendor/
+.phpunit.result.cache
+
+# 8. Server, cPanel & Hosting Artifacts
+.ftpquota
+5htaccess
+cgi-bin/
+core
