@@ -8,6 +8,7 @@
 <script src="assets/js/vendors/jquery.magnific-popup.min.js"></script>
 
 <script src="assets/js/app.js"></script>
+<script src="assets/js/cloudflox-domain-checker.js?v=4"></script>
 
 <script>
     const OFFER_KEY = "cloudflox_offer_hidden";

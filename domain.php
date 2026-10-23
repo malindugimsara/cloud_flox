@@ -158,6 +158,9 @@
                         </button>
                     </form>
 
+                    <!-- Real-time Live Domain Search Results Container -->
+                    <div id="domainSearchResults" class="cf-domain-results-wrap" style="display: none;"></div>
+
                     <!-- Compact Popular TLD Pills -->
                     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
                         <span class="fs-13 text-muted fw-semibold me-1">Popular:</span>

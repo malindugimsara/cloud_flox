@@ -274,6 +274,9 @@
                             </button>
                         </form>
 
+                        <!-- Real-time Live Domain Search Results Container -->
+                        <div id="homeDomainSearchResults" class="cf-domain-results-wrap" style="display: none;"></div>
+
                         <!-- Highlighted TLD Price Cards -->
                         <div class="domain-tld-showcase" aria-label="Popular Domain Extensions">
                             <a href="javascript:void(0)" class="tld-card active-tld"
