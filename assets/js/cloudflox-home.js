@@ -144,6 +144,16 @@ function switchComparisonCategory(catKey, btn) {
     });
 }
 
+function scrollMatrixTable(direction) {
+    const tableResp = document.querySelector('#compPane-all .table-responsive');
+    if (!tableResp) return;
+    const scrollAmount = 350;
+    tableResp.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+    });
+}
+
 // Comparison Table Billing Listener
 document.addEventListener('DOMContentLoaded', function () {
     const billingToggle = document.getElementById('cfCompBillingToggle');
@@ -198,7 +208,8 @@ const matchmakerData = {
             'LiteSpeed Web Server + LSCache'
         ],
         btnLabel: 'View Budget Plans',
-        actionType: 'tab',
+        actionType: 'link',
+        actionUrl: 'budget-hosting',
         reasons: {
             title1: 'Perfect For Personal Projects & Starters',
             text1: 'Ideal for portfolios, blogs, student showcases, and hobby websites where simplicity and cost-effectiveness matter most.',
@@ -223,7 +234,8 @@ const matchmakerData = {
             'Official cPanel + Priority 24/7 Support'
         ],
         btnLabel: 'View Business Plans',
-        actionType: 'tab',
+        actionType: 'link',
+        actionUrl: 'web-hosting',
         reasons: {
             title1: 'Tailored for SMEs & Business Sites',
             text1: 'Engineered specifically for corporate websites, SMEs, and digital agencies that require steady uptime, professional webmail, and zero maintenance headaches.',
@@ -248,7 +260,8 @@ const matchmakerData = {
             '&lt; 15-Minute Response SLA SysAdmin Support'
         ],
         btnLabel: 'View Premium Plans',
-        actionType: 'tab',
+        actionType: 'link',
+        actionUrl: 'premium-hosting',
         reasons: {
             title1: 'Engineered for High-Transaction E-Commerce & Apps',
             text1: 'Built for high-volume WooCommerce, SaaS platforms, database-heavy LMS, and busy media portals that cannot afford sub-second checkout delays.',
@@ -274,7 +287,7 @@ const matchmakerData = {
         ],
         btnLabel: 'Explore Cloud VPS',
         actionType: 'link',
-        actionUrl: 'vps-server',
+        actionUrl: 'vps-hosting',
         reasons: {
             title1: '100% Administrative Freedom & Custom Stacks',
             text1: 'Tailored for developers, DevOps teams, and custom web applications requiring custom packages, Docker containers, Python/Node.js, or Go.',
@@ -427,6 +440,11 @@ function renderMatchmakerResult(key) {
     const btnLabelEl = document.getElementById('res-btn-label');
     if (btnLabelEl) btnLabelEl.textContent = plan.btnLabel;
 
+    const primaryBtnEl = document.getElementById('res-primary-btn');
+    if (primaryBtnEl && plan.actionUrl) {
+        primaryBtnEl.setAttribute('href', plan.actionUrl);
+    }
+
     // Update Right Why-Box
     document.getElementById('why-title-1').textContent = plan.reasons.title1;
     document.getElementById('why-text-1').textContent = plan.reasons.text1;
@@ -493,8 +511,10 @@ function renderMatchmakerResult(key) {
 
 function handleMatchmakerCta() {
     const plan = matchmakerData[currentMatchmakerState.recommendedKey] || matchmakerData.business;
-    if (plan.actionType === 'tab') {
-        const pricingSection = document.getElementById('pricingSection');
+    if (plan.actionUrl) {
+        window.location.href = plan.actionUrl;
+    } else if (plan.actionType === 'tab') {
+        const pricingSection = document.getElementById('pricing');
         if (pricingSection) {
             pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -506,8 +526,6 @@ function handleMatchmakerCta() {
                 switchPricingCategory(plan.key, targetTab);
             }
         }, 350);
-    } else if (plan.actionType === 'link') {
-        window.location.href = plan.actionUrl;
     }
 }
 

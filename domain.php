@@ -691,7 +691,7 @@
                         <a href="https://my.cloudflox.com/cart.php?a=add&domain=transfer" class="btn btn-primary rounded-3 px-4 py-2 fw-bold fs-15 shadow-sm">
                             <i class="las la-exchange-alt me-1"></i> Start Domain Transfer
                         </a>
-                        <a href="contact" class="btn btn-outline-secondary rounded-3 px-4 py-2 fw-semibold fs-15">
+                        <a href="contact" class="btn btn-outline-secondary rounded-3 px-4 py-2 fw-semibold fs-15" style="color: #2563EB;">
                             <i class="las la-headset me-1"></i> Need Transfer Assistance?
                         </a>
                     </div>

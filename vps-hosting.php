@@ -164,12 +164,12 @@
                             <i class="las la-arrow-down ms-1"></i>
                         </a>
                         <a href="#vpsConfigurator" class="btn btn-outline-secondary rounded-3 py-2 px-3 fs-15 fw-semibold text-center">
-                            <i class="las la-sliders-h me-1"></i>
-                            <span>Custom Configurator</span>
+                            <i class="las la-sliders-h me-1" style="color:#2563EB;"></i>
+                            <span style="color:#2563EB;">Custom Configurator</span>
                         </a>
-                        <a href="#vpsComparison" class="btn btn-link text-decoration-none text-slate-700 fs-14 fw-semibold p-0 text-center">
+                        <!-- <a href="#vpsComparison" class="btn btn-link text-decoration-none text-slate-700 fs-14 fw-semibold p-0 text-center">
                             <span>Compare Specs</span> <i class="las la-angle-right ms-1"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
 
@@ -871,7 +871,7 @@
                             <tr>
                                 <th scope="col" style="min-width: 240px;">Hardware Specifications</th>
                                 <th scope="col" class="plan-col">Starter VPS</th>
-                                <th scope="col" class="plan-col" style="background: rgba(6, 182, 212, 0.08); border-top: 3px solid #06B6D4;">
+                                <th scope="col" class="plan-col popular-vps-th">
                                     Professional VPS <br>
                                     <span class="badge bg-cyan-subtle text-cyan fw-bold fs-11 mt-1">Popular</span>
                                 </th>
@@ -1006,33 +1006,79 @@
                                 <td class="plan-val fw-bold text-cyan">24/7 Priority Support</td>
                                 <td class="plan-val">24/7 Dedicated Architect</td>
                             </tr>
-                            <tr>
-                                <td>Monthly Price</td>
-                                <td class="plan-val">
-                                    <strong class="fs-18 text-slate-900">$40.46</strong> <small class="text-muted">/mo</small>
+                            <!-- Pricing Row -->
+                            <tr class="cf-vps-price-row">
+                                <td class="cf-vps-row-label">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="cf-vps-row-icon"><i class="las la-tag"></i></span>
+                                        <div>
+                                            <span class="d-block fw-bold text-slate-900 fs-15">Monthly Pricing</span>
+                                            <span class="d-block text-slate-500 fs-12">Cancel or scale anytime</span>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="plan-val">
-                                    <strong class="fs-20 text-cyan">$50.46</strong> <small class="text-muted">/mo</small>
+                                    <div class="cf-vps-price-box-mini">
+                                        <div class="cf-vps-price-figure">
+                                            <span class="cf-vps-price-currency">$</span>
+                                            <span class="cf-vps-price-val">40.46</span>
+                                            <span class="cf-vps-price-cycle">/mo</span>
+                                        </div>
+                                        <span class="cf-vps-price-hint">Starter Dedicated Core</span>
+                                    </div>
+                                </td>
+                                <td class="plan-val popular-vps-td">
+                                    <div class="cf-vps-price-box-mini is-featured">
+                                        <span class="badge bg-cyan-subtle text-cyan fw-bold fs-11 px-2 py-1 rounded-pill mb-1">
+                                            <i class="las la-fire me-1"></i> Best Value
+                                        </span>
+                                        <div class="cf-vps-price-figure text-cyan">
+                                            <span class="cf-vps-price-currency">$</span>
+                                            <span class="cf-vps-price-val">50.46</span>
+                                            <span class="cf-vps-price-cycle">/mo</span>
+                                        </div>
+                                        <span class="cf-vps-price-hint text-cyan fw-semibold">High Clock &bull; 8 Threads</span>
+                                    </div>
                                 </td>
                                 <td class="plan-val">
-                                    <strong class="fs-18 text-slate-900">$65.46</strong> <small class="text-muted">/mo</small>
+                                    <div class="cf-vps-price-box-mini">
+                                        <div class="cf-vps-price-figure">
+                                            <span class="cf-vps-price-currency">$</span>
+                                            <span class="cf-vps-price-val">65.46</span>
+                                            <span class="cf-vps-price-cycle">/mo</span>
+                                        </div>
+                                        <span class="cf-vps-price-hint">Custom Enterprise Node</span>
+                                    </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Action</td>
+
+                            <!-- Action / Deploy Row -->
+                            <tr class="cf-vps-action-row">
+                                <td class="cf-vps-row-label">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="cf-vps-row-icon is-rocket"><i class="las la-rocket"></i></span>
+                                        <div>
+                                            <span class="d-block fw-bold text-slate-900 fs-15">Deploy Server</span>
+                                            <span class="d-block text-slate-500 fs-12">Provision in &lt; 60 seconds</span>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td class="plan-val">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=1" class="btn btn-outline-secondary rounded-3 py-1 px-3 fs-13 fw-semibold">
-                                        Deploy
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=1" class="cf-vps-action-btn btn-starter" aria-label="Deploy Starter VPS">
+                                        <span>Deploy Starter</span>
+                                        <i class="las la-arrow-right"></i>
+                                    </a>
+                                </td>
+                                <td class="plan-val popular-vps-td">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=2" class="cf-vps-action-btn btn-popular" aria-label="Deploy Professional VPS">
+                                        <span>Deploy Pro</span>
+                                        <i class="las la-bolt"></i>
                                     </a>
                                 </td>
                                 <td class="plan-val">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=2" class="cf-btn-vps-glow py-2 px-3 fs-13">
-                                        Deploy Pro
-                                    </a>
-                                </td>
-                                <td class="plan-val">
-                                    <a href="contact-us" class="btn btn-outline-secondary rounded-3 py-1 px-3 fs-13 fw-semibold">
-                                        Quote
+                                    <a href="contact-us" class="cf-vps-action-btn btn-business" aria-label="Configure Business VPS">
+                                        <span>Configure VPS</span>
+                                        <i class="las la-sliders-h"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -1040,9 +1086,32 @@
                     </table>
                 </div>
 
-                <div class="p-3 bg-light text-center text-muted fs-12 border-top">
-                    Need custom IP allocations, BGP session peering, or customized storage arrays? 
-                    <a href="contact-us" class="text-cyan text-decoration-underline fw-semibold ms-1">Contact our Infrastructure Team</a>.
+                <!-- Bottom Ambient Enterprise Action Bar -->
+                <div class="cf-vps-table-bottom-bar">
+                    <div class="cf-vps-bottom-content">
+                        <div class="cf-vps-bottom-icon">
+                            <i class="las la-network-wired"></i>
+                        </div>
+                        <div class="cf-vps-bottom-text">
+                            <div class="cf-vps-bottom-title">
+                                Need a Custom Enterprise Infrastructure?
+                                <span class="badge bg-cyan-subtle text-cyan fw-bold px-2 py-1 rounded-pill">Custom SLA</span>
+                            </div>
+                            <p class="cf-vps-bottom-desc mb-0">
+                                Dedicated /24 IPv4 subnets, custom BGP session peering, NVMe storage arrays, and private VLAN interconnects ready on request.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="cf-vps-bottom-actions">
+                        <a href="contact-us" class="cf-vps-bottom-btn cf-vps-bottom-btn-quote">
+                            <i class="las la-file-invoice text-cyan fs-16"></i>
+                            <span>Request Custom Quote</span>
+                        </a>
+                        <button type="button" onclick="openLiveChat(event)" class="cf-vps-bottom-btn cf-vps-bottom-btn-chat">
+                            <i class="las la-comments fs-16"></i>
+                            <span>Chat with Architect</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1477,6 +1546,19 @@
                 });
             });
         }
+
+        // Dynamic Sticky Table Header Offset Tracker
+        function updateStickyTableHeader() {
+            const header = document.querySelector('.cf-header-wrapper');
+            if (header) {
+                const rect = header.getBoundingClientRect();
+                const offset = Math.max(0, Math.round(rect.bottom));
+                document.documentElement.style.setProperty('--cf-header-h', offset + 'px');
+            }
+        }
+        window.addEventListener('scroll', updateStickyTableHeader, { passive: true });
+        window.addEventListener('resize', updateStickyTableHeader, { passive: true });
+        updateStickyTableHeader();
     });
     </script>
 </body>

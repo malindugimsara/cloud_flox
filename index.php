@@ -125,7 +125,7 @@
                                 <span>Get Started Now</span>
                                 <i class="las la-arrow-right"></i>
                             </a>
-                            <a href="vps-server" class="btn-hero-secondary">
+                            <a href="vps-hosting" class="btn-hero-secondary">
                                 <i class="las la-server"></i>
                                 <span>Explore VPS &amp; Dedicated</span>
                             </a>
@@ -344,7 +344,7 @@
     <!-- =========================================================================
          3. HOSTING PACKAGES & PRICING SECTION
          ========================================================================= -->
-    <section class="modern-pricing-section" id="pricingSection">
+    <section class="modern-pricing-section" id="pricing">
         <!-- Ambient Decorative Pattern Backgrounds -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true">
             <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager"
@@ -1004,7 +1004,7 @@
 
             <!-- Compare All CTA -->
             <div class="text-center mt-4">
-                <a href="shared-hosting" class="btn-compare-all">
+                <a href="#compare-plans" class="btn-compare-all">
                     <span>Compare All Hosting Plan Specs</span>
                     <i class="las la-arrow-right ms-2" aria-hidden="true"></i>
                 </a>
@@ -1711,6 +1711,21 @@
                  PANE 4: ALL 11 PLANS MATRIX (DEEP DIVE)
                  ========================================== -->
             <div class="cf-comp-pane" id="compPane-all" style="display: none;">
+                <!-- Matrix Horizontal Scroll Navigation Helper -->
+                <div class="d-flex align-items-center justify-content-between mb-2 px-1">
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 fs-12 fw-semibold">
+                        <i class="las la-arrows-alt-h me-1"></i> Scroll horizontally to compare all 11 plans
+                    </span>
+                    <div class="d-none d-sm-flex align-items-center gap-1">
+                        <button type="button" class="btn btn-sm btn-light border bg-white rounded-circle shadow-xs" onclick="scrollMatrixTable('left')" aria-label="Scroll left" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">
+                            <i class="las la-angle-left"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-light border bg-white rounded-circle shadow-xs" onclick="scrollMatrixTable('right')" aria-label="Scroll right" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">
+                            <i class="las la-angle-right"></i>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="cf-comparison-table-wrapper rounded-4 border bg-white shadow-sm mb-4">
                     <div class="table-responsive">
                         <table class="table cf-comparison-table align-middle mb-0">
@@ -1900,10 +1915,10 @@
                         infrastructure quote from our engineering team.</p>
                 </div>
                 <div class="cf-custom-bar-actions">
-                    <a href="/vps-hosting/" class="cf-bar-btn btn-secondary-light">Explore VPS Plans</a>
-                    <a href="/custom-solutions/" class="cf-bar-btn btn-accent-orange">Request Custom Solution</a>
+                    <a href="vps-hosting" class="cf-bar-btn btn-secondary-light">Explore VPS Plans</a>
+                    <a href="contact-us" class="cf-bar-btn btn-accent-orange">Request Custom Solution</a>
                 </div>
-            </div>
+            </div>  
 
         </div>
     </section>
@@ -2279,7 +2294,7 @@
                             </div>
 
                             <div class="result-plan-actions">
-                                <a href="javascript:void(0)" id="res-primary-btn" onclick="handleMatchmakerCta()"
+                                <a href="web-hosting" id="res-primary-btn" onclick="handleMatchmakerCta()"
                                     class="btn-result-cta">
                                     <span id="res-btn-label">View Business Plans</span> <i
                                         class="las la-arrow-right"></i>
@@ -3874,7 +3889,7 @@
                         </p>
 
                         <div class="faq-help-actions">
-                            <a href="contact-us" class="btn-faq-chat">
+                            <a href="javascript:void(0)" onclick="openLiveChat(event)" class="btn-faq-chat" aria-label="Start Live Chat">
                                 <i class="las la-comments"></i> Start Live Chat
                             </a>
                             <a href="mailto:support@cloudflox.com" class="btn-faq-email">
@@ -4188,7 +4203,7 @@
 
                     <!-- Primary & Secondary Buttons -->
                     <div class="cta-buttons-wrapper">
-                        <a href="https://my.cloudflox.com/cart.php?a=view" class="btn-cta-primary-glow">
+                        <a href="#pricing" class="btn-cta-primary-glow">
                             <span>Get Started Now</span>
                             <i class="las la-arrow-right"></i>
                         </a>
@@ -4237,7 +4252,7 @@
     <!-- =========== JS Area =========== -->
 
     <!-- CloudFlox Homepage Interactive Scripts (Pricing, Comparison, Matchmaker, Quotes) -->
-    <script src="assets/js/cloudflox-home.js?v=5"></script>
+    <script src="assets/js/cloudflox-home.js?v=7"></script>
 
 </body>
 

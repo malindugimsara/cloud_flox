@@ -1622,25 +1622,93 @@
                 </div>
             </div>
 
-            <!-- Key Infrastructure Metrics -->
-            <div class="mt-5 pt-4 border-top border-light border-opacity-10">
-                <div class="row g-4 text-center">
-                    <div class="col-md-4">
-                        <div class="p-3">
-                            <h3 class="text-white fw-extrabold mb-1"><span class="text-crimson">99.99%</span> SLA</h3>
-                            <p class="text-white text-opacity-75 fs-14 mb-0">Hardware &amp; Network Availability Guarantee</p>
+            <!-- Key Infrastructure Telemetry Metrics Deck -->
+            <div class="cf-dedicated-metrics-deck mt-5 pt-3">
+                <div class="row g-4">
+                    <!-- Metric 1: 99.99% SLA -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cf-dedicated-metric-card h-100">
+                            <div class="cf-metric-card-top">
+                                <div class="cf-metric-icon">
+                                    <i class="las la-shield-alt"></i>
+                                </div>
+                                <span class="cf-metric-pill">
+                                    <span class="cf-metric-ping ping-crimson"></span>
+                                    <span>High Availability</span>
+                                </span>
+                            </div>
+                            <div class="cf-metric-card-body">
+                                <div class="cf-metric-val-wrap">
+                                    <span class="cf-metric-number">99.99%</span>
+                                    <span class="cf-metric-label">SLA</span>
+                                </div>
+                                <p class="cf-metric-subtext">
+                                    Hardware &amp; Network Availability Guarantee
+                                </p>
+                            </div>
+                            <div class="cf-metric-card-footer">
+                                <span class="cf-metric-spec">
+                                    <i class="las la-check-circle"></i> Redundant Power &amp; Dual Uplinks
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="p-3">
-                            <h3 class="text-white fw-extrabold mb-1"><span class="text-crimson">1 Gbps</span> Unmetered</h3>
-                            <p class="text-white text-opacity-75 fs-14 mb-0">Zero Bandwidth Throttling &bull; Tier-1 Transit</p>
+
+                    <!-- Metric 2: 1 Gbps Unmetered -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cf-dedicated-metric-card is-featured h-100">
+                            <div class="cf-metric-card-top">
+                                <div class="cf-metric-icon is-cyan">
+                                    <i class="las la-tachometer-alt"></i>
+                                </div>
+                                <span class="cf-metric-pill is-cyan">
+                                    <span class="cf-metric-ping ping-cyan"></span>
+                                    <span>Dedicated Port</span>
+                                </span>
+                            </div>
+                            <div class="cf-metric-card-body">
+                                <div class="cf-metric-val-wrap">
+                                    <span class="cf-metric-number">1 Gbps</span>
+                                    <span class="cf-metric-label">Unmetered</span>
+                                </div>
+                                <p class="cf-metric-subtext">
+                                    Zero Bandwidth Throttling &bull; Tier-1 Transit
+                                </p>
+                            </div>
+                            <div class="cf-metric-card-footer">
+                                <span class="cf-metric-spec">
+                                    <i class="las la-check-circle"></i> Uncapped Monthly Data Transfer
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="p-3">
-                            <h3 class="text-white fw-extrabold mb-1"><span class="text-crimson">24/7/365</span> Datacenter Ops</h3>
-                            <p class="text-white text-opacity-75 fs-14 mb-0">On-Site Engineers &amp; Rapid Hardware Hot-Swap</p>
+
+                    <!-- Metric 3: 24/7/365 Datacenter Ops -->
+                    <div class="col-lg-4 col-md-12">
+                        <div class="cf-dedicated-metric-card h-100">
+                            <div class="cf-metric-card-top">
+                                <div class="cf-metric-icon is-emerald">
+                                    <i class="las la-server"></i>
+                                </div>
+                                <span class="cf-metric-pill is-emerald">
+                                    <span class="cf-metric-ping ping-emerald"></span>
+                                    <span>On-Site 24/7/365</span>
+                                </span>
+                            </div>
+                            <div class="cf-metric-card-body">
+                                <div class="cf-metric-val-wrap">
+                                    <span class="cf-metric-number">24/7/365</span>
+                                    <span class="cf-metric-label">Datacenter Ops</span>
+                                </div>
+                                <p class="cf-metric-subtext">
+                                    On-Site Engineers &amp; Rapid Hardware Hot-Swap
+                                </p>
+                            </div>
+                            <div class="cf-metric-card-footer">
+                                <span class="cf-metric-spec">
+                                    <i class="las la-check-circle"></i> Certified Tier-3 DC Technicians
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

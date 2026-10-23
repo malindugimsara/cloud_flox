@@ -7534,6 +7534,99 @@ footer .border-top {
     }
 }
 
+/* ==========================================================================
+   ALL 11 PLANS MATRIX (#compPane-all) HORIZONTAL SCROLL & CONTAINMENT FIX
+   Prevents wide 11-plan table from overflowing screen; enables smooth horizontal scroll
+   with pinned/sticky left feature column.
+   ========================================================================== */
+#compPane-all .cf-comparison-table-wrapper {
+    overflow: hidden !important;
+    border-radius: 18px !important;
+    max-width: 100% !important;
+    border: 1px solid #E2E8F0 !important;
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08) !important;
+}
+
+#compPane-all .table-responsive {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    position: relative !important;
+    max-width: 100% !important;
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E1 #F8FAFC;
+}
+
+#compPane-all .table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+#compPane-all .table-responsive::-webkit-scrollbar-track {
+    background: #F8FAFC;
+    border-radius: 0 0 16px 16px;
+}
+
+#compPane-all .table-responsive::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+}
+
+#compPane-all .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+/* Feature column stays sticky on the left during horizontal scroll */
+#compPane-all .cf-sticky-feature-th {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 35 !important;
+    background: #FFFFFF !important;
+    box-shadow: 4px 0 10px rgba(15, 23, 42, 0.06) !important;
+    width: 240px !important;
+    min-width: 220px !important;
+    max-width: 240px !important;
+}
+
+#compPane-all .cf-sticky-feature-cell {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 20 !important;
+    background: #FFFFFF !important;
+    box-shadow: 4px 0 10px rgba(15, 23, 42, 0.04) !important;
+    width: 240px !important;
+    min-width: 220px !important;
+    max-width: 240px !important;
+}
+
+#compPane-all tbody tr:nth-child(even) .cf-sticky-feature-cell {
+    background: #F8FAFC !important;
+}
+
+#compPane-all tbody tr:hover .cf-sticky-feature-cell {
+    background: #EFF6FF !important;
+}
+
+/* Category header row sticks on the left as well */
+#compPane-all .cf-cat-header-row td {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 15 !important;
+    white-space: nowrap !important;
+}
+
+/* Compact header cells and values for 11-column matrix */
+#compPane-all .cf-plan-header-cell {
+    min-width: 145px !important;
+    padding: 18px 12px !important;
+    white-space: nowrap !important;
+}
+
+#compPane-all .cf-comparison-table tbody td {
+    padding: 12px 14px !important;
+    white-space: nowrap !important;
+    font-size: 13px !important;
+}
+
 /* Tablet & Mobile (<= 991.98px): Internal scroll container with frozen header and sticky left column */
 @media (max-width: 991.98px) {
     .cf-comparison-table-wrapper {
@@ -10480,6 +10573,222 @@ body.cf-premium-page .cf-modern-accordion .accordion-button:not(.collapsed) {
     box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
 }
 
+/* 6. Hardware Telemetry Metrics Deck (why-area-one) */
+.cf-dedicated-metrics-deck {
+    position: relative;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cf-dedicated-metric-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.82) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cf-dedicated-metric-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(225, 29, 72, 0.6), transparent);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.cf-dedicated-metric-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(225, 29, 72, 0.45);
+    box-shadow: 0 20px 40px -10px rgba(225, 29, 72, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.cf-dedicated-metric-card:hover::before {
+    opacity: 1;
+}
+
+.cf-dedicated-metric-card.is-featured {
+    border-color: rgba(225, 29, 72, 0.25);
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.78) 0%, rgba(15, 23, 42, 0.9) 100%);
+}
+
+.cf-dedicated-metric-card.is-featured::before {
+    opacity: 0.75;
+}
+
+.cf-metric-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.cf-metric-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(225, 29, 72, 0.14);
+    border: 1px solid rgba(225, 29, 72, 0.3);
+    color: #FB7185;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.15);
+}
+
+.cf-metric-icon.is-cyan {
+    background: rgba(6, 182, 212, 0.14);
+    border-color: rgba(6, 182, 212, 0.3);
+    color: #38BDF8;
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.15);
+}
+
+.cf-metric-icon.is-emerald {
+    background: rgba(16, 185, 129, 0.14);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #34D399;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
+}
+
+.cf-metric-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    background: rgba(225, 29, 72, 0.1);
+    border: 1px solid rgba(225, 29, 72, 0.25);
+    color: #FDA4AF;
+}
+
+.cf-metric-pill.is-cyan {
+    background: rgba(6, 182, 212, 0.1);
+    border-color: rgba(6, 182, 212, 0.25);
+    color: #7DD3FC;
+}
+
+.cf-metric-pill.is-emerald {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.25);
+    color: #6EE7B7;
+}
+
+.cf-metric-ping {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+}
+
+.cf-metric-ping.ping-crimson {
+    background-color: #E11D48;
+    box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7);
+    animation: cfPingCrimson 2s infinite ease-out;
+}
+
+.cf-metric-ping.ping-cyan {
+    background-color: #06B6D4;
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7);
+    animation: cfPingCyan 2s infinite ease-out;
+}
+
+.cf-metric-ping.ping-emerald {
+    background-color: #10B981;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: cfPingEmerald 2s infinite ease-out;
+}
+
+@keyframes cfPingCrimson {
+    0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.8); }
+    70% { box-shadow: 0 0 0 6px rgba(225, 29, 72, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+}
+
+@keyframes cfPingCyan {
+    0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.8); }
+    70% { box-shadow: 0 0 0 6px rgba(6, 182, 212, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
+}
+
+@keyframes cfPingEmerald {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.8); }
+    70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.cf-metric-card-body {
+    margin-bottom: 22px;
+}
+
+.cf-metric-val-wrap {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.cf-metric-number {
+    font-size: clamp(26px, 2.5vw, 34px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #FFFFFF 15%, #FDA4AF 65%, #FB7185 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.cf-metric-label {
+    font-size: 19px;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.01em;
+}
+
+.cf-metric-subtext {
+    font-size: 14px;
+    color: rgba(226, 232, 240, 0.8);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.cf-metric-card-footer {
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cf-metric-spec {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: rgba(241, 245, 249, 0.75);
+}
+
+.cf-metric-spec i {
+    color: #FB7185;
+    font-size: 15px;
+}
+
 /* 6. Responsive Optimization for Dedicated Page */
 @media (max-width: 991.98px) {
     .cf-dedicated-hero {
@@ -11683,8 +11992,8 @@ body.cf-domain-page .cf-modern-accordion .accordion-button:not(.collapsed) {
     background: #FFFFFF;
     border: 1px solid #E2E8F0;
     border-radius: 20px;
-    overflow: hidden;
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    position: relative;
 }
 
 .cf-vps-table-wrap {
@@ -11694,23 +12003,115 @@ body.cf-domain-page .cf-modern-accordion .accordion-button:not(.collapsed) {
 
 .cf-vps-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     margin: 0;
     font-size: 14px;
 }
 
 .cf-vps-table thead th {
-    background: #F8FAFC;
+    background: #FFFFFF;
     padding: 18px 20px;
     font-weight: 800;
     color: #0F172A;
-    border-bottom: 2px solid #E2E8F0;
+    border-bottom: 2px solid #CBD5E1;
     white-space: nowrap;
+}
+
+.cf-vps-table thead th.popular-vps-th {
+    background: #F0FDFA !important;
+    border-top: 3px solid #06B6D4;
 }
 
 .cf-vps-table thead th.plan-col {
     text-align: center;
     min-width: 180px;
+}
+
+/* Desktop (min-width: 992px): Seamless sticky table header below fixed navbar */
+@media (min-width: 992px) {
+    .cf-vps-table-card {
+        overflow: visible !important;
+    }
+
+    .cf-vps-table-wrap {
+        overflow: visible !important;
+    }
+
+    .cf-vps-table thead th {
+        position: sticky;
+        top: var(--cf-header-h, 110px) !important;
+        z-index: 25 !important;
+        background: #FFFFFF !important;
+        box-shadow: 0 4px 12px -3px rgba(15, 23, 42, 0.08);
+    }
+
+    .cf-vps-table thead th.popular-vps-th {
+        background: #F0FDFA !important;
+    }
+
+    .cf-vps-table thead tr th:first-child {
+        border-top-left-radius: 18px;
+    }
+
+    .cf-vps-table thead tr th:last-child {
+        border-top-right-radius: 18px;
+    }
+}
+
+/* Tablet & Mobile (max-width: 991.98px): Scrollable container with sticky top and left column */
+@media (max-width: 991.98px) {
+    .cf-vps-table-card {
+        overflow: hidden !important;
+    }
+
+    .cf-vps-table-wrap {
+        max-height: 70vh;
+        overflow-y: auto !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .cf-vps-table thead th {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 25 !important;
+        background: #FFFFFF !important;
+        box-shadow: 0 3px 8px -2px rgba(15, 23, 42, 0.08);
+    }
+
+    .cf-vps-table thead th.popular-vps-th {
+        background: #F0FDFA !important;
+    }
+
+    .cf-vps-table thead th:first-child {
+        position: sticky !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 35 !important;
+        background: #FFFFFF !important;
+        border-right: 2px solid #E2E8F0;
+    }
+
+    .cf-vps-table tbody td:first-child {
+        position: sticky !important;
+        left: 0 !important;
+        z-index: 20 !important;
+        background: #FFFFFF !important;
+        border-right: 2px solid #E2E8F0;
+        box-shadow: 3px 0 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .cf-vps-table tbody tr:hover td:first-child {
+        background: #F8FAFC !important;
+    }
+
+    .cf-vps-table tbody tr.cat-header td {
+        position: sticky !important;
+        left: 0 !important;
+        z-index: 22 !important;
+        white-space: nowrap;
+    }
 }
 
 .cf-vps-table tbody tr.cat-header td {
@@ -11736,6 +12137,322 @@ body.cf-domain-page .cf-modern-accordion .accordion-button:not(.collapsed) {
 
 .cf-vps-table td.plan-val {
     text-align: center;
+}
+
+/* Highlighted column styling for Professional VPS */
+.cf-vps-table tbody td.popular-vps-td {
+    background: #F0FDFA;
+    position: relative;
+}
+
+.cf-vps-table tbody tr:not(.cat-header):hover td.popular-vps-td {
+    background: #E6FFFA;
+}
+
+/* VPS Specs Table Price & Action Rows */
+.cf-vps-table tbody tr.cf-vps-price-row td {
+    background: #F8FAFC;
+    border-top: 2px solid #E2E8F0;
+    border-bottom: 1px solid #E2E8F0;
+    padding: 20px;
+    vertical-align: middle;
+}
+
+.cf-vps-table tbody tr.cf-vps-price-row td.popular-vps-td {
+    background: #ECFEFF !important;
+    border-top: 2px solid #06B6D4;
+}
+
+.cf-vps-table tbody tr.cf-vps-price-row:hover td {
+    background: #F8FAFC !important;
+}
+
+.cf-vps-table tbody tr.cf-vps-price-row:hover td.popular-vps-td {
+    background: #E0F2FE !important;
+}
+
+.cf-vps-row-label {
+    min-width: 240px;
+}
+
+.cf-vps-row-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(6, 182, 212, 0.12);
+    color: #0891B2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.cf-vps-row-icon.is-rocket {
+    background: rgba(2, 132, 199, 0.12);
+    color: #0284C7;
+}
+
+.cf-vps-price-box-mini {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+.cf-vps-price-figure {
+    display: inline-flex;
+    align-items: baseline;
+    color: #0F172A;
+}
+
+.cf-vps-price-currency {
+    font-size: 16px;
+    font-weight: 700;
+    margin-right: 2px;
+}
+
+.cf-vps-price-val {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.cf-vps-price-cycle {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748B;
+    margin-left: 3px;
+}
+
+.cf-vps-price-hint {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748B;
+}
+
+/* Action Button Row */
+.cf-vps-table tbody tr.cf-vps-action-row td {
+    padding: 18px 20px 24px 20px;
+    border-bottom: none;
+    background: #FFFFFF;
+}
+
+.cf-vps-table tbody tr.cf-vps-action-row td.popular-vps-td {
+    background: #F0FDFA !important;
+    border-bottom: none;
+}
+
+.cf-vps-table tbody tr.cf-vps-action-row:hover td {
+    background: #FFFFFF !important;
+}
+
+.cf-vps-table tbody tr.cf-vps-action-row:hover td.popular-vps-td {
+    background: #ECFEFF !important;
+}
+
+/* Action Buttons */
+.cf-vps-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    min-width: 160px;
+    line-height: 1.2;
+}
+
+.cf-vps-action-btn.btn-starter {
+    background: #F8FAFC;
+    color: #0F172A;
+    border: 1.5px solid #CBD5E1;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.cf-vps-action-btn.btn-starter:hover {
+    background: #0F172A;
+    color: #FFFFFF !important;
+    border-color: #0F172A;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+}
+
+.cf-vps-action-btn.btn-popular {
+    background: linear-gradient(135deg, #0284C7 0%, #06B6D4 100%);
+    color: #FFFFFF !important;
+    border: 1.5px solid #0284C7;
+    box-shadow: 0 8px 22px -3px rgba(6, 182, 212, 0.45);
+    position: relative;
+}
+
+.cf-vps-action-btn.btn-popular:hover {
+    background: linear-gradient(135deg, #0369A1 0%, #0284C7 100%);
+    border-color: #0369A1;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -2px rgba(6, 182, 212, 0.6);
+    color: #FFFFFF !important;
+}
+
+.cf-vps-action-btn.btn-business {
+    background: #0F172A;
+    color: #FFFFFF !important;
+    border: 1.5px solid #0F172A;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.16);
+}
+
+.cf-vps-action-btn.btn-business:hover {
+    background: #1E293B;
+    border-color: #1E293B;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.28);
+    color: #FFFFFF !important;
+}
+
+/* Bottom Infrastructure Enterprise Strip */
+.cf-vps-table-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 28px;
+    background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+    border-top: 1px solid #E2E8F0;
+    border-bottom-left-radius: 19px;
+    border-bottom-right-radius: 19px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cf-vps-table-bottom-bar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+}
+
+.cf-vps-bottom-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 280px;
+}
+
+.cf-vps-bottom-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #0891B2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    flex-shrink: 0;
+}
+
+.cf-vps-bottom-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.cf-vps-bottom-desc {
+    font-size: 13px;
+    color: #64748B;
+    margin: 0;
+    line-height: 1.45;
+}
+
+.cf-vps-bottom-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.cf-vps-bottom-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    line-height: 1.2;
+}
+
+.cf-vps-bottom-btn-quote {
+    background: #FFFFFF;
+    color: #0F172A;
+    border: 1.5px solid #CBD5E1;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.cf-vps-bottom-btn-quote:hover {
+    background: #0F172A;
+    color: #FFFFFF !important;
+    border-color: #0F172A;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.14);
+}
+
+.cf-vps-bottom-btn-chat {
+    background: rgba(6, 182, 212, 0.12);
+    color: #0891B2;
+    border: 1.5px solid rgba(6, 182, 212, 0.3);
+}
+
+.cf-vps-bottom-btn-chat:hover {
+    background: #0891B2;
+    color: #FFFFFF !important;
+    border-color: #0891B2;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(6, 182, 212, 0.28);
+}
+
+@media (max-width: 991.98px) {
+    .cf-vps-table tbody tr.cf-vps-price-row td:first-child,
+    .cf-vps-table tbody tr.cf-vps-action-row td:first-child {
+        background: #FFFFFF !important;
+    }
+
+    .cf-vps-table-bottom-bar {
+        padding: 18px 20px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .cf-vps-bottom-actions {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cf-vps-bottom-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 /* 6. OS & 1-Click Distro Badges */
@@ -11972,4 +12689,469 @@ body.cf-home-page .modern-cta-section {
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-}
+}
+
+/* ==========================================================================
+   LEGAL PAGES STYLING (Terms of Service, Privacy Policy, Refund Policy)
+   ========================================================================== */
+.cf-legal-page {
+    background-color: #FFFFFF;
+    color: #0F172A;
+}
+
+/* Optimal container width for legal reading experience */
+.cf-legal-page .container {
+    max-width: 1260px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+/* 1. Legal Hero Section */
+.cf-legal-hero {
+    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+    padding-top: 56px;
+    padding-bottom: 52px;
+    border-bottom: 1px solid #E2E8F0;
+    position: relative;
+    overflow: hidden;
+}
+
+.cf-legal-hero .hero-ambient-glow {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1100px;
+    height: 480px;
+    background: radial-gradient(ellipse 65% 55% at 50% 0%, rgba(37, 99, 235, 0.12) 0%, rgba(124, 58, 237, 0.04) 50%, rgba(255, 255, 255, 0) 80%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cf-legal-hero-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+    color: #0F172A;
+}
+
+.cf-legal-hero-lead {
+    font-size: clamp(15px, 1.4vw, 16.5px);
+    max-width: 680px;
+    color: #475569;
+    line-height: 1.65;
+}
+
+.cf-legal-meta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    color: #2563EB;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+/* Feature/Trust chips */
+.cf-legal-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.cf-legal-chip:hover {
+    transform: translateY(-1px);
+    border-color: #CBD5E1;
+}
+
+.cf-legal-chip i {
+    font-size: 15px;
+    color: #2563EB;
+}
+
+/* 2. Legal Main Content Section */
+.cf-legal-content-section {
+    background-color: #F8FAFC;
+    padding-top: 54px;
+    padding-bottom: 80px;
+}
+
+/* 3. Sticky Sidebar Navigation */
+.cf-legal-toc-card {
+    position: sticky;
+    top: calc(var(--cf-header-h, 115px) + 20px) !important;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+    box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+    padding: 24px 20px;
+    margin-bottom: 24px;
+}
+
+.cf-legal-toc-title {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.cf-legal-toc-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: calc(100vh - 290px);
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.cf-legal-toc-nav::-webkit-scrollbar {
+    width: 4px;
+}
+.cf-legal-toc-nav::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+}
+
+.cf-legal-toc-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.cf-legal-toc-link:hover,
+.cf-legal-toc-link.active {
+    background: #EFF6FF;
+    color: #2563EB;
+    font-weight: 700;
+    transform: translateX(3px);
+}
+
+.cf-legal-toc-link .toc-num {
+    font-size: 11px;
+    font-weight: 800;
+    background: #E2E8F0;
+    color: #475569;
+    padding: 2px 6px;
+    border-radius: 6px;
+    min-width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+}
+
+.cf-legal-toc-link:hover .toc-num,
+.cf-legal-toc-link.active .toc-num {
+    background: #2563EB;
+    color: #FFFFFF;
+}
+
+/* Sidebar Quick Help Card */
+.cf-legal-help-card {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    border-radius: 16px;
+    padding: 22px 20px;
+    color: #FFFFFF;
+    margin-top: 20px;
+}
+
+.cf-legal-help-card h5 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 6px;
+}
+
+.cf-legal-help-card p {
+    font-size: 12.5px;
+    color: #94A3B8;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+/* 4. Legal Article Cards */
+.cf-legal-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+    padding: 36px 34px;
+    margin-bottom: 24px;
+    scroll-margin-top: calc(var(--cf-header-h, 115px) + 24px) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cf-legal-card:hover {
+    border-color: #CBD5E1;
+    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.06);
+}
+
+.cf-legal-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.cf-legal-section-tag {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #2563EB;
+    background: rgba(37, 99, 235, 0.08);
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.cf-legal-section-title {
+    font-size: 21px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cf-legal-section-title i {
+    font-size: 22px;
+    color: #2563EB;
+}
+
+.cf-legal-card p {
+    font-size: 14.5px;
+    color: #334155;
+    line-height: 1.72;
+    margin-bottom: 16px;
+}
+
+.cf-legal-card p:last-child {
+    margin-bottom: 0;
+}
+
+/* Custom list items */
+.cf-legal-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 18px;
+}
+
+.cf-legal-list li {
+    position: relative;
+    padding-left: 32px;
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.65;
+    margin-bottom: 11px;
+}
+
+.cf-legal-list li::before {
+    content: "\f00c";
+    font-family: "Line Awesome Free";
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    top: 2px;
+    font-size: 12px;
+    color: #10B981;
+    background: rgba(16, 185, 129, 0.12);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cf-legal-list.cf-list-prohibited li::before {
+    content: "\f00d";
+    color: #EF4444;
+    background: rgba(239, 68, 68, 0.12);
+}
+
+/* Callout alert cards */
+.cf-legal-callout {
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.cf-legal-callout-info {
+    background: #EFF6FF;
+    border-left: 4px solid #2563EB;
+    color: #1E40AF;
+}
+
+.cf-legal-callout-warning {
+    background: #FFFBEB;
+    border-left: 4px solid #F59E0B;
+    color: #92400E;
+}
+
+.cf-legal-callout-danger {
+    background: #FEF2F2;
+    border-left: 4px solid #EF4444;
+    color: #991B1B;
+}
+
+.cf-legal-callout i {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Mini service specs table inside legal card */
+.cf-legal-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 18px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #E2E8F0;
+    font-size: 13.5px;
+}
+
+.cf-legal-table th {
+    background: #F8FAFC;
+    color: #0F172A;
+    font-weight: 700;
+    padding: 13px 18px;
+    border-bottom: 1px solid #E2E8F0;
+    text-align: left;
+}
+
+.cf-legal-table td {
+    padding: 13px 18px;
+    border-bottom: 1px solid #F1F5F9;
+    color: #334155;
+}
+
+.cf-legal-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* 5. Responsive Padding & Spacing */
+@media (max-width: 991.98px) {
+    .cf-legal-hero {
+        padding-top: 40px;
+        padding-bottom: 38px;
+    }
+
+    .cf-legal-content-section {
+        padding-top: 36px;
+        padding-bottom: 60px;
+    }
+
+    .cf-legal-toc-card {
+        position: relative;
+        top: 0 !important;
+        margin-bottom: 28px;
+        padding: 22px 18px;
+    }
+
+    .cf-legal-toc-nav {
+        max-height: 260px;
+    }
+
+    .cf-legal-card {
+        padding: 28px 24px;
+        scroll-margin-top: 80px !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-legal-hero {
+        padding-top: 26px;
+        padding-bottom: 26px;
+    }
+
+    .cf-legal-content-section {
+        padding-top: 22px;
+        padding-bottom: 44px;
+    }
+
+    .cf-legal-hero-title {
+        font-size: 26px !important;
+    }
+
+    .cf-legal-hero-lead {
+        font-size: 13.5px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .cf-legal-toc-card {
+        padding: 18px 14px;
+        border-radius: 14px;
+    }
+
+    .cf-legal-card {
+        padding: 22px 16px;
+        border-radius: 16px;
+        margin-bottom: 18px;
+    }
+
+    .cf-legal-card-header {
+        margin-bottom: 14px;
+        padding-bottom: 12px;
+    }
+
+    .cf-legal-section-title {
+        font-size: 18px !important;
+    }
+
+    .cf-legal-callout {
+        padding: 12px 14px;
+        margin: 14px 0;
+        font-size: 13px;
+        gap: 10px;
+    }
+
+    .cf-legal-list li {
+        padding-left: 28px;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .cf-legal-table th,
+    .cf-legal-table td {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+}

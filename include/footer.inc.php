@@ -133,14 +133,14 @@
                         <ul class="cf-footer-links list-unstyled">
                             <li><a href="shared-hosting" class="cf-footer-link">Shared Hosting</a></li>
                             <li>
-                                <a href="vps-server" class="cf-footer-link d-inline-flex align-items-center gap-2">
+                                <a href="vps-hosting" class="cf-footer-link d-inline-flex align-items-center gap-2">
                                     <span>VPS Hosting</span>
                                     <span class="cf-nav-hot-pill">HOT</span>
                                 </a>
                             </li>
                             <li><a href="dedicated-server" class="cf-footer-link">Dedicated Servers</a></li>
                             <li><a href="domain" class="cf-footer-link">Domain Names</a></li>
-                            <li><a href="vps-server#storage-vps" class="cf-footer-link">Storage VPS</a></li>
+                            <li><a href="vps-hosting#storage-vps" class="cf-footer-link">Storage VPS</a></li>
                             <li><a href="shared-hosting#wordpress" class="cf-footer-link">WordPress Cloud</a></li>
                         </ul>
                     </div>
@@ -321,22 +321,54 @@
         <i class="las la-arrow-up"></i>
     </div>
 
-    <!-- Start of Delayed Tawk.to Script -->
+    <!-- Start of Tawk.to Script with on-demand openLiveChat helper -->
     <script type="text/javascript">
+        var tawkLoaded = false;
+        window.Tawk_API = window.Tawk_API || {};
+        window.Tawk_LoadStart = new Date();
+
+        function loadTawkTo(callback) {
+            if (tawkLoaded) {
+                if (callback) callback();
+                return;
+            }
+            tawkLoaded = true;
+            if (callback) {
+                var prevOnLoad = window.Tawk_API.onLoad;
+                window.Tawk_API.onLoad = function() {
+                    if (typeof prevOnLoad === 'function') prevOnLoad();
+                    callback();
+                };
+            }
+            var s1 = document.createElement("script"),
+                s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/675a684749e2fd8dfef6be84/1iesiemke';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        }
+
+        function openLiveChat(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function') {
+                window.Tawk_API.maximize();
+                return false;
+            }
+            loadTawkTo(function() {
+                if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function') {
+                    window.Tawk_API.maximize();
+                }
+            });
+            return false;
+        }
+
         window.addEventListener("load", function() {
             setTimeout(function() {
-                var Tawk_API = Tawk_API || {},
-                    Tawk_LoadStart = new Date();
-                (function() {
-                    var s1 = document.createElement("script"),
-                        s0 = document.getElementsByTagName("script")[0];
-                    s1.async = true;
-                    s1.src = 'https://embed.tawk.to/675a684749e2fd8dfef6be84/1iesiemke';
-                    s1.charset = 'UTF-8';
-                    s1.setAttribute('crossorigin', '*');
-                    s0.parentNode.insertBefore(s1, s0);
-                })();
-            }, 5000); // 5000ms = 5 seconds delay
+                if (!tawkLoaded) {
+                    loadTawkTo();
+                }
+            }, 4000); // 4000ms delay for optimal initial page load performance
         });
     </script>
-    <!-- End of Delayed Tawk.to Script -->
+    <!-- End of Tawk.to Script -->

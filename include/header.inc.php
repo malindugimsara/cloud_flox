@@ -37,7 +37,7 @@
                         <span class="d-sm-none">VPS &amp; Dedicated Servers — </span>
                         <span class="cf-promo-highlight">30% OFF</span>!
                     </span>
-                    <a href="vps-server" class="cf-promo-link">
+                    <a href="vps-hosting" class="cf-promo-link">
                         Claim <i class="las la-arrow-right"></i>
                     </a>
                 </div>
@@ -148,7 +148,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'vps-server.php' || $cfCurrentPage == 'vps-server') ? 'active' : ''; ?>" href="vps-server">
+                            <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'vps-hosting.php' || $cfCurrentPage == 'vps-hosting') ? 'active' : ''; ?>" href="vps-hosting">
                                 <i class="las la-server nav-icon-mobile d-lg-none"></i>
                                 <span>VPS Hosting</span>
                             </a>
@@ -211,7 +211,7 @@
 
             <div class="offer-popup__badge">Limited Offer</div>
 
-            <a href="vps-server">
+            <a href="vps-hosting">
                 <img src="assets/imgs/banners/cloudflox-cheap-web-hosting-usa.png" alt="Offer" width="100%" style="border-radius: 0px 0px 15px 15px;">
             </a>
             <label class="offer-popup__dont text-black d-none">
