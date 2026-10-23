@@ -12,5 +12,5 @@
 
           <!--build:css-->
           <link rel="stylesheet" href="assets/css/main.css">
-          <link rel="stylesheet" href="assets/css/cloudflox-redesign.css?v=70">
+          <link rel="stylesheet" href="assets/css/cloudflox-redesign.css?v=81">
           <!-- endbuild -->

@@ -171,6 +171,7 @@
                         </h6>
                         <ul class="cf-footer-links list-unstyled">
                             <li><a href="contact-us" class="cf-footer-link">Contact Specialist Team</a></li>
+                            <li><a href="blog/" class="cf-footer-link">Engineering &amp; Cloud Blog</a></li>
                             <li><a href="https://my.cloudflox.com/submitticket.php" class="cf-footer-link">Submit Support Ticket</a></li>
                             <li><a href="https://my.cloudflox.com/index.php?rp=/knowledgebase" class="cf-footer-link">Knowledgebase &amp; FAQs</a></li>
                             <li><a href="https://my.cloudflox.com/index.php?rp=/announcements" class="cf-footer-link">Network Announcements</a></li>

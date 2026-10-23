@@ -922,7 +922,7 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="cf-feature-box h-100 shadow-sm hover-shadow transition-all">
                         <div class="cf-card-icon-bubble bg-danger-subtle text-danger mb-3">
-                            <i class="las la-shield-virus"></i>
+                            <i class="las la-hdd"></i>
                         </div>
                         <h4 class="fw-bold text-slate-900 fs-18 mb-2">Imunify360 &amp; Multi-Tier DDoS</h4>
                         <p class="text-slate-600 fs-14 mb-0 lh-base">

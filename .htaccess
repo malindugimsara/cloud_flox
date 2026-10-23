@@ -20,7 +20,18 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
 # ---------------------------------
-# 4. Internally rewrite clean URLs to .php (supports optional trailing slash)
+# 4. Blog & Guides routing (/blog/ and /blog/{slug}/)
+# ---------------------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^blog/([a-zA-Z0-9_-]+)/?$ blog.php?slug=$1 [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^blog/?$ blog.php [QSA,L]
+
+# ---------------------------------
+# 5. Internally rewrite clean URLs to .php (supports optional trailing slash)
 # ---------------------------------
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f

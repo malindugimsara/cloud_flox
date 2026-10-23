@@ -15,14 +15,14 @@
     <meta name="keywords"
         content="dedicated servers, bare metal hosting, intel xeon dedicated server, amd ryzen server, cloudflox hosting, high performance bare metal, unmanaged dedicated hosting, enterprise server hosting">
     <meta name="author" content="CloudFlox">
-    <link rel="canonical" href="https://cloudflox.com/dedicated-servers">
+    <link rel="canonical" href="https://cloudflox.com/dedicated-server">
 
     <!-- Open Graph / Social Meta -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Enterprise Dedicated Servers — CloudFlox Bare Metal Hosting">
     <meta property="og:description"
         content="Maximum compute power, zero hypervisor overhead, and complete root control with Intel Xeon & AMD Ryzen dedicated servers starting at $79.00/mo.">
-    <meta property="og:url" content="https://cloudflox.com/dedicated-servers">
+    <meta property="og:url" content="https://cloudflox.com/dedicated-server">
     <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-dedicated-server-infrastructure.jpg">
     <meta property="og:site_name" content="CloudFlox">
 

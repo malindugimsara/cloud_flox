@@ -172,179 +172,155 @@
     </section><!-- /Hero -->
 
     <!-- =========================================================================
-         2. CONTACT INFO CARDS
-         ========================================================================= -->
-    <section class="cf-contact-cards-section">
-        <div class="container">
-            <div class="row g-4 justify-content-center">
-
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="cf-contact-info-card">
-                        <div class="cf-contact-info-icon bg-blue-subtle text-blue">
-                            <i class="las la-headset"></i>
-                        </div>
-                        <h3 class="fs-15 fw-bold text-slate-900 mb-1">Global Support</h3>
-                        <p class="fs-13 text-muted mb-0">24/7/365 Expert NOC</p>
-                        <p class="fs-13 text-muted mb-0">Response Time &lt; 15 Mins</p>
-                        <p class="fs-13 text-muted mb-0">
-                            <a href="https://my.cloudflox.com/submitticket.php" class="text-blue fw-semibold">Client Portal &rarr;</a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="cf-contact-info-card">
-                        <div class="cf-contact-info-icon bg-blue-subtle text-blue">
-                            <i class="las la-building"></i>
-                        </div>
-                        <h3 class="fs-15 fw-bold text-slate-900 mb-1">Headquarters</h3>
-                        <p class="fs-13 text-muted mb-0">CloudFlox LLC</p>
-                        <p class="fs-13 text-muted mb-0">2709 N Hayden Island Dr</p>
-                        <p class="fs-13 text-muted mb-0">Portland, OR 97217, USA</p>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="cf-contact-info-card">
-                        <div class="cf-contact-info-icon bg-blue-subtle text-blue">
-                            <i class="las la-envelope"></i>
-                        </div>
-                        <h3 class="fs-15 fw-bold text-slate-900 mb-1">Email</h3>
-                        <p class="fs-13 text-muted mb-0">
-                            <a href="mailto:support@cloudflox.com" class="text-slate-700">support@cloudflox.com</a>
-                        </p>
-                        <p class="fs-13 text-muted mb-0">
-                            <a href="mailto:sales@cloudflox.com" class="text-slate-700">sales@cloudflox.com</a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="cf-contact-info-card">
-                        <div class="cf-contact-info-icon bg-blue-subtle text-blue">
-                            <i class="las la-clock"></i>
-                        </div>
-                        <h3 class="fs-15 fw-bold text-slate-900 mb-1">Operations</h3>
-                        <p class="fs-13 text-muted mb-0">Cloud Hosting: 24/7/365</p>
-                        <p class="fs-13 text-muted mb-0">Billing: Mon - Fri (UTC)</p>
-                        <p class="fs-13 text-muted mb-0">Incident Desk: Always Active</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- =========================================================================
-         3. CONTACT FORM SECTION
+         3. CONTACT FORM SECTION (HIGH-CONVERSION HIGHLIGHTED FORM & SIDEBAR)
          ========================================================================= -->
     <section class="cf-contact-form-section" id="contactForm">
-        <div class="container">
+        <div class="container position-relative">
+
+            <!-- Ambient Glow behind form -->
+            <div class="cf-form-ambient-glow" aria-hidden="true"></div>
 
             <!-- Section Header -->
             <div class="text-center mb-5">
                 <div class="section-tag mx-auto mb-3">
                     <i class="las la-paper-plane me-1"></i> Send a Message
                 </div>
-                <h2 class="fs-32 fw-bold text-slate-900 mb-2">Get in Touch With Our Team</h2>
-                <p class="text-muted fs-15 mx-auto" style="max-width:520px;">
-                    Fill out the form below and one of our specialists will respond to your query as quickly as possible.
+                <h2 class="fs-32 fw-bold text-slate-900 mb-2">Get in Touch With Our Specialists</h2>
+                <p class="text-muted fs-15 mx-auto" style="max-width:540px;">
+                    Submit your inquiry below. Our team triages every submission immediately and will respond to your registered email address.
                 </p>
             </div>
 
-            <div class="row g-5 align-items-start justify-content-center">
+            <div class="row g-4 g-xl-5 align-items-stretch justify-content-center">
 
-                <!-- Form Card -->
-                <div class="col-12 col-lg-7">
-                    <div class="cf-contact-form-card">
+                <!-- Highlighted Form Card -->
+                <div class="col-12 col-lg-7 d-flex">
+                    <div class="cf-contact-form-card cf-form-card-highlighted position-relative w-100 h-100 d-flex flex-column">
+
+                        <!-- Form Top Gradient Accent -->
+                        <div class="cf-form-top-accent"></div>
+
+                        <!-- Form Header with Active Pulse Desk -->
+                        <div class="cf-form-inner-header mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div>
+                                <span class="cf-form-desk-badge mb-1">
+                                    <i class="las la-headset me-1"></i> Direct Message Dispatch
+                                </span>
+                                <h3 class="fs-20 fw-bold text-slate-900 mb-0">Send Us an Inquiry</h3>
+                            </div>
+                            <div class="cf-form-live-status">
+                                <span class="cf-chip-pulse"></span>
+                                <span class="cf-live-text">Desk Online</span>
+                                <span class="cf-live-sla">&lt; 15 Mins</span>
+                            </div>
+                        </div>
 
                         <!-- Active form -->
-                        <form id="c-f">
+                        <form id="c-f" class="d-flex flex-column h-100">
                             <div class="row g-3">
 
                                 <div class="col-12 col-sm-6">
                                     <div class="cf-form-group">
                                         <label class="cf-form-label" for="name">
-                                            Full Name <span class="text-danger">*</span>
+                                            <i class="las la-user me-1 text-primary"></i> Full Name <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" id="name"
-                                            placeholder="Enter your full name"
-                                            class="cf-form-input">
+                                        <div class="cf-input-wrapper">
+                                            <input type="text" id="name"
+                                                placeholder="Enter your full name"
+                                                class="cf-form-input">
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
                                     <div class="cf-form-group">
                                         <label class="cf-form-label" for="email">
-                                            Email Address <span class="text-danger">*</span>
+                                            <i class="las la-envelope me-1 text-primary"></i> Business Email <span class="text-danger">*</span>
                                         </label>
-                                        <input type="email" id="email"
-                                            placeholder="you@example.com"
-                                            class="cf-form-input">
+                                        <div class="cf-input-wrapper">
+                                            <input type="email" id="email"
+                                                placeholder="you@company.com"
+                                                class="cf-form-input">
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
                                     <div class="cf-form-group">
                                         <label class="cf-form-label" for="phone">
-                                            Phone <span class="text-muted fw-normal">(Optional)</span>
+                                            <i class="las la-phone me-1 text-primary"></i> Phone Number <span class="text-muted fw-normal">(Optional)</span>
                                         </label>
-                                        <input type="tel" id="phone"
-                                            placeholder="+1 (555) 000-0000"
-                                            class="cf-form-input">
+                                        <div class="cf-input-wrapper">
+                                            <input type="tel" id="phone"
+                                                placeholder="+1 (555) 000-0000"
+                                                class="cf-form-input">
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
                                     <div class="cf-form-group">
                                         <label class="cf-form-label" for="subject">
-                                            Subject
+                                            <i class="las la-tag me-1 text-primary"></i> Subject / Topic
                                         </label>
-                                        <input type="text" id="subject"
-                                            placeholder="e.g. Hosting setup / VPS upgrade"
-                                            class="cf-form-input">
+                                        <div class="cf-input-wrapper">
+                                            <input type="text" id="subject"
+                                                placeholder="e.g. VPS Upgrade / Custom Server / Migration"
+                                                class="cf-form-input">
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="col-12">
                                     <div class="cf-form-group">
                                         <label class="cf-form-label" for="message">
-                                            Message <span class="text-danger">*</span>
+                                            <i class="las la-comment-alt me-1 text-primary"></i> Your Message <span class="text-danger">*</span>
                                         </label>
-                                        <textarea id="message"
-                                            placeholder="Tell us what you need help with (domain, hosting plan, error message, etc.)"
-                                            class="cf-form-input cf-form-textarea"></textarea>
+                                        <div class="cf-input-wrapper">
+                                            <textarea id="message"
+                                                placeholder="Please provide details about your hosting requirements, domain names, current server setup, or specific assistance needed..."
+                                                class="cf-form-input cf-form-textarea"></textarea>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="col-12">
-                                    <div class="g-recaptcha" data-sitekey="6Le_PGssAAAAAIXSCvbRBvKbhGpoyiLAxd3fMA_H"></div>
+                                    <div class="cf-recaptcha-wrapper p-2 bg-slate-50 rounded-3 border">
+                                        <div class="g-recaptcha" data-sitekey="6Le_PGssAAAAAIXSCvbRBvKbhGpoyiLAxd3fMA_H"></div>
+                                    </div>
                                 </div>
 
                             </div><!-- /row -->
 
-                            <div class="d-flex gap-3 mt-4">
+                            <div class="mt-auto pt-4">
                                 <button type="button" id="form-btn" onclick="form_submit();"
-                                    class="cf-btn-contact-submit">
-                                    <i class="las la-paper-plane me-2"></i>
-                                    Send Message
+                                    class="cf-btn-contact-submit cf-btn-submit-highlighted w-100">
+                                    <i class="las la-paper-plane me-2 fs-18"></i>
+                                    <span>Send Priority Message</span>
                                 </button>
                                 <button type="button" id="form-btn2"
-                                    class="cf-btn-contact-submit d-none" disabled>
+                                    class="cf-btn-contact-submit cf-btn-submit-highlighted w-100 d-none" disabled>
                                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                    Sending...
+                                    <span>Transmitting Message...</span>
                                 </button>
+
+                                <!-- Trust Guarantee Footer -->
+                                <div class="cf-form-trust-footer mt-3 pt-3 border-top d-flex flex-wrap align-items-center justify-content-between gap-2 text-muted fs-12">
+                                    <span><i class="las la-shield-alt text-success me-1"></i> No spam guarantee</span>
+                                    <span><i class="las la-lock text-primary me-1"></i> 256-bit SSL encrypted</span>
+                                    <span><i class="las la-bolt text-warning me-1"></i> Direct engineer reply</span>
+                                </div>
                             </div>
 
                         </form>
 
                         <!-- Thank you state -->
-                        <div class="cf-contact-thankyou d-none" id="th-c-f">
+                        <div class="cf-contact-thankyou d-none my-auto" id="th-c-f">
                             <div class="text-center py-4">
                                 <img src="assets/imgs/success.gif" alt="Thank you" style="width: 220px; margin-bottom: 16px;">
-                                <h2 class="fs-22 fw-bold text-slate-900 mb-2">Message Sent!</h2>
-                                <p class="text-muted fs-14 mb-4">
-                                    Thank you for reaching out. We have received your message and will get back to you shortly.
+                                <h2 class="fs-24 fw-bold text-slate-900 mb-2">Message Transmitted!</h2>
+                                <p class="text-muted fs-14 mb-4 mx-auto" style="max-width:440px;">
+                                    Thank you for reaching out to CloudFlox. We have received your inquiry and our engineering team will get back to you shortly.
                                 </p>
                                 <a href="<?php echo $url; ?>" class="cf-btn-contact-outline">
                                     <i class="las la-home me-1"></i> Back to Home
@@ -355,75 +331,328 @@
                     </div><!-- /card -->
                 </div>
 
-                <!-- Sidebar -->
-                <div class="col-12 col-lg-4 col-xl-4">
+                <!-- Unified Sidebar Card: Why Work With CloudFlox & Quick Support (Exact Form Size & Height) -->
+                <div class="col-12 col-lg-5 col-xl-5 d-flex">
+                    <div class="cf-contact-sidebar-unified w-100 h-100 d-flex flex-column position-relative">
 
-                    <!-- Why Contact Us? -->
-                    <div class="cf-contact-sidebar-block mb-4">
-                        <h3 class="fs-15 fw-bold text-slate-900 mb-3">Why Contact CloudFlox?</h3>
-                        <ul class="cf-contact-sidebar-list">
-                            <li>
-                                <span class="cf-sidebar-icon bg-blue-subtle text-blue"><i class="las la-headset"></i></span>
-                                <div>
-                                    <strong>Expert Support</strong>
-                                    <p class="text-muted fs-13 mb-0">Our team specializes in web hosting, VPS, and server management.</p>
-                                </div>
-                            </li>
-                            <li>
-                                <span class="cf-sidebar-icon bg-blue-subtle text-blue"><i class="las la-bolt"></i></span>
-                                <div>
-                                    <strong>Fast Resolutions</strong>
-                                    <p class="text-muted fs-13 mb-0">Most tickets are resolved within the same business hour.</p>
-                                </div>
-                            </li>
-                            <li>
-                                <span class="cf-sidebar-icon bg-blue-subtle text-blue"><i class="las la-shield-alt"></i></span>
-                                <div>
-                                    <strong>Secure Communication</strong>
-                                    <p class="text-muted fs-13 mb-0">Your information is always encrypted and kept confidential.</p>
-                                </div>
-                            </li>
-                            <li>
-                                <span class="cf-sidebar-icon bg-blue-subtle text-blue"><i class="las la-comment-dots"></i></span>
-                                <div>
-                                    <strong>24/7 Online Support</strong>
-                                    <p class="text-muted fs-13 mb-0">Submit tickets anytime - our system is always open.</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                        <!-- Top Gradient Accent line matching form -->
+                        <div class="cf-sidebar-top-accent"></div>
 
-                    <!-- Quick Links -->
-                    <div class="cf-contact-sidebar-block">
-                        <h3 class="fs-15 fw-bold text-slate-900 mb-3">Quick Support Links</h3>
-                        <div class="d-flex flex-column gap-2">
-                            <a href="https://my.cloudflox.com" target="_blank" rel="noopener" class="cf-contact-quick-link">
-                                <i class="las la-user-circle me-2 text-blue"></i>
-                                Client Area Portal
-                                <i class="las la-arrow-right ms-auto text-muted"></i>
-                            </a>
-                            <a href="https://my.cloudflox.com/submitticket.php" target="_blank" rel="noopener" class="cf-contact-quick-link">
-                                <i class="las la-ticket-alt me-2 text-blue"></i>
-                                Open Support Ticket
-                                <i class="las la-arrow-right ms-auto text-muted"></i>
-                            </a>
-                            <a href="<?php echo $url; ?>budget-hosting" class="cf-contact-quick-link">
-                                <i class="las la-server me-2 text-blue"></i>
-                                Budget Hosting Plans
-                                <i class="las la-arrow-right ms-auto text-muted"></i>
-                            </a>
-                            <a href="<?php echo $url; ?>dedicated-server" class="cf-contact-quick-link">
-                                <i class="las la-database me-2 text-blue"></i>
-                                Dedicated Servers
-                                <i class="las la-arrow-right ms-auto text-muted"></i>
-                            </a>
+                        <!-- Card Header: Why Work With CloudFlox? -->
+                        <div class="cf-sidebar-unified-header mb-3 pb-3 border-bottom">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="cf-form-desk-badge">
+                                    <i class="las la-shield-alt me-1"></i> Enterprise SLA &amp; Support
+                                </span>
+                                <span class="badge bg-primary-subtle text-primary rounded-pill px-2 py-1 fs-11 fw-semibold">
+                                    24/7/365 NOC
+                                </span>
+                            </div>
+                            <h3 class="fs-20 fw-bold text-slate-900 mb-1">Why Work With CloudFlox?</h3>
+                            <p class="text-muted fs-13 mb-0">
+                                Direct sysadmin access, zero robotic delays, and enterprise cloud infrastructure.
+                            </p>
                         </div>
-                    </div>
 
+                        <!-- Why CloudFlox Core Pillars -->
+                        <div class="cf-sidebar-pillars-wrap mb-3">
+                            <ul class="cf-contact-sidebar-list">
+                                <li>
+                                    <span class="cf-sidebar-icon bg-blue-subtle text-blue"><i class="las la-headset"></i></span>
+                                    <div>
+                                        <strong class="text-slate-900 fs-13">Direct Sysadmin Access</strong>
+                                        <p class="text-muted fs-12 mb-0">No robotic scripts. Real infrastructure specialists handle and triage your inquiries.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="cf-sidebar-icon bg-purple-subtle text-purple"><i class="las la-bolt"></i></span>
+                                    <div>
+                                        <strong class="text-slate-900 fs-13">Sub-15 Minute Turnaround</strong>
+                                        <p class="text-muted fs-12 mb-0">High-priority ticket queues ensure emergency fixes and server reboots happen fast.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="cf-sidebar-icon bg-emerald-subtle text-emerald"><i class="las la-shield-alt"></i></span>
+                                    <div>
+                                        <strong class="text-slate-900 fs-13">Multi-Tbps DDoS Protection</strong>
+                                        <p class="text-muted fs-12 mb-0">Automated carrier-grade DDoS scrubbing shields every website, server, and DNS zone.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Quick Support Portals Section -->
+                        <div class="cf-sidebar-quick-section pt-3 border-top mt-auto">
+                            <div class="d-flex align-items-center justify-content-between mb-2 pb-1">
+                                <span class="fs-12 fw-bold text-slate-900 text-uppercase tracking-wider">
+                                    <i class="las la-bolt text-primary me-1"></i> Quick Support Portals
+                                </span>
+                                <span class="badge bg-slate-100 text-slate-600 rounded-pill px-2 py-0.5 fs-10 fw-semibold">Instant Access</span>
+                            </div>
+
+                            <div class="cf-quick-links-group d-flex flex-column gap-2">
+                                <!-- Link 1: Client Area Portal -->
+                                <a href="https://my.cloudflox.com" target="_blank" rel="noopener" class="cf-quick-action-card">
+                                    <div class="cf-quick-icon-wrap icon-theme-blue">
+                                        <i class="las la-user-circle"></i>
+                                    </div>
+                                    <div class="cf-quick-content">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <strong class="cf-quick-title">Client Area Portal</strong>
+                                            <span class="cf-quick-pill">my.cloudflox</span>
+                                        </div>
+                                        <span class="cf-quick-sub">Manage DNS, services &amp; billing</span>
+                                    </div>
+                                    <div class="cf-quick-arrow">
+                                        <i class="las la-arrow-right"></i>
+                                    </div>
+                                </a>
+
+                                <!-- Link 2: Open Support Ticket -->
+                                <a href="https://my.cloudflox.com/submitticket.php" target="_blank" rel="noopener" class="cf-quick-action-card">
+                                    <div class="cf-quick-icon-wrap icon-theme-purple">
+                                        <i class="las la-ticket-alt"></i>
+                                    </div>
+                                    <div class="cf-quick-content">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <strong class="cf-quick-title">Priority Support Ticket</strong>
+                                            <span class="cf-quick-pill pill-pulse">&lt; 15 Mins SLA</span>
+                                        </div>
+                                        <span class="cf-quick-sub">Direct NOC incident dispatch</span>
+                                    </div>
+                                    <div class="cf-quick-arrow">
+                                        <i class="las la-arrow-right"></i>
+                                    </div>
+                                </a>
+
+                                <!-- Link 3: High-Performance VPS -->
+                                <a href="<?php echo $url; ?>vps-server" class="cf-quick-action-card">
+                                    <div class="cf-quick-icon-wrap icon-theme-indigo">
+                                        <i class="las la-cloud"></i>
+                                    </div>
+                                    <div class="cf-quick-content">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <strong class="cf-quick-title">Cloud VPS Instances</strong>
+                                            <span class="cf-quick-pill">From $7.99</span>
+                                        </div>
+                                        <span class="cf-quick-sub">Pure NVMe storage with root access</span>
+                                    </div>
+                                    <div class="cf-quick-arrow">
+                                        <i class="las la-arrow-right"></i>
+                                    </div>
+                                </a>
+
+                                <!-- Link 4: Dedicated Servers -->
+                                <a href="<?php echo $url; ?>dedicated-server" class="cf-quick-action-card">
+                                    <div class="cf-quick-icon-wrap icon-theme-cyan">
+                                        <i class="las la-server"></i>
+                                    </div>
+                                    <div class="cf-quick-content">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <strong class="cf-quick-title">Dedicated Bare-Metal</strong>
+                                            <span class="cf-quick-pill">10Gbps</span>
+                                        </div>
+                                        <span class="cf-quick-sub">High-bandwidth raw compute</span>
+                                    </div>
+                                    <div class="cf-quick-arrow">
+                                        <i class="las la-arrow-right"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer Trust Note -->
+                        <div class="cf-sidebar-unified-footer mt-3 pt-3 border-top d-flex align-items-center justify-content-between text-muted fs-12">
+                            <span><i class="las la-check-circle text-success me-1"></i> 99.9% Network Uptime</span>
+                            <span><i class="las la-lock text-primary me-1"></i> 256-Bit SSL Secured</span>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </section><!-- /Contact Form -->
+
+    <!-- =========================================================================
+         2. DIRECT COMMUNICATION CHANNELS & SLA GUARANTEE HUB
+         ========================================================================= -->
+    <section class="cf-contact-channels-section">
+        <div class="container">
+
+            <!-- Section Header -->
+            <div class="text-center mb-5">
+                <div class="section-tag mx-auto mb-3">
+                    <i class="las la-headset me-1"></i> Fast-Track Channels
+                </div>
+                <h2 class="fs-24 fw-bold text-slate-900 mb-2">How Would You Like to Connect?</h2>
+                <p class="text-muted fs-15 mx-auto" style="max-width:560px;">
+                    Choose the fastest route for your request. Our specialized technical and enterprise teams are on standby 24/7/365.
+                </p>
+            </div>
+
+            <!-- 3 Modern Actionable Communication Hub Cards -->
+            <div class="row g-4 justify-content-center mb-4">
+
+                <!-- Channel 1: Technical & Incident Support -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="cf-channel-card cf-channel-card-support h-100">
+                        <div class="cf-channel-badge-top">
+                            <span class="cf-channel-chip chip-blue">
+                                <span class="cf-chip-pulse-dot"></span> Fastest Resolution
+                            </span>
+                        </div>
+                        <div class="cf-channel-icon-wrap icon-blue">
+                            <i class="las la-terminal"></i>
+                        </div>
+                        <h3 class="cf-channel-title">Priority NOC &amp; Ticket Desk</h3>
+                        <p class="cf-channel-desc">
+                            Active hosting, VPS reboot, DNS configuration, or server incident? Open a priority ticket with direct NOC engineer triage.
+                        </p>
+                        <div class="cf-channel-sla-pill">
+                            <i class="las la-stopwatch text-blue"></i>
+                            <span>Guaranteed <strong>&lt; 15 Mins</strong> Response SLA</span>
+                        </div>
+                        <div class="cf-channel-actions">
+                            <a href="https://my.cloudflox.com/submitticket.php" target="_blank" rel="noopener" class="cf-btn-channel-primary w-100">
+                                <span>Open Priority Ticket</span>
+                                <i class="las la-arrow-right ms-2"></i>
+                            </a>
+                            <div class="text-center mt-2">
+                                <a href="https://my.cloudflox.com" target="_blank" rel="noopener" class="cf-channel-sublink">
+                                    <i class="las la-sign-in-alt me-1"></i> Client Portal Login &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Channel 2: Solutions & Sales -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="cf-channel-card cf-channel-card-sales h-100">
+                        <div class="cf-channel-badge-top">
+                            <span class="cf-channel-chip chip-purple">
+                                <i class="las la-rocket me-1"></i> Custom Deployments
+                            </span>
+                        </div>
+                        <div class="cf-channel-icon-wrap icon-purple">
+                            <i class="las la-network-wired"></i>
+                        </div>
+                        <h3 class="cf-channel-title">Solutions &amp; Cloud Architects</h3>
+                        <p class="cf-channel-desc">
+                            Planning dedicated bare-metal, high-bandwidth clusters, or need seamless zero-downtime migration from another provider?
+                        </p>
+                        <div class="cf-channel-sla-pill">
+                            <i class="las la-file-invoice text-purple"></i>
+                            <span>Custom Quotes &amp; <strong>Free White-Glove Migration</strong></span>
+                        </div>
+                        <div class="cf-channel-actions">
+                            <a href="#contactForm" class="cf-btn-channel-secondary w-100">
+                                <span>Consult Cloud Architects</span>
+                                <i class="las la-arrow-down ms-2"></i>
+                            </a>
+                            <div class="text-center mt-2">
+                                <a href="mailto:sales@cloudflox.com" class="cf-channel-sublink">
+                                    <i class="las la-envelope me-1"></i> sales@cloudflox.com
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Channel 3: Direct Email & Executive Inquiries -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="cf-channel-card cf-channel-card-email h-100">
+                        <div class="cf-channel-badge-top">
+                            <span class="cf-channel-chip chip-emerald">
+                                <i class="las la-shield-alt me-1"></i> Verified Inboxes
+                            </span>
+                        </div>
+                        <div class="cf-channel-icon-wrap icon-emerald">
+                            <i class="las la-envelope-open-text"></i>
+                        </div>
+                        <h3 class="cf-channel-title">Direct Department Desks</h3>
+                        <p class="cf-channel-desc">
+                            Prefer communicating via email? Reach our specialized departments directly with failover round-the-clock monitoring.
+                        </p>
+                        <div class="cf-channel-emails-list">
+                            <div class="cf-channel-email-row">
+                                <span class="cf-email-label">Technical:</span>
+                                <a href="mailto:support@cloudflox.com" class="cf-email-val">support@cloudflox.com</a>
+                            </div>
+                            <div class="cf-channel-email-row">
+                                <span class="cf-email-label">Sales &amp; Billing:</span>
+                                <a href="mailto:sales@cloudflox.com" class="cf-email-val">sales@cloudflox.com</a>
+                            </div>
+                        </div>
+                        <div class="cf-channel-actions mt-auto">
+                            <a href="#contactForm" class="cf-btn-channel-emerald w-100">
+                                <span>Send Direct Message</span>
+                                <i class="las la-paper-plane ms-2"></i>
+                            </a>
+                            <div class="text-center mt-2">
+                                <span class="cf-channel-subtext">
+                                    <i class="las la-clock me-1"></i> 24/7 Monitored Dispatch
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Trust & SLA Guarantee Ribbon -->
+            <div class="cf-contact-sla-ribbon">
+                <div class="row g-3 align-items-center">
+                    <div class="col-6 col-md-3">
+                        <div class="cf-sla-item">
+                            <div class="cf-sla-icon text-blue">
+                                <i class="las la-bolt"></i>
+                            </div>
+                            <div>
+                                <strong class="cf-sla-title">&lt; 15 Mins SLA</strong>
+                                <span class="cf-sla-sub">Guaranteed response</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="cf-sla-item">
+                            <div class="cf-sla-icon text-purple">
+                                <i class="las la-shield-alt"></i>
+                            </div>
+                            <div>
+                                <strong class="cf-sla-title">Multi-Tbps DDoS</strong>
+                                <span class="cf-sla-sub">Always active protection</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="cf-sla-item">
+                            <div class="cf-sla-icon text-emerald">
+                                <i class="las la-user-shield"></i>
+                            </div>
+                            <div>
+                                <strong class="cf-sla-title">100% In-House</strong>
+                                <span class="cf-sla-sub">Real cloud sysadmins</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="cf-sla-item">
+                            <div class="cf-sla-icon text-cyan">
+                                <i class="las la-lock"></i>
+                            </div>
+                            <div>
+                                <strong class="cf-sla-title">256-Bit SSL</strong>
+                                <span class="cf-sla-sub">Zero-spam privacy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
 
     <!-- =========== Footer Area =========== -->
     <?php include 'include/footer.inc.php'; ?>

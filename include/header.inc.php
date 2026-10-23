@@ -166,6 +166,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'blog.php' || $cfCurrentPage == 'blog') ? 'active' : ''; ?>" href="blog/">
+                                <i class="las la-newspaper nav-icon-mobile d-lg-none"></i>
+                                <span>Blog</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'contact-us.php' || $cfCurrentPage == 'contact-us') ? 'active' : ''; ?>" href="contact-us">
                                 <i class="las la-envelope nav-icon-mobile d-lg-none"></i>
                                 <span>Contact Us</span>
@@ -190,14 +196,19 @@
     (function() {
         function checkHeaderScroll() {
             var nav = document.getElementById('mainNavbar');
+            var header = document.querySelector('.cf-header-wrapper');
             if (!nav) return;
-            if (window.scrollY > 30) {
+            var isScrolled = window.scrollY > 25;
+            if (isScrolled) {
                 nav.classList.add('scrolled');
+                if (header) header.classList.add('is-scrolled');
             } else {
                 nav.classList.remove('scrolled');
+                if (header) header.classList.remove('is-scrolled');
             }
         }
         window.addEventListener('scroll', checkHeaderScroll, { passive: true });
+        window.addEventListener('resize', checkHeaderScroll, { passive: true });
         checkHeaderScroll();
     })();
     </script>

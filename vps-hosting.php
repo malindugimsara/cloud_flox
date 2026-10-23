@@ -9,30 +9,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Title -->
-    <title>High-Performance Cloud VPS Hosting | Linux &amp; Windows Virtual Servers - CloudFlox</title>
+    <title>High-Performance Linux Cloud VPS Hosting | CloudFlox</title>
 
     <!-- SEO Meta -->
     <meta name="description"
-        content="Deploy ultra-fast KVM Cloud VPS hosting with CloudFlox. Pure NVMe/SSD storage, guaranteed CPU &amp; RAM, full root access, 1Gbps network, and 99.95% uptime SLA starting at $40.46/mo.">
+        content="Deploy scalable, isolated Linux Cloud VPS hosting with CloudFlox starting at just $7.99/mo. High-speed NVMe/SSD storage, full root access, 1Gbps network, and 99.95% uptime SLA.">
     <meta name="keywords"
-        content="cloud vps hosting, linux vps, windows vps, kvm virtual servers, ssd vps, nvme vps, root access vps, ddos protected vps, scalable cloud hosting, cloudflox vps">
+        content="linux cloud vps, kvm vps hosting, linux vps hosting, affordable vps, cloudflox vps, launch scale pro power vps, root access vps">
     <meta name="author" content="CloudFlox">
-    <link rel="canonical" href="https://cloudflox.com/vps-server">
+    <link rel="canonical" href="https://cloudflox.com/vps-hosting">
 
     <!-- Open Graph (Facebook / LinkedIn) -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="High-Performance Cloud VPS Hosting | CloudFlox">
+    <meta property="og:title" content="High-Performance Linux Cloud VPS Hosting | CloudFlox">
     <meta property="og:description"
-        content="Launch ultra-fast Linux &amp; Windows VPS servers with dedicated KVM resources, SSD/NVMe speed, 1Gbps network, and 24/7 human engineering support.">
-    <meta property="og:url" content="https://cloudflox.com/vps-server">
+        content="Launch scalable Linux Cloud VPS servers with KVM isolation, NVMe/SSD speed, 1Gbps network, and full root access starting at $7.99/mo.">
+    <meta property="og:url" content="https://cloudflox.com/vps-hosting">
     <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-vps-infrastructure.jpg">
     <meta property="og:site_name" content="CloudFlox">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="High-Performance Cloud VPS Hosting | CloudFlox">
+    <meta name="twitter:title" content="High-Performance Linux Cloud VPS Hosting | CloudFlox">
     <meta name="twitter:description"
-        content="Deploy dedicated KVM cloud virtual private servers with 1Gbps uplink, full root access, and 99.95% SLA.">
+        content="Deploy scalable KVM Linux virtual private servers with 1Gbps uplink, full root access, and 99.95% SLA starting at $7.99/mo.">
     <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-vps-infrastructure.jpg">
 
     <!-- Structured Data (JSON-LD) for SEO -->
@@ -42,8 +42,8 @@
       "@graph": [
         {
           "@type": "Product",
-          "name": "CloudFlox KVM Cloud VPS Hosting",
-          "description": "High-performance virtual private servers with dedicated KVM resources, enterprise SSD storage, full root access, and 1Gbps network.",
+          "name": "CloudFlox Linux Cloud VPS Hosting",
+          "description": "High-performance Linux virtual private servers with KVM isolation, NVMe/SSD storage, full root access, and 1Gbps network.",
           "brand": {
             "@type": "Brand",
             "name": "CloudFlox"
@@ -51,9 +51,9 @@
           "offers": {
             "@type": "AggregateOffer",
             "priceCurrency": "USD",
-            "lowPrice": "40.46",
-            "highPrice": "65.46",
-            "offerCount": "6"
+            "lowPrice": "7.99",
+            "highPrice": "44.99",
+            "offerCount": "4"
           }
         },
         {
@@ -69,7 +69,7 @@
               "@type": "ListItem",
               "position": 2,
               "name": "VPS Hosting",
-              "item": "https://cloudflox.com/vps-server"
+              "item": "https://cloudflox.com/vps-hosting"
             }
           ]
         }
@@ -121,7 +121,7 @@
                     <!-- Hero Badge -->
                     <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-cyan-subtle text-cyan fw-bold fs-13 mb-3 border border-cyan-subtle">
                         <span class="cf-pulse-dot-cyan"></span>
-                        <span>100% KVM VIRTUALIZATION &amp; GUARANTEED RESOURCES</span>
+                        <span>100% KVM VIRTUALIZATION &amp; ISOLATED RESOURCES</span>
                     </div>
 
                     <!-- Hero Title -->
@@ -132,13 +132,13 @@
 
                     <!-- Hero Lead -->
                     <p class="cf-vps-hero-lead text-slate-600 mb-4 lh-base">
-                        Deploy scalable, isolated virtual private servers powered by Intel high-frequency compute, pure SSD storage, and 1Gbps uplink. Full root/administrator access with instant 60-second automated provisioning.
+                        Deploy scalable, isolated virtual private servers powered by high-frequency compute, pure NVMe/SSD storage, and 1Gbps uplink. Full root/administrator access with fast automated cloud provisioning.
                     </p>
 
                     <!-- Trust Chips -->
                     <div class="d-flex flex-wrap gap-2 mb-4 pb-2">
                         <span class="cf-feature-chip">
-                            <i class="las la-microchip text-primary"></i> Guaranteed vCPU &amp; ECC RAM
+                            <i class="las la-microchip text-primary"></i> High-Speed vCPU &amp; ECC Memory
                         </span>
                         <span class="cf-feature-chip">
                             <i class="las la-hdd text-info"></i> Pure SSD / NVMe Storage
@@ -153,7 +153,7 @@
                             <i class="las la-shield-alt text-danger"></i> Multi-Tbps DDoS Defense
                         </span>
                         <span class="cf-feature-chip">
-                            <i class="las la-check-circle text-success"></i> 99.95% Hardware SLA
+                            <i class="las la-check-circle text-success"></i> 99.95% Network &amp; Hardware SLA
                         </span>
                     </div>
 
@@ -189,11 +189,11 @@
                             <div class="cf-hero-float-chip float-chip-top shadow-sm">
                                 <span class="cf-pulse-dot-cyan"></span>
                                 <div class="text-start">
-                                    <span class="d-block cf-chip-sub">KVM Cloud VPS From</span>
-                                    <strong class="cf-chip-val text-cyan">$40.46<small class="text-muted fw-normal">/mo</small></strong>
+                                    <span class="d-block cf-chip-sub">Linux Cloud VPS From</span>
+                                    <strong class="cf-chip-val text-cyan">$7.99<small class="text-muted fw-normal">/mo</small></strong>
                                 </div>
                                 <span class="badge bg-cyan-subtle text-cyan fw-bold px-2 py-1 rounded-pill ms-2 fs-11">
-                                    Instant Deploy
+                                    Root Access
                                 </span>
                             </div>
 
@@ -230,91 +230,86 @@
             <!-- Section Header -->
             <div class="text-center max-w-750 mx-auto mb-4 mb-md-5">
                 <span class="badge bg-cyan-subtle text-cyan fw-bold px-3 py-1 rounded-pill mb-2 border border-cyan-subtle">
-                    TRANSPARENT CLOUD SERVER PRICING
+                    PROVISIONAL LINUX VPS PRICING
                 </span>
                 <h2 class="display-6 fw-extrabold text-slate-900 mb-2">
-                    Scalable VPS Plans Tailored to Your Workload
+                    Scalable Cloud VPS Plans Tailored to Your Workload
                 </h2>
                 <p class="text-slate-600 fs-16 mb-0">
-                    Run production websites, custom APIs, microservices, and enterprise databases on dedicated resources with zero noisy neighbors and zero virtualization overhead.
+                    Launch, Scale, Pro, and Power tiers engineered for developers and growing businesses. Transparent monthly USD pricing with full root control and KVM isolation.
                 </p>
             </div>
 
             <!-- OS Architecture Switcher (Linux VPS vs Windows VPS) -->
-            <div class="d-flex justify-content-center mb-4">
+            <div class="d-flex justify-content-center mb-3">
                 <div class="cf-vps-os-switch" role="tablist">
                     <button type="button" class="cf-vps-os-btn active linux-active" id="btnOsLinux" role="tab" aria-selected="true" aria-controls="paneLinux">
                         <i class="lab la-linux fs-18"></i>
                         <span class="cf-os-tag">Linux VPS</span>
-                        <span class="cf-os-badge-count">3 Plans</span>
+                        <span class="cf-os-badge-count">4 Plans</span>
                     </button>
                     <button type="button" class="cf-vps-os-btn" id="btnOsWindows" role="tab" aria-selected="false" aria-controls="paneWindows">
                         <i class="lab la-windows fs-18"></i>
                         <span class="cf-os-tag">Windows VPS</span>
-                        <span class="cf-os-badge-count">3 Plans</span>
+                        <span class="cf-os-badge-count">On Demand</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Billing Cycle Switcher (Monthly / Annually 15% Off) -->
-            <div class="pricing-switch-container mb-4 mb-md-5">
-                <div class="pricing-switch-pill">
-                    <button type="button" class="switch-opt active" id="btnMonthly">
-                        <span>Monthly</span>
-                    </button>
-                    <button type="button" class="switch-opt" id="btnYearly">
-                        <span>Annual Billing</span>
-                        <span class="discount-pill">Save 15%</span>
-                    </button>
+            <!-- Provisional Status Notice Pill -->
+            <div class="d-flex justify-content-center mb-4 mb-md-5">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1-5 rounded-pill bg-light border border-slate-200 text-slate-700 fs-13">
+                    <i class="las la-tag text-cyan fs-15"></i>
+                    <span><strong>Proposed Monthly Rates:</strong> Billed in USD &bull; WHMCS Provisioning Verification in Progress</span>
                 </div>
             </div>
 
-            <!-- TAB PANE: LINUX VPS -->
+            <!-- TAB PANE: LINUX VPS (4 TIERS) -->
             <div id="paneLinux">
                 <div class="row g-4 align-items-stretch justify-content-center">
 
-                    <!-- Plan 1: Starter VPS -->
-                    <div class="col-12 col-md-6 col-lg-4">
+                    <!-- Plan 1: Launch VPS ($7.99) -->
+                    <div class="col-12 col-md-6 col-xl-3">
                         <div class="cf-vps-card">
                             <div class="cf-vps-card-header">
                                 <div class="cf-vps-icon-wrap bg-cyan-subtle text-cyan">
-                                    <i class="las la-server"></i>
+                                    <i class="las la-rocket"></i>
                                 </div>
                                 <div>
                                     <span class="badge bg-light text-slate-700 fw-bold fs-11 px-2 py-1 rounded-pill mb-1">Entry Tier</span>
-                                    <h3 class="cf-vps-card-title">Starter VPS</h3>
-                                    <p class="cf-vps-card-sub">Development &amp; Small Web Apps</p>
+                                    <h3 class="cf-vps-card-title">Launch VPS</h3>
+                                    <p class="cf-vps-card-sub">Dev, Testing &amp; Microservices</p>
                                 </div>
                             </div>
 
                             <div class="cf-vps-price-wrap">
                                 <div class="d-flex align-items-baseline justify-content-center gap-1">
-                                    <span class="cf-vps-amount" data-monthly="40.46" data-yearly="34.39">$40.46</span>
+                                    <span class="cf-vps-amount" data-monthly="7.99">$7.99</span>
                                     <span class="cf-vps-period">/ month</span>
                                 </div>
-                                <div class="fs-12 text-muted mt-1 billing-note">Billed monthly &bull; ex VAT</div>
+                                <div class="fs-12 text-muted mt-1 billing-note">Proposed monthly rate &bull; ex VAT</div>
                             </div>
 
                             <ul class="cf-vps-specs-list">
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-microchip"></i></span>
-                                    <span><strong>Intel E3-1240 V2</strong> (4 Cores)</span>
+                                    <span><strong>1 vCPU</strong> High-Speed Core</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-memory"></i></span>
-                                    <span><strong>8 GB</strong> Dedicated ECC RAM</span>
+                                    <span><strong>2 GB</strong> High-Performance RAM</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-hdd"></i></span>
-                                    <span><strong>480 GB</strong> High-Speed SSD</span>
+                                    <span><strong>30 GB</strong> Pure NVMe / SSD</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-network-wired"></i></span>
-                                    <span><strong>1 Gbit</strong> Port Speed</span>
+                                    <span><strong>1 Gbit</strong> Port Uplink</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-exchange-alt"></i></span>
-                                    <span><strong>10 TB</strong> Monthly Bandwidth</span>
+                                    <span><strong>1 TB</strong> Monthly Data Transfer</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-globe"></i></span>
@@ -322,7 +317,7 @@
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-shield-alt"></i></span>
-                                    <span><strong>Multi-Tbps</strong> DDoS Protection</span>
+                                    <span><strong>Multi-Tbps</strong> DDoS Defense</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-terminal"></i></span>
@@ -330,22 +325,90 @@
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-check-circle"></i></span>
-                                    <span><strong>99.95%</strong> Hardware SLA</span>
+                                    <span><strong>99.95%</strong> Network SLA</span>
                                 </li>
                             </ul>
 
                             <a href="https://my.cloudflox.com/cart.php?a=add&pid=1" class="cf-btn-vps-order">
-                                <span>Deploy Starter VPS</span>
+                                <span>Deploy Launch VPS</span>
                                 <i class="las la-arrow-right"></i>
                             </a>
                         </div>
                     </div>
 
-                    <!-- Plan 2: Professional VPS (Popular / 30% Sale) -->
-                    <div class="col-12 col-md-6 col-lg-4">
+                    <!-- Plan 2: Scale VPS ($14.99) -->
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <div class="cf-vps-card">
+                            <div class="cf-vps-card-header">
+                                <div class="cf-vps-icon-wrap bg-cyan-subtle text-cyan">
+                                    <i class="las la-server"></i>
+                                </div>
+                                <div>
+                                    <span class="badge bg-light text-slate-700 fw-bold fs-11 px-2 py-1 rounded-pill mb-1">Growth Tier</span>
+                                    <h3 class="cf-vps-card-title">Scale VPS</h3>
+                                    <p class="cf-vps-card-sub">Fast-Growing Apps &amp; APIs</p>
+                                </div>
+                            </div>
+
+                            <div class="cf-vps-price-wrap">
+                                <div class="d-flex align-items-baseline justify-content-center gap-1">
+                                    <span class="cf-vps-amount" data-monthly="14.99">$14.99</span>
+                                    <span class="cf-vps-period">/ month</span>
+                                </div>
+                                <div class="fs-12 text-muted mt-1 billing-note">Proposed monthly rate &bull; ex VAT</div>
+                            </div>
+
+                            <ul class="cf-vps-specs-list">
+                                <li>
+                                    <span class="cf-vps-spec-icon"><i class="las la-microchip"></i></span>
+                                    <span><strong>2 vCPU</strong> High-Speed Cores</span>
+                                </li>
+                                <li>
+                                    <span class="cf-vps-spec-icon"><i class="las la-memory"></i></span>
+                                    <span><strong>4 GB</strong> High-Performance RAM</span>
+                                </li>
+                                <li>
+                                    <span class="cf-vps-spec-icon"><i class="las la-hdd"></i></span>
+                                    <span><strong>60 GB</strong> Pure NVMe / SSD</span>
+                                </li>
+                                <li>
+                                    <span class="cf-vps-spec-icon"><i class="las la-network-wired"></i></span>
+                                    <span><strong>1 Gbit</strong> Port Uplink</span>
+                                </li>
+                                <li>
+                                    <span class="cf-vps-spec-icon"><i class="las la-exchange-alt"></i></span>
+                                    <span><strong>2 TB</strong> Monthly Data Transfer</span>
+                                </li>
+                                <li>
+                                    <span class="cf-vps-spec-icon"><i class="las la-globe"></i></span>
+                                    <span><strong>1 Dedicated</strong> IPv4 Address</span>
+                                </li>
+                                <li>
+                                    <span class="cf-vps-spec-icon"><i class="las la-shield-alt"></i></span>
+                                    <span><strong>Multi-Tbps</strong> DDoS Defense</span>
+                                </li>
+                                <li>
+                                    <span class="cf-vps-spec-icon"><i class="las la-terminal"></i></span>
+                                    <span><strong>Full Root</strong> Access &amp; Web KVM</span>
+                                </li>
+                                <li>
+                                    <span class="cf-vps-spec-icon"><i class="las la-check-circle"></i></span>
+                                    <span><strong>99.95%</strong> Network SLA</span>
+                                </li>
+                            </ul>
+
+                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=2" class="cf-btn-vps-order">
+                                <span>Deploy Scale VPS</span>
+                                <i class="las la-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Plan 3: Pro VPS ($29.99 - Popular / Best Value) -->
+                    <div class="col-12 col-md-6 col-xl-3">
                         <div class="cf-vps-card popular">
                             <div class="cf-vps-popular-badge">
-                                <i class="las la-fire me-1"></i> Most Popular &bull; 30% Off
+                                <i class="las la-fire me-1"></i> Most Popular Tier
                             </div>
 
                             <div class="cf-vps-card-header">
@@ -354,45 +417,41 @@
                                 </div>
                                 <div>
                                     <span class="badge bg-cyan-subtle text-cyan fw-bold fs-11 px-2 py-1 rounded-pill mb-1">Production Ready</span>
-                                    <h3 class="cf-vps-card-title">Professional VPS</h3>
-                                    <p class="cf-vps-card-sub">High-Traffic Websites &amp; SaaS</p>
+                                    <h3 class="cf-vps-card-title">Pro VPS</h3>
+                                    <p class="cf-vps-card-sub">Websites, SaaS &amp; Databases</p>
                                 </div>
                             </div>
 
                             <div class="cf-vps-price-wrap" style="background: rgba(6, 182, 212, 0.05); border-color: rgba(6, 182, 212, 0.2);">
                                 <div class="d-flex align-items-baseline justify-content-center gap-1">
-                                    <span class="cf-vps-amount text-cyan" data-monthly="50.46" data-yearly="42.89">$50.46</span>
+                                    <span class="cf-vps-amount text-cyan" data-monthly="29.99">$29.99</span>
                                     <span class="cf-vps-period">/ month</span>
                                 </div>
                                 <div class="fs-12 text-muted mt-1 billing-note">
-                                    <span class="text-decoration-line-through text-muted me-1">$72.00</span> 30% Sale applied &bull; ex VAT
+                                    Best performance value &bull; ex VAT
                                 </div>
                             </div>
 
                             <ul class="cf-vps-specs-list">
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-microchip"></i></span>
-                                    <span><strong>Intel E3-1240 V2</strong> (High Clock)</span>
+                                    <span><strong>4 vCPU</strong> High-Speed Cores</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-memory"></i></span>
-                                    <span><strong>8 GB</strong> High-Performance ECC RAM</span>
+                                    <span><strong>8 GB</strong> High-Performance RAM</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-hdd"></i></span>
-                                    <span><strong>480 GB</strong> Enterprise Grade SSD</span>
+                                    <span><strong>120 GB</strong> Pure NVMe / SSD</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-network-wired"></i></span>
-                                    <span><strong>1 Gbit</strong> Port Speed (Unmetered)</span>
+                                    <span><strong>1 Gbit</strong> Priority Port Uplink</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-exchange-alt"></i></span>
-                                    <span><strong>10 TB</strong> Monthly Transfer</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-tachometer-alt"></i></span>
-                                    <span><strong>2 TB</strong> Priority High-Speed Bandwidth</span>
+                                    <span><strong>4 TB</strong> Monthly Data Transfer</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-globe"></i></span>
@@ -403,81 +462,85 @@
                                     <span><strong>Advanced</strong> DDoS Packet Scrubbing</span>
                                 </li>
                                 <li>
+                                    <span class="cf-vps-spec-icon"><i class="las la-terminal"></i></span>
+                                    <span><strong>Full Root</strong> Access &amp; Web KVM</span>
+                                </li>
+                                <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-headset"></i></span>
-                                    <span><strong>24/7 Priority</strong> Engineering Support</span>
+                                    <span><strong>24/7 Priority</strong> Human Support</span>
                                 </li>
                             </ul>
 
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=2" class="cf-btn-vps-order">
-                                <span>Deploy Professional VPS</span>
+                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=3" class="cf-btn-vps-order">
+                                <span>Deploy Pro VPS</span>
                                 <i class="las la-arrow-right"></i>
                             </a>
                         </div>
                     </div>
 
-                    <!-- Plan 3: Business Enterprise VPS -->
-                    <div class="col-12 col-md-6 col-lg-4">
+                    <!-- Plan 4: Power VPS ($44.99) -->
+                    <div class="col-12 col-md-6 col-xl-3">
                         <div class="cf-vps-card">
                             <div class="cf-vps-card-header">
                                 <div class="cf-vps-icon-wrap bg-cyan-subtle text-cyan">
                                     <i class="las la-cubes"></i>
                                 </div>
                                 <div>
-                                    <span class="badge bg-light text-slate-700 fw-bold fs-11 px-2 py-1 rounded-pill mb-1">Enterprise Workloads</span>
-                                    <h3 class="cf-vps-card-title">Business VPS</h3>
-                                    <p class="cf-vps-card-sub">ERP, Databases &amp; Heavy Clusters</p>
+                                    <span class="badge bg-light text-slate-700 fw-bold fs-11 px-2 py-1 rounded-pill mb-1">High Performance</span>
+                                    <h3 class="cf-vps-card-title">Power VPS</h3>
+                                    <p class="cf-vps-card-sub">Heavy Stacks &amp; Clusters</p>
                                 </div>
                             </div>
 
                             <div class="cf-vps-price-wrap">
                                 <div class="d-flex align-items-baseline justify-content-center gap-1">
-                                    <span class="cf-vps-amount" data-monthly="65.46" data-yearly="55.64">$65.46</span>
+                                    <span class="cf-vps-amount" data-monthly="44.99">$44.99</span>
                                     <span class="cf-vps-period">/ month</span>
                                 </div>
-                                <div class="fs-12 text-muted mt-1 billing-note">Or Custom Scaled &bull; ex VAT</div>
+                                <div class="fs-12 text-muted mt-1 billing-note">Proposed monthly rate &bull; ex VAT</div>
                             </div>
 
                             <ul class="cf-vps-specs-list">
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-microchip"></i></span>
-                                    <span><strong>8 Cores</strong> Dedicated Compute</span>
+                                    <span><strong>8 vCPU</strong> High-Speed Cores</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-memory"></i></span>
-                                    <span><strong>16 GB</strong> High-Performance ECC RAM</span>
+                                    <span><strong>16 GB</strong> High-Performance RAM</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-hdd"></i></span>
-                                    <span><strong>960 GB</strong> Enterprise SSD Storage</span>
+                                    <span><strong>240 GB</strong> Pure NVMe / SSD</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-network-wired"></i></span>
-                                    <span><strong>1 Gbit</strong> Redundant Uplink</span>
+                                    <span><strong>1 Gbit</strong> Redundant Port Uplink</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-exchange-alt"></i></span>
-                                    <span><strong>20 TB</strong> Monthly Bandwidth</span>
+                                    <span><strong>8 TB</strong> Monthly Data Transfer</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-globe"></i></span>
-                                    <span><strong>2 Dedicated</strong> IPv4 Addresses</span>
+                                    <span><strong>1 Dedicated</strong> IPv4 Address</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-shield-alt"></i></span>
-                                    <span><strong>Automated</strong> Firewall &amp; AI Defense</span>
+                                    <span><strong>Advanced</strong> AI DDoS Mitigation</span>
                                 </li>
                                 <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-sync"></i></span>
-                                    <span><strong>Automated</strong> Daily Server Snapshots</span>
+                                    <span class="cf-vps-spec-icon"><i class="las la-terminal"></i></span>
+                                    <span><strong>Full Root</strong> Access &amp; Web KVM</span>
                                 </li>
                                 <li>
                                     <span class="cf-vps-spec-icon"><i class="las la-user-tie"></i></span>
-                                    <span><strong>Dedicated</strong> Account Manager</span>
+                                    <span><strong>24/7 Dedicated</strong> Engineering Support</span>
                                 </li>
                             </ul>
 
-                            <a href="contact-us" class="cf-btn-vps-order">
-                                <span>Request Business Quote</span>
+                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=4" class="cf-btn-vps-order">
+                                <span>Deploy Power VPS</span>
                                 <i class="las la-arrow-right"></i>
                             </a>
                         </div>
@@ -486,208 +549,58 @@
                 </div>
             </div>
 
-            <!-- TAB PANE: WINDOWS VPS -->
+            <!-- TAB PANE: WINDOWS VPS (On-Demand / Quote based without publishing unverified prices) -->
             <div id="paneWindows" class="d-none">
-                <div class="row g-4 align-items-stretch justify-content-center">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-8">
+                        <div class="cf-vps-card text-center p-4 p-md-5">
+                            <div class="cf-vps-icon-wrap bg-primary-subtle text-primary mx-auto mb-3" style="width: 64px; height: 64px; font-size: 32px;">
+                                <i class="lab la-windows"></i>
+                            </div>
+                            <span class="badge bg-primary-subtle text-primary fw-bold fs-12 px-3 py-1 rounded-pill mb-2">
+                                ENTERPRISE WINDOWS SERVER
+                            </span>
+                            <h3 class="display-6 fw-bold text-slate-900 mb-2">
+                                Windows VPS Environments On Demand
+                            </h3>
+                            <p class="text-slate-600 fs-16 mb-4 max-w-650 mx-auto lh-base">
+                                Windows Server 2022 and 2019 editions with full Remote Desktop (RDP) Administrator access, MSSQL, and IIS readiness are available via custom order while automated provisioning integration is verified. Contact our engineering team for instant quotes and custom resource sizing.
+                            </p>
 
-                    <!-- Win Plan 1 -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="cf-vps-card">
-                            <div class="cf-vps-card-header">
-                                <div class="cf-vps-icon-wrap bg-primary-subtle text-primary">
-                                    <i class="lab la-windows"></i>
+                            <div class="row g-3 justify-content-center mb-4 text-start max-w-600 mx-auto">
+                                <div class="col-12 col-sm-6">
+                                    <div class="d-flex align-items-center gap-2 text-slate-700 fs-14">
+                                        <i class="las la-check-circle text-primary fs-18"></i>
+                                        <span>Windows Server 2022 / 2019</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span class="badge bg-light text-slate-700 fw-bold fs-11 px-2 py-1 rounded-pill mb-1">Windows Starter</span>
-                                    <h3 class="cf-vps-card-title">Windows SG1</h3>
-                                    <p class="cf-vps-card-sub">Remote Desktop &amp; Basic Workloads</p>
+                                <div class="col-12 col-sm-6">
+                                    <div class="d-flex align-items-center gap-2 text-slate-700 fs-14">
+                                        <i class="las la-check-circle text-primary fs-18"></i>
+                                        <span>Full Remote Desktop (RDP) Admin</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="d-flex align-items-center gap-2 text-slate-700 fs-14">
+                                        <i class="las la-check-circle text-primary fs-18"></i>
+                                        <span>MSSQL &amp; ASP.NET Optimized</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="d-flex align-items-center gap-2 text-slate-700 fs-14">
+                                        <i class="las la-check-circle text-primary fs-18"></i>
+                                        <span>Dedicated IPv4 &amp; 1Gbps Uplink</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="cf-vps-price-wrap">
-                                <div class="d-flex align-items-baseline justify-content-center gap-1">
-                                    <span class="cf-vps-amount" data-monthly="40.46" data-yearly="34.39">$40.46</span>
-                                    <span class="cf-vps-period">/ month</span>
-                                </div>
-                                <div class="fs-12 text-muted mt-1 billing-note">Billed monthly &bull; ex VAT</div>
+                            <div>
+                                <a href="contact-us" class="btn btn-primary px-4 py-3 rounded-3 fw-bold fs-15 shadow-sm">
+                                    <i class="las la-envelope me-1"></i> Request Windows Server VPS Quote
+                                </a>
                             </div>
-
-                            <ul class="cf-vps-specs-list">
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-microchip"></i></span>
-                                    <span><strong>Intel E3-1240 V2</strong> (4 Cores)</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-memory"></i></span>
-                                    <span><strong>8 GB</strong> Dedicated RAM</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-hdd"></i></span>
-                                    <span><strong>480 GB</strong> High-Speed SSD</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="lab la-windows"></i></span>
-                                    <span><strong>Windows Server</strong> 2022 / 2019 Ready</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-desktop"></i></span>
-                                    <span><strong>Remote Desktop (RDP)</strong> Full Admin</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-globe"></i></span>
-                                    <span><strong>1 Dedicated</strong> IPv4 Address</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-network-wired"></i></span>
-                                    <span><strong>1 Gbit</strong> Port Speed &bull; 10 TB Transfer</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-check-circle"></i></span>
-                                    <span><strong>99.95%</strong> Hardware SLA</span>
-                                </li>
-                            </ul>
-
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=4" class="cf-btn-vps-order">
-                                <span>Deploy Windows SG1</span>
-                                <i class="las la-arrow-right"></i>
-                            </a>
                         </div>
                     </div>
-
-                    <!-- Win Plan 2 -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="cf-vps-card popular">
-                            <div class="cf-vps-popular-badge">
-                                <i class="las la-star me-1"></i> Best for Teams &bull; 30% Off
-                            </div>
-
-                            <div class="cf-vps-card-header">
-                                <div class="cf-vps-icon-wrap bg-primary-subtle text-primary">
-                                    <i class="lab la-windows"></i>
-                                </div>
-                                <div>
-                                    <span class="badge bg-primary-subtle text-primary fw-bold fs-11 px-2 py-1 rounded-pill mb-1">Windows Pro</span>
-                                    <h3 class="cf-vps-card-title">Windows Partner Pro</h3>
-                                    <p class="cf-vps-card-sub">MSSQL, ASP.NET &amp; Remote Teams</p>
-                                </div>
-                            </div>
-
-                            <div class="cf-vps-price-wrap" style="background: rgba(37, 99, 235, 0.05); border-color: rgba(37, 99, 235, 0.2);">
-                                <div class="d-flex align-items-baseline justify-content-center gap-1">
-                                    <span class="cf-vps-amount text-primary" data-monthly="50.46" data-yearly="42.89">$50.46</span>
-                                    <span class="cf-vps-period">/ month</span>
-                                </div>
-                                <div class="fs-12 text-muted mt-1 billing-note">
-                                    <span class="text-decoration-line-through text-muted me-1">$72.00</span> 30% Sale applied &bull; ex VAT
-                                </div>
-                            </div>
-
-                            <ul class="cf-vps-specs-list">
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-microchip"></i></span>
-                                    <span><strong>Intel E3-1240 V2</strong> (High Clock)</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-memory"></i></span>
-                                    <span><strong>8 GB</strong> High-Performance ECC RAM</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-hdd"></i></span>
-                                    <span><strong>480 GB</strong> Enterprise Grade SSD</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="lab la-windows"></i></span>
-                                    <span><strong>Windows Server</strong> 2022 Datacenter</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-desktop"></i></span>
-                                    <span><strong>Remote Desktop (RDP)</strong> + Multi-User</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-database"></i></span>
-                                    <span><strong>MSSQL &amp; IIS</strong> Optimized</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-shield-alt"></i></span>
-                                    <span><strong>Multi-Tbps</strong> DDoS Protection</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-headset"></i></span>
-                                    <span><strong>24/7 Engineering</strong> Priority Support</span>
-                                </li>
-                            </ul>
-
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=5" class="cf-btn-vps-order" style="border-color: #2563EB; color: #2563EB;">
-                                <span>Deploy Windows Partner Pro</span>
-                                <i class="las la-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Win Plan 3 -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="cf-vps-card">
-                            <div class="cf-vps-card-header">
-                                <div class="cf-vps-icon-wrap bg-primary-subtle text-primary">
-                                    <i class="lab la-windows"></i>
-                                </div>
-                                <div>
-                                    <span class="badge bg-light text-slate-700 fw-bold fs-11 px-2 py-1 rounded-pill mb-1">Windows Enterprise</span>
-                                    <h3 class="cf-vps-card-title">Windows Enterprise</h3>
-                                    <p class="cf-vps-card-sub">Heavy Windows Application Workloads</p>
-                                </div>
-                            </div>
-
-                            <div class="cf-vps-price-wrap">
-                                <div class="d-flex align-items-baseline justify-content-center gap-1">
-                                    <span class="cf-vps-amount" data-monthly="65.46" data-yearly="55.64">$65.46</span>
-                                    <span class="cf-vps-period">/ month</span>
-                                </div>
-                                <div class="fs-12 text-muted mt-1 billing-note">Or Custom Quote &bull; ex VAT</div>
-                            </div>
-
-                            <ul class="cf-vps-specs-list">
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-microchip"></i></span>
-                                    <span><strong>8 Cores</strong> Dedicated Compute</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-memory"></i></span>
-                                    <span><strong>16 GB</strong> High-Performance ECC RAM</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-hdd"></i></span>
-                                    <span><strong>960 GB</strong> Enterprise SSD Storage</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="lab la-windows"></i></span>
-                                    <span><strong>Windows Server</strong> 2022 / 2019</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-globe"></i></span>
-                                    <span><strong>2 Dedicated</strong> IPv4 Addresses</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-network-wired"></i></span>
-                                    <span><strong>1 Gbit</strong> Redundant Uplink</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-shield-alt"></i></span>
-                                    <span><strong>Enterprise</strong> Firewall &amp; Anti-DDoS</span>
-                                </li>
-                                <li>
-                                    <span class="cf-vps-spec-icon"><i class="las la-user-tie"></i></span>
-                                    <span><strong>Dedicated</strong> Account Manager</span>
-                                </li>
-                            </ul>
-
-                            <a href="contact-us" class="cf-btn-vps-order">
-                                <span>Request Windows Quote</span>
-                                <i class="las la-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
@@ -699,7 +612,7 @@
                 </div>
                 <div class="guarantee-badge">
                     <i class="las la-bolt text-cyan"></i>
-                    <span><strong>Instant</strong> Automated Deployment</span>
+                    <span><strong>Automated</strong> Cloud Provisioning</span>
                 </div>
                 <div class="guarantee-badge">
                     <i class="las la-shield-alt text-cyan"></i>
@@ -869,40 +782,38 @@
                     <table class="cf-vps-table">
                         <thead>
                             <tr>
-                                <th scope="col" style="min-width: 240px;">Hardware Specifications</th>
-                                <th scope="col" class="plan-col">Starter VPS</th>
+                                <th scope="col" style="min-width: 240px;">Specifications</th>
+                                <th scope="col" class="plan-col">Launch VPS</th>
+                                <th scope="col" class="plan-col">Scale VPS</th>
                                 <th scope="col" class="plan-col popular-vps-th">
-                                    Professional VPS <br>
+                                    Pro VPS <br>
                                     <span class="badge bg-cyan-subtle text-cyan fw-bold fs-11 mt-1">Popular</span>
                                 </th>
-                                <th scope="col" class="plan-col">Business VPS</th>
+                                <th scope="col" class="plan-col">Power VPS</th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- Category: Compute & Processing -->
                             <tr class="cat-header">
-                                <td colspan="4"><i class="las la-microchip me-1 text-cyan"></i> Compute &amp; Processing Power</td>
+                                <td colspan="5"><i class="las la-microchip me-1 text-cyan"></i> Compute &amp; Processing Power</td>
                             </tr>
                             <tr>
                                 <td>CPU Architecture</td>
-                                <td class="plan-val">Intel E3-1240 V2</td>
-                                <td class="plan-val fw-bold text-cyan">Intel E3-1240 V2 (High Clock)</td>
-                                <td class="plan-val">Multi-Core Dedicated Intel</td>
+                                <td class="plan-val">High-Frequency vCPU</td>
+                                <td class="plan-val">High-Frequency vCPU</td>
+                                <td class="plan-val fw-bold text-cyan">High-Frequency vCPU</td>
+                                <td class="plan-val">High-Frequency vCPU</td>
                             </tr>
                             <tr>
                                 <td>CPU Cores</td>
-                                <td class="plan-val">4 Dedicated Cores</td>
-                                <td class="plan-val fw-bold text-slate-900">4 Cores / 8 Threads</td>
-                                <td class="plan-val">8 Dedicated Cores</td>
-                            </tr>
-                            <tr>
-                                <td>Base / Boost Frequency</td>
-                                <td class="plan-val">3.40 GHz / 3.80 GHz</td>
-                                <td class="plan-val">3.40 GHz / 3.80 GHz</td>
-                                <td class="plan-val">Up to 4.20 GHz Boost</td>
+                                <td class="plan-val">1 vCPU Core</td>
+                                <td class="plan-val">2 vCPU Cores</td>
+                                <td class="plan-val fw-bold text-slate-900">4 vCPU Cores</td>
+                                <td class="plan-val">8 vCPU Cores</td>
                             </tr>
                             <tr>
                                 <td>Virtualization Hypervisor</td>
+                                <td class="plan-val"><span class="badge bg-light text-slate-700">100% KVM</span></td>
                                 <td class="plan-val"><span class="badge bg-light text-slate-700">100% KVM</span></td>
                                 <td class="plan-val"><span class="badge bg-cyan-subtle text-cyan">100% KVM</span></td>
                                 <td class="plan-val"><span class="badge bg-light text-slate-700">100% KVM</span></td>
@@ -910,74 +821,70 @@
 
                             <!-- Category: Memory & Storage -->
                             <tr class="cat-header">
-                                <td colspan="4"><i class="las la-hdd me-1 text-cyan"></i> Memory &amp; Storage Architecture</td>
+                                <td colspan="5"><i class="las la-hdd me-1 text-cyan"></i> Memory &amp; Storage Architecture</td>
                             </tr>
                             <tr>
-                                <td>Dedicated ECC Memory</td>
-                                <td class="plan-val">8 GB ECC RAM</td>
-                                <td class="plan-val fw-bold text-slate-900">8 GB High-Speed ECC</td>
-                                <td class="plan-val">16 GB High-Speed ECC</td>
+                                <td>High-Performance Memory</td>
+                                <td class="plan-val">2 GB RAM</td>
+                                <td class="plan-val">4 GB RAM</td>
+                                <td class="plan-val fw-bold text-slate-900">8 GB High-Speed RAM</td>
+                                <td class="plan-val">16 GB High-Speed RAM</td>
                             </tr>
                             <tr>
                                 <td>Storage Capacity</td>
-                                <td class="plan-val">480 GB SSD</td>
-                                <td class="plan-val fw-bold text-slate-900">480 GB Enterprise SSD</td>
-                                <td class="plan-val">960 GB Enterprise SSD</td>
+                                <td class="plan-val">30 GB NVMe / SSD</td>
+                                <td class="plan-val">60 GB NVMe / SSD</td>
+                                <td class="plan-val fw-bold text-slate-900">120 GB NVMe / SSD</td>
+                                <td class="plan-val">240 GB NVMe / SSD</td>
                             </tr>
                             <tr>
                                 <td>Storage Technology</td>
-                                <td class="plan-val">Solid State (SSD)</td>
-                                <td class="plan-val">Enterprise Grade SSD</td>
-                                <td class="plan-val">NVMe / Enterprise SSD</td>
-                            </tr>
-                            <tr>
-                                <td>RAID Protection</td>
-                                <td class="plan-val"><i class="las la-check text-success fs-18"></i> RAID 10 Array</td>
-                                <td class="plan-val"><i class="las la-check text-success fs-18"></i> RAID 10 Array</td>
-                                <td class="plan-val"><i class="las la-check text-success fs-18"></i> Enterprise RAID</td>
+                                <td class="plan-val">Pure NVMe / SSD</td>
+                                <td class="plan-val">Pure NVMe / SSD</td>
+                                <td class="plan-val">Pure NVMe / SSD</td>
+                                <td class="plan-val">Pure NVMe / SSD</td>
                             </tr>
 
                             <!-- Category: Network & Bandwidth -->
                             <tr class="cat-header">
-                                <td colspan="4"><i class="las la-network-wired me-1 text-cyan"></i> Network &amp; Connectivity</td>
+                                <td colspan="5"><i class="las la-network-wired me-1 text-cyan"></i> Network &amp; Connectivity</td>
                             </tr>
                             <tr>
                                 <td>Port Uplink Speed</td>
                                 <td class="plan-val">1 Gbit Port</td>
-                                <td class="plan-val fw-bold text-slate-900">1 Gbit Port Speed</td>
-                                <td class="plan-val">1 Gbit Redundant Port</td>
+                                <td class="plan-val">1 Gbit Port</td>
+                                <td class="plan-val fw-bold text-slate-900">1 Gbit Priority</td>
+                                <td class="plan-val">1 Gbit Redundant</td>
                             </tr>
                             <tr>
                                 <td>Monthly Data Transfer</td>
-                                <td class="plan-val">10 TB Transfer</td>
-                                <td class="plan-val fw-bold text-slate-900">10 TB Transfer</td>
-                                <td class="plan-val">20 TB Transfer</td>
-                            </tr>
-                            <tr>
-                                <td>High-Speed Bandwidth</td>
-                                <td class="plan-val">2 TB</td>
-                                <td class="plan-val fw-bold text-cyan">2 TB Priority Tier</td>
-                                <td class="plan-val">5 TB Priority Tier</td>
+                                <td class="plan-val">1 TB Transfer</td>
+                                <td class="plan-val">2 TB Transfer</td>
+                                <td class="plan-val fw-bold text-slate-900">4 TB Transfer</td>
+                                <td class="plan-val">8 TB Transfer</td>
                             </tr>
                             <tr>
                                 <td>Dedicated IPv4 Addresses</td>
                                 <td class="plan-val">1 Dedicated IP</td>
+                                <td class="plan-val">1 Dedicated IP</td>
                                 <td class="plan-val fw-bold text-slate-900">1 Dedicated IP</td>
-                                <td class="plan-val">2 Dedicated IPs</td>
+                                <td class="plan-val">1 Dedicated IP (+Extra)</td>
                             </tr>
                             <tr>
                                 <td>DDoS Defense Capacity</td>
                                 <td class="plan-val">Multi-Tbps Filtering</td>
-                                <td class="plan-val fw-bold text-slate-900">Multi-Tbps Real-Time</td>
-                                <td class="plan-val">Advanced AI Scrubbing</td>
+                                <td class="plan-val">Multi-Tbps Filtering</td>
+                                <td class="plan-val fw-bold text-slate-900">Advanced Packet Scrubbing</td>
+                                <td class="plan-val">Advanced AI Mitigation</td>
                             </tr>
 
                             <!-- Category: Control & Management -->
                             <tr class="cat-header">
-                                <td colspan="4"><i class="las la-terminal me-1 text-cyan"></i> Control, Access &amp; Support</td>
+                                <td colspan="5"><i class="las la-terminal me-1 text-cyan"></i> Control, Access &amp; Support</td>
                             </tr>
                             <tr>
                                 <td>Root / Admin Access</td>
+                                <td class="plan-val"><i class="las la-check text-success fs-18"></i> Full Root Access</td>
                                 <td class="plan-val"><i class="las la-check text-success fs-18"></i> Full Root Access</td>
                                 <td class="plan-val"><i class="las la-check text-success fs-18"></i> Full Root Access</td>
                                 <td class="plan-val"><i class="las la-check text-success fs-18"></i> Full Root Access</td>
@@ -987,24 +894,28 @@
                                 <td class="plan-val"><i class="las la-check text-success fs-18"></i> Web VNC Console</td>
                                 <td class="plan-val"><i class="las la-check text-success fs-18"></i> Web VNC Console</td>
                                 <td class="plan-val"><i class="las la-check text-success fs-18"></i> Web VNC Console</td>
+                                <td class="plan-val"><i class="las la-check text-success fs-18"></i> Web VNC Console</td>
                             </tr>
                             <tr>
                                 <td>1-Click OS Reinstalls</td>
                                 <td class="plan-val"><i class="las la-check text-success fs-18"></i> Unlimited</td>
                                 <td class="plan-val"><i class="las la-check text-success fs-18"></i> Unlimited</td>
                                 <td class="plan-val"><i class="las la-check text-success fs-18"></i> Unlimited</td>
+                                <td class="plan-val"><i class="las la-check text-success fs-18"></i> Unlimited</td>
                             </tr>
                             <tr>
-                                <td>SLA Guarantee</td>
-                                <td class="plan-val">99.95% Uptime SLA</td>
-                                <td class="plan-val fw-bold text-slate-900">99.95% Uptime SLA</td>
-                                <td class="plan-val">99.95% Hardware SLA</td>
+                                <td>Network SLA</td>
+                                <td class="plan-val">99.95% Network SLA</td>
+                                <td class="plan-val">99.95% Network SLA</td>
+                                <td class="plan-val fw-bold text-slate-900">99.95% Network SLA</td>
+                                <td class="plan-val">99.95% Network SLA</td>
                             </tr>
                             <tr>
-                                <td>Engineering Support</td>
+                                <td>Human Engineering Support</td>
+                                <td class="plan-val">24/7 Standard Helpdesk</td>
                                 <td class="plan-val">24/7 Standard Helpdesk</td>
                                 <td class="plan-val fw-bold text-cyan">24/7 Priority Support</td>
-                                <td class="plan-val">24/7 Dedicated Architect</td>
+                                <td class="plan-val">24/7 Dedicated Support</td>
                             </tr>
                             <!-- Pricing Row -->
                             <tr class="cf-vps-price-row">
@@ -1021,10 +932,20 @@
                                     <div class="cf-vps-price-box-mini">
                                         <div class="cf-vps-price-figure">
                                             <span class="cf-vps-price-currency">$</span>
-                                            <span class="cf-vps-price-val">40.46</span>
+                                            <span class="cf-vps-price-val">7.99</span>
                                             <span class="cf-vps-price-cycle">/mo</span>
                                         </div>
-                                        <span class="cf-vps-price-hint">Starter Dedicated Core</span>
+                                        <span class="cf-vps-price-hint">Launch Tier</span>
+                                    </div>
+                                </td>
+                                <td class="plan-val">
+                                    <div class="cf-vps-price-box-mini">
+                                        <div class="cf-vps-price-figure">
+                                            <span class="cf-vps-price-currency">$</span>
+                                            <span class="cf-vps-price-val">14.99</span>
+                                            <span class="cf-vps-price-cycle">/mo</span>
+                                        </div>
+                                        <span class="cf-vps-price-hint">Scale Tier</span>
                                     </div>
                                 </td>
                                 <td class="plan-val popular-vps-td">
@@ -1034,20 +955,20 @@
                                         </span>
                                         <div class="cf-vps-price-figure text-cyan">
                                             <span class="cf-vps-price-currency">$</span>
-                                            <span class="cf-vps-price-val">50.46</span>
+                                            <span class="cf-vps-price-val">29.99</span>
                                             <span class="cf-vps-price-cycle">/mo</span>
                                         </div>
-                                        <span class="cf-vps-price-hint text-cyan fw-semibold">High Clock &bull; 8 Threads</span>
+                                        <span class="cf-vps-price-hint text-cyan fw-semibold">Pro Tier</span>
                                     </div>
                                 </td>
                                 <td class="plan-val">
                                     <div class="cf-vps-price-box-mini">
                                         <div class="cf-vps-price-figure">
                                             <span class="cf-vps-price-currency">$</span>
-                                            <span class="cf-vps-price-val">65.46</span>
+                                            <span class="cf-vps-price-val">44.99</span>
                                             <span class="cf-vps-price-cycle">/mo</span>
                                         </div>
-                                        <span class="cf-vps-price-hint">Custom Enterprise Node</span>
+                                        <span class="cf-vps-price-hint">Power Tier</span>
                                     </div>
                                 </td>
                             </tr>
@@ -1059,25 +980,31 @@
                                         <span class="cf-vps-row-icon is-rocket"><i class="las la-rocket"></i></span>
                                         <div>
                                             <span class="d-block fw-bold text-slate-900 fs-15">Deploy Server</span>
-                                            <span class="d-block text-slate-500 fs-12">Provision in &lt; 60 seconds</span>
+                                            <span class="d-block text-slate-500 fs-12">Automated cloud provisioning</span>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="plan-val">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=1" class="cf-vps-action-btn btn-starter" aria-label="Deploy Starter VPS">
-                                        <span>Deploy Starter</span>
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=1" class="cf-vps-action-btn btn-starter" aria-label="Deploy Launch VPS">
+                                        <span>Deploy Launch</span>
+                                        <i class="las la-arrow-right"></i>
+                                    </a>
+                                </td>
+                                <td class="plan-val">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=2" class="cf-vps-action-btn btn-starter" aria-label="Deploy Scale VPS">
+                                        <span>Deploy Scale</span>
                                         <i class="las la-arrow-right"></i>
                                     </a>
                                 </td>
                                 <td class="plan-val popular-vps-td">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=2" class="cf-vps-action-btn btn-popular" aria-label="Deploy Professional VPS">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=3" class="cf-vps-action-btn btn-popular" aria-label="Deploy Pro VPS">
                                         <span>Deploy Pro</span>
                                         <i class="las la-bolt"></i>
                                     </a>
                                 </td>
                                 <td class="plan-val">
-                                    <a href="contact-us" class="cf-vps-action-btn btn-business" aria-label="Configure Business VPS">
-                                        <span>Configure VPS</span>
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=4" class="cf-vps-action-btn btn-business" aria-label="Deploy Power VPS">
+                                        <span>Deploy Power</span>
                                         <i class="las la-sliders-h"></i>
                                     </a>
                                 </td>
@@ -1315,13 +1242,13 @@
                     <div class="col-12 col-lg-8">
                         <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 text-white fs-13 mb-3 border border-white border-opacity-20">
                             <i class="las la-rocket text-warning"></i>
-                            <span>INSTANT AUTOMATED DEPLOYMENT</span>
+                            <span>RAPID CLOUD DEPLOYMENT</span>
                         </div>
                         <h3 class="display-6 fw-bold mb-3" style="color: #ffffff !important;">
-                            Launch Your High-Performance Cloud VPS Server in 60 Seconds.
+                            Launch Your High-Performance Linux Cloud VPS Server Today.
                         </h3>
                         <p class="text-slate-300 fs-16 mb-0 lh-base max-w-750">
-                            Experience the speed and autonomy of pure KVM cloud servers with Intel compute, SSD storage, and 1Gbps uplink backed by 24/7 human engineering support starting at just <strong>$40.46/month</strong>.
+                            Experience the speed and autonomy of pure KVM cloud servers with high-frequency compute, NVMe/SSD storage, and 1Gbps uplink backed by 24/7 human engineering support starting at just <strong>$7.99/month</strong>.
                         </p>
                     </div>
                     <div class="col-12 col-lg-4 text-lg-end">
