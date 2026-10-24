@@ -93,7 +93,7 @@ $cfFooterUrl = $url ?? '/';
                 <div class="col-lg-4 col-md-12">
                     <div class="cf-footer-brand-wrap pe-lg-4">
                         <a href="<?php echo $cfFooterUrl; ?>" class="d-inline-block mb-3">
-                            <img src="<?php echo $cfFooterUrl; ?>assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox Cloud Hosting" class="cf-footer-logo-img">
+                            <img src="<?php echo $cfFooterUrl; ?>assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox Cloud Hosting" class="cf-footer-logo-img" width="200" height="47" loading="lazy">
                         </a>
                         <p class="cf-footer-brand-desc">
                             Enterprise-grade cloud infrastructure engineered for velocity. Deploy ultra-fast NVMe VPS, dedicated bare-metal servers, and secure cloud hosting with 99.99% guaranteed uptime and 24/7 human engineering support.
@@ -273,7 +273,7 @@ $cfFooterUrl = $url ?? '/';
                             <span>Accepted Payment Methods:</span>
                         </span>
                         <div class="cf-payment-pill-card">
-                            <img src="<?php echo $cfFooterUrl; ?>assets/imgs/payments.webp" alt="Visa, Mastercard, American Express, PayPal, USDT Payments" class="cf-payment-img">
+                            <img src="<?php echo $cfFooterUrl; ?>assets/imgs/payments.webp" alt="Visa, Mastercard, American Express, PayPal, USDT Payments" class="cf-payment-img" width="300" height="49" loading="lazy">
                         </div>
                     </div>
 

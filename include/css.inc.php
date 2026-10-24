@@ -4,12 +4,17 @@
           <!--favicon icon-->
           <link rel="icon" href="assets/imgs/logos/cloud-flox-fav.webp" type="image/webp" sizes="16x16">
 
-          <!-- Google Fonts & Line Awesome Icons -->
+          <!-- Google Fonts (Non-Blocking Asynchronous Load) -->
           <link rel="preconnect" href="https://fonts.googleapis.com">
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-          <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+          <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap">
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
+          <noscript>
+              <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap">
+          </noscript>
 
-          <!--build:css-->
-          <link rel="stylesheet" href="assets/css/main.css">
+          <!-- Preload Core Stylesheets for Fastest First Paint -->
+          <link rel="preload" href="assets/css/main.min.css" as="style">
+          <link rel="preload" href="assets/css/cloudflox-redesign.css?v=83" as="style">
+          <link rel="stylesheet" href="assets/css/main.min.css">
           <link rel="stylesheet" href="assets/css/cloudflox-redesign.css?v=83">
-          <!-- endbuild -->

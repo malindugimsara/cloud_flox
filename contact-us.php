@@ -44,8 +44,10 @@
     <!-- =========== CSS Area =========== -->
     <?php include 'include/css.inc.php'; ?>
     <!-- =========== CSS Area =========== -->
-    <!-- toast -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" />
+    <!-- toast (Non-Blocking) -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" as="style">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"></noscript>
 </head>
 
 <body class="pure-white-theme cf-contact-page">

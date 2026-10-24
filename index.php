@@ -33,8 +33,10 @@
         content="Deploy high-speed NVMe cloud hosting, scalable VPS, and dedicated enterprise servers with CloudFlox. Enjoy free SSL, free migrations, and 24/7 expert human support.">
     <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/dedicated-server-components.webp">
 
-    <!-- Preload Hero Image for LCP Optimization -->
-    <link rel="preload" as="image" href="assets/imgs/banners/banner.webp" type="image/webp"
+    <!-- Preload Hero Image for LCP Optimization (Responsive Mobile & Desktop) -->
+    <link rel="preload" as="image" href="assets/imgs/banners/banner-sm.webp" media="(max-width: 576px)" type="image/webp"
+        fetchpriority="high">
+    <link rel="preload" as="image" href="assets/imgs/banners/banner.webp" media="(min-width: 577px)" type="image/webp"
         fetchpriority="high">
 
     <!-- Schema.org Structured Data for SEO -->
@@ -72,8 +74,10 @@
     }
     </script>
 
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Swiper CSS (Non-Blocking) -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" as="style">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"></noscript>
 
     <!-- =========== CSS Area =========== -->
     <?php include 'include/css.inc.php'; ?>
@@ -164,10 +168,11 @@
                         <!-- Main 3D Cloud Infrastructure Graphic -->
                         <div class="hero-image-wrapper">
                             <picture>
+                                <source media="(max-width: 576px)" srcset="assets/imgs/banners/banner-sm.webp" type="image/webp">
                                 <source srcset="assets/imgs/banners/banner.webp" type="image/webp">
                                 <img src="assets/imgs/banners/banner.webp"
                                     alt="CloudFlox Next-Gen High-Speed Cloud Hosting Infrastructure with NVMe Gen4 Storage and Global Network"
-                                    class="hero-main-img img-fluid" width="1024" height="768" fetchpriority="high"
+                                    class="hero-main-img img-fluid" width="1024" height="765" fetchpriority="high"
                                     loading="eager">
                             </picture>
                         </div>
@@ -3315,7 +3320,7 @@
                         <!-- Parallax Background Image Wrapper -->
                         <div class="review-visual-bg-wrapper">
                             <img src="assets/imgs/testimonials-team.webp" alt="CloudFlox Infrastructure Team"
-                                class="review-parallax-img" id="reviewParallaxImg" loading="lazy">
+                                class="review-parallax-img" id="reviewParallaxImg" width="600" height="804" loading="lazy">
                         </div>
 
                         <!-- Top Tag on Image -->

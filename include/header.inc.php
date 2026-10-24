@@ -64,7 +64,7 @@
             <div class="container">
                 <!-- Brand Logo -->
                 <a class="navbar-brand cf-brand-logo" href="<?php echo $url;?>">
-                    <img src="assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox Cloud Hosting" class="cf-logo-img">
+                    <img src="assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox Cloud Hosting" class="cf-logo-img" width="200" height="47">
                 </a>
 
                 <!-- Mobile Hamburger Toggler -->
@@ -222,7 +222,7 @@
             <div class="offer-popup__badge">Limited Offer</div>
 
             <a href="vps-hosting">
-                <img src="assets/imgs/banners/cloudflox-cheap-web-hosting-usa.webp" alt="Offer" width="100%" style="border-radius: 0px 0px 15px 15px;">
+                <img src="assets/imgs/banners/cloudflox-cheap-web-hosting-usa.webp" alt="Offer" width="640" height="427" style="width: 100%; height: auto; border-radius: 0px 0px 15px 15px;" loading="lazy">
             </a>
             <label class="offer-popup__dont text-black d-none">
                 <input type="checkbox" id="dontShowOffer" checked>
