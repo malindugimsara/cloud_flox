@@ -156,17 +156,17 @@
             primaryHtml = `
                 <div class="cf-domain-card cf-domain-card-taken">
                     <div class="cf-domain-card-left">
-                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
                             <span class="cf-badge-taken">
                                 <i class="las la-times-circle"></i> Already Registered
                             </span>
-                            <span class="text-muted fs-12">Unavailable for new registration</span>
+                            <span class="cf-domain-subtitle-taken">Unavailable for new registration</span>
                         </div>
-                        <h3 class="cf-domain-name-title text-muted text-decoration-line-through mb-1">${escapeHtml(primary.domain)}</h3>
-                        <p class="text-slate-500 fs-13 mb-0">Already own this domain? Transfer management to CloudFlox for cheaper renewals.</p>
+                        <h3 class="cf-domain-name-title mb-1">${escapeHtml(primary.domain)}</h3>
+                        <p class="cf-domain-desc-taken mb-0">Already own this domain? Transfer management to CloudFlox for cheaper renewals.</p>
                     </div>
                     <div class="cf-domain-card-right">
-                        <a href="${escapeHtml(primary.transfer_url)}" target="_blank" rel="noopener" class="btn cf-btn-domain-transfer">
+                        <a href="${escapeHtml(primary.transfer_url)}" class="btn cf-btn-domain-transfer">
                             <i class="las la-exchange-alt me-1"></i>
                             <span>Transfer to CloudFlox</span>
                         </a>
@@ -183,21 +183,35 @@
                     ? `<span class="cf-badge-alt-available"><i class="las la-check me-1"></i>Available</span>`
                     : `<span class="cf-badge-alt-taken"><i class="las la-times me-1"></i>Taken</span>`;
 
+                let tagClass = 'cf-tld-tag cf-tld-tag-blue';
+                if (s.badge === 'Hot Deal' || s.badge === 'Sale') {
+                    tagClass = 'cf-tld-tag cf-tld-tag-orange';
+                } else if (s.badge === 'Tech Favorite' || s.badge === 'Tech') {
+                    tagClass = 'cf-tld-tag cf-tld-tag-purple';
+                } else if (s.badge === 'Special') {
+                    tagClass = 'cf-tld-tag cf-tld-tag-green';
+                } else if (s.badge === 'Sri Lanka') {
+                    tagClass = 'cf-tld-tag cf-tld-tag-emerald';
+                }
+
                 const dealBadge = s.badge 
-                    ? `<span class="badge ${s.badge === 'Hot Deal' ? 'bg-orange-subtle text-orange' : 'bg-primary-subtle text-primary'} rounded-pill fs-11 ms-2">${escapeHtml(s.badge)}</span>`
+                    ? `<span class="${tagClass}">${escapeHtml(s.badge)}</span>`
                     : '';
 
                 const actionBtn = s.is_available
-                    ? `<a href="${escapeHtml(s.register_url)}" target="_blank" rel="noopener" class="btn btn-sm cf-btn-alt-buy">
+                    ? `<a href="${escapeHtml(s.register_url)}" class="cf-btn-alt-buy">
                            <span>Select</span>
                            <i class="las la-arrow-right ms-1"></i>
                        </a>`
-                    : `<a href="https://my.cloudflox.com/cart.php?a=add&domain=transfer&query=${encodeURIComponent(s.domain)}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary py-1 px-3 fs-12 rounded-pill">Transfer</a>`;
+                    : `<a href="https://my.cloudflox.com/cart.php?a=add&domain=transfer&query=${encodeURIComponent(s.domain)}" class="cf-btn-alt-transfer">
+                           <i class="las la-exchange-alt me-1"></i>
+                           <span>Transfer</span>
+                       </a>`;
 
                 return `
                     <div class="cf-domain-alt-row">
                         <div class="cf-domain-alt-name">
-                            <strong>${escapeHtml(s.sld)}<span class="text-primary">${escapeHtml(s.tld)}</span></strong>
+                            <strong>${escapeHtml(s.sld)}<span class="cf-domain-tld-ext">${escapeHtml(s.tld)}</span></strong>
                             ${dealBadge}
                         </div>
                         <div class="cf-domain-alt-meta">
@@ -212,11 +226,12 @@
             suggestionsHtml = `
                 <div class="cf-domain-alternatives-section">
                     <div class="cf-domain-alt-header d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <span class="fw-bold fs-14 text-slate-800">
+                        <span class="fw-bold fs-14 cf-domain-alt-title">
                             <i class="las la-sparkles text-primary me-1"></i> More Available Extensions for <strong>${escapeHtml(data.sld)}</strong>:
                         </span>
-                        <a href="domain#domainPricing" class="fs-12 text-primary text-decoration-none fw-semibold">
-                            View all 500+ TLDs <i class="las la-arrow-right"></i>
+                        <a href="domain#domainPricing" class="cf-domain-view-all-link">
+                            <span>View all 500+ TLDs</span>
+                            <i class="las la-arrow-right ms-1"></i>
                         </a>
                     </div>
                     <div class="cf-domain-alt-list">

@@ -1361,6 +1361,42 @@
                                     <td>24/7 Priority Support</td>
                                     <td><span class="cf-badge-tag badge-tag-blue">Dedicated 24/7 SLA</span></td>
                                 </tr>
+                                <tr class="cf-table-action-row">
+                                    <th class="cf-sticky-feature-cell bg-light">
+                                        <div class="py-1">
+                                            <span class="d-block fw-bold text-slate-900 fs-14">Get Started</span>
+                                            <small class="text-muted fs-11">Instant Setup • 30-Day Guarantee</small>
+                                        </div>
+                                    </th>
+                                    <td class="text-center p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" data-pid="201"
+                                            class="cf-table-cta-btn btn-cta-subtle">
+                                            <span>Buy Starter</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center popular-col-business p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" data-pid="202"
+                                            class="cf-table-cta-btn btn-cta-featured">
+                                            <span>Buy Business</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" data-pid="203"
+                                            class="cf-table-cta-btn btn-cta-subtle">
+                                            <span>Buy Professional</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" data-pid="204"
+                                            class="cf-table-cta-btn btn-cta-primary">
+                                            <span>Buy Enterprise</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1531,6 +1567,35 @@
                                     <td>Standard 24/7 Ticket</td>
                                     <td class="popular-col">Standard 24/7 Ticket</td>
                                     <td>Standard 24/7 Ticket</td>
+                                </tr>
+                                <tr class="cf-table-action-row">
+                                    <th class="cf-sticky-feature-cell bg-light">
+                                        <div class="py-1">
+                                            <span class="d-block fw-bold text-slate-900 fs-14">Get Started</span>
+                                            <small class="text-muted fs-11">Instant Setup • 30-Day Guarantee</small>
+                                        </div>
+                                    </th>
+                                    <td class="text-center p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly" data-pid="101"
+                                            class="cf-table-cta-btn btn-cta-subtle">
+                                            <span>Buy Mini</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center popular-col-budget p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly" data-pid="102"
+                                            class="cf-table-cta-btn btn-cta-featured">
+                                            <span>Buy Basic</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly" data-pid="103"
+                                            class="cf-table-cta-btn btn-cta-subtle">
+                                            <span>Buy Plus</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1708,6 +1773,42 @@
                                             SLA</span></td>
                                     <td><span class="cf-badge-tag badge-tag-orange">Senior SysAdmin SLA</span></td>
                                     <td><span class="cf-badge-tag badge-tag-orange">Dedicated DevOps SLA</span></td>
+                                </tr>
+                                <tr class="cf-table-action-row">
+                                    <th class="cf-sticky-feature-cell bg-light">
+                                        <div class="py-1">
+                                            <span class="d-block fw-bold text-slate-900 fs-14">Get Started</span>
+                                            <small class="text-muted fs-11">Dedicated Compute • VIP SLA</small>
+                                        </div>
+                                    </th>
+                                    <td class="text-center p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly" data-pid="301"
+                                            class="cf-table-cta-btn btn-cta-subtle">
+                                            <span>Buy Starter</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center popular-col-premium p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly" data-pid="302"
+                                            class="cf-table-cta-btn btn-cta-featured">
+                                            <span>Buy Business</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly" data-pid="303"
+                                            class="cf-table-cta-btn btn-cta-subtle">
+                                            <span>Buy Pro</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center p-3">
+                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly" data-pid="304"
+                                            class="cf-table-cta-btn btn-cta-primary">
+                                            <span>Buy Enterprise</span>
+                                            <i class="las la-arrow-right ms-1"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1907,6 +2008,25 @@
                                     <td>2x Daily</td>
                                     <td>2x Daily</td>
                                     <td>Continuous</td>
+                                </tr>
+                                <tr class="cf-table-action-row">
+                                    <th class="cf-sticky-feature-cell bg-light">
+                                        <div class="py-1">
+                                            <span class="d-block fw-bold text-slate-900 fs-14">Get Started</span>
+                                            <small class="text-muted fs-11">Instant Setup</small>
+                                        </div>
+                                    </th>
+                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly" data-pid="101" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Mini</a></td>
+                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly" data-pid="102" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Basic</a></td>
+                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly" data-pid="103" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Plus</a></td>
+                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" data-pid="201" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Starter</a></td>
+                                    <td class="text-center popular-col-business p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" data-pid="202" class="cf-table-cta-btn btn-cta-featured py-1 px-2 fs-12 text-nowrap">Buy Business</a></td>
+                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" data-pid="203" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Pro</a></td>
+                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" data-pid="204" class="cf-table-cta-btn btn-cta-primary py-1 px-2 fs-12 text-nowrap">Buy Ent</a></td>
+                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly" data-pid="301" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Starter</a></td>
+                                    <td class="text-center popular-col-premium p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly" data-pid="302" class="cf-table-cta-btn btn-cta-featured py-1 px-2 fs-12 text-nowrap">Buy Business</a></td>
+                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly" data-pid="303" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Pro</a></td>
+                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly" data-pid="304" class="cf-table-cta-btn btn-cta-primary py-1 px-2 fs-12 text-nowrap">Buy Ent</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -2488,6 +2608,40 @@
                             <span class="partner-role">Server Management</span>
                         </div>
                     </div>
+
+                    <!-- Partner 7 -->
+                    <div class="ecosystem-partner-card">
+                        <div class="partner-card-logo">
+                            <img src="assets/imgs/providers/backblaze-B2-Buckets.webp" alt="backblaze-B2-Buckets"
+                                loading="lazy">
+                        </div>
+                        <div class="partner-info">
+                            <span class="partner-name">Backblaze B2 Buckets</span>
+                            <span class="partner-role">Cloud Storage</span>
+                        </div>
+                    </div>
+
+                    <!-- Partner 8 -->
+                    <div class="ecosystem-partner-card">
+                        <div class="partner-card-logo">
+                            <img src="assets/imgs/providers/Imunify360.webp" alt="Imunify360" loading="lazy">
+                        </div>
+                        <div class="partner-info">
+                            <span class="partner-name">Imunify360</span>
+                            <span class="partner-role">Server Security</span>
+                        </div>
+                    </div>
+
+                    <!-- Partner 9 -->
+                    <div class="ecosystem-partner-card">
+                        <div class="partner-card-logo">
+                            <img src="assets/imgs/providers/Jetbackup.webp" alt="Jetbackup" loading="lazy">
+                        </div>
+                        <div class="partner-info">
+                            <span class="partner-name">Jetbackup</span>
+                            <span class="partner-role">Backup Management</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Duplicate Track 1 for seamless infinite looping -->
@@ -2544,6 +2698,34 @@
                         <div class="partner-info">
                             <span class="partner-name">WHM</span>
                             <span class="partner-role">Server Management</span>
+                        </div>
+                    </div>
+                    <div class="ecosystem-partner-card">
+                        <div class="partner-card-logo">
+                            <img src="assets/imgs/providers/backblaze-B2-Buckets.webp" alt="Backblaze B2 Buckets"
+                                loading="lazy">
+                        </div>
+                        <div class="partner-info">
+                            <span class="partner-name">Backblaze B2 Buckets</span>
+                            <span class="partner-role">Cloud Storage</span>
+                        </div>
+                    </div>
+                    <div class="ecosystem-partner-card">
+                        <div class="partner-card-logo">
+                            <img src="assets/imgs/providers/Imunify360.webp" alt="Imunify360" loading="lazy">
+                        </div>
+                        <div class="partner-info">
+                            <span class="partner-name">Imunify360</span>
+                            <span class="partner-role">Server Security</span>
+                        </div>
+                    </div>
+                    <div class="ecosystem-partner-card">
+                        <div class="partner-card-logo">
+                            <img src="assets/imgs/providers/Jetbackup.webp" alt="Jetbackup" loading="lazy">
+                        </div>
+                        <div class="partner-info">
+                            <span class="partner-name">Jetbackup</span>
+                            <span class="partner-role">Backup Management</span>
                         </div>
                     </div>
                 </div>

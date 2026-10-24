@@ -320,6 +320,9 @@ $cfFooterUrl = $url ?? '/';
         </div>
     </footer>
 
+    <!-- Global On-Site Checkout Modal -->
+    <?php include __DIR__ . '/checkout-modal.inc.php'; ?>
+
     <!-- Modern Elevated Scroll to Top Button -->
     <div class="scroll-top scroll-to-target cf-scroll-top-btn" data-target="html" aria-label="Back to top">
         <i class="las la-arrow-up"></i>

@@ -934,6 +934,29 @@
                                 <td class="text-center">24/7 Priority Support</td>
                                 <td class="text-center"><span class="badge bg-indigo-subtle text-indigo fw-bold px-2 py-1 rounded-pill">Dedicated 24/7 VIP SLA</span></td>
                             </tr>
+                            <tr>
+                                <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Order Action</th>
+                                <td class="text-center p-3">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" data-pid="201" class="btn btn-outline-indigo btn-sm px-3 fw-bold rounded-pill">
+                                        Choose Starter
+                                    </a>
+                                </td>
+                                <td class="text-center popular-col-business p-3">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" data-pid="202" class="btn btn-plan-business-featured btn-sm px-4 fw-bold rounded-pill text-white">
+                                        Choose Business
+                                    </a>
+                                </td>
+                                <td class="text-center p-3">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" data-pid="203" class="btn btn-outline-indigo btn-sm px-3 fw-bold rounded-pill">
+                                        Choose Pro
+                                    </a>
+                                </td>
+                                <td class="text-center p-3">
+                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" data-pid="204" class="btn btn-outline-indigo btn-sm px-3 fw-bold rounded-pill">
+                                        Choose Enterprise
+                                    </a>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

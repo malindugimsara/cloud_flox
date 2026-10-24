@@ -1,7 +1,8 @@
     <!--preloader start-->
     <div class="preloader bg-light-subtle">
         <div class="preloader-wrap">
-            <img src="assets/imgs/logos/cloud-flox-main.webp" alt="logo" class="img-fluid" width="10%">
+            <img src="assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox" class="img-fluid preloader-logo" width="240" height="56">
+            <div class="loading-bar"></div>
         </div>
     </div>
     <!--preloader end-->
