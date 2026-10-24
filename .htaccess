@@ -1,6 +1,12 @@
 RewriteEngine On
 
 # ---------------------------------
+# 0. Redirect WWW to Non-WWW (URL Canonicalization)
+# ---------------------------------
+RewriteCond %{HTTP_HOST} ^www\.cloudflox\.com [NC]
+RewriteRule ^(.*)$ https://cloudflox.com/$1 [L,R=301]
+
+# ---------------------------------
 # 1. Force index.php as homepage
 # ---------------------------------
 DirectoryIndex index.php
@@ -50,3 +56,5 @@ RewriteRule ^(.+)$ $1.php [L]
   AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
+
+

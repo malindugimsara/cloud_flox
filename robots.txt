@@ -1,2 +1,13 @@
+# ==============================================================================
+# CloudFlox - Production Robots Configuration
+# ==============================================================================
 User-agent: *
-Disallow: /
+Allow: /
+
+# Disallow private and administrative assets
+Disallow: /include/
+Disallow: /scratch/
+Disallow: /cgi-bin/
+
+# Official XML Sitemap
+Sitemap: https://cloudflox.com/sitemap.xml

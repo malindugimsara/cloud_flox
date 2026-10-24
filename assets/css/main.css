@@ -53110,7 +53110,7 @@ body {
     position: absolute;
     content: "";
     inset: 0;
-    background-image: url(../imgs/bg.jpg);
+    background-image: url(../imgs/bg.webp);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -55354,14 +55354,14 @@ body {
 }
 
 .bg-img-sec {
-    background-image: url(../imgs/bg.jpg);
+    background-image: url(../imgs/bg.webp);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 }
 
 .bg-img-sec-sh {
-    background-image: url(../imgs/bg.png) !important;
+    background-image: url(../imgs/bg-sh.webp) !important;
     background-repeat: no-repeat;
     background-position: inherit;
     background-size: cover;

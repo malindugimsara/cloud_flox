@@ -1,7 +1,7 @@
     <!--preloader start-->
     <div class="preloader bg-light-subtle">
         <div class="preloader-wrap">
-            <img src="assets/imgs/logos/cloud-flox-main.png" alt="logo" class="img-fluid" width="10%">
+            <img src="assets/imgs/logos/cloud-flox-main.webp" alt="logo" class="img-fluid" width="10%">
         </div>
     </div>
     <!--preloader end-->
@@ -12,8 +12,7 @@
     $isHostingActive = in_array($cfCurrentPage, [
         'budget-hosting.php', 'budget-hosting',
         'web-hosting.php', 'web-hosting',
-        'premium-hosting.php', 'premium-hosting',
-        'shared-hosting.php', 'shared-hosting'
+        'premium-hosting.php', 'premium-hosting'
     ]);
     ?>
 
@@ -65,7 +64,7 @@
             <div class="container">
                 <!-- Brand Logo -->
                 <a class="navbar-brand cf-brand-logo" href="<?php echo $url;?>">
-                    <img src="assets/imgs/logos/cloud-flox-main.png" alt="CloudFlox Cloud Hosting" class="cf-logo-img">
+                    <img src="assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox Cloud Hosting" class="cf-logo-img">
                 </a>
 
                 <!-- Mobile Hamburger Toggler -->
@@ -223,7 +222,7 @@
             <div class="offer-popup__badge">Limited Offer</div>
 
             <a href="vps-hosting">
-                <img src="assets/imgs/banners/cloudflox-cheap-web-hosting-usa.png" alt="Offer" width="100%" style="border-radius: 0px 0px 15px 15px;">
+                <img src="assets/imgs/banners/cloudflox-cheap-web-hosting-usa.webp" alt="Offer" width="100%" style="border-radius: 0px 0px 15px 15px;">
             </a>
             <label class="offer-popup__dont text-black d-none">
                 <input type="checkbox" id="dontShowOffer" checked>

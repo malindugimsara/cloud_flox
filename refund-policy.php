@@ -69,10 +69,10 @@
 
         <!-- Ambient Decorative Pattern Backgrounds -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true" style="opacity: 0.35;">
-            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="pattern-2" width="370" height="590" loading="eager" decoding="async">
         </div>
         <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true" style="opacity: 0.35;">
-            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="pattern-3" width="370" height="590" loading="eager" decoding="async">
         </div>
 
         <div class="container position-relative z-2">

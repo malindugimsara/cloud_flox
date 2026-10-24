@@ -27,7 +27,7 @@
     <meta property="og:description"
         content="Search and register your domain name with CloudFlox. Free WHOIS privacy, Anycast DNS management, and seamless 0-downtime transfers.">
     <meta property="og:url" content="https://cloudflox.com/domain">
-    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/dedicated-server-components.jpg">
+    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/dedicated-server-components.webp">
     <meta property="og:site_name" content="CloudFlox">
 
     <!-- Twitter -->
@@ -35,7 +35,7 @@
     <meta name="twitter:title" content="Domain Registration &amp; Transfer | CloudFlox">
     <meta name="twitter:description"
         content="Secure your domain name today with CloudFlox. Fast registration, free privacy protection, and global DNS management.">
-    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/dedicated-server-components.jpg">
+    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/dedicated-server-components.webp">
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
@@ -104,10 +104,10 @@
 
         <!-- Ambient Decorative Pattern Backgrounds -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true" style="opacity: 0.45;">
-            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="pattern-2" width="370" height="590" loading="eager" decoding="async">
         </div>
         <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true" style="opacity: 0.45;">
-            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="pattern-3" width="370" height="590" loading="eager" decoding="async">
         </div>
 
         <div class="container position-relative z-2">
@@ -205,7 +205,7 @@
                 <div class="col-12 col-lg-5">
                     <div class="cf-budget-hero-visual position-relative text-center">
                         <div class="cf-hero-img-wrap position-relative mx-auto" style="max-width: 480px;">
-                            <img src="assets/imgs/banners/cloudflox-domain-infrastructure.jpg"
+                            <img src="assets/imgs/banners/cloudflox-domain-infrastructure.webp"
                                  alt="CloudFlox Global Domain Registration & Anycast DNS Network"
                                  class="cf-hero-illustration img-fluid rounded-4 shadow-sm"
                                  width="600"

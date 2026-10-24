@@ -23,7 +23,7 @@
     <meta property="og:description"
         content="Maximum compute power, zero hypervisor overhead, and complete root control with Intel Xeon & AMD Ryzen dedicated servers starting at $79.00/mo.">
     <meta property="og:url" content="https://cloudflox.com/dedicated-server">
-    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-dedicated-server-infrastructure.jpg">
+    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-dedicated-server-infrastructure.webp">
     <meta property="og:site_name" content="CloudFlox">
 
     <!-- Twitter Card -->
@@ -31,7 +31,7 @@
     <meta name="twitter:title" content="CloudFlox Enterprise Bare Metal Dedicated Servers">
     <meta name="twitter:description"
         content="Deploy 100% single-tenant Intel Xeon & AMD Ryzen bare metal servers with Gen4 NVMe, 1Gbps unmetered port, IPMI/iDRAC KVM, and 99.99% hardware SLA.">
-    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-dedicated-server-infrastructure.jpg">
+    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-dedicated-server-infrastructure.webp">
 
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
@@ -100,10 +100,10 @@
 
         <!-- Ambient Decorative Pattern Backgrounds -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true" style="opacity: 0.45;">
-            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="pattern-2" width="370" height="590" loading="eager" decoding="async">
         </div>
         <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true" style="opacity: 0.45;">
-            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="pattern-3" width="370" height="590" loading="eager" decoding="async">
         </div>
 
         <div class="container position-relative z-2">
@@ -181,7 +181,7 @@
                         <div class="cf-hero-img-wrap position-relative mx-auto">
                             <picture>
                                 <source srcset="assets/imgs/banners/cloudflox-dedicated-server-infrastructure.webp" type="image/webp">
-                                <img src="assets/imgs/banners/cloudflox-dedicated-server-infrastructure.jpg"
+                                <img src="assets/imgs/banners/cloudflox-dedicated-server-infrastructure.webp"
                                      alt="CloudFlox Enterprise Bare Metal Dedicated Server Infrastructure with Intel Xeon and AMD Ryzen"
                                      class="cf-hero-illustration img-fluid"
                                      width="900"

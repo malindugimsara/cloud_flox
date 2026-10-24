@@ -23,7 +23,7 @@
     <meta property="og:description"
         content="Launch your website with fast, reliable, and affordable NVMe cPanel hosting starting at just $3.00/mo.">
     <meta property="og:url" content="https://cloudflox.com/budget-hosting">
-    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-cheap-web-hosting-usa.png">
+    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-cheap-web-hosting-usa.webp">
     <meta property="og:site_name" content="CloudFlox">
 
     <!-- Twitter Card -->
@@ -31,7 +31,7 @@
     <meta name="twitter:title" content="CloudFlox Budget Web Hosting">
     <meta name="twitter:description"
         content="Economical, high-performance NVMe shared hosting with cPanel, free SSL, and standard ticket support.">
-    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-cheap-web-hosting-usa.png">
+    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-cheap-web-hosting-usa.webp">
 
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
@@ -178,7 +178,7 @@
                         <div class="cf-hero-img-wrap position-relative mx-auto">
                             <picture>
                                 <source srcset="assets/imgs/banners/cloudflox-hero-infrastructure.webp" type="image/webp">
-                                <img src="assets/imgs/banners/cloudflox-hero-infrastructure.jpg"
+                                <img src="assets/imgs/banners/cloudflox-hero-infrastructure.webp"
                                      alt="CloudFlox NVMe Budget Web Hosting Infrastructure with cPanel and CloudLinux Isolation"
                                      class="cf-hero-illustration img-fluid"
                                      width="900"
@@ -223,11 +223,11 @@
         <!-- Ambient Decorative Pattern Backgrounds -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true">
             <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager"
-                decoding="async">
+                decoding="async" alt="pattern-2">
         </div>
         <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true">
             <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager"
-                decoding="async">
+                decoding="async" alt="pattern-3">
         </div>
 
         <div class="container position-relative z-2">

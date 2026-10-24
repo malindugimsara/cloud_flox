@@ -25,7 +25,7 @@
     <meta property="og:description"
         content="Launch scalable Linux Cloud VPS servers with KVM isolation, NVMe/SSD speed, 1Gbps network, and full root access starting at $7.99/mo.">
     <meta property="og:url" content="https://cloudflox.com/vps-hosting">
-    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-vps-infrastructure.jpg">
+    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-vps-infrastructure.webp">
     <meta property="og:site_name" content="CloudFlox">
 
     <!-- Twitter Card -->
@@ -33,7 +33,7 @@
     <meta name="twitter:title" content="High-Performance Linux Cloud VPS Hosting | CloudFlox">
     <meta name="twitter:description"
         content="Deploy scalable KVM Linux virtual private servers with 1Gbps uplink, full root access, and 99.95% SLA starting at $7.99/mo.">
-    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-vps-infrastructure.jpg">
+    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-vps-infrastructure.webp">
 
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
@@ -177,7 +177,7 @@
                 <div class="col-12 col-lg-5">
                     <div class="cf-budget-hero-visual position-relative text-center">
                         <div class="cf-hero-img-wrap position-relative mx-auto">
-                            <img src="assets/imgs/banners/cloudflox-vps-infrastructure.jpg"
+                            <img src="assets/imgs/banners/cloudflox-vps-infrastructure.webp"
                                  alt="CloudFlox High-Performance KVM Cloud VPS Hosting Infrastructure"
                                  class="cf-hero-illustration img-fluid"
                                  width="900"
@@ -220,10 +220,10 @@
     <section class="modern-pricing-section position-relative py-5" id="vpsPlans">
         <!-- Ambient Decorative Pattern Backgrounds -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true">
-            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="pattern-2" width="370" height="590" loading="eager" decoding="async">
         </div>
         <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true">
-            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="pattern-3" width="370" height="590" loading="eager" decoding="async">
         </div>
 
         <div class="container position-relative z-2">

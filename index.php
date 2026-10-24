@@ -8,33 +8,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>CloudFlox — Next-Gen High Speed Cloud Hosting, VPS, Dedicated Servers & Domains</title>
+    <title>CloudFlox — Enterprise NVMe Cloud Hosting, Dedicated Servers & Free 24/7 Support</title>
 
     <meta name="description"
-        content="Supercharge your website with CloudFlox next-generation cloud hosting. High-speed NVMe cPanel hosting, scalable VPS, dedicated bare-metal servers, and instant domain registration. 99.99% uptime guaranteed.">
+        content="Deploy high-speed NVMe cloud hosting, scalable VPS, and dedicated enterprise servers with CloudFlox. Enjoy free SSL, free migrations, and 24/7 expert human support. 99.99% uptime SLA.">
     <meta name="keywords"
-        content="web hosting, nvme hosting, cpanel hosting, vps hosting, dedicated servers, domain registration, cloudflox, cheap hosting, fast hosting">
+        content="nvme hosting, dedicated servers, enterprise cloud hosting, free migration, 24/7 support, vps hosting, cpanel hosting, domain registration, cloudflox">
     <meta name="author" content="CloudFlox">
     <link rel="canonical" href="https://cloudflox.com/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="CloudFlox — Next-Gen Global Cloud Hosting Solutions">
+    <meta property="og:title" content="CloudFlox — Enterprise NVMe Cloud Hosting, Dedicated Servers & Free 24/7 Support">
     <meta property="og:description"
-        content="Power your websites and applications with blazing fast NVMe cloud hosting, VPS, and dedicated servers.">
+        content="Deploy high-speed NVMe cloud hosting, scalable VPS, and dedicated enterprise servers with CloudFlox. Enjoy free SSL, free migrations, and 24/7 expert human support.">
     <meta property="og:url" content="https://cloudflox.com/">
-    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/dedicated-server-components.jpg">
+    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/dedicated-server-components.webp">
     <meta property="og:site_name" content="CloudFlox">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="CloudFlox — High Speed Cloud Hosting">
+    <meta name="twitter:title" content="CloudFlox — Enterprise NVMe Cloud Hosting, Dedicated Servers & Free 24/7 Support">
     <meta name="twitter:description"
-        content="Ultra-fast NVMe web hosting, VPS, dedicated servers, and domain services.">
-    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/dedicated-server-components.jpg">
+        content="Deploy high-speed NVMe cloud hosting, scalable VPS, and dedicated enterprise servers with CloudFlox. Enjoy free SSL, free migrations, and 24/7 expert human support.">
+    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/dedicated-server-components.webp">
 
     <!-- Preload Hero Image for LCP Optimization -->
-    <link rel="preload" as="image" href="assets/imgs/banners/cloudflox-hero-infrastructure.webp" type="image/webp"
+    <link rel="preload" as="image" href="assets/imgs/banners/banner.webp" type="image/webp"
         fetchpriority="high">
 
     <!-- Schema.org Structured Data for SEO -->
@@ -47,7 +47,7 @@
           "@id": "https://cloudflox.com/#organization",
           "name": "CloudFlox",
           "url": "https://cloudflox.com/",
-          "logo": "https://cloudflox.com/assets/imgs/logos/cloud-flox-main.png",
+          "logo": "https://cloudflox.com/assets/imgs/logos/cloud-flox-main.webp",
           "description": "Next-generation high-speed cloud hosting, scalable VPS, dedicated bare-metal servers, and domain services.",
           "sameAs": [
             "https://facebook.com/cloudflox",
@@ -109,8 +109,8 @@
 
                         <!-- Refined, Unified H1 Heading -->
                         <h1 class="hero-title" data-sal="slide-up" data-sal-duration="700" data-sal-delay="100">
-                            High-Speed <span class="hero-text-accent">Cloud Hosting</span><br
-                                class="d-none d-md-inline">&amp; Scalable Servers
+                            High-Speed <span class="hero-text-accent">NVMe Cloud Hosting</span><br
+                                class="d-none d-md-inline">&amp; Dedicated Enterprise Servers
                         </h1>
 
                         <!-- Punchy, Clear 2-Line Value Proposition -->
@@ -164,8 +164,8 @@
                         <!-- Main 3D Cloud Infrastructure Graphic -->
                         <div class="hero-image-wrapper">
                             <picture>
-                                <source srcset="assets/imgs/banners/banner.jfif" type="image/webp">
-                                <img src="assets/imgs/banners/banner.jfif"
+                                <source srcset="assets/imgs/banners/banner.webp" type="image/webp">
+                                <img src="assets/imgs/banners/banner.webp"
                                     alt="CloudFlox Next-Gen High-Speed Cloud Hosting Infrastructure with NVMe Gen4 Storage and Global Network"
                                     class="hero-main-img img-fluid" width="1024" height="768" fetchpriority="high"
                                     loading="eager">
@@ -251,7 +251,7 @@
 
                         <!-- High-Impact Title -->
                         <h2 class="domain-section-title">
-                            Find & Secure Your <span class="text-gradient-primary">Dream Domain</span> Today
+                            Find &amp; Register Your <span class="text-gradient-primary">Dream Domain</span> with Free WHOIS Privacy
                         </h2>
 
                         <!-- Subtitle -->
@@ -350,11 +350,11 @@
     <section class="modern-pricing-section" id="pricing">
         <!-- Ambient Decorative Pattern Backgrounds -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true">
-            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager"
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="pattern-2" width="370" height="590" loading="eager"
                 decoding="async">
         </div>
         <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true">
-            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager"
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="pattern-3" width="370" height="590" loading="eager"
                 decoding="async">
         </div>
 
@@ -368,7 +368,7 @@
                 </div>
 
                 <h2 class="pricing-section-title">
-                    High-Performance Hosting <span class="text-accent-blue">Built for Every Stage</span>
+                    Enterprise NVMe Hosting &amp; Dedicated Solutions <span class="text-accent-blue">With Free Migrations</span>
                 </h2>
                 <p class="pricing-section-subtitle">
                     Enterprise NVMe Gen4 storage, CloudLinux resource isolation, and automated daily backups — tailored
@@ -2426,7 +2426,7 @@
                     <!-- Partner 1 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/cpanel-hosting.png" alt="cPanel" loading="lazy">
+                            <img src="assets/imgs/providers/cpanel-hosting.webp" alt="cPanel" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">cPanel</span>
@@ -2436,7 +2436,7 @@
                     <!-- Partner 2 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/shared-hosting.png" alt="CloudLinux OS" loading="lazy">
+                            <img src="assets/imgs/providers/shared-hosting.webp" alt="CloudLinux OS" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">CloudLinux</span>
@@ -2446,7 +2446,7 @@
                     <!-- Partner 3 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/directadmin.png" alt="DirectAdmin" loading="lazy">
+                            <img src="assets/imgs/providers/directadmin.webp" alt="DirectAdmin" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">DirectAdmin</span>
@@ -2456,7 +2456,7 @@
                     <!-- Partner 4 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/wordpress-hosting.png" alt="WordPress" loading="lazy">
+                            <img src="assets/imgs/providers/wordpress-hosting.webp" alt="WordPress" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">WordPress</span>
@@ -2466,7 +2466,7 @@
                     <!-- Partner 5 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/mysql.png" alt="MySQL" loading="lazy">
+                            <img src="assets/imgs/providers/mysql.webp" alt="MySQL" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">MySQL DB</span>
@@ -2476,7 +2476,7 @@
                     <!-- Partner 6 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/whm-cpanel.png" alt="WHM" loading="lazy">
+                            <img src="assets/imgs/providers/whm-cpanel.webp" alt="WHM" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">WHM</span>
@@ -2489,7 +2489,7 @@
                 <div class="marquee-track marquee-scroll-left" aria-hidden="true">
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/cpanel-hosting.png" alt="cPanel" loading="lazy">
+                            <img src="assets/imgs/providers/cpanel-hosting.webp" alt="cPanel" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">cPanel</span>
@@ -2498,7 +2498,7 @@
                     </div>
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/shared-hosting.png" alt="CloudLinux OS" loading="lazy">
+                            <img src="assets/imgs/providers/shared-hosting.webp" alt="CloudLinux OS" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">CloudLinux</span>
@@ -2507,7 +2507,7 @@
                     </div>
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/directadmin.png" alt="DirectAdmin" loading="lazy">
+                            <img src="assets/imgs/providers/directadmin.webp" alt="DirectAdmin" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">DirectAdmin</span>
@@ -2516,7 +2516,7 @@
                     </div>
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/wordpress-hosting.png" alt="WordPress" loading="lazy">
+                            <img src="assets/imgs/providers/wordpress-hosting.webp" alt="WordPress" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">WordPress</span>
@@ -2525,7 +2525,7 @@
                     </div>
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/mysql.png" alt="MySQL" loading="lazy">
+                            <img src="assets/imgs/providers/mysql.webp" alt="MySQL" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">MySQL DB</span>
@@ -2534,7 +2534,7 @@
                     </div>
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/whm-cpanel.png" alt="WHM" loading="lazy">
+                            <img src="assets/imgs/providers/whm-cpanel.webp" alt="WHM" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">WHM</span>
@@ -2550,7 +2550,7 @@
                     <!-- Partner 7 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/ovhcloud.png" alt="OVHcloud" loading="lazy">
+                            <img src="assets/imgs/providers/ovhcloud.webp" alt="OVHcloud" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">OVHcloud</span>
@@ -2560,7 +2560,7 @@
                     <!-- Partner 8 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/cloudflox-hosting.png" alt="Hetzner" loading="lazy">
+                            <img src="assets/imgs/providers/cloudflox-hosting.webp" alt="Hetzner" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">Hetzner Online</span>
@@ -2570,7 +2570,7 @@
                     <!-- Partner 9 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/cloudflox-hosting-domain.png" alt="Hivelocity"
+                            <img src="assets/imgs/providers/cloudflox-hosting-domain.webp" alt="Hivelocity"
                                 loading="lazy">
                         </div>
                         <div class="partner-info">
@@ -2581,7 +2581,7 @@
                     <!-- Partner 10 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/usa-hosting.png" alt="Tata Communications" loading="lazy">
+                            <img src="assets/imgs/providers/usa-hosting.webp" alt="Tata Communications" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">Tata Comm</span>
@@ -2591,7 +2591,7 @@
                     <!-- Partner 11 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/india-hosting.png" alt="Telia / Arelion" loading="lazy">
+                            <img src="assets/imgs/providers/india-hosting.webp" alt="Telia / Arelion" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">Telia / Arelion</span>
@@ -2601,7 +2601,7 @@
                     <!-- Partner 12 -->
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/cloudflox-main.png" alt="Cogent" loading="lazy">
+                            <img src="assets/imgs/providers/cloudflox-main.webp" alt="Cogent" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">Cogent</span>
@@ -2614,7 +2614,7 @@
                 <div class="marquee-track marquee-scroll-right" aria-hidden="true">
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/ovhcloud.png" alt="OVHcloud" loading="lazy">
+                            <img src="assets/imgs/providers/ovhcloud.webp" alt="OVHcloud" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">OVHcloud</span>
@@ -2623,7 +2623,7 @@
                     </div>
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/cloudflox-hosting.png" alt="Hetzner" loading="lazy">
+                            <img src="assets/imgs/providers/cloudflox-hosting.webp" alt="Hetzner" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">Hetzner Online</span>
@@ -2632,7 +2632,7 @@
                     </div>
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/cloudflox-hosting-domain.png" alt="Hivelocity"
+                            <img src="assets/imgs/providers/cloudflox-hosting-domain.webp" alt="Hivelocity"
                                 loading="lazy">
                         </div>
                         <div class="partner-info">
@@ -2642,7 +2642,7 @@
                     </div>
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/usa-hosting.png" alt="Tata Communications" loading="lazy">
+                            <img src="assets/imgs/providers/usa-hosting.webp" alt="Tata Communications" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">Tata Comm</span>
@@ -2651,7 +2651,7 @@
                     </div>
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/india-hosting.png" alt="Telia / Arelion" loading="lazy">
+                            <img src="assets/imgs/providers/india-hosting.webp" alt="Telia / Arelion" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">Telia / Arelion</span>
@@ -2660,7 +2660,7 @@
                     </div>
                     <div class="ecosystem-partner-card">
                         <div class="partner-card-logo">
-                            <img src="assets/imgs/providers/cloudflox-main.png" alt="Cogent" loading="lazy">
+                            <img src="assets/imgs/providers/cloudflox-main.webp" alt="Cogent" loading="lazy">
                         </div>
                         <div class="partner-info">
                             <span class="partner-name">Cogent</span>
@@ -2796,7 +2796,7 @@
                                 </div>
                                 <span class="bento-status-pill pill-blue-soft">Zero Noisy Neighbors</span>
                             </div>
-                            <h3 class="bento-seo-title">CloudLinux LVE Limits &amp; Kernel Isolation</h3>
+                            <h3 class="bento-seo-title">CloudLinux Kernel Isolation &amp; Dedicated Resources</h3>
                             <p class="bento-seo-desc">
                                 Every shared cPanel hosting account runs within a dedicated Lightweight Virtualized
                                 Environment (LVE).
@@ -2872,7 +2872,7 @@
                                 </div>
                                 <span class="bento-status-pill pill-green-soft">Proactive AI WAF</span>
                             </div>
-                            <h3 class="bento-seo-title">Multi-Layer Imunify360 &amp; DDoS Defense</h3>
+                            <h3 class="bento-seo-title">Multi-Layer Enterprise Security &amp; Free DDoS Defense</h3>
                             <p class="bento-seo-desc">
                                 Enterprise cybersecurity active 24/7. Automated machine-learning Web Application
                                 Firewall (WAF) inspects incoming requests, filters malicious botnets, and neutralizes
@@ -2901,7 +2901,7 @@
                                 </div>
                                 <span class="bento-status-pill pill-purple-soft">&lt; 15m Response SLA</span>
                             </div>
-                            <h3 class="bento-seo-title">24/7/365 Certified Human SysAdmin Care</h3>
+                            <h3 class="bento-seo-title">24/7/365 Expert Human Support &amp; SysAdmin Care</h3>
                             <p class="bento-seo-desc">
                                 Zero automated robot runarounds. Real Linux sysadmins and certified hosting engineers
                                 ready to troubleshoot code, database queries, and server configurations immediately.
@@ -2978,7 +2978,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/ubuntu.svg" alt="Ubuntu Linux" loading="lazy">
+                                        <img src="assets/imgs/icons/ubuntu.svg" alt="Ubuntu Linux" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -2996,7 +2996,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/debian.svg" alt="Debian Linux" loading="lazy">
+                                        <img src="assets/imgs/icons/debian.svg" alt="Debian Linux" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3014,7 +3014,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/almalinux.svg" alt="AlmaLinux" loading="lazy">
+                                        <img src="assets/imgs/icons/almalinux.svg" alt="AlmaLinux" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3032,7 +3032,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/rockylinux.svg" alt="Rocky Linux" loading="lazy">
+                                        <img src="assets/imgs/icons/rockylinux.svg" alt="Rocky Linux" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3050,7 +3050,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/imgs/windows.png" alt="Windows Server" loading="lazy">
+                                        <img src="assets/imgs/windows.webp" alt="Windows Server" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3068,7 +3068,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/opensuse.svg" alt="openSUSE" loading="lazy">
+                                        <img src="assets/imgs/icons/opensuse.svg" alt="openSUSE" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3086,7 +3086,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/freebsd.svg" alt="FreeBSD" loading="lazy">
+                                        <img src="assets/imgs/icons/freebsd.svg" alt="FreeBSD" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3127,7 +3127,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/cpanel.svg" alt="cPanel &amp; WHM" loading="lazy">
+                                        <img src="assets/imgs/icons/cpanel.svg" alt="cPanel &amp; WHM" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3145,7 +3145,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/plesk.svg" alt="Plesk" loading="lazy">
+                                        <img src="assets/imgs/icons/plesk.svg" alt="Plesk" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3163,7 +3163,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/docker.svg" alt="Docker Engine" loading="lazy">
+                                        <img src="assets/imgs/icons/docker.svg" alt="Docker Engine" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3181,7 +3181,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/imgs/providers/directadmin.png" alt="DirectAdmin"
+                                        <img src="assets/imgs/providers/directadmin.webp" alt="DirectAdmin"
                                             loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
@@ -3200,7 +3200,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/webmin.svg" alt="Webmin / Virtualmin" loading="lazy">
+                                        <img src="assets/imgs/icons/webmin.svg" alt="Webmin / Virtualmin" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3218,7 +3218,7 @@
                             <div class="col">
                                 <div class="tech-matrix-card">
                                     <div class="tech-card-logo-box">
-                                        <img src="assets/img/proxmox.svg" alt="Proxmox VE" loading="lazy">
+                                        <img src="assets/imgs/icons/proxmox.svg" alt="Proxmox VE" loading="lazy">
                                     </div>
                                     <div class="tech-card-details">
                                         <div class="tech-card-top-row">
@@ -3314,7 +3314,7 @@
                     <div class="review-visual-card">
                         <!-- Parallax Background Image Wrapper -->
                         <div class="review-visual-bg-wrapper">
-                            <img src="assets/imgs/testimonials-team.jpg" alt="CloudFlox Infrastructure Team"
+                            <img src="assets/imgs/testimonials-team.webp" alt="CloudFlox Infrastructure Team"
                                 class="review-parallax-img" id="reviewParallaxImg" loading="lazy">
                         </div>
 
@@ -3636,7 +3636,7 @@
                 <div class="col-lg-6" data-sal="slide-up" data-sal-duration="600">
                     <span class="custom-cta-badge"><i class="las la-project-diagram"></i> Tailored Solutions</span>
                     <h2 class="custom-cta-title">
-                        Need Custom Infrastructure? <span>Get a Tailored Architecture Quote</span>
+                        Need Dedicated Infrastructure? <span>Get 24/7 Expert Support &amp; Custom Architecture</span>
                     </h2>
                     <p class="custom-cta-desc">
                         Standard packages don't always fit enterprise workloads. Whether you require multi-server
@@ -4194,7 +4194,7 @@
 
                     <!-- Main Catchy Title with Gradient Accent -->
                     <h2 class="cta-banner-title">
-                        Ready to Accelerate Your <span class="cta-gradient-text">Digital Presence?</span>
+                        Deploy Enterprise NVMe &amp; Dedicated Cloud Today <span class="cta-gradient-text">With Free Setup &amp; 24/7 Support</span>
                     </h2>
 
                     <!-- Compelling Subtitle -->

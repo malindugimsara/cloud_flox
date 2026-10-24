@@ -23,7 +23,7 @@
     <meta property="og:description"
         content="Power your mission-critical applications and high-traffic portals with 100% fully managed dedicated cloud hosting starting at $75.00/mo.">
     <meta property="og:url" content="https://cloudflox.com/premium-hosting">
-    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-premium-infrastructure.jpg">
+    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-premium-infrastructure.webp">
     <meta property="og:site_name" content="CloudFlox">
 
     <!-- Twitter Card -->
@@ -31,7 +31,7 @@
     <meta name="twitter:title" content="CloudFlox Premium Managed Cloud Hosting">
     <meta name="twitter:description"
         content="Dedicated vCPU, isolated ECC RAM, Gen4 NVMe RAID-10, and 24/7 VIP sysadmin support with 99.99% SLA.">
-    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-premium-infrastructure.jpg">
+    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-premium-infrastructure.webp">
 
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
@@ -178,7 +178,7 @@
                         <div class="cf-hero-img-wrap position-relative mx-auto">
                             <picture>
                                 <source srcset="assets/imgs/banners/cloudflox-premium-infrastructure.webp" type="image/webp">
-                                <img src="assets/imgs/banners/cloudflox-premium-infrastructure.jpg"
+                                <img src="assets/imgs/banners/cloudflox-premium-infrastructure.webp"
                                      alt="CloudFlox Premium Managed Enterprise Cloud Hosting Infrastructure with Dedicated Compute"
                                      class="cf-hero-illustration img-fluid"
                                      width="900"
@@ -222,11 +222,11 @@
     <section class="modern-pricing-section position-relative py-5" id="managedPlans">
         <!-- Ambient Decorative Pattern Backgrounds -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true">
-            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager"
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="pattern-2" width="370" height="590" loading="eager"
                 decoding="async">
         </div>
         <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true">
-            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager"
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="pattern-3" width="370" height="590" loading="eager"
                 decoding="async">
         </div>
 

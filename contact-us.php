@@ -22,13 +22,13 @@
     <meta property="og:title" content="Contact CloudFlox Support Team">
     <meta property="og:description" content="Reach CloudFlox for hosting assistance, technical support, or sales inquiries.">
     <meta property="og:url" content="https://cloudflox.com/contact-us">
-    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-contact-support.jpg">
+    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-contact-support.webp">
     <meta property="og:site_name" content="CloudFlox">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Contact CloudFlox">
     <meta name="twitter:description" content="Get help with hosting, domains, and servers from CloudFlox support.">
-    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-contact-support.jpg">
+    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-contact-support.webp">
 
     <!-- JSON-LD -->
     <script type="application/ld+json">
@@ -62,10 +62,10 @@
 
         <!-- Ambient Decorative Patterns -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true" style="opacity: 0.4;">
-            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="pattern-2" width="370" height="590" loading="eager" decoding="async">
         </div>
         <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true" style="opacity: 0.4;">
-            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager" decoding="async">
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="pattern-3" width="370" height="590" loading="eager" decoding="async">
         </div>
 
         <div class="container position-relative z-2">
@@ -134,7 +134,7 @@
                 <div class="col-12 col-lg-5">
                     <div class="cf-contact-hero-visual position-relative text-center">
                         <div class="cf-hero-img-wrap position-relative mx-auto">
-                            <img src="assets/imgs/banners/cloudflox-contact-support.jpg"
+                            <img src="assets/imgs/banners/cloudflox-contact-support.webp"
                                 alt="CloudFlox Support and Sales Assistance Team"
                                 class="cf-hero-illustration img-fluid"
                                 width="440"
@@ -317,7 +317,7 @@
                         <!-- Thank you state -->
                         <div class="cf-contact-thankyou d-none my-auto" id="th-c-f">
                             <div class="text-center py-4">
-                                <img src="assets/imgs/success.gif" alt="Thank you" style="width: 220px; margin-bottom: 16px;">
+                                <img src="assets/imgs/success.webp" alt="Thank you" style="width: 220px; margin-bottom: 16px;">
                                 <h2 class="fs-24 fw-bold text-slate-900 mb-2">Message Transmitted!</h2>
                                 <p class="text-muted fs-14 mb-4 mx-auto" style="max-width:440px;">
                                     Thank you for reaching out to CloudFlox. We have received your inquiry and our engineering team will get back to you shortly.
@@ -426,7 +426,7 @@
                                 </a>
 
                                 <!-- Link 3: High-Performance VPS -->
-                                <a href="<?php echo $url; ?>vps-server" class="cf-quick-action-card">
+                                <a href="<?php echo $url; ?>vps-hosting" class="cf-quick-action-card">
                                     <div class="cf-quick-icon-wrap icon-theme-indigo">
                                         <i class="las la-cloud"></i>
                                     </div>

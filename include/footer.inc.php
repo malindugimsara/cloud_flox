@@ -1,3 +1,6 @@
+<?php
+$cfFooterUrl = $url ?? '/';
+?>
 <?php if (empty($hide_footer_cta)): ?>
     <!-- Subpage Bottom CTA Banner (Shown on subpages when not hidden) -->
     <section class="cf-subpage-cta-banner">
@@ -10,7 +13,7 @@
                             <span>Enterprise Infrastructure</span>
                         </span>
                         <h2 class="cf-subpage-cta-title">
-                            
+                            Ready to Elevate Your Digital Infrastructure?
                         </h2>
                         <p class="cf-subpage-cta-desc mb-0">
                             From high-performance NVMe VPS and Dedicated Bare-Metal Servers to secure Cloud Hosting and domain registration — CloudFlox delivers scalable, ultra-reliable infrastructure engineered for speed.
@@ -28,7 +31,7 @@
                                 <span>Get Started Today</span>
                                 <i class="las la-arrow-right"></i>
                             </a>
-                            <a href="contact-us" class="cf-btn-outline-glow">
+                            <a href="<?php echo $cfFooterUrl; ?>contact-us" class="cf-btn-outline-glow">
                                 <i class="las la-headset"></i>
                                 <span>Talk to an Expert</span>
                             </a>
@@ -89,8 +92,8 @@
                 <!-- Brand Column -->
                 <div class="col-lg-4 col-md-12">
                     <div class="cf-footer-brand-wrap pe-lg-4">
-                        <a href="<?php echo $url ?? ''; ?>" class="d-inline-block mb-3">
-                            <img src="assets/imgs/logos/cloud-flox-main.png" alt="CloudFlox Cloud Hosting" class="cf-footer-logo-img">
+                        <a href="<?php echo $cfFooterUrl; ?>" class="d-inline-block mb-3">
+                            <img src="<?php echo $cfFooterUrl; ?>assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox Cloud Hosting" class="cf-footer-logo-img">
                         </a>
                         <p class="cf-footer-brand-desc">
                             Enterprise-grade cloud infrastructure engineered for velocity. Deploy ultra-fast NVMe VPS, dedicated bare-metal servers, and secure cloud hosting with 99.99% guaranteed uptime and 24/7 human engineering support.
@@ -110,7 +113,7 @@
                             <a href="#" class="cf-social-btn" aria-label="CloudFlox on YouTube">
                                 <i class="lab la-youtube"></i>
                             </a>
-                            <a href="contact-us" class="cf-social-btn" aria-label="CloudFlox Support Desk">
+                            <a href="<?php echo $cfFooterUrl; ?>contact-us" class="cf-social-btn" aria-label="CloudFlox Support Desk">
                                 <i class="las la-headset"></i>
                             </a>
                         </div>
@@ -131,34 +134,34 @@
                             <span>Hosting Solutions</span>
                         </h6>
                         <ul class="cf-footer-links list-unstyled">
-                            <li><a href="shared-hosting" class="cf-footer-link">Shared Hosting</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>budget-hosting" class="cf-footer-link">Budget Hosting</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>web-hosting" class="cf-footer-link">Business Hosting</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>premium-hosting" class="cf-footer-link">Premium Hosting</a></li>
                             <li>
-                                <a href="vps-hosting" class="cf-footer-link d-inline-flex align-items-center gap-2">
+                                <a href="<?php echo $cfFooterUrl; ?>vps-hosting" class="cf-footer-link d-inline-flex align-items-center gap-2">
                                     <span>VPS Hosting</span>
                                     <span class="cf-nav-hot-pill">HOT</span>
                                 </a>
                             </li>
-                            <li><a href="dedicated-server" class="cf-footer-link">Dedicated Servers</a></li>
-                            <li><a href="domain" class="cf-footer-link">Domain Names</a></li>
-                            <li><a href="vps-hosting#storage-vps" class="cf-footer-link">Storage VPS</a></li>
-                            <li><a href="shared-hosting#wordpress" class="cf-footer-link">WordPress Cloud</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>dedicated-server" class="cf-footer-link">Dedicated Servers</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>domain" class="cf-footer-link">Domain Names</a></li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Column 2: Platform & Features -->
+                <!-- Column 2: Platform & Infrastructure -->
                 <div class="col-lg-3 col-md-4 col-6">
                     <div class="cf-footer-col ps-lg-3">
                         <h6 class="cf-footer-col-title">
                             <span>Platform &amp; Tech</span>
                         </h6>
                         <ul class="cf-footer-links list-unstyled">
-                            <li><a href="#!" class="cf-footer-link">Tier-3 Data Centers</a></li>
-                            <li><a href="#!" class="cf-footer-link">cPanel &amp; DirectAdmin</a></li>
-                            <li><a href="#!" class="cf-footer-link">Linux &amp; Windows OS</a></li>
-                            <li><a href="#!" class="cf-footer-link">AMD EPYC™ Hardware</a></li>
-                            <li><a href="#!" class="cf-footer-link">NVMe Gen4 Storage</a></li>
-                            <li><a href="#!" class="cf-footer-link">DDoS Guard &amp; Firewall</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>vps-hosting" class="cf-footer-link">NVMe Gen4 Cloud Fabric</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>dedicated-server" class="cf-footer-link">AMD EPYC™ Bare-Metal</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>web-hosting" class="cf-footer-link">cPanel &amp; LiteSpeed Stack</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>domain" class="cf-footer-link">Anycast DNS &amp; Domains</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>blog/" class="cf-footer-link">Engineering &amp; Benchmarks</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>contact-us" class="cf-footer-link">Custom Infrastructure SLA</a></li>
                         </ul>
                     </div>
                 </div>
@@ -170,8 +173,8 @@
                             <span>Support &amp; Portal</span>
                         </h6>
                         <ul class="cf-footer-links list-unstyled">
-                            <li><a href="contact-us" class="cf-footer-link">Contact Specialist Team</a></li>
-                            <li><a href="blog/" class="cf-footer-link">Engineering &amp; Cloud Blog</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>contact-us" class="cf-footer-link">Contact Specialist Team</a></li>
+                            <li><a href="<?php echo $cfFooterUrl; ?>blog/" class="cf-footer-link">Engineering &amp; Cloud Blog</a></li>
                             <li><a href="https://my.cloudflox.com/submitticket.php" class="cf-footer-link">Submit Support Ticket</a></li>
                             <li><a href="https://my.cloudflox.com/index.php?rp=/knowledgebase" class="cf-footer-link">Knowledgebase &amp; FAQs</a></li>
                             <li><a href="https://my.cloudflox.com/index.php?rp=/announcements" class="cf-footer-link">Network Announcements</a></li>
@@ -270,7 +273,7 @@
                             <span>Accepted Payment Methods:</span>
                         </span>
                         <div class="cf-payment-pill-card">
-                            <img src="assets/imgs/payments.png" alt="Visa, Mastercard, American Express, PayPal, USDT Payments" class="cf-payment-img">
+                            <img src="<?php echo $cfFooterUrl; ?>assets/imgs/payments.webp" alt="Visa, Mastercard, American Express, PayPal, USDT Payments" class="cf-payment-img">
                         </div>
                     </div>
 
@@ -303,11 +306,11 @@
                             <i class="las la-shield-alt text-success"></i> 256-Bit SSL Encrypted
                         </span>
                         <div class="cf-legal-links d-inline-flex align-items-center gap-3">
-                            <a href="terms-of-service" class="cf-legal-link">Terms of Service</a>
+                            <a href="<?php echo $cfFooterUrl; ?>terms-of-service" class="cf-legal-link">Terms of Service</a>
                             <span class="cf-legal-sep">&middot;</span>
-                            <a href="privacy-policy" class="cf-legal-link">Privacy Policy</a>
+                            <a href="<?php echo $cfFooterUrl; ?>privacy-policy" class="cf-legal-link">Privacy Policy</a>
                             <span class="cf-legal-sep">&middot;</span>
-                            <a href="refund-policy" class="cf-legal-link">Refund Policy</a>
+                            <a href="<?php echo $cfFooterUrl; ?>refund-policy" class="cf-legal-link">Refund Policy</a>
                         </div>
                     </div>
 

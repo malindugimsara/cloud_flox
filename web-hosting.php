@@ -23,7 +23,7 @@
     <meta property="og:description"
         content="Scale your company website, WooCommerce store, or client portals with LiteSpeed Enterprise and high-speed NVMe Gen4 storage starting at $7.50/mo.">
     <meta property="og:url" content="https://cloudflox.com/web-hosting">
-    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-business-infrastructure.jpg">
+    <meta property="og:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-business-infrastructure.webp">
     <meta property="og:site_name" content="CloudFlox">
 
     <!-- Twitter Card -->
@@ -31,7 +31,7 @@
     <meta name="twitter:title" content="CloudFlox Business Web Hosting">
     <meta name="twitter:description"
         content="Blazing-fast NVMe business hosting with LiteSpeed Enterprise, cPanel, Imunify360 security, and priority ticket support.">
-    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-business-infrastructure.jpg">
+    <meta name="twitter:image" content="https://cloudflox.com/assets/imgs/banners/cloudflox-business-infrastructure.webp">
 
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
@@ -181,7 +181,7 @@
                         <div class="cf-hero-img-wrap position-relative mx-auto">
                             <picture>
                                 <source srcset="assets/imgs/banners/cloudflox-business-infrastructure.webp" type="image/webp">
-                                <img src="assets/imgs/banners/cloudflox-business-infrastructure.jpg"
+                                <img src="assets/imgs/banners/cloudflox-business-infrastructure.webp"
                                      alt="CloudFlox Enterprise Business Web Hosting Infrastructure with LiteSpeed and NVMe Gen4"
                                      class="cf-hero-illustration img-fluid"
                                      width="900"
@@ -225,11 +225,11 @@
     <section class="modern-pricing-section position-relative py-5" id="businessPlans">
         <!-- Ambient Decorative Pattern Backgrounds -->
         <div class="pricing-bg-shape pricing-shape-left" aria-hidden="true">
-            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="" width="370" height="590" loading="eager"
+            <img src="assets/imgs/shape/pattern-2.svg?v=2" alt="pattern-2" width="370" height="590" loading="eager"
                 decoding="async">
         </div>
         <div class="pricing-bg-shape pricing-shape-right" aria-hidden="true">
-            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="" width="370" height="590" loading="eager"
+            <img src="assets/imgs/shape/pattern-3.svg?v=2" alt="pattern-3" width="370" height="590" loading="eager"
                 decoding="async">
         </div>
 

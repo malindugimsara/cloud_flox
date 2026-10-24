@@ -22,7 +22,7 @@ $articles = [
         'iso_date' => '2026-10-20T09:00:00+00:00',
         'author' => 'Alex Rivera',
         'author_role' => 'Principal Cloud Architect',
-        'image' => 'assets/imgs/banners/cloudflox-vps-infrastructure.jpg',
+        'image' => 'assets/imgs/banners/cloudflox-vps-infrastructure.webp',
         'meta_desc' => 'Comprehensive server storage benchmark: Discover why PCIe Gen4 NVMe drives deliver 10x IOPS and microsecond latency compared to legacy SATA SSDs for MySQL and web hosting.',
         'keywords' => 'nvme vs sata ssd, vps storage benchmark, server iops comparison, pcie gen4 cloud vps, mysql disk latency',
         'excerpt' => 'An architectural benchmark deep-dive into how PCIe Gen4 NVMe arrays eliminate I/O queue bottlenecks for MySQL, PostgreSQL, and high-concurrency Node.js workloads. Discover why raw IOPS and microsecond latency matter more than pure CPU clock speed.',
@@ -389,7 +389,7 @@ sudo systemctl start fail2ban</code></pre>
         'iso_date' => '2026-10-04T09:00:00+00:00',
         'author' => 'Alex Rivera',
         'author_role' => 'Principal Cloud Architect',
-        'image' => 'assets/imgs/banners/cloud-hosting-technology.png',
+        'image' => 'assets/imgs/banners/cloud-hosting-technology.webp',
         'meta_desc' => 'Complete step-by-step engineer checklist for migrating busy production websites from legacy cPanel shared hosting to a high-speed CloudFlox KVM VPS.',
         'keywords' => 'zero downtime migration, cpanel to vps transfer, rsync mysql transfer, dns ttl migration checklist, cloudflox free migration',
         'excerpt' => 'Complete checklist for rsync database replication, pre-propagation DNS TTL reduction, and SSL cert verification without a second of downtime.',
@@ -424,7 +424,7 @@ sudo systemctl start fail2ban</code></pre>
         'iso_date' => '2026-09-28T09:00:00+00:00',
         'author' => 'David Chen',
         'author_role' => 'Global Network Operations Lead',
-        'image' => 'assets/imgs/banners/cloudflox-domain-infrastructure.jpg',
+        'image' => 'assets/imgs/banners/cloudflox-domain-infrastructure.webp',
         'meta_desc' => 'Why DNS resolution latency accounts for up to 30% of initial mobile page load times, and how Anycast routing ensures sub-20ms lookup speeds.',
         'keywords' => 'anycast dns speed, unicast vs anycast nameserver, reduce ttfb dns, domain dns management, cloudflox premium dns',
         'excerpt' => 'Why DNS lookup latency accounts for up to 30% of initial mobile page load times, and how Anycast routing ensures sub-20ms resolution worldwide.',
@@ -464,7 +464,7 @@ if ($isSingleArticle) {
     $metaKeywords = 'cloud hosting blog, vps tutorials, dedicated server benchmarks, linux sysadmin guide, anti-ddos protection, cpanel optimization, cloudflox engineering';
     $canonicalUrl = 'https://cloudflox.com/blog/';
     $ogType = 'website';
-    $ogImage = 'https://cloudflox.com/assets/imgs/banners/cloudflox-blog-architecture.jpg';
+    $ogImage = 'https://cloudflox.com/assets/imgs/banners/cloudflox-blog-architecture.webp';
 }
 ?>
 <!DOCTYPE html>
@@ -534,7 +534,7 @@ if ($isSingleArticle) {
             "url": "https://cloudflox.com",
             "logo": {
               "@type": "ImageObject",
-              "url": "https://cloudflox.com/assets/imgs/logos/cloud-flox-main.png"
+              "url": "https://cloudflox.com/assets/imgs/logos/cloud-flox-main.webp"
             }
           },
           "mainEntityOfPage": "<?php echo $canonicalUrl; ?>"
@@ -583,7 +583,7 @@ if ($isSingleArticle) {
             "url": "https://cloudflox.com",
             "logo": {
               "@type": "ImageObject",
-              "url": "https://cloudflox.com/assets/imgs/logos/cloud-flox-main.png"
+              "url": "https://cloudflox.com/assets/imgs/logos/cloud-flox-main.webp"
             }
           }
         },
@@ -956,7 +956,7 @@ if ($isSingleArticle) {
                 <div class="col-12 col-lg-5">
                     <div class="cf-blog-hero-visual position-relative text-center">
                         <div class="cf-blog-visual-card position-relative mx-auto">
-                            <img src="assets/imgs/banners/cloudflox-blog-architecture.jpg"
+                            <img src="assets/imgs/banners/cloudflox-blog-architecture.webp"
                                  alt="CloudFlox Technical Guides, Cloud Architecture &amp; DevOps Knowledge Hub"
                                  class="cf-blog-hero-img img-fluid"
                                  width="580"
@@ -1004,7 +1004,7 @@ if ($isSingleArticle) {
                     <div class="col-12 col-lg-6">
                         <div class="cf-featured-img-box">
                             <a href="blog/nvme-vs-sata-ssd-iops-benchmarks/">
-                                <img src="assets/imgs/banners/cloudflox-vps-infrastructure.jpg"
+                                <img src="assets/imgs/banners/cloudflox-vps-infrastructure.webp"
                                     alt="NVMe Gen4 vs SATA SSD VPS Performance Benchmarks"
                                     class="img-fluid w-100 h-100 object-fit-cover"
                                     width="640" height="380" loading="eager" fetchpriority="high">
@@ -1203,7 +1203,7 @@ if ($isSingleArticle) {
                     <article class="cf-article-grid-card">
                         <div class="cf-article-thumb-wrap">
                             <a href="blog/zero-downtime-cpanel-to-kvm-migration/">
-                                <img src="assets/imgs/banners/cloud-hosting-technology.png"
+                                <img src="assets/imgs/banners/cloud-hosting-technology.webp"
                                     alt="Zero Downtime Server Migration from cPanel to Cloud VPS"
                                     class="img-fluid" width="400" height="210" loading="lazy">
                             </a>
@@ -1237,7 +1237,7 @@ if ($isSingleArticle) {
                     <article class="cf-article-grid-card">
                         <div class="cf-article-thumb-wrap">
                             <a href="blog/optimizing-global-dns-resolution-anycast/">
-                                <img src="assets/imgs/banners/cloudflox-domain-infrastructure.jpg"
+                                <img src="assets/imgs/banners/cloudflox-domain-infrastructure.webp"
                                     alt="Optimizing DNS Resolution Times with Anycast Nameservers"
                                     class="img-fluid" width="400" height="210" loading="lazy">
                             </a>
