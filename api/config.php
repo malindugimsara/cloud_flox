@@ -10,14 +10,23 @@
 // WHMCS API Endpoint
 define('WHMCS_API_URL', 'https://my.cloudflox.com/includes/api.php');
 
-// WHMCS API Credentials (Create in WHMCS Admin: Setup -> Staff Management -> API Credentials)
-// If left empty, system runs in Smart Demo Mode so you can preview the full interactive checkout flow immediately.
-define('WHMCS_API_IDENTIFIER', 'aYxzdsEu6e4hfsBS0y3SD7QQvSICdyD3'); // Enter your API Identifier here
-define('WHMCS_API_SECRET', 'L6ZMtif9sRQc4Owd4Rzm65xrvOI8jPIA');     // Enter your API Secret here
-define('WHMCS_API_ACCESS_KEY', ''); // Optional $api_access_key from configuration.php
+define('WHMCS_API_IDENTIFIER', 'aYxzdsEu6e4hfsBS0y3SD7QQvSICdyD3'); 
+define('WHMCS_API_SECRET', 'L6ZMtif9sRQc4Owd4Rzm65xrvOI8jPIA');     
+define('WHMCS_API_ACCESS_KEY', ''); 
 
-// Auto-detect Demo Mode if API credentials are not yet supplied
-define('CF_CHECKOUT_DEMO_MODE', empty(WHMCS_API_IDENTIFIER) || empty(WHMCS_API_SECRET));
+// Auto-detect Local Development environment
+$host = $_SERVER['HTTP_HOST'] ?? '';
+$isLocalDev = (
+    strpos($host, 'localhost') !== false ||
+    strpos($host, '127.0.0.1') !== false ||
+    strpos($host, '::1') !== false ||
+    preg_match('/^192\.168\./', $host) ||
+    preg_match('/^10\./', $host)
+);
+
+// Enable local simulation on localhost so WHMCS API IP restrictions don't block development
+define('CF_FORCE_LOCAL_DEMO', true);
+define('CF_CHECKOUT_DEMO_MODE', empty(WHMCS_API_IDENTIFIER) || empty(WHMCS_API_SECRET) || (CF_FORCE_LOCAL_DEMO && $isLocalDev));
 
 // CloudFlox Products Catalog & Specifications Matrix
 $CF_PRODUCTS = [

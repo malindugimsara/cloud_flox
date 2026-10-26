@@ -67,6 +67,18 @@ class WHMCSClient {
             ];
         }
 
+        // Graceful Localhost Fallback for WHMCS IP restrictions
+        if (!empty($data['result']) && $data['result'] === 'error') {
+            $msg = strtolower($data['message'] ?? '');
+            if (str_contains($msg, 'invalid ip')) {
+                $host = $_SERVER['HTTP_HOST'] ?? '';
+                $isLocal = (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false || strpos($host, '::1') !== false || preg_match('/^192\.168\./', $host));
+                if ($isLocal) {
+                    return self::simulateResponse($action, $params);
+                }
+            }
+        }
+
         return $data;
     }
 

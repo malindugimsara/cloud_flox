@@ -3968,8 +3968,7 @@
                             </div>
 
                             <!-- Anti-spam Honeypot (Hidden) -->
-                            <input type="text" name="cf_hp_field" id="cq_hp" style="display:none;" tabindex="-1"
-                                autocomplete="off">
+                            <input type="text" name="cf_hp_field" id="cq_hp" style="display:none !important; position:absolute; left:-9999px;" tabindex="-1" autocomplete="new-password" aria-hidden="true">
 
                             <!-- Submit Buttons -->
                             <button type="submit" id="cq_submit_btn" class="btn-cq-submit">
@@ -4442,7 +4441,7 @@
     <!-- =========== JS Area =========== -->
 
     <!-- CloudFlox Homepage Interactive Scripts (Pricing, Comparison, Matchmaker, Quotes) -->
-    <script src="assets/js/cloudflox-home.js?v=7"></script>
+    <script src="assets/js/cloudflox-home.js?v=8"></script>
 
 </body>
 

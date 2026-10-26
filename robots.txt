@@ -6,7 +6,6 @@ Allow: /
 
 # Disallow private and administrative assets
 Disallow: /include/
-Disallow: /scratch/
 Disallow: /cgi-bin/
 
 # Official XML Sitemap

@@ -1,20 +1,35 @@
     <!--preloader start-->
     <div class="preloader bg-light-subtle">
         <div class="preloader-wrap">
-            <img src="assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox" class="img-fluid preloader-logo" width="240" height="56">
+            <img src="<?php echo $url ?? ''; ?>assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox" class="img-fluid preloader-logo" width="240" height="56">
             <div class="loading-bar"></div>
         </div>
     </div>
     <!--preloader end-->
 
     <?php
+    // Ensure $url is loaded
+    if (!isset($url)) {
+        include_once __DIR__ . '/url.inc.php';
+    }
+
     // Active menu page detection
     $cfCurrentPage = basename($_SERVER['PHP_SELF'] ?? '');
-    $isHostingActive = in_array($cfCurrentPage, [
-        'budget-hosting.php', 'budget-hosting',
-        'web-hosting.php', 'web-hosting',
-        'premium-hosting.php', 'premium-hosting'
-    ]);
+    $cfRequestPath = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    $cfPathParts = explode('/', $cfRequestPath);
+    $cfCurrentSlug = end($cfPathParts);
+
+    if (!function_exists('isCfPageActive')) {
+        function isCfPageActive($slug, $currentPage, $currentSlug) {
+            return ($currentPage === $slug . '.php' || $currentPage === $slug || $currentSlug === $slug);
+        }
+    }
+
+    $isHostingActive = (
+        isCfPageActive('budget-hosting', $cfCurrentPage, $cfCurrentSlug) ||
+        isCfPageActive('web-hosting', $cfCurrentPage, $cfCurrentSlug) ||
+        isCfPageActive('premium-hosting', $cfCurrentPage, $cfCurrentSlug)
+    );
     ?>
 
     <!-- =========================================================================
@@ -37,7 +52,7 @@
                         <span class="d-sm-none">VPS &amp; Dedicated Servers — </span>
                         <span class="cf-promo-highlight">30% OFF</span>!
                     </span>
-                    <a href="vps-hosting" class="cf-promo-link">
+                    <a href="<?php echo $url; ?>vps-hosting" class="cf-promo-link">
                         Claim <i class="las la-arrow-right"></i>
                     </a>
                 </div>
@@ -48,7 +63,7 @@
                         <i class="las la-check-circle"></i> 99.99% Uptime SLA
                     </span>
                     <span class="cf-top-divider"></span>
-                    <a href="contact-us" class="cf-top-support-link">
+                    <a href="<?php echo $url; ?>contact-us" class="cf-top-support-link">
                         <i class="las la-headset"></i> 24/7 Human Support
                     </a>
                 </div>
@@ -65,7 +80,7 @@
             <div class="container">
                 <!-- Brand Logo -->
                 <a class="navbar-brand cf-brand-logo" href="<?php echo $url;?>">
-                    <img src="assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox Cloud Hosting" class="cf-logo-img" width="200" height="47">
+                    <img src="<?php echo $url; ?>assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox Cloud Hosting" class="cf-logo-img" width="200" height="47">
                 </a>
 
                 <!-- Mobile Hamburger Toggler -->
@@ -79,7 +94,7 @@
                 <div class="collapse navbar-collapse" id="primaryMenu">
                     <ul class="navbar-nav mx-auto align-items-lg-center cf-nav-list">
                         <li class="nav-item">
-                            <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'index.php' || empty($cfCurrentPage)) ? 'active' : ''; ?>" href="<?php echo $url;?>">
+                            <a class="nav-link cf-nav-link <?php echo (isCfPageActive('index', $cfCurrentPage, $cfCurrentSlug) || empty($cfCurrentSlug) || $cfCurrentSlug === 'cf-website') ? 'active' : ''; ?>" href="<?php echo $url;?>">
                                 <i class="las la-home nav-icon-mobile d-lg-none"></i>
                                 <span>Home</span>
                             </a>
@@ -102,7 +117,7 @@
                             <ul class="dropdown-menu cf-dropdown-menu" aria-labelledby="hostingMenuDropdown">
                                 <!-- 1. Budget Hosting -->
                                 <li>
-                                    <a class="dropdown-item cf-dropdown-item <?php echo ($cfCurrentPage == 'budget-hosting.php' || $cfCurrentPage == 'budget-hosting') ? 'active' : ''; ?>" href="budget-hosting">
+                                    <a class="dropdown-item cf-dropdown-item <?php echo isCfPageActive('budget-hosting', $cfCurrentPage, $cfCurrentSlug) ? 'active' : ''; ?>" href="<?php echo $url; ?>budget-hosting">
                                         <div class="cf-dd-icon-box cf-dd-icon-budget">
                                             <i class="las la-wallet"></i>
                                         </div>
@@ -117,7 +132,7 @@
                                 </li>
                                 <!-- 2. Business Web Hosting -->
                                 <li>
-                                    <a class="dropdown-item cf-dropdown-item <?php echo ($cfCurrentPage == 'web-hosting.php' || $cfCurrentPage == 'web-hosting') ? 'active' : ''; ?>" href="web-hosting">
+                                    <a class="dropdown-item cf-dropdown-item <?php echo isCfPageActive('web-hosting', $cfCurrentPage, $cfCurrentSlug) ? 'active' : ''; ?>" href="<?php echo $url; ?>web-hosting">
                                         <div class="cf-dd-icon-box cf-dd-icon-web">
                                             <i class="las la-briefcase"></i>
                                         </div>
@@ -132,7 +147,7 @@
                                 </li>
                                 <!-- 3. Premium Managed Hosting -->
                                 <li>
-                                    <a class="dropdown-item cf-dropdown-item <?php echo ($cfCurrentPage == 'premium-hosting.php' || $cfCurrentPage == 'premium-hosting') ? 'active' : ''; ?>" href="premium-hosting">
+                                    <a class="dropdown-item cf-dropdown-item <?php echo isCfPageActive('premium-hosting', $cfCurrentPage, $cfCurrentSlug) ? 'active' : ''; ?>" href="<?php echo $url; ?>premium-hosting">
                                         <div class="cf-dd-icon-box cf-dd-icon-premium">
                                             <i class="las la-crown"></i>
                                         </div>
@@ -148,31 +163,31 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'vps-hosting.php' || $cfCurrentPage == 'vps-hosting') ? 'active' : ''; ?>" href="vps-hosting">
+                            <a class="nav-link cf-nav-link <?php echo isCfPageActive('vps-hosting', $cfCurrentPage, $cfCurrentSlug) ? 'active' : ''; ?>" href="<?php echo $url; ?>vps-hosting">
                                 <i class="las la-server nav-icon-mobile d-lg-none"></i>
                                 <span>VPS Hosting</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'dedicated-server.php' || $cfCurrentPage == 'dedicated-server') ? 'active' : ''; ?>" href="dedicated-server">
+                            <a class="nav-link cf-nav-link <?php echo isCfPageActive('dedicated-server', $cfCurrentPage, $cfCurrentSlug) ? 'active' : ''; ?>" href="<?php echo $url; ?>dedicated-server">
                                 <i class="las la-microchip nav-icon-mobile d-lg-none"></i>
                                 <span>Dedicated Server</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'domain.php' || $cfCurrentPage == 'domain') ? 'active' : ''; ?>" href="domain">
+                            <a class="nav-link cf-nav-link <?php echo isCfPageActive('domain', $cfCurrentPage, $cfCurrentSlug) ? 'active' : ''; ?>" href="<?php echo $url; ?>domain">
                                 <i class="las la-globe nav-icon-mobile d-lg-none"></i>
                                 <span>Domain</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'blog.php' || $cfCurrentPage == 'blog') ? 'active' : ''; ?>" href="blog/">
+                            <a class="nav-link cf-nav-link <?php echo isCfPageActive('blog', $cfCurrentPage, $cfCurrentSlug) ? 'active' : ''; ?>" href="<?php echo $url; ?>blog">
                                 <i class="las la-newspaper nav-icon-mobile d-lg-none"></i>
                                 <span>Blog</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link cf-nav-link <?php echo ($cfCurrentPage == 'contact-us.php' || $cfCurrentPage == 'contact-us') ? 'active' : ''; ?>" href="contact-us">
+                            <a class="nav-link cf-nav-link <?php echo isCfPageActive('contact-us', $cfCurrentPage, $cfCurrentSlug) ? 'active' : ''; ?>" href="<?php echo $url; ?>contact-us">
                                 <i class="las la-envelope nav-icon-mobile d-lg-none"></i>
                                 <span>Contact Us</span>
                             </a>
@@ -222,8 +237,8 @@
 
             <div class="offer-popup__badge">Limited Offer</div>
 
-            <a href="vps-hosting">
-                <img src="assets/imgs/banners/cloudflox-cheap-web-hosting-usa.webp" alt="Offer" width="640" height="427" style="width: 100%; height: auto; border-radius: 0px 0px 15px 15px;" loading="lazy">
+            <a href="<?php echo $url; ?>vps-hosting">
+                <img src="<?php echo $url; ?>assets/imgs/banners/cloudflox-cheap-web-hosting-usa.webp" alt="Offer" width="640" height="427" style="width: 100%; height: auto; border-radius: 0px 0px 15px 15px;" loading="lazy">
             </a>
             <label class="offer-popup__dont text-black d-none">
                 <input type="checkbox" id="dontShowOffer" checked>

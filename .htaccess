@@ -17,8 +17,16 @@ DirectoryIndex index.php
 RewriteCond %{REQUEST_METHOD} !POST
 RewriteCond %{REQUEST_URI} !check-domain [NC]
 RewriteCond %{REQUEST_URI} !custom-quote [NC]
-RewriteCond %{THE_REQUEST} \s/+(.*)\.php[\s?]
-RewriteRule ^ %1 [R=301,L]
+RewriteCond %{REQUEST_URI} !api/ [NC]
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php [NC]
+RewriteRule ^index\.php$ / [R=301,L]
+
+RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{REQUEST_URI} !check-domain [NC]
+RewriteCond %{REQUEST_URI} !custom-quote [NC]
+RewriteCond %{REQUEST_URI} !api/ [NC]
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?]
+RewriteRule ^ /%1 [R=301,L]
 
 # ---------------------------------
 # 3. Do NOT rewrite real files or folders
@@ -28,7 +36,15 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
 # ---------------------------------
-# 4. Blog & Guides routing (/blog/ and /blog/{slug}/)
+# 4. Remove trailing slashes from non-directory URLs (prevents broken relative paths)
+# ---------------------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} ^(.+)/+$
+RewriteCond %{REQUEST_URI} !^/blog/?$
+RewriteRule ^(.+)/+$ $1 [R=301,L]
+
+# ---------------------------------
+# 5. Blog & Guides routing (/blog/ and /blog/{slug}/)
 # ---------------------------------
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -39,12 +55,13 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^blog/?$ blog.php [QSA,L]
 
 # ---------------------------------
-# 5. Internally rewrite clean URLs to .php (supports optional trailing slash)
+# 6. Internally rewrite clean URLs to .php
 # ---------------------------------
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.php -f [OR]
-RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f [OR]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.php -f
 RewriteRule ^([a-zA-Z0-9_-]+)/?$ $1.php [L]
 
 RewriteCond %{REQUEST_FILENAME}.php -f

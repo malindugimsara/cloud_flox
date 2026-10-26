@@ -89,12 +89,12 @@
                         <!-- Billing Cycle Toggle -->
                         <div class="cf-cycle-selector-wrap">
                             <span class="fs-13 fw-semibold text-slate-700 me-2">Billing Term:</span>
-                            <div class="btn-group btn-group-sm cf-cycle-pill-group" role="group">
-                                <button type="button" class="btn btn-outline-primary active" id="cfCycleMonthlyBtn" onclick="cfSetCycle('monthly')">
+                            <div class="btn-group btn-group-sm cf-cycle-pill-group " role="group">
+                                <button type="button" class="btn btn-outline-primary active btn-hover" id="cfCycleMonthlyBtn" onclick="cfSetCycle('monthly')">
                                     Monthly
                                 </button>
-                                <button type="button" class="btn btn-outline-primary" id="cfCycleYearlyBtn" onclick="cfSetCycle('annually')">
-                                    Annually <span class="badge bg-emerald text-white rounded-pill ms-1">-20% OFF</span>
+                                <button type="button" class="btn btn-outline-primary btn-hover" id="cfCycleYearlyBtn" onclick="cfSetCycle('annually')">
+                                    Annually <span class="badge bg-emerald text-white rounded-pill ms-1" style="color: #000000ff !important;">-20% OFF</span>
                                 </button>
                             </div>
                         </div>
@@ -260,7 +260,7 @@
                             <input type="text" class="form-control" name="address1" id="cfCustAddress" placeholder="123 Galle Road" value="Main Street">
                         </div>
                         <div class="col-12">
-                            <label class="form-label fs-13 fw-semibold text-slate-700">Account Password <span class="text-danger">*</span></label>
+                            <label class="form-label fs-13 fw-semibold text-slate-700">Account Password <span class="text-danger" style="color: #000000ff !important;">*</span></label>
                             <div class="input-group">
                                 <input type="password" class="form-control" name="password" id="cfCustPassword" placeholder="Minimum 6 characters" required>
                                 <button type="button" class="btn btn-outline-secondary" onclick="cfTogglePasswordVisibility()">
@@ -272,7 +272,7 @@
 
                     <!-- Step 2 Navigation -->
                     <div class="cf-step-nav-footer d-flex gap-2 mt-4">
-                        <button type="button" class="btn btn-outline-secondary w-50 py-2 fs-14 fw-semibold" onclick="cfGoToStep(1)">
+                        <button type="button" class="btn btn-outline-secondary w-50 py-2 fs-14 fw-semibold" onclick="cfGoToStep(1)" style="color: #000000ff !important;">
                             <i class="las la-arrow-left me-1"></i> Back
                         </button>
                         <button type="button" class="btn btn-primary cf-btn-next w-50 py-2 fs-14 fw-bold" onclick="cfGoToStep(3)">
@@ -360,7 +360,7 @@
 
                     <!-- Step 3 Navigation / Submit -->
                     <div class="cf-step-nav-footer d-flex gap-2 mt-4">
-                        <button type="button" class="btn btn-outline-secondary w-40 py-2 fs-14 fw-semibold" onclick="cfGoToStep(2)">
+                        <button type="button" class="btn btn-outline-secondary w-40 py-2 fs-14 fw-semibold" onclick="cfGoToStep(2)" style="color: #000000ff !important;">
                             <i class="las la-arrow-left me-1"></i> Back
                         </button>
                         <button type="button" class="btn btn-emerald cf-btn-submit w-60 py-2 fs-15 fw-bold text-white" id="cfBtnSubmitOrder" onclick="cfSubmitCheckoutOrder()">
@@ -408,7 +408,7 @@
                             <a href="#" class="btn btn-primary fw-bold py-2 fs-15 shadow-sm" id="cfSuccessInvoiceBtn" target="_blank">
                                 <i class="las la-file-invoice-dollar me-1"></i> View Invoice &amp; Pay Online
                             </a>
-                            <a href="https://my.cloudflox.com/clientarea.php" class="btn btn-outline-secondary fw-semibold py-2 fs-14" target="_blank">
+                            <a href="https://my.cloudflox.com/clientarea.php" class="btn btn-outline-secondary fw-semibold py-2 fs-14" target="_blank" style="color: #000000ff !important;">
                                 <i class="las la-user me-1"></i> Open Client Dashboard
                             </a>
                             <button type="button" class="btn btn-link text-muted fs-13 mt-2" onclick="cfCloseCheckoutModal()">

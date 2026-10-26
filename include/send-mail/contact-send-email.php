@@ -38,9 +38,18 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
     $mail->Host = 'mail.cloudflox.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'info@cloudflox.com';
-    $mail->Password = '7q6M(Ice^1a9';
+    $mail->Password = 'TC.jk1mnPoccDTf=';
     $mail->SMTPSecure = 'ssl';
     $mail->Port = 465;
+    $mail->Timeout = 10;
+    $mail->CharSet = 'UTF-8';
+    $mail->SMTPOptions = [
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        ]
+    ];
     $mail->setFrom('info@cloudflox.com', 'CloudFlox LLC Hosting');
     $mail->addReplyTo($email, $name);
     $mail->addAddress('info@cloudflox.com');
@@ -72,21 +81,33 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
     $mail->Body  = $bodyContent;
 
     if (!$mail->send()) {
-        // echo $mail->ErrorInfo;
+        echo "Unable to deliver inquiry: " . $mail->ErrorInfo;
+        exit;
     }
-    $mail = new PHPMailer;
-    $mail->IsSMTP();
-    $mail->Host = 'mail.cloudflox.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'info@cloudflox.com';
-    $mail->Password = '7q6M(Ice^1a9';
-    $mail->SMTPSecure = 'ssl';
-    $mail->Port = 465;
-    $mail->setFrom('info@cloudflox.com', 'CloudFlox LLC Hosting');
-    $mail->addReplyTo('info@cloudflox.com', 'CloudFlox LLC Hosting');
-    $mail->addAddress($email);
-    $mail->isHTML(true);
-    $mail->Subject = 'Thank you for contacting CloudFlox Hosting';
+
+    // Auto-reply to customer
+    $clientMail = new PHPMailer;
+    $clientMail->IsSMTP();
+    $clientMail->Host = 'mail.cloudflox.com';
+    $clientMail->SMTPAuth = true;
+    $clientMail->Username = 'info@cloudflox.com';
+    $clientMail->Password = 'TC.jk1mnPoccDTf=';
+    $clientMail->SMTPSecure = 'ssl';
+    $clientMail->Port = 465;
+    $clientMail->Timeout = 10;
+    $clientMail->CharSet = 'UTF-8';
+    $clientMail->SMTPOptions = [
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        ]
+    ];
+    $clientMail->setFrom('info@cloudflox.com', 'CloudFlox LLC Hosting');
+    $clientMail->addReplyTo('info@cloudflox.com', 'CloudFlox LLC Hosting');
+    $clientMail->addAddress($email);
+    $clientMail->isHTML(true);
+    $clientMail->Subject = 'Thank you for contacting CloudFlox Hosting';
     $bodyContent = " <div style='font-family: Arial, sans-serif; padding:20px; background:#f6f6f6;'>
             <div style='max-width:600px; margin:auto; background:#ffffff; border-radius:6px;'>
 
@@ -118,9 +139,8 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
             </div>
         </div>";
 
-    $mail->Body  = $bodyContent;
-    if (!$mail->send()) {
-    } else {
-        echo "success";
-    }
+    $clientMail->Body = $bodyContent;
+    @$clientMail->send();
+
+    echo "success";
 }

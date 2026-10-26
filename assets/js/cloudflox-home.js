@@ -566,20 +566,90 @@ function applyMatchmakerPreset(presetKey) {
 }
 
 // =============================================================================
+// GLOBAL TOAST NOTIFICATION SYSTEM
+// =============================================================================
+function displayToast(heading, text, icon, loaderBg) {
+    if (window.jQuery && typeof jQuery.toast === 'function') {
+        jQuery.toast({
+            heading: heading || 'Notification',
+            text: text || '',
+            position: 'bottom-right',
+            loaderBg: loaderBg || (icon === 'success' ? '#10b981' : '#ef4444'),
+            icon: icon || 'info',
+            hideAfter: 8000,
+            stack: 4
+        });
+        return;
+    }
+
+    // Modern glassmorphism toast fallback
+    let container = document.getElementById('cf-toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'cf-toast-container';
+        container.className = 'cf-toast-container';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    const toastType = (icon === 'success') ? 'success' : ((icon === 'warning') ? 'warning' : ((icon === 'info') ? 'info' : 'error'));
+    toast.className = `cf-toast cf-toast-${toastType}`;
+
+    let iconClass = 'la-exclamation-circle';
+    if (toastType === 'success') iconClass = 'la-check-circle';
+    else if (toastType === 'warning') iconClass = 'la-exclamation-triangle';
+    else if (toastType === 'info') iconClass = 'la-info-circle';
+
+    toast.innerHTML = `
+        <div class="cf-toast-icon-wrap">
+            <i class="las ${iconClass}"></i>
+        </div>
+        <div class="cf-toast-body">
+            <div class="cf-toast-heading">${heading || (toastType === 'success' ? 'Success' : 'Notice')}</div>
+            <div class="cf-toast-text">${text || ''}</div>
+        </div>
+        <button type="button" class="cf-toast-close" aria-label="Close">&times;</button>
+        <div class="cf-toast-progress-bar"></div>
+    `;
+
+    container.appendChild(toast);
+
+    const closeBtn = toast.querySelector('.cf-toast-close');
+    const removeToast = () => {
+        if (toast.classList.contains('cf-toast-closing')) return;
+        toast.classList.add('cf-toast-closing');
+        setTimeout(() => {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 320);
+    };
+
+    if (closeBtn) closeBtn.addEventListener('click', removeToast);
+
+    // Auto dismiss after 7 seconds
+    setTimeout(removeToast, 7000);
+}
+
+// =============================================================================
 // 6. CUSTOM INFRASTRUCTURE QUOTE AJAX SUBMISSION & SLA CONFIRMATION
 // =============================================================================
 function submitCustomQuote(event) {
     event.preventDefault();
 
-    const name = document.getElementById('cq_name').value.trim();
-    const email = document.getElementById('cq_email').value.trim();
-    const service = document.getElementById('cq_service').value;
-    const budget = document.getElementById('cq_budget').value;
-    const requirements = document.getElementById('cq_requirements').value.trim();
-    const hp = document.getElementById('cq_hp').value;
+    const name = document.getElementById('cq_name') ? document.getElementById('cq_name').value.trim() : '';
+    const email = document.getElementById('cq_email') ? document.getElementById('cq_email').value.trim() : '';
+    const service = document.getElementById('cq_service') ? document.getElementById('cq_service').value : '';
+    const budget = document.getElementById('cq_budget') ? document.getElementById('cq_budget').value : '';
+    const requirements = document.getElementById('cq_requirements') ? document.getElementById('cq_requirements').value.trim() : '';
+    const hp = document.getElementById('cq_hp') ? document.getElementById('cq_hp').value : '';
 
     if (!name || !email || !service || !budget || !requirements) {
-        alert('Please fill in all required fields.');
+        displayToast('Validation Error', 'Please complete all required fields before submitting your quote request.', 'error', '#c46a69');
+        return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        displayToast('Invalid Email', 'Please enter a valid business email address (e.g. name@company.com).', 'warning', '#f59e0b');
         return;
     }
 
@@ -597,33 +667,55 @@ function submitCustomQuote(event) {
     formData.append('requirements', requirements);
     formData.append('cf_hp_field', hp);
 
-    fetch('custom-quote-send.php', {
+    // Dynamic root prefix resolution so fetch works across localhost, subfolders, and root domain
+    let targetUrl = 'custom-quote-send.php';
+    const scriptEl = document.querySelector('script[src*="cloudflox-home.js"]');
+    if (scriptEl) {
+        const scriptSrc = scriptEl.getAttribute('src');
+        const rootPrefix = scriptSrc.replace(/assets\/js\/cloudflox-home\.js.*$/, '');
+        targetUrl = (rootPrefix ? rootPrefix : '') + 'custom-quote-send.php';
+    }
+
+    fetch(targetUrl, {
         method: 'POST',
         body: formData
     })
-    .then(res => res.json())
+    .then(async res => {
+        let data;
+        try {
+            data = await res.json();
+        } catch (jsonErr) {
+            throw new Error('Server returned an invalid response (HTTP ' + res.status + '). Please try again later.');
+        }
+
+        if (!res.ok && (!data || !data.message)) {
+            throw new Error(`Server returned HTTP ${res.status}`);
+        }
+        return data;
+    })
     .then(data => {
-        if (data.status === 'success') {
+        if (data && data.status === 'success') {
             document.getElementById('cq_res_name').textContent = data.name || name;
             document.getElementById('cq_res_email').textContent = data.email || email;
             document.getElementById('cq_res_ref').textContent = data.ref || 'CFX-REQ-PENDING';
 
             document.getElementById('customQuoteForm').style.display = 'none';
             document.getElementById('cq_success_card').style.display = 'block';
+
+            displayToast('Quote Request Received', 'Your inquiry has been successfully delivered to our Solutions Architecture team.', 'success', '#10b981');
         } else {
-            alert(data.message || 'There was an issue delivering your inquiry. Please try again.');
+            const errorMsg = (data && data.message) ? data.message : 'Unable to submit your quote inquiry at this time. Please try again.';
+            displayToast('Submission Failed', errorMsg, 'error', '#c46a69');
             if (submitBtn) submitBtn.classList.remove('d-none');
             if (loadingBtn) loadingBtn.classList.add('d-none');
         }
     })
     .catch(err => {
-        // Graceful fallback display in case of local network/offline sandbox
-        document.getElementById('cq_res_name').textContent = name;
-        document.getElementById('cq_res_email').textContent = email;
-        document.getElementById('cq_res_ref').textContent = 'CFX-REQ-' + Math.floor(10000 + Math.random() * 90000);
-
-        document.getElementById('customQuoteForm').style.display = 'none';
-        document.getElementById('cq_success_card').style.display = 'block';
+        console.error('Custom quote submission error:', err);
+        const failMessage = err.message || 'Network connection issue. Please check your internet connection and try again.';
+        displayToast('Submission Failed', failMessage, 'error', '#c46a69');
+        if (submitBtn) submitBtn.classList.remove('d-none');
+        if (loadingBtn) loadingBtn.classList.add('d-none');
     });
 }
 

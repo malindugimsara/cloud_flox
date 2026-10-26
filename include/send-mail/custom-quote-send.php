@@ -17,8 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Honeypot anti-spam check
 if (!empty($_POST['cf_hp_field'])) {
-    // Bot detected - silently succeed
-    echo json_encode(['status' => 'success', 'ref' => 'CFX-REQ-' . rand(10000, 99999)]);
+    echo json_encode(['status' => 'error', 'message' => 'Spam verification detected. Please try again.']);
     exit;
 }
 
@@ -67,6 +66,9 @@ require_once __DIR__ . "/Exception.php";
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+$salesMailSent = false;
+$mailErrorMessage = '';
+
 try {
     // 1. Send Notification Email to CloudFlox Sales Team
     $mail = new PHPMailer(true);
@@ -74,11 +76,18 @@ try {
     $mail->Host = 'mail.cloudflox.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'info@cloudflox.com';
-    $mail->Password = '7q6M(Ice^1a9';
+    $mail->Password = 'TC.jk1mnPoccDTf=';
     $mail->SMTPSecure = 'ssl';
     $mail->Port = 465;
     $mail->Timeout = 8;
     $mail->CharSet = 'UTF-8';
+    $mail->SMTPOptions = [
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        ]
+    ];
 
     $mail->setFrom('info@cloudflox.com', 'CloudFlox Enterprise Portal');
     $mail->addReplyTo($email, $name);
@@ -134,9 +143,20 @@ try {
     ";
     $mail->Body = $salesHtml;
     $mail->send();
+    $salesMailSent = true;
 
 } catch (Exception $e) {
-    // Lead is safely logged in custom_quotes_archive.log
+    $mailErrorMessage = $mail->ErrorInfo ?: $e->getMessage();
+}
+
+// If sales email failed to dispatch via SMTP
+if (!$salesMailSent) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Inquiry archived under ref #' . $ref_id . ', but mail server notification failed (' . htmlspecialchars($mailErrorMessage, ENT_QUOTES, 'UTF-8') . '). Please contact info@cloudflox.com.',
+        'ref' => $ref_id
+    ]);
+    exit;
 }
 
 // 2. Send Automated Confirmation Email to Client
@@ -146,11 +166,18 @@ try {
     $clientMail->Host = 'mail.cloudflox.com';
     $clientMail->SMTPAuth = true;
     $clientMail->Username = 'info@cloudflox.com';
-    $clientMail->Password = '7q6M(Ice^1a9';
+    $clientMail->Password = 'TC.jk1mnPoccDTf=';
     $clientMail->SMTPSecure = 'ssl';
     $clientMail->Port = 465;
     $clientMail->Timeout = 8;
     $clientMail->CharSet = 'UTF-8';
+    $clientMail->SMTPOptions = [
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        ]
+    ];
 
     $clientMail->setFrom('info@cloudflox.com', 'CloudFlox Enterprise Solutions');
     $clientMail->addReplyTo('info@cloudflox.com', 'CloudFlox Solutions Team');
@@ -193,10 +220,9 @@ try {
     $clientMail->send();
 
 } catch (Exception $e) {
-    // Auto-responder failure is non-blocking
+    // Non-blocking autoresponder
 }
 
-// Return successful JSON response
 echo json_encode([
     'status' => 'success',
     'message' => 'Your custom infrastructure inquiry has been securely delivered to our sales engineering team.',
