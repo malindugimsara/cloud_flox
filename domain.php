@@ -124,9 +124,9 @@
                 </ol>
             </nav>
 
-            <div class="row align-items-center g-4 g-xl-5 pb-lg-3">
+            <div class="row align-items-center g-4 g-xl-5 pb-lg-3 cf-domain-hero-row" id="cfDomainHeroRow">
                 <!-- Left Column: Copy, Search & Value Proposition -->
-                <div class="col-12 col-lg-7">
+                <div class="col-12 col-lg-7 cf-domain-search-col" id="cfDomainSearchCol">
                     <!-- Hero Badge -->
                     <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-blue-subtle text-blue fw-bold fs-13 mb-3 border border-blue-subtle">
                         <span class="cf-pulse-dot-blue"></span>
@@ -158,8 +158,8 @@
                         </button>
                     </form>
 
-                    <!-- Real-time Live Domain Search Results Container -->
-                    <div id="domainSearchResults" class="cf-domain-results-wrap" style="display: none;"></div>
+
+
 
                     <!-- Compact Popular TLD Pills -->
                     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
@@ -199,10 +199,13 @@
                             Transfer Domain <i class="las la-arrow-right ms-1"></i>
                         </a>
                     </div>
+
+                    <!-- Real-time Live Domain Search Results Container -->
+                    <div id="domainSearchResults" class="cf-domain-results-wrap" style="display: none;"></div>
                 </div>
 
                 <!-- Right Column: Visual Hero Infrastructure Showcase -->
-                <div class="col-12 col-lg-5">
+                <div class="col-12 col-lg-5 cf-domain-visual-col" id="cfDomainVisualCol">
                     <div class="cf-budget-hero-visual position-relative text-center">
                         <div class="cf-hero-img-wrap position-relative mx-auto" style="max-width: 480px;">
                             <img src="assets/imgs/banners/cloudflox-domain-infrastructure.webp"

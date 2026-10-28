@@ -38,6 +38,60 @@ body.pure-white-theme {
     -webkit-font-smoothing: antialiased;
 }
 
+/* =========================================================================
+   UNIVERSAL TEXT CONTRAST & BUTTON VISIBILITY FIXES
+   Overrides Bootstrap variables that cause #f1f5f9 (white) text on light bgs
+   ========================================================================= */
+body.pure-white-theme .text-secondary,
+.text-secondary {
+    color: #475569 !important;
+}
+
+body.pure-white-theme .text-muted,
+.text-muted {
+    color: #64748B !important;
+}
+
+body.pure-white-theme .text-slate-900,
+.text-slate-900 {
+    color: #0F172A !important;
+}
+
+body.pure-white-theme .text-slate-800,
+.text-slate-800 {
+    color: #1E293B !important;
+}
+
+body.pure-white-theme .btn-outline-secondary,
+.btn-outline-secondary {
+    color: #1E293B !important;
+    border-color: #CBD5E1 !important;
+    background-color: #FFFFFF !important;
+}
+
+body.pure-white-theme .btn-outline-secondary:hover,
+body.pure-white-theme .btn-outline-secondary:focus,
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+    color: #0F172A !important;
+    border-color: #94A3B8 !important;
+    background-color: #F1F5F9 !important;
+}
+
+body.pure-white-theme .btn-light,
+.btn-light {
+    color: #1E293B !important;
+    background-color: #FFFFFF !important;
+    border-color: #CBD5E1 !important;
+}
+
+body.pure-white-theme .btn-light:hover,
+.btn-light:hover {
+    color: #0F172A !important;
+    background-color: #F8FAFC !important;
+    border-color: #94A3B8 !important;
+}
+
 body.pure-white-theme h1,
 body.pure-white-theme h2,
 body.pure-white-theme h3,
@@ -14660,6 +14714,66 @@ body.cf-home-page .modern-cta-section {
    CloudFlox Inline Domain Checker (Real-time Live Results)
    ========================================================================== */
 
+/* Dynamic Domain Results Hero Full-Width Layout */
+.cf-domain-hero-row {
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cf-domain-search-col {
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cf-domain-visual-col {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Expand Search Column and Hide Visual Column when search results are rendered */
+.cf-domain-hero.has-domain-results .cf-domain-search-col,
+.cf-domain-hero:has(.cf-domain-results-wrap:not([style*="display: none"])) .cf-domain-search-col,
+.cf-domain-hero-row.has-domain-results .cf-domain-search-col,
+.cf-domain-hero-row:has(.cf-domain-results-wrap:not([style*="display: none"])) .cf-domain-search-col {
+    width: 100% !important;
+    max-width: 1080px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    flex: 0 0 100% !important;
+}
+
+.cf-domain-hero.has-domain-results .cf-domain-visual-col,
+.cf-domain-hero:has(.cf-domain-results-wrap:not([style*="display: none"])) .cf-domain-visual-col,
+.cf-domain-hero-row.has-domain-results .cf-domain-visual-col,
+.cf-domain-hero-row:has(.cf-domain-results-wrap:not([style*="display: none"])) .cf-domain-visual-col {
+    display: none !important;
+}
+
+/* Close / Dismiss Button for Domain Results Card */
+.cf-domain-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(148, 163, 184, 0.15);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    color: #475569;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    padding: 0;
+}
+
+.cf-domain-close-btn:hover {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #DC2626;
+    transform: rotate(90deg);
+}
+
 .cf-domain-results-wrap {
     margin-top: 18px;
     margin-bottom: 24px;
@@ -15978,6 +16092,10 @@ body.cf-home-page .modern-cta-section {
 
 /* Responsive adjustments for domain upsell */
 @media (max-width: 767.98px) {
+    .cf-upsell-cards-row > div {
+        width: 100% !important;
+        margin-bottom: 12px !important;
+    }
     .cf-domain-cart-upsell-wrap {
         padding: 18px 14px !important;
     }

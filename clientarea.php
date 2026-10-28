@@ -421,13 +421,13 @@ function getStatusBadge($status) {
                                                 </td>
                                                 <td>
                                                     <?php if (strtolower($inv['status']) === 'unpaid'): ?>
-                                                        <a href="<?php echo $url; ?>checkout?invoiceid=<?php echo $inv['id']; ?>" class="btn btn-danger btn-sm rounded-pill px-3 py-1 fs-12 fw-bold">
+                                                        <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>&paynow=1" class="btn btn-danger btn-sm rounded-pill px-3 py-1 fs-12 fw-bold">
                                                             <i class="las la-credit-card me-1"></i> Pay Now
                                                         </a>
                                                     <?php else: ?>
-                                                        <button class="btn btn-light btn-sm rounded-pill px-3 py-1 fs-12 fw-semibold text-secondary" disabled>
-                                                            Paid
-                                                        </button>
+                                                        <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>" class="btn btn-light btn-sm rounded-pill px-3 py-1 fs-12 fw-semibold text-secondary border">
+                                                            <i class="las la-file-invoice me-1"></i> View
+                                                        </a>
                                                     <?php endif; ?>
                                                 </td>
                                             </tr>

@@ -536,32 +536,28 @@ if (empty($invoiceId)) {
     $invoiceId = $orderResult['invoiceid'] ?? ($orderId + 100);
 }
 
-// Generate Invoice URL
-$host = $_SERVER['HTTP_HOST'] ?? '';
-$isLocal = (
-    strpos($host, 'localhost') !== false ||
-    strpos($host, '127.0.0.1') !== false ||
-    strpos($host, '::1') !== false ||
-    preg_match('/^192\.168\./', $host) ||
-    preg_match('/^10\./', $host)
-);
+// Generate Invoice URL in CloudFlox main site
+require_once __DIR__ . '/../include/url.inc.php';
+$invoiceUrl = $url . "invoice?id=" . urlencode($invoiceId) . "&gateway=" . urlencode($paymentMethod) . "&paynow=1";
+$clientAreaUrl = $url . "clientarea";
 
-if ($isLocal) {
-    $whmcsBase = 'http://' . ($host ?: 'localhost:8080') . '/cfwhmcs/';
+$proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || ($_SERVER['SERVER_PORT'] ?? 80) == 443) ? 'https' : 'http';
+$hostHeader = $_SERVER['HTTP_HOST'] ?? 'localhost:8080';
+if (substr($url, 0, 4) === 'http') {
+    $fullSiteUrl = rtrim($url, '/') . '/';
 } else {
-    $whmcsBase = 'https://my.cloudflox.com/';
+    $fullSiteUrl = $proto . '://' . $hostHeader . '/' . ltrim($url, '/');
+    $fullSiteUrl = rtrim($fullSiteUrl, '/') . '/';
 }
+$fullInvoiceUrl = $fullSiteUrl . "invoice?id=" . urlencode($invoiceId) . "&gateway=" . urlencode($paymentMethod) . "&paynow=1";
 
-$invoiceUrl = $whmcsBase . "viewinvoice.php?id=" . urlencode($invoiceId);
-$clientAreaUrl = $whmcsBase . "clientarea.php";
-
-// PayHere SDK Data (from cfwhmcs modules/gateways/payheresdk.php)
+// PayHere SDK Data (synced with active gateway configuration)
 $payhereData = null;
 if ($paymentMethod === 'payhere' || $paymentMethod === 'card') {
-    $lkrRate = 335.00;
+    $lkrRate = defined('CF_PAYHERE_EXCHANGE_RATE') ? CF_PAYHERE_EXCHANGE_RATE : 335.00;
     $amountLkr = number_format($totalPrice * $lkrRate, 2, '.', '');
-    $merchantId = '1211149';
-    $merchantSecret = '4UG3V85u5Y84h3Z840Y78a83';
+    $merchantId = defined('CF_PAYHERE_MERCHANT_ID') ? CF_PAYHERE_MERCHANT_ID : '230744';
+    $merchantSecret = defined('CF_PAYHERE_MERCHANT_SECRET') ? CF_PAYHERE_MERCHANT_SECRET : 'Mjc4NjU2NTM4MDM5OTA5NTg3NDAyNzAyMzk2Mzc1MTM1ODYwMTUy';
     $payHash = strtoupper(md5($merchantId . $invoiceId . $amountLkr . 'LKR' . strtoupper(md5($merchantSecret))));
 
     $cName = $_SESSION['cf_client_name'] ?? 'CloudFlox Customer';
@@ -571,11 +567,11 @@ if ($paymentMethod === 'payhere' || $paymentMethod === 'card') {
     $lName = count($nameParts) > 1 ? implode(' ', array_slice($nameParts, 1)) : 'Customer';
 
     $payhereData = [
-        'sandbox'     => true,
+        'sandbox'     => defined('CF_PAYHERE_SANDBOX') ? CF_PAYHERE_SANDBOX : false,
         'merchant_id' => $merchantId,
-        'return_url'  => $invoiceUrl,
-        'cancel_url'  => $invoiceUrl,
-        'notify_url'  => 'https://my.cloudflox.com/modules/gateways/callback/payheresdk.php',
+        'return_url'  => $fullInvoiceUrl . '&paid=1',
+        'cancel_url'  => $fullInvoiceUrl . '&cancelled=1',
+        'notify_url'  => $fullSiteUrl . 'api/payment-notify.php',
         'first_name'  => $fName,
         'last_name'   => $lName,
         'email'       => $cEmail,

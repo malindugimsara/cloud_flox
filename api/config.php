@@ -28,6 +28,15 @@ $isLocalDev = (
 define('CF_FORCE_LOCAL_DEMO', true);
 define('CF_CHECKOUT_DEMO_MODE', empty(WHMCS_API_IDENTIFIER) || empty(WHMCS_API_SECRET) || (CF_FORCE_LOCAL_DEMO && $isLocalDev));
 
+// Active Payment Gateways Configuration (Synced with cfwhmcs)
+define('CF_PAYHERE_MERCHANT_ID', '230744');
+define('CF_PAYHERE_MERCHANT_SECRET', 'Mjc4NjU2NTM4MDM5OTA5NTg3NDAyNzAyMzk2Mzc1MTM1ODYwMTUy');
+define('CF_PAYHERE_CURRENCY', 'LKR');
+define('CF_PAYHERE_EXCHANGE_RATE', 335.00); // 1 USD = 335 LKR
+define('CF_PAYHERE_SANDBOX', false);
+define('CF_PAYPAL_EMAIL', 'info@cloudflox.com');
+
+
 // CloudFlox Products Catalog & Specifications Matrix
 $CF_PRODUCTS = [
     // 1. Budget Hosting Series

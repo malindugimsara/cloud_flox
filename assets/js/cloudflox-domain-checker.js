@@ -47,8 +47,41 @@
         });
     }
 
+    function expandHeroForResults() {
+        const heroRow = document.getElementById('cfDomainHeroRow') || document.querySelector('.cf-domain-hero-row');
+        const heroSec = document.querySelector('.cf-domain-hero');
+        const visualCol = document.getElementById('cfDomainVisualCol');
+        const searchCol = document.getElementById('cfDomainSearchCol');
+
+        if (heroRow) heroRow.classList.add('has-domain-results');
+        if (heroSec) heroSec.classList.add('has-domain-results');
+        if (visualCol) visualCol.style.display = 'none';
+        if (searchCol) {
+            searchCol.classList.remove('col-lg-7');
+            searchCol.classList.add('col-12');
+        }
+    }
+
+    function collapseHeroResults() {
+        const heroRow = document.getElementById('cfDomainHeroRow') || document.querySelector('.cf-domain-hero-row');
+        const heroSec = document.querySelector('.cf-domain-hero');
+        const visualCol = document.getElementById('cfDomainVisualCol');
+        const searchCol = document.getElementById('cfDomainSearchCol');
+
+        if (heroRow) heroRow.classList.remove('has-domain-results');
+        if (heroSec) heroSec.classList.remove('has-domain-results');
+        if (visualCol) visualCol.style.display = '';
+        if (searchCol) {
+            searchCol.classList.remove('col-12');
+            searchCol.classList.add('col-lg-7');
+        }
+    }
+
     function performDomainCheck(domainQuery, submitBtn, container) {
         if (!container) return;
+
+        // Expand hero layout to full-width & hide illustration
+        expandHeroForResults();
 
         // 1. Loading UI State
         const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>Search</span>';
@@ -59,7 +92,10 @@
 
         container.style.display = 'block';
         container.innerHTML = `
-            <div class="cf-domain-loading-card">
+            <div class="cf-domain-loading-card position-relative">
+                <button type="button" class="btn cf-domain-close-btn" onclick="cfResetDomainSearch()" aria-label="Cancel search" title="Cancel">
+                    <i class="las la-times"></i>
+                </button>
                 <div class="cf-domain-pulse-spinner"></div>
                 <h4 class="fs-16 fw-bold text-slate-800 mb-1">Checking Registry Availability...</h4>
                 <p class="text-muted fs-13 mb-0">Verifying <strong>${escapeHtml(domainQuery)}</strong> across ICANN Anycast DNS &amp; global registries.</p>
@@ -145,9 +181,12 @@
         let primaryHtml = '';
         if (isAvail) {
             primaryHtml = `
-                <div class="cf-domain-card cf-domain-card-available">
+                <div class="cf-domain-card cf-domain-card-available position-relative">
+                    <button type="button" class="btn cf-domain-close-btn" onclick="cfResetDomainSearch()" aria-label="Close search results" title="Close results">
+                        <i class="las la-times"></i>
+                    </button>
                     <div class="cf-domain-card-left">
-                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap pe-4">
                             <span class="cf-badge-available">
                                 <i class="las la-check-circle"></i> Available Now
                             </span>
@@ -171,9 +210,12 @@
             `;
         } else {
             primaryHtml = `
-                <div class="cf-domain-card cf-domain-card-taken">
+                <div class="cf-domain-card cf-domain-card-taken position-relative">
+                    <button type="button" class="btn cf-domain-close-btn" onclick="cfResetDomainSearch()" aria-label="Close search results" title="Close results">
+                        <i class="las la-times"></i>
+                    </button>
                     <div class="cf-domain-card-left">
-                        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap pe-4">
                             <span class="cf-badge-taken">
                                 <i class="las la-times-circle"></i> Already Registered
                             </span>
@@ -438,6 +480,22 @@
         `;
     }
 
+    // Dismiss / Reset Domain Search Results & Restore Initial Hero State
+    window.cfResetDomainSearch = function() {
+        const container = document.getElementById('domainSearchResults');
+        if (container) {
+            container.style.display = 'none';
+            container.innerHTML = '';
+        }
+        collapseHeroResults();
+        hideFloatingCartBar();
+        activeDomainCart.domain = null;
+        activeDomainCart.domainPrice = 0.00;
+        activeDomainCart.hostingPid = null;
+        activeDomainCart.hostingName = null;
+        activeDomainCart.hostingPrice = 0.00;
+    };
+
     // Add Domain to Active Cart Action
     window.cfAddDomainToCart = function(domain, price, btn) {
         const rawPrice = String(price).replace(/[^0-9\.]/g, '');
@@ -650,7 +708,10 @@
 
     function renderError(container, msg) {
         container.innerHTML = `
-            <div class="cf-domain-results-box border-danger-subtle bg-danger-subtle text-danger p-3 rounded-3 text-center">
+            <div class="cf-domain-results-box border-danger-subtle bg-danger-subtle text-danger p-3 rounded-3 text-center position-relative">
+                <button type="button" class="btn cf-domain-close-btn" onclick="cfResetDomainSearch()" aria-label="Close error" title="Close">
+                    <i class="las la-times"></i>
+                </button>
                 <i class="las la-exclamation-triangle fs-22 mb-1"></i>
                 <div class="fw-semibold fs-14">${escapeHtml(msg)}</div>
             </div>
