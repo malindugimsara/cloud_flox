@@ -37,7 +37,6 @@
         '.cloud': 9.99,
         '.io': 39.99,
         '.co': 24.99,
-        '.lk': 29.00,
         '.online': 3.99,
         '.store': 4.99
     };
@@ -84,9 +83,12 @@
 
         // Global Event Delegation: Intercept any "Buy Now", "Choose Plan", or WHMCS cart links
         document.addEventListener('click', function (e) {
-            // 1. Intercept Domain Claim / Buy buttons
+            // If already on the dedicated checkout page, don't intercept
+            if (window.location.pathname.includes('/checkout')) return;
+
+            // 1. Intercept Domain Claim / Buy buttons that are NOT handled inline
             const domainBuyBtn = e.target.closest('.cf-btn-domain-buy, .cf-btn-alt-buy, a[href*="domain=register"]');
-            if (domainBuyBtn) {
+            if (domainBuyBtn && !domainBuyBtn.hasAttribute('onclick')) {
                 e.preventDefault();
                 e.stopPropagation();
                 let domainName = '';
@@ -95,17 +97,16 @@
                     if (match) domainName = decodeURIComponent(match[1]);
                 }
                 openCheckoutDrawer({
-                    pid: '201',
-                    cycle: 'annually',
+                    pid: 'none',
                     domain: domainName,
                     domainType: 'register'
                 });
                 return;
             }
 
-            // 1.1 Intercept Domain Transfer buttons
+            // 1.1 Intercept Domain Transfer buttons that are NOT handled inline
             const domainTransferBtn = e.target.closest('.cf-btn-domain-transfer, .cf-btn-alt-transfer, a[href*="domain=transfer"]');
-            if (domainTransferBtn) {
+            if (domainTransferBtn && !domainTransferBtn.hasAttribute('onclick')) {
                 e.preventDefault();
                 e.stopPropagation();
                 let domainName = '';
@@ -155,71 +156,23 @@
         });
     }
 
-    // Open Checkout Drawer with selected plan
+    // Redirect to Dedicated Full-Page Checkout (Spacious, Clear & Step-by-Step)
     window.openCheckoutDrawer = function (opts) {
         opts = opts || {};
-        currentPid = opts.pid || '201';
-        currentCycle = opts.cycle || 'monthly';
-        currentDomainType = opts.domainType || 'subdomain';
-        currentDomainFee = 0.00;
-
-        const plan = CF_PRODUCTS[currentPid] || CF_PRODUCTS['201'];
-
-        // Populate Plan Details
-        document.getElementById('cfCheckoutPid').value = currentPid;
-        document.getElementById('cfSummaryPlanName').textContent = plan.name;
-        document.getElementById('cfSummaryCategory').textContent = plan.category;
-        document.getElementById('cfCheckoutPlanBadge').textContent = plan.category + ' — ' + plan.name;
-        document.getElementById('cfSummarySpecs').textContent = plan.specs;
-
-        // Set Cycle
-        cfSetCycle(currentCycle);
-
-        // Set domain tabs
-        if (opts.domain && currentDomainType === 'register') {
-            cfSelectDomainTab('register');
-            const regInput = document.getElementById('cfInputRegister');
-            if (regInput) {
-                if (opts.domain.includes('.')) {
-                    const lastDot = opts.domain.lastIndexOf('.');
-                    regInput.value = opts.domain.substring(0, lastDot);
-                    const tld = opts.domain.substring(lastDot);
-                    const sel = document.getElementById('cfSelectTld');
-                    if (sel && [...sel.options].some(o => o.value === tld)) {
-                        sel.value = tld;
-                    }
-                } else {
-                    regInput.value = opts.domain;
-                }
-            }
-            setTimeout(() => cfCheckDomainAvailability(), 150);
-        } else if (opts.domain && currentDomainType === 'transfer') {
-            cfSelectDomainTab('transfer');
-            const transferInput = document.getElementById('cfInputTransfer');
-            if (transferInput) {
-                transferInput.value = opts.domain;
-            }
-        } else {
-            cfSelectDomainTab('subdomain');
-            const subInput = document.getElementById('cfInputSubdomain');
-            if (subInput && !subInput.value) {
-                subInput.value = 'mybusiness-' + Math.floor(100 + Math.random() * 900);
-            }
+        const base = window.CF_BASE_URL || '';
+        const params = new URLSearchParams();
+        if (opts.pid) params.set('pid', opts.pid);
+        if (opts.cycle) params.set('cycle', opts.cycle);
+        if (opts.domain) params.set('domain', opts.domain);
+        if (opts.domainPrice) {
+            const rawPrice = String(opts.domainPrice).replace(/[^0-9\.]/g, '');
+            params.set('price', rawPrice);
         }
+        if (opts.domainType) params.set('domainType', opts.domainType);
 
-        // Reset form & steps
-        cfGoToStep(1);
-        hideAlert();
-
-        // Show Backdrop & Drawer
-        backdrop.style.display = 'flex';
-        setTimeout(() => {
-            backdrop.classList.add('open');
-            document.body.classList.add('cf-modal-open');
-            document.documentElement.classList.add('cf-modal-open');
-            document.body.style.overflow = 'hidden';
-        }, 10);
+        window.location.href = `${base}checkout?` + params.toString();
     };
+
 
     window.closeCheckoutModal = function () {
         if (!backdrop) return;
@@ -237,32 +190,52 @@
         currentCycle = (cycle === 'annually' || cycle === 'yearly') ? 'annually' : 'monthly';
         document.getElementById('cfCheckoutCycle').value = currentCycle;
 
-        const plan = CF_PRODUCTS[currentPid] || CF_PRODUCTS['201'];
-        const isYearly = currentCycle === 'annually';
+        if (currentPid !== 'none' && CF_PRODUCTS[currentPid]) {
+            const plan = CF_PRODUCTS[currentPid];
+            const isYearly = currentCycle === 'annually';
 
-        const monthlyBtn = document.getElementById('cfCycleMonthlyBtn');
-        const yearlyBtn  = document.getElementById('cfCycleYearlyBtn');
+            const monthlyBtn = document.getElementById('cfCycleMonthlyBtn');
+            const yearlyBtn  = document.getElementById('cfCycleYearlyBtn');
 
-        if (monthlyBtn && yearlyBtn) {
-            monthlyBtn.classList.toggle('active', !isYearly);
-            yearlyBtn.classList.toggle('active', isYearly);
-        }
+            if (monthlyBtn && yearlyBtn) {
+                monthlyBtn.classList.toggle('active', !isYearly);
+                yearlyBtn.classList.toggle('active', isYearly);
+            }
 
-        const priceEl = document.getElementById('cfSummaryPrice');
-        const cycleLabelEl = document.getElementById('cfSummaryCycleLabel');
+            const priceEl = document.getElementById('cfSummaryPrice');
+            const cycleLabelEl = document.getElementById('cfSummaryCycleLabel');
 
-        if (isYearly) {
-            priceEl.textContent = '$' + (plan.yearly / 12).toFixed(2);
-            cycleLabelEl.textContent = '/mo (billed $' + plan.yearly.toFixed(2) + '/yr)';
-        } else {
-            priceEl.textContent = '$' + plan.monthly.toFixed(2);
-            cycleLabelEl.textContent = '/mo';
+            if (isYearly) {
+                priceEl.textContent = '$' + (plan.yearly / 12).toFixed(2);
+                cycleLabelEl.textContent = '/mo (billed $' + plan.yearly.toFixed(2) + '/yr)';
+            } else {
+                priceEl.textContent = '$' + plan.monthly.toFixed(2);
+                cycleLabelEl.textContent = '/mo';
+            }
         }
 
         updateReceipt();
     };
 
-    // Domain Choice Tabs
+    // Toggle attaching recommended hosting in checkout drawer
+    window.cfToggleHostingAddon = function () {
+        currentPid = '201';
+        document.getElementById('cfCheckoutPid').value = '201';
+        const plan = CF_PRODUCTS['201'];
+        const reviewHostingCard = document.getElementById('cfReviewHostingCard');
+        const noHostingBanner = document.getElementById('cfNoHostingBanner');
+        if (reviewHostingCard) reviewHostingCard.style.display = 'block';
+        if (noHostingBanner) noHostingBanner.style.display = 'none';
+
+        document.getElementById('cfSummaryPlanName').textContent = plan.name;
+        document.getElementById('cfSummaryCategory').textContent = plan.category;
+        document.getElementById('cfCheckoutPlanBadge').textContent = plan.category + ' — ' + plan.name;
+        document.getElementById('cfSummarySpecs').textContent = plan.specs;
+        cfSetCycle('monthly');
+        updateReceipt();
+    };
+
+    // Domain Choice Tabs (for hosting-first path)
     window.cfSelectDomainTab = function (type) {
         currentDomainType = type;
         document.getElementById('cfCheckoutDomainType').value = type;
@@ -290,6 +263,29 @@
         }
 
         updateReceipt();
+    };
+
+    // Account Mode Switcher (Register vs Login)
+    window.cfSetAccountMode = function (mode) {
+        const actionInput = document.getElementById('cfCheckoutAccountAction');
+        if (actionInput) actionInput.value = mode;
+
+        const btnRegister = document.getElementById('cfBtnModeRegister');
+        const btnLogin    = document.getElementById('cfBtnModeLogin');
+        const paneRegister = document.getElementById('cfPaneRegister');
+        const paneLogin    = document.getElementById('cfPaneLogin');
+
+        if (mode === 'login') {
+            if (btnRegister) btnRegister.classList.remove('active');
+            if (btnLogin) btnLogin.classList.add('active');
+            if (paneRegister) paneRegister.classList.add('d-none');
+            if (paneLogin) paneLogin.classList.remove('d-none');
+        } else {
+            if (btnLogin) btnLogin.classList.remove('active');
+            if (btnRegister) btnRegister.classList.add('active');
+            if (paneLogin) paneLogin.classList.add('d-none');
+            if (paneRegister) paneRegister.classList.remove('d-none');
+        }
     };
 
     // Check Domain Availability via check-domain.php
@@ -362,12 +358,34 @@
             });
     };
 
-    // Update Live Order Receipt
+    // Update Live Order Receipt across Step 1 and Step 3
     function updateReceipt() {
-        const plan = CF_PRODUCTS[currentPid] || CF_PRODUCTS['201'];
+        const hasHosting = (currentPid && currentPid !== 'none' && CF_PRODUCTS[currentPid]);
+        const plan = hasHosting ? CF_PRODUCTS[currentPid] : null;
         const isYearly = currentCycle === 'annually';
-        const planPrice = isYearly ? plan.yearly : plan.monthly;
+        const planPrice = hasHosting ? (isYearly ? plan.yearly : plan.monthly) : 0.00;
 
+        // Step 1 Summary
+        const step1DomainRow = document.getElementById('cfStep1DomainRow');
+        const step1DomainFee = document.getElementById('cfStep1DomainFee');
+        const step1HostingRow = document.getElementById('cfStep1HostingRow');
+        const step1HostingFee = document.getElementById('cfStep1HostingFee');
+        const step1TotalDue = document.getElementById('cfStep1TotalDue');
+
+        if (step1DomainRow) {
+            step1DomainRow.style.display = currentDomainFee > 0 ? 'flex' : 'none';
+            if (step1DomainFee) step1DomainFee.textContent = '$' + currentDomainFee.toFixed(2);
+        }
+        if (step1HostingRow) {
+            step1HostingRow.style.display = hasHosting ? 'flex' : 'none';
+            if (step1HostingFee) step1HostingFee.textContent = '$' + planPrice.toFixed(2);
+        }
+        const grandTotal = planPrice + currentDomainFee;
+        if (step1TotalDue) {
+            step1TotalDue.textContent = '$' + grandTotal.toFixed(2);
+        }
+
+        // Step 3 Order Summary
         const receiptTitle = document.getElementById('cfReceiptPlanTitle');
         const receiptPlanPrice = document.getElementById('cfReceiptPlanPrice');
         const receiptDomainRow = document.getElementById('cfReceiptDomainRow');
@@ -375,22 +393,19 @@
         const receiptTotal = document.getElementById('cfReceiptTotal');
 
         if (receiptTitle) {
-            receiptTitle.textContent = plan.name + (isYearly ? ' (Annual Billing - 20% Saved)' : ' (Monthly Billing)');
+            if (hasHosting) {
+                receiptTitle.textContent = plan.name + (isYearly ? ' (Annual Billing - 20% Saved)' : ' (Monthly Billing)');
+            } else {
+                receiptTitle.textContent = 'Domain Registration Only (1 Year)';
+            }
         }
         if (receiptPlanPrice) {
             receiptPlanPrice.textContent = '$' + planPrice.toFixed(2);
         }
-
         if (receiptDomainRow) {
-            if (currentDomainFee > 0) {
-                receiptDomainRow.style.display = 'flex';
-                if (receiptDomainPrice) receiptDomainPrice.textContent = '$' + currentDomainFee.toFixed(2);
-            } else {
-                receiptDomainRow.style.display = 'none';
-            }
+            receiptDomainRow.style.display = currentDomainFee > 0 ? 'flex' : 'none';
+            if (receiptDomainPrice) receiptDomainPrice.textContent = '$' + currentDomainFee.toFixed(2);
         }
-
-        const grandTotal = planPrice + currentDomainFee;
         if (receiptTotal) {
             receiptTotal.textContent = '$' + grandTotal.toFixed(2);
         }
@@ -401,16 +416,15 @@
         hideAlert();
 
         if (step === 2) {
-            // Validate Step 1 domain input
+            // Validate Step 1 domain/hosting input
             if (currentDomainType === 'register') {
+                const finalDom = document.getElementById('cfCheckoutFinalDomain').value.trim();
                 const regInput = document.getElementById('cfInputRegister');
-                if (!regInput || !regInput.value.trim()) {
-                    showAlert('Please enter the domain name you wish to register.');
-                    return;
+                if (!finalDom && regInput && regInput.value.trim()) {
+                    const tld = document.getElementById('cfSelectTld').value;
+                    document.getElementById('cfCheckoutFinalDomain').value = regInput.value.trim();
+                    document.getElementById('cfCheckoutFinalTld').value = tld;
                 }
-                const tld = document.getElementById('cfSelectTld').value;
-                document.getElementById('cfCheckoutFinalDomain').value = regInput.value.trim();
-                document.getElementById('cfCheckoutFinalTld').value = tld;
             } else if (currentDomainType === 'subdomain') {
                 const sub = document.getElementById('cfInputSubdomain').value.trim() || 'mybusiness';
                 document.getElementById('cfCheckoutFinalDomain').value = sub;
@@ -431,28 +445,43 @@
                 document.getElementById('cfCheckoutFinalDomain').value = tr;
             }
         } else if (step === 3) {
-            // Validate Step 2 customer inputs
-            const fname = document.getElementById('cfCustFirstname').value.trim();
-            const lname = document.getElementById('cfCustLastname').value.trim();
-            const email = document.getElementById('cfCustEmail').value.trim();
-            const phone = document.getElementById('cfCustPhone').value.trim();
-            const pass  = document.getElementById('cfCustPassword').value;
+            // Validate Step 2 customer inputs depending on Login vs Register mode
+            const accountAction = document.getElementById('cfCheckoutAccountAction').value;
 
-            if (!fname || !lname) {
-                showAlert('Please provide both your First and Last Name.');
-                return;
-            }
-            if (!email || !email.includes('@')) {
-                showAlert('Please provide a valid email address.');
-                return;
-            }
-            if (!phone) {
-                showAlert('Please provide a phone number for billing verification.');
-                return;
-            }
-            if (!pass || pass.length < 6) {
-                showAlert('Password must be at least 6 characters long.');
-                return;
+            if (accountAction === 'login') {
+                const logEmail = document.getElementById('cfLoginEmail').value.trim();
+                const logPass  = document.getElementById('cfLoginPassword').value;
+                if (!logEmail || !logEmail.includes('@')) {
+                    showAlert('Please enter your registered account email.');
+                    return;
+                }
+                if (!logPass) {
+                    showAlert('Please enter your account password.');
+                    return;
+                }
+            } else {
+                const fname = document.getElementById('cfCustFirstname').value.trim();
+                const lname = document.getElementById('cfCustLastname').value.trim();
+                const email = document.getElementById('cfCustEmail').value.trim();
+                const phone = document.getElementById('cfCustPhone').value.trim();
+                const pass  = document.getElementById('cfCustPassword').value;
+
+                if (!fname || !lname) {
+                    showAlert('Please provide both your First and Last Name.');
+                    return;
+                }
+                if (!email || !email.includes('@')) {
+                    showAlert('Please provide a valid email address.');
+                    return;
+                }
+                if (!phone) {
+                    showAlert('Please provide a phone number for billing verification.');
+                    return;
+                }
+                if (!pass || pass.length < 6) {
+                    showAlert('Password must be at least 6 characters long.');
+                    return;
+                }
             }
         }
 
@@ -489,16 +518,19 @@
         }
     };
 
-    // Password Eye Toggle
-    window.cfTogglePasswordVisibility = function () {
-        const passInput = document.getElementById('cfCustPassword');
-        const eyeIcon = document.getElementById('cfPasswordEye');
+    // Generalized Password Eye Toggle
+    window.cfTogglePasswordVisibility = function (inputId, eyeId) {
+        inputId = inputId || 'cfCustPassword';
+        eyeId = eyeId || 'cfPasswordEye';
+        const passInput = document.getElementById(inputId);
+        const eyeIcon = document.getElementById(eyeId);
+        if (!passInput) return;
         if (passInput.type === 'password') {
             passInput.type = 'text';
-            eyeIcon.classList.replace('la-eye', 'la-eye-slash');
+            if (eyeIcon) eyeIcon.classList.replace('la-eye', 'la-eye-slash');
         } else {
             passInput.type = 'password';
-            eyeIcon.classList.replace('la-eye-slash', 'la-eye');
+            if (eyeIcon) eyeIcon.classList.replace('la-eye-slash', 'la-eye');
         }
     };
 

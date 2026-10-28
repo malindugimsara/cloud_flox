@@ -1,16 +1,49 @@
     <!--preloader start-->
-    <div class="preloader bg-light-subtle">
+    <div class="preloader bg-light-subtle" id="cfMainPreloader">
         <div class="preloader-wrap">
             <img src="<?php echo $url ?? ''; ?>assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox" class="img-fluid preloader-logo" width="240" height="56">
             <div class="loading-bar"></div>
         </div>
     </div>
+    <script>
+    (function() {
+        function cfDismissPreloader() {
+            var p = document.getElementById('cfMainPreloader') || document.querySelector('.preloader');
+            if (p && p.style.display !== 'none') {
+                p.style.opacity = '0';
+                p.style.transition = 'opacity 0.25s ease';
+                setTimeout(function() { 
+                    if (p) p.style.display = 'none'; 
+                }, 260);
+            }
+        }
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            setTimeout(cfDismissPreloader, 150);
+        } else {
+            window.addEventListener('DOMContentLoaded', cfDismissPreloader);
+            window.addEventListener('load', cfDismissPreloader);
+        }
+        // Universal fail-safe: dismiss after max 1.2s regardless of external assets
+        setTimeout(cfDismissPreloader, 1200);
+    })();
+    </script>
     <!--preloader end-->
 
     <?php
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     // Ensure $url is loaded
     if (!isset($url)) {
         include_once __DIR__ . '/url.inc.php';
+    }
+
+    $cfIsLoggedIn = !empty($_SESSION['cf_client_logged_in']);
+    $cfClientName = $_SESSION['cf_client_name'] ?? 'Client Area';
+    $cfClientNameShort = $cfClientName;
+    if (!empty($cfClientName) && strpos($cfClientName, ' ') !== false) {
+        $parts = explode(' ', trim($cfClientName));
+        $cfClientNameShort = $parts[0];
     }
 
     // Active menu page detection
@@ -31,6 +64,8 @@
         isCfPageActive('premium-hosting', $cfCurrentPage, $cfCurrentSlug)
     );
     ?>
+    <script>window.CF_BASE_URL = <?php echo json_encode($url); ?>;</script>
+
 
     <!-- =========================================================================
          MODERN CLOUDFLOX HEADER & ANNOUNCEMENT BAR
@@ -196,11 +231,19 @@
 
                     <!-- Right Action Button -->
                     <div class="cf-nav-actions d-flex align-items-center gap-2 mt-3 mt-lg-0">
-                        <a href="https://my.cloudflox.com/index.php?rp=/login" class="cf-btn-client-area">
-                            <i class="las la-user-circle"></i>
-                            <span>Client Portal</span>
-                            <i class="las la-arrow-right cf-arrow-hover"></i>
-                        </a>
+                        <?php if ($cfIsLoggedIn): ?>
+                            <a href="<?php echo $url; ?>clientarea" class="cf-btn-client-area logged-in" title="Client Dashboard (<?php echo htmlspecialchars($cfClientName); ?>)">
+                                <i class="las la-user-check text-emerald"></i>
+                                <span><?php echo htmlspecialchars($cfClientNameShort); ?></span>
+                                <i class="las la-arrow-right cf-arrow-hover"></i>
+                            </a>
+                        <?php else: ?>
+                            <a href="<?php echo $url; ?>login" class="cf-btn-client-area">
+                                <i class="las la-user-circle"></i>
+                                <span>Client Portal</span>
+                                <i class="las la-arrow-right cf-arrow-hover"></i>
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

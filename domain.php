@@ -176,8 +176,8 @@
                         <button type="button" class="btn btn-sm btn-light border py-1 px-3 rounded-pill fs-13 fw-bold text-slate-800 d-inline-flex align-items-center gap-1 hover-shadow transition" onclick="setDomainExt('.cloud', this)">
                             <span class="text-orange">.cloud</span> <span class="badge bg-orange-subtle text-orange ms-1 fs-10">DEAL $9.99</span>
                         </button>
-                        <button type="button" class="btn btn-sm btn-light border py-1 px-3 rounded-pill fs-13 fw-bold text-slate-800 d-inline-flex align-items-center gap-1 hover-shadow transition" onclick="setDomainExt('.lk', this)">
-                            <span class="text-emerald">.lk</span> <span class="text-muted fw-normal">$29.00</span>
+                        <button type="button" class="btn btn-sm btn-light border py-1 px-3 rounded-pill fs-13 fw-bold text-slate-800 d-inline-flex align-items-center gap-1 hover-shadow transition" onclick="setDomainExt('.co', this)">
+                            <span class="text-blue">.co</span> <span class="text-muted fw-normal">$24.99</span>
                         </button>
                     </div>
 

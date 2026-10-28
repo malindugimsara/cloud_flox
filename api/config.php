@@ -197,7 +197,6 @@ $CF_TLDS = [
     'cloud'  => ['price' => 9.99,  'badge' => 'Hot Deal', 'tag' => 'Cloud & SaaS'],
     'io'     => ['price' => 39.99, 'badge' => 'Tech Fav', 'tag' => 'Startups & APIs'],
     'co'     => ['price' => 24.99, 'badge' => 'Global', 'tag' => 'Company'],
-    'lk'     => ['price' => 29.00, 'badge' => 'Sri Lanka', 'tag' => 'National ccTLD'],
     'store'  => ['price' => 4.99,  'badge' => 'E-Com', 'tag' => 'Online Store'],
     'online' => ['price' => 3.99,  'badge' => 'Sale', 'tag' => 'Web Presence']
 ];

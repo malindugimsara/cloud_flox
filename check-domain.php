@@ -19,7 +19,6 @@ $tldPricing = [
     'cloud'  => ['price' => '$9.99',  'badge' => 'Hot Deal', 'tag' => 'Cloud & DevOps'],
     'io'     => ['price' => '$39.99', 'badge' => 'Tech Favorite', 'tag' => 'Startups & APIs'],
     'co'     => ['price' => '$24.99', 'badge' => 'Business', 'tag' => 'Company & Innovation'],
-    'lk'     => ['price' => '$29.00', 'badge' => 'Sri Lanka', 'tag' => 'National ccTLD'],
     'store'  => ['price' => '$4.99',  'badge' => 'Special', 'tag' => 'E-Commerce'],
     'online' => ['price' => '$3.99',  'badge' => 'Sale', 'tag' => 'Online Presence'],
     'tech'   => ['price' => '$6.99',  'badge' => 'Tech', 'tag' => 'Technology'],
@@ -63,6 +62,15 @@ if (strpos($cleaned, '.') !== false) {
     $tld = 'com';
 }
 
+// Explicitly disallow .lk domains from being searched
+if ($tld === 'lk') {
+    echo json_encode([
+        'status'  => 'error',
+        'message' => '.lk domain registrations are not supported here. Please choose another extension (.com, .net, .cloud, etc.).'
+    ]);
+    exit;
+}
+
 $fullDomain = $sld . '.' . $tld;
 
 // Map domain to authoritative query endpoint
@@ -75,9 +83,6 @@ function getDomainLookupConfig($domain) {
         return ['type' => 'rdap', 'url' => "https://rdap.verisign.com/net/v1/domain/" . urlencode($domain)];
     } elseif ($ext === 'org') {
         return ['type' => 'rdap', 'url' => "https://rdap.publicinterestregistry.org/rdap/domain/" . urlencode($domain)];
-    } elseif ($ext === 'lk') {
-        // LK registry does not have RDAP; use high-speed Google DoH for NS record
-        return ['type' => 'doh', 'url' => "https://dns.google/resolve?name=" . urlencode($domain) . "&type=NS"];
     } else {
         return ['type' => 'rdap', 'url' => "https://rdap.org/domain/" . urlencode($domain)];
     }
@@ -85,7 +90,7 @@ function getDomainLookupConfig($domain) {
 
 // Build list of domains to query concurrently (primary + top alternatives)
 $domainsToQuery = [$fullDomain];
-$suggestTlds = ['com', 'net', 'cloud', 'org', 'lk', 'io'];
+$suggestTlds = ['com', 'net', 'cloud', 'org', 'store', 'io'];
 
 foreach ($suggestTlds as $altTld) {
     if ($altTld === $tld) continue;

@@ -127,7 +127,7 @@ $cfFooterUrl = $url ?? '/';
                     </div>
 
                     <!-- Direct Portal Quick Link -->
-                    <a href="https://my.cloudflox.com/index.php?rp=/login" class="cf-footer-portal-chip">
+                    <a href="<?php echo $cfFooterUrl; ?>login" class="cf-footer-portal-chip">
                         <i class="las la-user-circle"></i>
                         <span>Access Client Portal</span>
                         <i class="las la-arrow-right"></i>
@@ -203,7 +203,7 @@ $cfFooterUrl = $url ?? '/';
                                 class="cf-footer-link">Knowledgebase &amp; FAQs</a></li>
                         <li><a href="https://my.cloudflox.com/index.php?rp=/announcements"
                                 class="cf-footer-link">Network Announcements</a></li>
-                        <li><a href="https://my.cloudflox.com/index.php?rp=/login" class="cf-footer-link">Server Status
+                        <li><a href="<?php echo $cfFooterUrl; ?>login" class="cf-footer-link">Server Status
                                 &amp; Metrics</a></li>
                         <li><a href="https://my.cloudflox.com/cart.php?a=view" class="cf-footer-link">Order &amp;
                                 Billing Cart</a></li>

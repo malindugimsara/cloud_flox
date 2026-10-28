@@ -8,7 +8,7 @@
 <script src="assets/js/vendors/jquery.magnific-popup.min.js"></script>
 
 <script src="assets/js/app.js"></script>
-<script src="assets/js/cloudflox-domain-checker.js?v=5"></script>
+<script src="assets/js/cloudflox-domain-checker.js?v=6"></script>
 <script src="assets/js/cf-checkout.js?v=3"></script>
 
 <script>

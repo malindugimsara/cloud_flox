@@ -72,7 +72,7 @@ class WHMCSClient {
             $msg = strtolower($data['message'] ?? '');
             if (str_contains($msg, 'invalid ip')) {
                 $host = $_SERVER['HTTP_HOST'] ?? '';
-                $isLocal = (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false || strpos($host, '::1') !== false || preg_match('/^192\.168\./', $host));
+                $isLocal = empty($host) || php_sapi_name() === 'cli' || (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false || strpos($host, '::1') !== false || preg_match('/^192\.168\./', $host));
                 if ($isLocal) {
                     return self::simulateResponse($action, $params);
                 }
@@ -110,8 +110,10 @@ class WHMCSClient {
         $create = self::call('AddClient', [
             'firstname'   => $clientData['firstname'] ?? 'Customer',
             'lastname'    => $clientData['lastname'] ?? 'Client',
+            'companyname' => $clientData['companyname'] ?? '',
             'email'       => $clientData['email'],
             'address1'    => $clientData['address1'] ?? 'Colombo',
+            'address2'    => $clientData['address2'] ?? '',
             'city'        => $clientData['city'] ?? 'Colombo',
             'state'       => $clientData['state'] ?? 'Western',
             'postcode'    => $clientData['postcode'] ?? '00100',
@@ -121,6 +123,58 @@ class WHMCSClient {
         ]);
 
         return $create;
+    }
+
+    /**
+     * Authenticate an existing client via WHMCS ValidateLogin API or local DB
+     */
+    public static function validateLogin($email, $password) {
+        // First check local MySQL database if available
+        try {
+            $m = @new mysqli('localhost', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+            if (!$m->connect_error) {
+                $s = $m->prepare("SELECT id, firstname, lastname, email, password FROM tblclients WHERE email = ? LIMIT 1");
+                if ($s) {
+                    $s->bind_param('s', $email);
+                    $s->execute();
+                    $r = $s->get_result();
+                    if ($row = $r->fetch_assoc()) {
+                        if (empty($row['password']) || password_verify($password, $row['password'])) {
+                            return [
+                                'result'   => 'success',
+                                'clientid' => $row['id']
+                            ];
+                        } else {
+                            return [
+                                'result'  => 'error',
+                                'message' => 'Incorrect password for this account.'
+                            ];
+                        }
+                    } else {
+                        if (CF_CHECKOUT_DEMO_MODE) {
+                            return [
+                                'result'  => 'error',
+                                'message' => 'Client account not found with this email address.'
+                            ];
+                        }
+                    }
+                }
+            }
+        } catch (Exception $e) {}
+
+        if (CF_CHECKOUT_DEMO_MODE) {
+            return [
+                'result'  => 'error',
+                'message' => 'Unable to authenticate account credentials.'
+            ];
+        }
+
+        $res = self::call('ValidateLogin', [
+            'email'    => $email,
+            'password' => $password
+        ]);
+
+        return $res;
     }
 
     /**
@@ -142,7 +196,35 @@ class WHMCSClient {
             case 'GetClientsDetails':
                 return [
                     'result'   => 'success',
-                    'clientid' => rand(1001, 3999)
+                    'clientid' => rand(1001, 3999),
+                    'demo_mode' => true
+                ];
+
+            case 'ValidateLogin':
+                $email = $params['email'] ?? '';
+                $pass  = $params['password'] ?? '';
+                try {
+                    $m = @new mysqli('localhost', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+                    if (!$m->connect_error) {
+                        $s = $m->prepare("SELECT id, firstname, lastname, email, password FROM tblclients WHERE email = ? LIMIT 1");
+                        if ($s) {
+                            $s->bind_param('s', $email);
+                            $s->execute();
+                            $r = $s->get_result();
+                            if ($row = $r->fetch_assoc()) {
+                                if (empty($row['password']) || password_verify($pass, $row['password'])) {
+                                    return [
+                                        'result'   => 'success',
+                                        'clientid' => $row['id']
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception $e) {}
+                return [
+                    'result'  => 'error',
+                    'message' => 'Invalid email or password. Please check your credentials.'
                 ];
 
             case 'AddOrder':
