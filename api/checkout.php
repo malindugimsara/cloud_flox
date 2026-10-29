@@ -16,8 +16,8 @@ ini_set('display_errors', '0');
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/whmcs.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+    @session_start();
 }
 
 // Accept both JSON payload and $_POST
@@ -427,6 +427,8 @@ if (!str_contains($domainName, '.') && !empty($domainTld)) {
 
 $tldKey = ltrim(substr($fullDomain, strrpos($fullDomain, '.')), '.');
 
+$domainYears = max(1, min(5, (int)($data['domain_years'] ?? 1)));
+
 if ($domainType === 'register') {
     if (empty($fullDomain)) {
         echo json_encode([
@@ -435,7 +437,8 @@ if ($domainType === 'register') {
         ]);
         exit;
     }
-    $domainFee = (float)($liveDomains[$tldKey]['register'] ?? $CF_TLDS[$tldKey]['price'] ?? 14.93);
+    $yearlyRate = (float)($liveDomains[$tldKey]['register'] ?? $CF_TLDS[$tldKey]['price'] ?? 14.93);
+    $domainFee = round($yearlyRate * $domainYears, 2);
 } elseif ($domainType === 'transfer') {
     if (empty($fullDomain)) {
         echo json_encode([
@@ -444,6 +447,7 @@ if ($domainType === 'register') {
         ]);
         exit;
     }
+    $domainYears = 1;
     $domainFee = (float)($liveDomains[$tldKey]['transfer'] ?? 12.73);
 } elseif ($domainType === 'owndomain') {
     if (empty($fullDomain)) {
@@ -646,7 +650,7 @@ if ($hasHosting) {
 
 if ($domainType === 'register') {
     $orderPayload['domaintype'] = ['register'];
-    $orderPayload['regperiod']  = [1];
+    $orderPayload['regperiod']  = [$domainYears];
 } elseif ($domainType === 'transfer') {
     $orderPayload['domaintype'] = ['transfer'];
     $orderPayload['regperiod']  = [1];
@@ -686,7 +690,18 @@ try {
             if ($invStmt->insert_id > 0) {
                 $invoiceId = $invStmt->insert_id;
 
-                $itemDesc = $planName . ($fullDomain ? ' - ' . $fullDomain : '');
+                if ($hasHosting) {
+                    $itemDesc = $planName . ($fullDomain ? ' - ' . $fullDomain : '');
+                    if ($domainType === 'register' && $domainFee > 0) {
+                        $itemDesc .= " + Domain ({$domainYears} Yr" . ($domainYears > 1 ? 's' : '') . ")";
+                    }
+                } elseif ($domainType === 'register') {
+                    $itemDesc = "Domain Registration - {$fullDomain} ({$domainYears} Year" . ($domainYears > 1 ? 's' : '') . ")";
+                } elseif ($domainType === 'transfer') {
+                    $itemDesc = "Domain Transfer - {$fullDomain} (1 Year Extension)";
+                } else {
+                    $itemDesc = $planName . ($fullDomain ? ' - ' . $fullDomain : '');
+                }
                 $relType  = $hasHosting ? 'Hosting' : 'Item';
                 $itemStmt = $mysqli->prepare("INSERT INTO tblinvoiceitems (invoiceid, userid, type, relid, description, amount, taxed, duedate, paymentmethod) VALUES (?, ?, ?, 0, ?, ?, 0, ?, ?)");
                 if ($itemStmt) {

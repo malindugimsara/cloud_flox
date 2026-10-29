@@ -3,14 +3,13 @@
    Matches WHMCS Lagom2 Flow (configureproductdomain.tpl -> configureproduct.tpl)
    ========================================================================== */
 
-/* Active Step Box Highlight */
+/* Active Step Box Highlight - Modern Glass-Aura Card */
 .cf-checkout-card.active-step-card,
 .cf-checkout-card:not(.d-none) {
-    background: linear-gradient(180deg, #F8FAFD 0%, #FFFFFF 160px) !important;
-    border: 1.5px solid #BFDBFE !important;
-    border-top: 4px solid #2563EB !important;
-    border-radius: 18px !important;
-    box-shadow: 0 16px 36px -4px rgba(37, 99, 235, 0.09), 0 4px 12px rgba(15, 23, 42, 0.03) !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.08), 0 20px 40px -12px rgba(37, 99, 235, 0.09), 0 2px 8px rgba(15, 23, 42, 0.02) !important;
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -552,12 +551,36 @@
     justify-content: space-between;
     margin-bottom: 24px;
     box-shadow: 0 4px 14px rgba(22, 163, 74, 0.08);
+    box-sizing: border-box;
+}
+
+.cf-domain-strip-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.cf-domain-strip-icon {
+    flex-shrink: 0;
+}
+
+.cf-domain-strip-meta {
+    min-width: 0;
 }
 
 .cf-connected-domain-name {
     font-size: 16px;
     font-weight: 800;
     color: #0F172A;
+    word-break: break-all;
+}
+
+.cf-domain-strip-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
 }
 
 /* Billing Cycle Selector in Step 2 */
@@ -672,6 +695,7 @@
     .cf-checkout-steps-bar {
         padding: 8px 14px !important;
         max-width: 100% !important;
+        margin-bottom: 24px !important;
     }
     .cf-step-connector {
         margin: 0 6px !important;
@@ -685,4 +709,349 @@
         height: 28px !important;
         font-size: 12px !important;
     }
+    .cf-connected-domain-strip {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        padding: 14px 14px !important;
+        border-radius: 14px !important;
+    }
+    .cf-domain-strip-left {
+        width: 100% !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+    .cf-domain-strip-meta {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+    .cf-domain-strip-right {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding-top: 10px !important;
+        border-top: 1px dashed #BBF7D0 !important;
+    }
+    .cf-domain-plan-banner {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        padding: 14px 14px !important;
+    }
+    .cf-plan-banner-left {
+        width: 100% !important;
+        align-items: flex-start !important;
+    }
+    .cf-plan-banner-meta {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+    .cf-plan-banner-right {
+        width: 100% !important;
+        display: flex !important;
+        align-items: baseline !important;
+        justify-content: space-between !important;
+        border-top: 1px dashed #BFDBFE !important;
+        padding-top: 8px !important;
+    }
+    .cf-plan-banner-right small {
+        display: inline !important;
+        margin-left: 4px;
+    }
+    .cf-domain-opt-tab {
+        padding: 16px 14px !important;
+    }
+    .cf-domain-search-card {
+        padding: 18px 14px !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-checkout-steps-bar {
+        padding: 6px 10px !important;
+        border-radius: 999px !important;
+    }
+    .cf-step-pill:not(.active) .cf-step-text {
+        display: none !important;
+    }
+    .cf-step-pill.active .cf-step-label {
+        font-size: 11.5px !important;
+    }
+    .cf-step-connector {
+        margin: 0 4px !important;
+        min-width: 6px !important;
+    }
+    .cf-step-num {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 11px !important;
+    }
+    .cf-domain-input-group {
+        flex-direction: column !important;
+        border-radius: 12px !important;
+    }
+    .cf-domain-input-group .input-group-text {
+        border-bottom: 1px solid #E2E8F0 !important;
+        padding: 8px 14px !important;
+    }
+    .cf-domain-input-group .form-control {
+        border-bottom: 1px solid #E2E8F0 !important;
+        padding: 12px 14px !important;
+        font-size: 14px !important;
+        width: 100% !important;
+    }
+    .cf-domain-input-group .cf-tld-select {
+        border-left: none !important;
+        border-bottom: 1px solid #E2E8F0 !important;
+        width: 100% !important;
+        padding: 10px 14px !important;
+    }
+    .cf-domain-input-group .cf-btn-domain-check {
+        width: 100% !important;
+        padding: 12px !important;
+        justify-content: center !important;
+        font-size: 14px !important;
+    }
+    .cf-pay-option-pill {
+        padding: 12px 10px !important;
+    }
+    .cf-card-header .cf-card-title {
+        font-size: 15px !important;
+    }
+    .cf-card-header .cf-active-step-chip {
+        font-size: 11px !important;
+        padding: 3px 8px !important;
+    }
+    .cf-card-header .cf-card-badge-secure {
+        font-size: 11px !important;
+    }
+    .cf-quick-tld-pill {
+        padding: 3px 8px !important;
+        font-size: 11px !important;
+    }
+    .cf-cycle-card {
+        padding: 14px !important;
+    }
+}
+
+
+/* =============================================================================
+   STEP 1: DOMAIN HOSTING ADDON CARDS ("hosting gannwada kiyla aai ahanwa")
+   ============================================================================= */
+.cf-domain-upsell-hosting-section {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 24px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+}
+
+.cf-hosting-addon-card {
+    background: #F8FAFC;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 18px 16px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.25s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cf-hosting-addon-card:hover {
+    border-color: #93C5FD;
+    background: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
+}
+
+.cf-hosting-addon-card.active {
+    background: #FFFFFF !important;
+    border-color: #2563EB !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), 0 8px 24px rgba(37, 99, 235, 0.1) !important;
+}
+
+.cf-addon-radio {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid #CBD5E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: transparent;
+    transition: all 0.2s ease;
+}
+
+.cf-hosting-addon-card.active .cf-addon-radio {
+    background: #2563EB;
+    border-color: #2563EB;
+    color: #FFFFFF;
+}
+
+.cf-addon-badge {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: linear-gradient(135deg, #2563EB, #1D4ED8);
+    color: #FFFFFF;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+}
+
+.cf-addon-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.cf-addon-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 4px;
+}
+
+.cf-addon-price {
+    font-size: 17px;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 6px;
+}
+
+.cf-hosting-addon-card.active .cf-addon-price {
+    color: #2563EB;
+}
+
+.cf-addon-desc {
+    font-size: 12px;
+    color: #64748B;
+    margin-bottom: 0;
+    line-height: 1.4;
+    margin-top: auto;
+}
+
+/* =============================================================================
+   STEP 2: DOMAIN REGISTRATION DURATION CARDS (1 TO 5 YEARS)
+   ============================================================================= */
+.cf-domain-years-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+@media (max-width: 991.98px) {
+    .cf-domain-years-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-domain-years-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.cf-year-card {
+    background: #F8FAFC;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 16px 14px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.25s ease;
+    text-align: center;
+}
+
+.cf-year-card:hover {
+    border-color: #93C5FD;
+    background: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.08);
+}
+
+.cf-year-card.active {
+    background: #FFFFFF !important;
+    border-color: #2563EB !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), 0 8px 20px rgba(37, 99, 235, 0.1) !important;
+}
+
+.cf-year-badge {
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: #FFFFFF;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.cf-year-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.cf-year-num {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1E293B;
+}
+
+.cf-year-radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #CBD5E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: transparent;
+    transition: all 0.2s ease;
+}
+
+.cf-year-card.active .cf-year-radio {
+    background: #2563EB;
+    border-color: #2563EB;
+    color: #FFFFFF;
+}
+
+.cf-year-price {
+    font-size: 19px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 2px;
+}
+
+.cf-year-card.active .cf-year-price {
+    color: #2563EB;
+}
+
+.cf-year-rate {
+    font-size: 11px;
+    color: #64748B;
+    display: block;
 }

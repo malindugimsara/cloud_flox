@@ -12,7 +12,7 @@ $cfFooterUrl = $url ?? '/';
                             <span class="cf-pulse-dot"></span>
                             <span>Enterprise Infrastructure</span>
                         </span>
-                        <h2 class="cf-subpage-cta-title">
+                        <h2 class="cf-subpage-cta-title" style="color: #fff;">
                             Ready to Elevate Your Digital Infrastructure?
                         </h2>
                         <p class="cf-subpage-cta-desc mb-0">
@@ -197,15 +197,14 @@ $cfFooterUrl = $url ?? '/';
                                 Team</a></li>
                         <li><a href="<?php echo $cfFooterUrl; ?>blog/" class="cf-footer-link">Engineering &amp; Cloud
                                 Blog</a></li>
-                        <li><a href="https://my.cloudflox.com/submitticket.php" class="cf-footer-link">Submit Support
+                        <li><a href="<?php echo $cfFooterUrl; ?>ticket" class="cf-footer-link">Submit Support
                                 Ticket</a></li>
-                        <li><a href="https://my.cloudflox.com/index.php?rp=/knowledgebase"
-                                class="cf-footer-link">Knowledgebase &amp; FAQs</a></li>
+                        <li><a href="<?php echo $cfFooterUrl; ?>knowledgebase" class="cf-footer-link">Knowledgebase &amp; FAQs</a></li>
                         <li><a href="https://my.cloudflox.com/index.php?rp=/announcements"
                                 class="cf-footer-link">Network Announcements</a></li>
-                        <li><a href="<?php echo $cfFooterUrl; ?>login" class="cf-footer-link">Server Status
+                        <li><a href="<?php echo $cfFooterUrl; ?>server-status" class="cf-footer-link">Server Status
                                 &amp; Metrics</a></li>
-                        <li><a href="https://my.cloudflox.com/cart.php?a=view" class="cf-footer-link">Order &amp;
+                        <li><a href="<?php echo $cfFooterUrl; ?>checkout" class="cf-footer-link">Order &amp;
                                 Billing Cart</a></li>
                     </ul>
                 </div>

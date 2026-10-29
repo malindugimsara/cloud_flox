@@ -1,0 +1,423 @@
+/**
+ * CloudFlox Knowledgebase & Help Desk Portal Stylesheet
+ * -------------------------------------------------------------------------
+ * Dedicated styles for knowledgebase.php:
+ * - Enterprise Hero search section with instant live-filtering
+ * - Category cards with gradient badges & hover elevation
+ * - Featured & trending article lists
+ * - Rich single article reading layout (breadcrumbs, helpful vote, related topics)
+ * - Mobile responsive design & symmetrical gutters
+ */
+
+/* 1. Base & Symmetrical Gutters */
+html, body.cf-kb-page {
+    background-color: #F8FAFC !important;
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+}
+
+.cf-kb-container {
+    max-width: 1220px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+}
+
+@media (min-width: 1400px) {
+    .cf-kb-container {
+        max-width: 1280px !important;
+        padding-left: 36px !important;
+        padding-right: 36px !important;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .cf-kb-container {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-kb-container {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+}
+
+/* 2. Hero Search Section */
+.cf-kb-hero {
+    position: relative !important;
+    background-color: #080F1E !important;
+    background: linear-gradient(135deg, #080F1E 0%, #0F1D38 60%, #162B4E 100%) !important;
+    padding: 56px 0 62px 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    overflow: hidden !important;
+    color: #FFFFFF !important;
+    text-align: center;
+}
+
+.cf-kb-hero::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: 10%;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.22) 0%, rgba(37, 99, 235, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.cf-kb-hero::after {
+    content: "";
+    position: absolute;
+    bottom: -50%;
+    left: 10%;
+    width: 450px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.16) 0%, rgba(6, 182, 212, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.cf-kb-hero-title {
+    color: #FFFFFF !important;
+    font-size: clamp(26px, 3.4vw, 38px) !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.025em !important;
+    margin-bottom: 12px !important;
+}
+
+.cf-kb-hero-lead {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    max-width: 640px !important;
+    margin: 0 auto 28px auto !important;
+}
+
+/* 3. Search Box */
+.cf-kb-search-wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 5;
+}
+
+.cf-kb-search-box {
+    position: relative;
+    background: #FFFFFF;
+    border-radius: 9999px;
+    padding: 6px 8px 6px 22px;
+    box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cf-kb-search-box:focus-within {
+    box-shadow: 0 16px 42px -4px rgba(37, 99, 235, 0.35), 0 0 0 3px rgba(37, 99, 235, 0.35);
+    transform: translateY(-1px);
+}
+
+.cf-kb-search-input {
+    border: none !important;
+    outline: none !important;
+    width: 100%;
+    font-size: 15px;
+    color: #0F172A;
+    background: transparent;
+    padding: 8px 0;
+}
+
+.cf-kb-search-input::placeholder {
+    color: #94A3B8;
+}
+
+.cf-kb-search-btn {
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    padding: 10px 24px !important;
+    font-weight: 700 !important;
+    font-size: 13.5px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.cf-kb-search-btn:hover {
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    transform: translateY(-1px);
+}
+
+/* 4. Quick Suggested Topics Pills */
+.cf-kb-topics-pills {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 12px;
+}
+
+.cf-kb-topic-pill {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.cf-kb-topic-pill:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #FFFFFF !important;
+}
+
+/* 5. Main Content Area */
+.cf-kb-main-wrap {
+    padding-top: 40px !important;
+    padding-bottom: 60px !important;
+}
+
+/* 6. Category Cards */
+.cf-kb-cat-card {
+    background: #FFFFFF !important;
+    border-radius: 18px !important;
+    padding: 24px 22px !important;
+    border: 1.5px solid #E2E8F0 !important;
+    box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04) !important;
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none !important;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.cf-kb-cat-card:hover {
+    transform: translateY(-3px) !important;
+    border-color: #2563EB !important;
+    box-shadow: 0 12px 28px -4px rgba(37, 99, 235, 0.1) !important;
+}
+
+.cf-kb-cat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+    transition: transform 0.2s ease;
+}
+
+.cf-kb-cat-card:hover .cf-kb-cat-icon {
+    transform: scale(1.08);
+}
+
+.cf-kb-cat-title {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+    margin-bottom: 6px !important;
+}
+
+.cf-kb-cat-desc {
+    font-size: 13px !important;
+    color: #64748B !important;
+    line-height: 1.55 !important;
+    margin-bottom: 14px !important;
+    flex-grow: 1;
+}
+
+.cf-kb-cat-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid #F1F5F9;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2563EB;
+}
+
+/* 7. Trending & Popular Articles Section */
+.cf-kb-articles-box {
+    background: #FFFFFF !important;
+    border-radius: 18px !important;
+    padding: 24px 28px !important;
+    border: 1.5px solid #E2E8F0 !important;
+    box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.04) !important;
+    margin-bottom: 30px !important;
+}
+
+.cf-kb-article-link-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid #F1F5F9;
+    text-decoration: none !important;
+    transition: all 0.15s ease;
+}
+
+.cf-kb-article-link-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.cf-kb-article-link-item:first-child {
+    padding-top: 4px;
+}
+
+.cf-kb-article-link-item:hover .cf-kb-article-title {
+    color: #2563EB !important;
+}
+
+.cf-kb-article-link-item:hover .cf-kb-article-arrow {
+    transform: translateX(3px);
+    color: #2563EB !important;
+}
+
+.cf-kb-article-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #0F172A;
+    transition: color 0.15s ease;
+}
+
+.cf-kb-article-arrow {
+    color: #94A3B8;
+    font-size: 16px;
+    transition: transform 0.15s ease, color 0.15s ease;
+}
+
+/* 8. Single Article Reading Mode */
+.cf-kb-read-card {
+    background: #FFFFFF !important;
+    border-radius: 20px !important;
+    padding: 36px 38px !important;
+    border: 1.5px solid #E2E8F0 !important;
+    box-shadow: 0 6px 24px -4px rgba(15, 23, 42, 0.05) !important;
+    margin-bottom: 30px !important;
+}
+
+.cf-kb-article-content {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #334155;
+}
+
+.cf-kb-article-content h2, 
+.cf-kb-article-content h3, 
+.cf-kb-article-content h4 {
+    color: #0F172A;
+    font-weight: 700;
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+.cf-kb-article-content p {
+    margin-bottom: 16px;
+}
+
+.cf-kb-article-content pre,
+.cf-kb-article-content code {
+    background: #0F172A;
+    color: #38BDF8;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-family: var(--bs-font-monospace, monospace);
+    font-size: 13.5px;
+    display: block;
+    overflow-x: auto;
+    margin: 16px 0;
+}
+
+.cf-kb-article-content code {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 12.5px;
+}
+
+.cf-kb-feedback-box {
+    background: #F8FAFC;
+    border-radius: 14px;
+    border: 1px solid #E2E8F0;
+    padding: 20px 24px;
+    margin-top: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* 9. Support Escalation CTA Banner */
+.cf-kb-cta-banner {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%) !important;
+    border-radius: 18px !important;
+    padding: 32px 34px !important;
+    color: #FFFFFF !important;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cf-kb-cta-banner h3 {
+    color: #FFFFFF !important;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 991.98px) {
+    .cf-kb-hero {
+        padding: 44px 0 48px 0 !important;
+    }
+    .cf-kb-main-wrap {
+        padding-top: 28px !important;
+        padding-bottom: 44px !important;
+    }
+    .cf-kb-read-card {
+        padding: 26px 22px !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .cf-kb-hero {
+        padding: 34px 0 38px 0 !important;
+    }
+    .cf-kb-search-box {
+        padding: 4px 6px 4px 16px;
+    }
+    .cf-kb-search-btn {
+        padding: 8px 16px !important;
+        font-size: 13px !important;
+    }
+    .cf-kb-cat-card {
+        padding: 18px 16px !important;
+    }
+    .cf-kb-articles-box {
+        padding: 18px 16px !important;
+    }
+    .cf-kb-cta-banner {
+        padding: 24px 20px !important;
+        text-align: center;
+    }
+    .cf-kb-cta-banner .d-flex {
+        justify-content: center !important;
+    }
+}
+

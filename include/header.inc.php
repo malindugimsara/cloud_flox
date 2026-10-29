@@ -254,15 +254,19 @@ $isHostingActive = (
 
     <script>
     (function() {
+        var isScrolled = false;
         function checkHeaderScroll() {
             var nav = document.getElementById('mainNavbar');
             var header = document.querySelector('.cf-header-wrapper');
             if (!nav) return;
-            var isScrolled = window.scrollY > 25;
-            if (isScrolled) {
+            var y = window.scrollY || window.pageYOffset || 0;
+            // Deadband hysteresis to eliminate scroll jitter/shaking loops on mobile
+            if (!isScrolled && y > 60) {
+                isScrolled = true;
                 nav.classList.add('scrolled');
                 if (header) header.classList.add('is-scrolled');
-            } else {
+            } else if (isScrolled && y < 15) {
+                isScrolled = false;
                 nav.classList.remove('scrolled');
                 if (header) header.classList.remove('is-scrolled');
             }

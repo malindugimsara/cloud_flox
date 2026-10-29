@@ -1,6 +1,6 @@
 <?php 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+    @session_start();
 }
 include 'include/url.inc.php'; 
 require_once __DIR__ . '/api/whmcs-pricing.php';
@@ -46,6 +46,20 @@ if ($isLoggedIn && $loggedInClientId > 0) {
             }
         }
     } catch (Exception $e) {}
+}
+
+// Read pre-selected query parameters from URL
+$initialDomain = trim($_GET['domain'] ?? '');
+$initialPrice  = trim($_GET['price'] ?? $_GET['domain_price'] ?? '');
+$initialType   = strtolower(trim($_GET['domainType'] ?? $_GET['domain_type'] ?? 'register'));
+$initialPid    = trim($_GET['pid'] ?? '');
+$hasDomainPreselected = !empty($initialDomain);
+
+if ($hasDomainPreselected && empty($initialPrice)) {
+    $lastDot = strrpos($initialDomain, '.');
+    $ext = ($lastDot !== false) ? substr($initialDomain, $lastDot) : '.com';
+    $tldKey = ltrim($ext, '.');
+    $initialPrice = '$' . number_format($whmcsDomains[$tldKey]['register'] ?? 14.93, 2);
 }
 ?>
 <!DOCTYPE html>
@@ -148,6 +162,7 @@ if ($isLoggedIn && $loggedInClientId > 0) {
                     <input type="hidden" id="pageDomainType" name="domain_type" value="register">
                     <input type="hidden" id="pageDomain" name="domain" value="">
                     <input type="hidden" id="pageDomainTld" name="domain_tld" value="">
+                    <input type="hidden" id="pageDomainYears" name="domain_years" value="1">
                     <input type="hidden" id="pageEppCode" name="epp_code" value="">
                     <input type="hidden" id="pageAccountAction" name="account_action" value="register">
 
@@ -173,48 +188,107 @@ if ($isLoggedIn && $loggedInClientId > 0) {
 
                                 <!-- Hosting Plan Context Banner (When plan is selected) -->
                                 <div class="cf-domain-plan-banner" id="pageStep1PlanBanner" style="display: none;">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="cf-item-icon-box bg-primary text-white" style="width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                                    <div class="cf-plan-banner-left d-flex align-items-center gap-3">
+                                        <div class="cf-item-icon-box bg-primary text-white" style="width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
                                             <i class="las la-server"></i>
                                         </div>
-                                        <div>
-                                            <div class="d-flex align-items-center gap-2 mb-0.5">
+                                        <div class="cf-plan-banner-meta">
+                                            <div class="d-flex align-items-center gap-2 mb-0.5 flex-wrap">
                                                 <span class="cf-domain-plan-badge" id="step1BannerBadge">WEB HOSTING</span>
                                                 <strong class="text-slate-900 fs-15" id="step1BannerPlanName">Business Starter</strong>
                                             </div>
-                                            <span class="text-secondary fs-12" id="step1BannerSpecs">20 GB Pure NVMe • 1 vCPU &amp; 2 GB RAM</span>
+                                            <span class="text-secondary fs-12 d-block" id="step1BannerSpecs">20 GB Pure NVMe • 1 vCPU &amp; 2 GB RAM</span>
                                         </div>
                                     </div>
-                                    <div class="text-end">
+                                    <div class="cf-plan-banner-right text-end">
                                         <span class="fs-16 fw-bold text-primary" id="step1BannerPrice">$5.99</span>
                                         <small class="text-secondary d-block fs-11" id="step1BannerCycle">/month</small>
                                     </div>
                                 </div>
 
                                 <!-- Currently Connected Domain Confirmation Strip (If already chosen) -->
-                                <div class="cf-connected-domain-strip" id="pageConnectedDomainStrip" style="display: none;">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #DCFCE7; color: #15803D; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                                <div class="cf-connected-domain-strip" id="pageConnectedDomainStrip" style="<?php echo $hasDomainPreselected ? 'display: flex;' : 'display: none;'; ?>">
+                                    <div class="cf-domain-strip-left d-flex align-items-center gap-3">
+                                        <div class="cf-domain-strip-icon" style="width: 40px; height: 40px; border-radius: 50%; background: #DCFCE7; color: #15803D; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
                                             <i class="las la-check-circle"></i>
                                         </div>
-                                        <div>
-                                            <div class="d-flex align-items-center gap-2 mb-0.5">
-                                                <span class="cf-connected-domain-name" id="connectedDomainName">yourdomain.com</span>
-                                                <span class="badge bg-primary text-white rounded-pill fs-11" id="connectedDomainTypeBadge">New Registration</span>
+                                        <div class="cf-domain-strip-meta">
+                                            <div class="d-flex align-items-center gap-2 mb-0.5 flex-wrap">
+                                                <span class="cf-connected-domain-name" id="connectedDomainName"><?php echo htmlspecialchars($initialDomain ?: 'yourdomain.com'); ?></span>
+                                                <span class="badge bg-primary text-white rounded-pill fs-11" id="connectedDomainTypeBadge"><?php echo ($initialType === 'transfer') ? 'Transfer' : (($initialType === 'owndomain') ? 'Existing Domain' : 'New Registration'); ?></span>
                                             </div>
-                                            <span class="text-secondary fs-12" id="connectedDomainNote">1 Year Registration • Free WHOIS Privacy &amp; Anycast DNS</span>
+                                            <span class="text-secondary fs-12 d-block" id="connectedDomainNote">1 Year Registration • Free WHOIS Privacy &amp; Anycast DNS</span>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <strong class="fs-17 text-slate-900" id="connectedDomainFeeText">$14.93</strong>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fs-12" onclick="pageToggleDomainOptions(true)">
+                                    <div class="cf-domain-strip-right d-flex align-items-center gap-3">
+                                        <strong class="fs-17 text-slate-900" id="connectedDomainFeeText"><?php echo htmlspecialchars($initialPrice ?: '$14.93'); ?></strong>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fs-12 text-nowrap" onclick="pageToggleDomainOptions(true)">
                                             <i class="las la-pen me-1"></i> Change
                                         </button>
                                     </div>
                                 </div>
 
+                                <!-- Domain Hosting Add-On Section (When coming with domain: "step 1 ekedi hosting gannwada kiyla aai ahanwa") -->
+                                <div class="cf-domain-upsell-hosting-section" id="pageDomainUpsellHostingWrap" style="<?php echo $hasDomainPreselected ? 'display: block;' : 'display: none;'; ?>">
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                        <div>
+                                            <h5 class="fw-bold text-slate-900 mb-0.5">
+                                                <i class="las la-server text-primary me-1.5"></i>Add Web Hosting to your Domain?
+                                            </h5>
+                                            <p class="text-secondary fs-13 mb-0">Select high-speed NVMe cloud hosting with free SSL &amp; cPanel, or continue with domain registration only.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row g-3">
+                                        <!-- Card 0: Domain Only -->
+                                        <div class="col-12 col-md-6 col-lg-3">
+                                            <div class="cf-hosting-addon-card active" id="hostingAddonNone" onclick="pageSelectHostingAddon('none')">
+                                                <div class="cf-addon-radio"><i class="las la-check"></i></div>
+                                                <div class="cf-addon-icon bg-slate-100 text-slate-600"><i class="las la-globe"></i></div>
+                                                <h6 class="cf-addon-title">Domain Only</h6>
+                                                <div class="cf-addon-price">$0.00 <small class="text-muted fs-11">/mo</small></div>
+                                                <p class="cf-addon-desc">No web hosting. Pure domain registration &amp; Anycast DNS.</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card 1: Mini Plan -->
+                                        <div class="col-12 col-md-6 col-lg-3">
+                                            <div class="cf-hosting-addon-card" id="hostingAddon1" onclick="pageSelectHostingAddon('1')">
+                                                <div class="cf-addon-radio"><i class="las la-check"></i></div>
+                                                <div class="cf-addon-icon bg-emerald-subtle text-emerald"><i class="las la-leaf"></i></div>
+                                                <h6 class="cf-addon-title">Mini Plan</h6>
+                                                <div class="cf-addon-price">$2.99 <small class="text-muted fs-11">/mo</small></div>
+                                                <p class="cf-addon-desc">5 GB NVMe • 1 Site • Free SSL &amp; Email</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card 2: Business Starter (Recommended) -->
+                                        <div class="col-12 col-md-6 col-lg-3">
+                                            <div class="cf-hosting-addon-card" id="hostingAddon2" onclick="pageSelectHostingAddon('2')">
+                                                <span class="cf-addon-badge">POPULAR</span>
+                                                <div class="cf-addon-radio"><i class="las la-check"></i></div>
+                                                <div class="cf-addon-icon bg-blue-subtle text-primary"><i class="las la-building"></i></div>
+                                                <h6 class="cf-addon-title">Business Starter</h6>
+                                                <div class="cf-addon-price">$5.99 <small class="text-muted fs-11">/mo</small></div>
+                                                <p class="cf-addon-desc">20 GB NVMe • 1 vCPU / 2GB RAM • Daily Backups</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card 3: Business Growth -->
+                                        <div class="col-12 col-md-6 col-lg-3">
+                                            <div class="cf-hosting-addon-card" id="hostingAddon3" onclick="pageSelectHostingAddon('3')">
+                                                <div class="cf-addon-radio"><i class="las la-check"></i></div>
+                                                <div class="cf-addon-icon bg-purple-subtle text-purple"><i class="las la-chart-line"></i></div>
+                                                <h6 class="cf-addon-title">Business Growth</h6>
+                                                <div class="cf-addon-price">$9.99 <small class="text-muted fs-11">/mo</small></div>
+                                                <p class="cf-addon-desc">40 GB NVMe • 2 vCPU / 4GB RAM • Multi-Site</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- 3 Domain Options Segmented Selector (Matching WHMCS configureproductdomain.tpl) -->
-                                <div id="pageDomainOptionsWrap">
+                                <div id="pageDomainOptionsWrap" style="<?php echo $hasDomainPreselected ? 'display: none;' : 'display: block;'; ?>">
                                     <div class="cf-domain-options-tabs">
                                         <!-- Option 1: Register New Domain -->
                                         <div class="cf-domain-opt-tab active" id="domainOptTabRegister" onclick="pageSetDomainOption('register')">
@@ -447,7 +521,7 @@ if ($isLoggedIn && $loggedInClientId > 0) {
                                 </div>
 
                                 <!-- Step 1 Next Step Action Button -->
-                                <div class="mt-4 pt-3 border-top" id="step1ContinueBar" style="display: none;">
+                                <div class="mt-4 pt-3 border-top" id="step1ContinueBar" style="<?php echo $hasDomainPreselected ? 'display: block;' : 'display: none;'; ?>">
                                     <button type="button" class="cf-btn-next-step w-100" onclick="pageGoToStep(2)">
                                         <span>Continue to Plan &amp; Configuration</span>
                                         <i class="las la-arrow-right ms-2"></i>
@@ -485,6 +559,75 @@ if ($isLoggedIn && $loggedInClientId > 0) {
                                     <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fs-11" onclick="pageGoToStep(1)">
                                         <i class="las la-sync-alt me-1"></i> Change Domain
                                     </button>
+                                </div>
+
+                                <!-- Domain Registration Billing Period Card (1 to 5 Years: "step 2 ekedi domain walata bill eka enna oni yearly maximux 5 year wenakan select karanna thiyenna oni") -->
+                                <div class="cf-checkout-card p-4 border bg-white mb-4 shadow-xs" id="step2DomainPeriodCard" style="display: none;">
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                        <div>
+                                            <h5 class="fw-bold text-slate-900 mb-0.5">
+                                                <i class="las la-calendar-check text-primary me-1.5"></i>Domain Registration Period
+                                            </h5>
+                                            <p class="text-secondary fs-13 mb-0">Select your registration term (maximum up to 5 years). Multi-year registration locks in your domain rate.</p>
+                                        </div>
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 fs-12 fw-bold" id="step2DomainExtBadge">
+                                            .COM Registration
+                                        </span>
+                                    </div>
+
+                                    <!-- 1 to 5 Years Selector Grid -->
+                                    <div class="cf-domain-years-grid" id="domainYearsGrid">
+                                        <!-- 1 Year -->
+                                        <div class="cf-year-card active" data-years="1" onclick="pageSetDomainYears(1)">
+                                            <div class="cf-year-top">
+                                                <span class="cf-year-num">1 Year</span>
+                                                <div class="cf-year-radio"><i class="las la-check"></i></div>
+                                            </div>
+                                            <div class="cf-year-price" id="yearPrice_1">$14.93</div>
+                                            <span class="cf-year-rate" id="yearRate_1">$14.93 / yr</span>
+                                        </div>
+
+                                        <!-- 2 Years -->
+                                        <div class="cf-year-card" data-years="2" onclick="pageSetDomainYears(2)">
+                                            <div class="cf-year-top">
+                                                <span class="cf-year-num">2 Years</span>
+                                                <div class="cf-year-radio"><i class="las la-check"></i></div>
+                                            </div>
+                                            <div class="cf-year-price" id="yearPrice_2">$29.86</div>
+                                            <span class="cf-year-rate" id="yearRate_2">$14.93 / yr</span>
+                                        </div>
+
+                                        <!-- 3 Years -->
+                                        <div class="cf-year-card" data-years="3" onclick="pageSetDomainYears(3)">
+                                            <div class="cf-year-top">
+                                                <span class="cf-year-num">3 Years</span>
+                                                <div class="cf-year-radio"><i class="las la-check"></i></div>
+                                            </div>
+                                            <div class="cf-year-price" id="yearPrice_3">$44.79</div>
+                                            <span class="cf-year-rate" id="yearRate_3">$14.93 / yr</span>
+                                        </div>
+
+                                        <!-- 4 Years -->
+                                        <div class="cf-year-card" data-years="4" onclick="pageSetDomainYears(4)">
+                                            <div class="cf-year-top">
+                                                <span class="cf-year-num">4 Years</span>
+                                                <div class="cf-year-radio"><i class="las la-check"></i></div>
+                                            </div>
+                                            <div class="cf-year-price" id="yearPrice_4">$59.72</div>
+                                            <span class="cf-year-rate" id="yearRate_4">$14.93 / yr</span>
+                                        </div>
+
+                                        <!-- 5 Years (Maximum) -->
+                                        <div class="cf-year-card" data-years="5" onclick="pageSetDomainYears(5)">
+                                            <span class="cf-year-badge">MAXIMUM (5 YRS)</span>
+                                            <div class="cf-year-top">
+                                                <span class="cf-year-num">5 Years</span>
+                                                <div class="cf-year-radio"><i class="las la-check"></i></div>
+                                            </div>
+                                            <div class="cf-year-price" id="yearPrice_5">$74.65</div>
+                                            <span class="cf-year-rate" id="yearRate_5">$14.93 / yr</span>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Hosting Plan Showcase Card -->
@@ -628,10 +771,7 @@ if ($isLoggedIn && $loggedInClientId > 0) {
                                                     <span class="text-secondary fs-13" id="loggedInEmailText"><?php echo htmlspecialchars($loggedInClientEmail); ?></span>
                                                 </div>
                                             </div>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fs-12 fw-semibold" id="btnToggleEditProfileCheckout" onclick="pageToggleCheckoutEditProfile()">
-                                                    <i class="las la-user-edit me-1"></i> Edit Personal &amp; Billing Info
-                                                </button>
+                                            <div>
                                                 <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fs-12" onclick="pageLogout()">
                                                     <i class="las la-sign-out-alt me-1"></i> Switch Account
                                                 </button>
@@ -640,6 +780,14 @@ if ($isLoggedIn && $loggedInClientId > 0) {
 
                                         <!-- Summary of Personal & Billing Info -->
                                         <div class="mt-3 pt-3 border-top" id="checkoutProfileSummary">
+                                            <div class="d-flex align-items-center justify-content-between mb-2.5">
+                                                <span class="fs-12 fw-bold text-slate-700 text-uppercase tracking-wider">
+                                                    <i class="las la-address-card text-primary me-1"></i> Billing &amp; Contact Information
+                                                </span>
+                                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fs-12 fw-semibold" id="btnToggleEditProfileCheckout" onclick="pageToggleCheckoutEditProfile()">
+                                                    <i class="las la-user-edit me-1"></i> Edit Details
+                                                </button>
+                                            </div>
                                             <div class="row g-2 text-secondary fs-12">
                                                 <div class="col-sm-4">
                                                     <span class="text-muted d-block fs-11 fw-bold text-uppercase">Contact Phone</span>
@@ -1246,8 +1394,9 @@ if ($isLoggedIn && $loggedInClientId > 0) {
             domain: '',
             domainType: 'register', // 'register', 'transfer', 'owndomain'
             domainPrice: 0.00,
+            domainYears: 1, // 1 to 5 years registration term
             eppCode: '',
-            pid: '201', // defaults to Business Starter
+            pid: 'none', // 'none' for domain-only or product ID (e.g. 1, 2, 3)
             billingcycle: 'monthly',
             accountAction: userSession.isLoggedIn ? 'loggedin' : 'register',
             paymentMethod: 'card',
@@ -1262,22 +1411,27 @@ if ($isLoggedIn && $loggedInClientId > 0) {
             const priceParam      = params.get('price') || params.get('domain_price') || '';
             const pidParam        = params.get('pid') || '';
             const cycleParam      = params.get('cycle') || params.get('billingcycle') || 'monthly';
+            const yearsParam      = parseInt(params.get('years') || params.get('domain_years') || '1', 10);
 
-            // 1. Hosting Plan
+            // 1. Domain Registration Years (1 - 5)
+            state.domainYears = (yearsParam >= 1 && yearsParam <= 5) ? yearsParam : 1;
+
+            // 2. Hosting Plan
             if (pidParam && pidParam !== 'none' && PRODUCTS[pidParam]) {
                 state.pid = pidParam;
             } else if (!domainParam && !pidParam) {
-                state.pid = '201'; // Default recommended
-            } else if (pidParam === 'none') {
-                state.pid = 'none';
+                state.pid = '201'; // Default recommended when purchasing hosting
+            } else if (pidParam === 'none' || domainParam) {
+                // If coming with domain search: default to domain-only unless pid specifically set
+                state.pid = (pidParam && PRODUCTS[pidParam]) ? pidParam : 'none';
             } else {
                 state.pid = '201';
             }
 
-            // 2. Billing Cycle
+            // 3. Billing Cycle
             state.billingcycle = (cycleParam === 'annually' || cycleParam === 'yearly') ? 'annually' : 'monthly';
 
-            // 3. Domain Details
+            // 4. Domain Details
             if (domainParam) {
                 state.domain = domainParam.toLowerCase().trim();
                 state.domainType = (domainTypeParam === 'owndomain' || domainTypeParam === 'existing') ? 'owndomain' : (domainTypeParam === 'transfer' ? 'transfer' : 'register');
@@ -1312,6 +1466,8 @@ if ($isLoggedIn && $loggedInClientId > 0) {
             document.getElementById('pageCycle').value = state.billingcycle;
             document.getElementById('pageDomain').value = state.domain;
             document.getElementById('pageDomainType').value = state.domainType;
+            const yearsHidden = document.getElementById('pageDomainYears');
+            if (yearsHidden) yearsHidden.value = state.domainYears;
             document.getElementById('pageEppCode').value = state.eppCode || '';
             document.getElementById('pageAccountAction').value = state.accountAction;
 
@@ -1323,98 +1479,165 @@ if ($isLoggedIn && $loggedInClientId > 0) {
             const planBanner = document.getElementById('pageStep1PlanBanner');
             const domainStrip = document.getElementById('pageConnectedDomainStrip');
             const domainOptionsWrap = document.getElementById('pageDomainOptionsWrap');
+            const domainUpsellWrap = document.getElementById('pageDomainUpsellHostingWrap');
             const step1ContinueBar = document.getElementById('step1ContinueBar');
 
             if (hasHosting) {
-                planBanner.style.display = 'flex';
-                document.getElementById('step1BannerPlanName').textContent = plan.name;
-                document.getElementById('step1BannerBadge').textContent = plan.category.toUpperCase();
-                document.getElementById('step1BannerSpecs').textContent = plan.specs;
-                document.getElementById('step1BannerPrice').textContent = isYearly ? ('$' + plan.yearly.toFixed(2)) : ('$' + plan.monthly.toFixed(2));
-                document.getElementById('step1BannerCycle').textContent = isYearly ? '/year' : '/month';
+                if (planBanner) {
+                    planBanner.style.display = 'flex';
+                    document.getElementById('step1BannerPlanName').textContent = plan.name;
+                    document.getElementById('step1BannerBadge').textContent = plan.category.toUpperCase();
+                    document.getElementById('step1BannerSpecs').textContent = plan.specs;
+                    document.getElementById('step1BannerPrice').textContent = isYearly ? ('$' + plan.yearly.toFixed(2)) : ('$' + plan.monthly.toFixed(2));
+                    document.getElementById('step1BannerCycle').textContent = isYearly ? '/year' : '/month';
+                }
             } else {
-                planBanner.style.display = 'none';
+                if (planBanner) planBanner.style.display = 'none';
             }
+
+            const domainRate = state.domainPrice;
+            const domainYears = (state.domainType === 'register') ? (state.domainYears || 1) : 1;
+            const domainTotal = (state.domainType === 'owndomain') ? 0.00 : (domainRate * domainYears);
+            const hostingFee = hasHosting ? (isYearly ? plan.yearly : plan.monthly) : 0.00;
+            const total = domainTotal + hostingFee;
 
             // If a domain is already connected
             if (state.domain) {
-                domainStrip.style.display = 'flex';
-                document.getElementById('connectedDomainName').textContent = state.domain;
-                
-                const typeBadge = document.getElementById('connectedDomainTypeBadge');
-                const noteEl = document.getElementById('connectedDomainNote');
-                const feeEl = document.getElementById('connectedDomainFeeText');
+                if (domainStrip) {
+                    domainStrip.style.display = 'flex';
+                    document.getElementById('connectedDomainName').textContent = state.domain;
+                    
+                    const typeBadge = document.getElementById('connectedDomainTypeBadge');
+                    const noteEl = document.getElementById('connectedDomainNote');
+                    const feeEl = document.getElementById('connectedDomainFeeText');
 
-                if (state.domainType === 'owndomain') {
-                    typeBadge.textContent = 'Existing Domain';
-                    typeBadge.className = 'badge bg-success text-white rounded-pill fs-11';
-                    noteEl.textContent = 'Point DNS nameservers to ns1.cloudflox.com & ns2.cloudflox.com';
-                    feeEl.textContent = 'FREE ($0.00)';
-                } else if (state.domainType === 'transfer') {
-                    typeBadge.textContent = 'Transfer';
-                    typeBadge.className = 'badge bg-info text-dark rounded-pill fs-11';
-                    noteEl.textContent = 'Transfer from external registrar • 1 Year Extension';
-                    feeEl.textContent = '$' + state.domainPrice.toFixed(2);
-                } else {
-                    typeBadge.textContent = 'New Registration';
-                    typeBadge.className = 'badge bg-primary text-white rounded-pill fs-11';
-                    noteEl.textContent = '1 Year • Free Privacy Protection & Anycast DNS';
-                    feeEl.textContent = '$' + state.domainPrice.toFixed(2);
+                    if (state.domainType === 'owndomain') {
+                        typeBadge.textContent = 'Existing Domain';
+                        typeBadge.className = 'badge bg-success text-white rounded-pill fs-11';
+                        noteEl.textContent = 'Point DNS nameservers to ns1.cloudflox.com & ns2.cloudflox.com';
+                        feeEl.textContent = 'FREE ($0.00)';
+                    } else if (state.domainType === 'transfer') {
+                        typeBadge.textContent = 'Transfer';
+                        typeBadge.className = 'badge bg-info text-dark rounded-pill fs-11';
+                        noteEl.textContent = 'Transfer from external registrar • 1 Year Extension';
+                        feeEl.textContent = '$' + state.domainPrice.toFixed(2);
+                    } else {
+                        typeBadge.textContent = 'New Registration';
+                        typeBadge.className = 'badge bg-primary text-white rounded-pill fs-11';
+                        noteEl.textContent = (domainYears > 1 ? (domainYears + ' Years') : '1 Year') + ' • Free Privacy Protection & Anycast DNS';
+                        feeEl.textContent = '$' + domainTotal.toFixed(2);
+                    }
                 }
+
+                // If coming with domain: HIDE the 3 cards and SHOW Step 1 hosting upsell
+                if (domainOptionsWrap) domainOptionsWrap.style.display = 'none';
+                if (domainUpsellWrap) domainUpsellWrap.style.display = 'block';
+
+                // Sync active card in Step 1 hosting upsell
+                ['none', '1', '2', '3'].forEach(k => {
+                    const card = document.getElementById('hostingAddon' + (k === 'none' ? 'None' : k));
+                    if (card) {
+                        const isMatch = (state.pid === k) || (k === '2' && state.pid === '201') || (k === '1' && state.pid === '101') || (k === '3' && state.pid === '202');
+                        card.classList.toggle('active', isMatch);
+                    }
+                });
 
                 if (step1ContinueBar) step1ContinueBar.style.display = 'block';
             } else {
-                domainStrip.style.display = 'none';
+                if (domainStrip) domainStrip.style.display = 'none';
+                if (domainUpsellWrap) domainUpsellWrap.style.display = 'none';
+                if (domainOptionsWrap) domainOptionsWrap.style.display = 'block';
                 if (step1ContinueBar) step1ContinueBar.style.display = 'none';
             }
 
             // 2. STEP 2: Plan & Configuration Rendering
-            document.getElementById('step2DomainText').textContent = state.domain || 'Not connected yet';
+            const step2DomainText = document.getElementById('step2DomainText');
+            if (step2DomainText) step2DomainText.textContent = state.domain || 'Not connected yet';
             const s2Badge = document.getElementById('step2DomainBadge');
-            if (state.domainType === 'owndomain') {
-                s2Badge.textContent = 'Existing Domain ($0.00)';
-                s2Badge.className = 'badge bg-success text-white rounded-pill ms-1 fs-10';
-            } else if (state.domainType === 'transfer') {
-                s2Badge.textContent = 'Domain Transfer';
-                s2Badge.className = 'badge bg-info text-dark rounded-pill ms-1 fs-10';
-            } else {
-                s2Badge.textContent = 'Registered Domain';
-                s2Badge.className = 'badge bg-primary text-white rounded-pill ms-1 fs-10';
+            if (s2Badge) {
+                if (state.domainType === 'owndomain') {
+                    s2Badge.textContent = 'Existing Domain ($0.00)';
+                    s2Badge.className = 'badge bg-success text-white rounded-pill ms-1 fs-10';
+                } else if (state.domainType === 'transfer') {
+                    s2Badge.textContent = 'Domain Transfer';
+                    s2Badge.className = 'badge bg-info text-dark rounded-pill ms-1 fs-10';
+                } else {
+                    s2Badge.textContent = 'Registered Domain (' + domainYears + ' ' + (domainYears > 1 ? 'Years' : 'Year') + ')';
+                    s2Badge.className = 'badge bg-primary text-white rounded-pill ms-1 fs-10';
+                }
             }
 
-            if (hasHosting) {
-                document.getElementById('step2PlanName').textContent = plan.name;
-                document.getElementById('step2PlanBadge').textContent = plan.category.toUpperCase();
-                document.getElementById('step2PlanSpecs').textContent = plan.specs;
+            // Step 2 Domain 1-5 Years Registration Selector
+            const periodCard = document.getElementById('step2DomainPeriodCard');
+            if (periodCard) {
+                if (state.domain && state.domainType === 'register') {
+                    periodCard.style.display = 'block';
+                    const lastDot = state.domain.lastIndexOf('.');
+                    const ext = (lastDot !== -1 ? state.domain.substring(lastDot) : '.com').toUpperCase();
+                    const extBadge = document.getElementById('step2DomainExtBadge');
+                    if (extBadge) extBadge.textContent = ext + ' Registration (Max 5 Yrs)';
 
-                document.getElementById('cyclePriceMonthlyText').textContent = '$' + plan.monthly.toFixed(2) + '/mo';
-                document.getElementById('cyclePriceAnnuallyText').textContent = '$' + plan.yearly.toFixed(2) + '/yr';
-
-                // Active cycle card toggle
-                document.getElementById('cycleCardMonthly').classList.toggle('active', !isYearly);
-                document.getElementById('cycleCardAnnually').classList.toggle('active', isYearly);
-
-                // Highlight active plan button
-                Object.keys(PRODUCTS).forEach(pKey => {
-                    const btn = document.getElementById('switchPlanBtn_' + pKey);
-                    if (btn) {
-                        btn.classList.toggle('btn-primary', pKey === state.pid);
-                        btn.classList.toggle('btn-outline-secondary', pKey !== state.pid);
+                    for (let y = 1; y <= 5; y++) {
+                        const yPriceEl = document.getElementById('yearPrice_' + y);
+                        const yRateEl = document.getElementById('yearRate_' + y);
+                        const totalForY = (domainRate * y).toFixed(2);
+                        if (yPriceEl) yPriceEl.textContent = '$' + totalForY;
+                        if (yRateEl) yRateEl.textContent = '$' + domainRate.toFixed(2) + ' / yr';
                     }
-                });
+
+                    document.querySelectorAll('.cf-year-card').forEach(card => {
+                        const yVal = parseInt(card.getAttribute('data-years'), 10);
+                        card.classList.toggle('active', yVal === domainYears);
+                    });
+                } else {
+                    periodCard.style.display = 'none';
+                }
+            }
+
+            // Step 2 Hosting Showcase Card
+            const step2HostingCard = document.getElementById('step2HostingShowcase');
+            if (step2HostingCard) {
+                if (hasHosting) {
+                    step2HostingCard.style.display = 'block';
+                    document.getElementById('step2PlanName').textContent = plan.name;
+                    document.getElementById('step2PlanBadge').textContent = plan.category.toUpperCase();
+                    document.getElementById('step2PlanSpecs').textContent = plan.specs;
+
+                    document.getElementById('cyclePriceMonthlyText').textContent = '$' + plan.monthly.toFixed(2) + '/mo';
+                    document.getElementById('cyclePriceAnnuallyText').textContent = '$' + plan.yearly.toFixed(2) + '/yr';
+
+                    // Active cycle card toggle
+                    document.getElementById('cycleCardMonthly').classList.toggle('active', !isYearly);
+                    document.getElementById('cycleCardAnnually').classList.toggle('active', isYearly);
+
+                    // Highlight active plan button
+                    Object.keys(PRODUCTS).forEach(pKey => {
+                        const btn = document.getElementById('switchPlanBtn_' + pKey);
+                        if (btn) {
+                            btn.classList.toggle('btn-primary', pKey === state.pid);
+                            btn.classList.toggle('btn-outline-secondary', pKey !== state.pid);
+                        }
+                    });
+                } else {
+                    step2HostingCard.style.display = 'none';
+                }
             }
 
             // 3. STEP 4 & SIDEBAR: Total Calculations
-            const hostingFee = hasHosting ? (isYearly ? plan.yearly : plan.monthly) : 0.00;
-            const total = state.domainPrice + hostingFee;
-
             // Final breakdown in Step 4
             document.getElementById('finalPlanItemName').textContent = hasHosting ? (plan.name + ' (' + (isYearly ? 'Annual' : 'Monthly') + '):') : 'Hosting:';
             document.getElementById('finalPlanItemPrice').textContent = hasHosting ? ('$' + hostingFee.toFixed(2)) : 'None ($0.00)';
 
-            const domLabel = (state.domainType === 'owndomain') ? 'Domain (Existing DNS point):' : (state.domainType === 'transfer' ? 'Domain (Transfer):' : 'Domain (Registration):');
+            let domLabel = 'Domain:';
+            if (state.domainType === 'owndomain') {
+                domLabel = 'Domain (Existing DNS point):';
+            } else if (state.domainType === 'transfer') {
+                domLabel = 'Domain Transfer (1 Year):';
+            } else {
+                domLabel = 'Domain Registration (' + domainYears + ' ' + (domainYears > 1 ? 'Years' : 'Year') + '):';
+            }
             document.getElementById('finalDomainItemName').textContent = state.domain ? (domLabel + ' ' + state.domain) : 'Domain:';
-            document.getElementById('finalDomainItemPrice').textContent = state.domain ? (state.domainPrice > 0 ? ('$' + state.domainPrice.toFixed(2)) : 'FREE ($0.00)') : '$0.00';
+            document.getElementById('finalDomainItemPrice').textContent = state.domain ? (domainTotal > 0 ? ('$' + domainTotal.toFixed(2)) : 'FREE ($0.00)') : '$0.00';
             document.getElementById('finalTotalDue').textContent = '$' + total.toFixed(2) + ' USD';
             document.getElementById('btnPayAmount').textContent = '$' + total.toFixed(2) + ' USD';
 
@@ -1438,8 +1661,16 @@ if ($isLoggedIn && $loggedInClientId > 0) {
             if (sideDomainRow) {
                 sideDomainRow.style.display = state.domain ? 'flex' : 'none';
                 if (state.domain) {
-                    sideDomainLabel.textContent = (state.domainType === 'owndomain') ? 'Domain (Existing):' : (state.domainType === 'transfer' ? 'Domain (Transfer):' : 'Domain:');
-                    sideDomainFee.textContent = state.domainPrice > 0 ? ('$' + state.domainPrice.toFixed(2)) : 'FREE ($0.00)';
+                    let sLabel = 'Domain:';
+                    if (state.domainType === 'owndomain') {
+                        sLabel = 'Domain (Existing):';
+                    } else if (state.domainType === 'transfer') {
+                        sLabel = 'Domain (Transfer 1 Yr):';
+                    } else {
+                        sLabel = 'Domain (' + domainYears + ' ' + (domainYears > 1 ? 'Yrs' : 'Yr') + '):';
+                    }
+                    sideDomainLabel.textContent = sLabel;
+                    sideDomainFee.textContent = domainTotal > 0 ? ('$' + domainTotal.toFixed(2)) : 'FREE ($0.00)';
                 }
             }
 
@@ -1477,10 +1708,31 @@ if ($isLoggedIn && $loggedInClientId > 0) {
         // Toggle Domain Options visibility
         window.pageToggleDomainOptions = function(show) {
             const wrap = document.getElementById('pageDomainOptionsWrap');
+            const upsell = document.getElementById('pageDomainUpsellHostingWrap');
             if (wrap) {
                 wrap.style.display = show ? 'block' : 'none';
                 if (show) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
+            if (upsell && show) {
+                upsell.style.display = 'none';
+            }
+        };
+
+        // Select Hosting Addon in Step 1
+        window.pageSelectHostingAddon = function(pid) {
+            state.pid = pid;
+            renderState();
+        };
+
+        // Select Domain Registration Years (1 to 5) in Step 2
+        window.pageSetDomainYears = function(years) {
+            years = parseInt(years, 10);
+            if (years < 1) years = 1;
+            if (years > 5) years = 5;
+            state.domainYears = years;
+            const hidden = document.getElementById('pageDomainYears');
+            if (hidden) hidden.value = years;
+            renderState();
         };
 
         // Switch Domain Option Tab (Register, Transfer, Own Domain)
@@ -1613,8 +1865,10 @@ if ($isLoggedIn && $loggedInClientId > 0) {
                 cfToast.success('Domain <strong>' + escapeHtml(domain) + '</strong> connected!');
             }
 
-            // Advance to Step 2
-            pageGoToStep(2);
+            const upsell = document.getElementById('pageDomainUpsellHostingWrap');
+            if (upsell) {
+                upsell.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         };
 
         // Select alternative suggested domain
@@ -1630,7 +1884,10 @@ if ($isLoggedIn && $loggedInClientId > 0) {
                 cfToast.success('Domain <strong>' + escapeHtml(domain) + '</strong> connected!');
             }
 
-            pageGoToStep(2);
+            const upsell = document.getElementById('pageDomainUpsellHostingWrap');
+            if (upsell) {
+                upsell.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         };
 
         // Connect domain for Transfer
@@ -1704,13 +1961,13 @@ if ($isLoggedIn && $loggedInClientId > 0) {
         };
 
         // Step Navigation Logic (1: Domain, 2: Plan & Config, 3: Account, 4: Payment)
-        window.pageGoToStep = function(targetStep) {
+        function pageGoToStep(targetStep) {
             hideAlert();
 
             if (targetStep >= 2) {
-                // Validate domain connection if hosting plan is selected
-                if (state.pid !== 'none' && !state.domain) {
-                    showAlert('Please connect a domain name for your hosting package before proceeding.');
+                // Validate domain connection
+                if (!state.domain) {
+                    showAlert('Please choose or enter a domain name before proceeding.');
                     pageGoToStep(1);
                     return;
                 }
@@ -1768,7 +2025,8 @@ if ($isLoggedIn && $loggedInClientId > 0) {
             });
 
             window.scrollTo({ top: 120, behavior: 'smooth' });
-        };
+        }
+        window.pageGoToStep = pageGoToStep;
 
         // Process Customer Account (Verify login credentials or create account)
         window.pageProcessAccount = function() {
@@ -2193,6 +2451,7 @@ if ($isLoggedIn && $loggedInClientId > 0) {
             payload.billingcycle = state.billingcycle;
             payload.domain = state.domain;
             payload.domain_type = state.domainType;
+            payload.domain_years = state.domainYears || 1;
             payload.epp_code = state.eppCode;
             payload.account_action = state.accountAction;
             payload.paymentmethod = state.paymentMethod;

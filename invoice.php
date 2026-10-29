@@ -6,8 +6,8 @@
  * Connects PayHere (Visa/Master/Amex/USD), Card, and PayPal directly.
  */
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+    @session_start();
 }
 
 require_once __DIR__ . '/include/url.inc.php';
@@ -631,6 +631,46 @@ $payhereObj = [
                 width: 100% !important;
             }
         }
+
+        /* Floating Close Button for PayHere Modal */
+        .cf-payhere-floating-close-btn {
+            position: fixed !important;
+            top: 18px !important;
+            right: 22px !important;
+            z-index: 2147483647 !important;
+            background: #0F172A !important;
+            color: #FFFFFF !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 999px !important;
+            padding: 8px 18px !important;
+            font-size: 13.5px !important;
+            font-weight: 700 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 7px !important;
+            cursor: pointer !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            font-family: inherit !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+        }
+        .cf-payhere-floating-close-btn:hover {
+            background: #DC2626 !important;
+            border-color: #EF4444 !important;
+            color: #FFFFFF !important;
+            transform: translateY(-2px) scale(1.03) !important;
+            box-shadow: 0 12px 30px rgba(220, 38, 38, 0.45) !important;
+        }
+        .cf-payhere-floating-close-btn:active {
+            transform: scale(0.97) !important;
+        }
+        .cf-payhere-floating-close-btn i {
+            font-size: 16px !important;
+            font-weight: 800 !important;
+        }
     </style>
 </head>
 
@@ -973,6 +1013,121 @@ $payhereObj = [
             }
         };
 
+        // Universal PayHere Modal Closer
+        window.closePayHereModal = function() {
+            // 1. Remove all PayHere container and modal elements from DOM
+            const selectors = [
+                '#ph-container',
+                '#payhere-modal',
+                '.ph-backdrop',
+                '#ph-iframe',
+                'iframe[src*="payhere.lk"]',
+                'iframe[name*="payhere"]',
+                '#cfPayhereCloseBtn'
+            ];
+            selectors.forEach(function(sel) {
+                document.querySelectorAll(sel).forEach(function(el) {
+                    try { el.remove(); } catch(e) {}
+                });
+            });
+
+            // 2. Restore body scrolling
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+
+            // 3. Clean paynow query param from URL so page refresh doesn't pop up again
+            if (window.history && window.history.replaceState) {
+                try {
+                    const cleanUrl = window.location.pathname + window.location.search.replace(/([&?])paynow=[^&]*(&|$)/, '$1').replace(/[&?]$/, '') + window.location.hash;
+                    window.history.replaceState(null, '', cleanUrl);
+                } catch(e) {}
+            }
+
+            // 4. Fire onDismissed callback
+            if (typeof payhere !== 'undefined' && typeof payhere.onDismissed === 'function') {
+                try { payhere.onDismissed(); } catch(e) {}
+            }
+        };
+
+        // Ensure floating close button exists while modal is active in DOM
+        function syncPayHereCloseButton() {
+            const hasModal = !!(document.getElementById('ph-container') || document.getElementById('payhere-modal') || document.getElementById('ph-iframe') || document.querySelector('iframe[src*="payhere.lk"]'));
+            let floatBtn = document.getElementById('cfPayhereCloseBtn');
+
+            if (hasModal) {
+                if (!floatBtn) {
+                    floatBtn = document.createElement('button');
+                    floatBtn.type = 'button';
+                    floatBtn.id = 'cfPayhereCloseBtn';
+                    floatBtn.className = 'cf-payhere-floating-close-btn';
+                    floatBtn.setAttribute('aria-label', 'Close Payment Window');
+                    floatBtn.title = 'Close payment window and return to invoice (Esc)';
+                    floatBtn.innerHTML = '<i class="las la-times"></i> <span>Close Payment</span>';
+                    floatBtn.onclick = function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.closePayHereModal();
+                    };
+                    document.body.appendChild(floatBtn);
+                }
+            } else {
+                if (floatBtn) {
+                    try { floatBtn.remove(); } catch(e) {}
+                }
+            }
+        }
+
+        // Intercept postMessage from PayHere iframe (Fixes PayHere SDK JSON.parse crash on modern postMessage objects)
+        window.addEventListener('message', function(event) {
+            let msg = event.data;
+            if (typeof msg === 'string') {
+                try { msg = JSON.parse(msg); } catch(err) {}
+            }
+
+            if (msg && typeof msg === 'object') {
+                // Type 4: Customer clicked the 'X' (cut) close button inside PayHere iframe
+                if (msg.type === 4 || msg.type === '4' || msg.status === 'DISMISSED' || msg.status === 'CANCELLED' || msg.status === 'CLOSED' || msg.action === 'close' || msg.event === 'close') {
+                    window.closePayHereModal();
+                }
+                // Type 2: Payment completed successfully
+                else if (msg.type === 2 || msg.type === '2') {
+                    if (typeof payhere !== 'undefined' && typeof payhere.onCompleted === 'function' && msg.data) {
+                        payhere.onCompleted(msg.data);
+                    }
+                }
+            } else if (msg === 'close' || msg === 'dismiss' || msg === 'CANCELLED') {
+                window.closePayHereModal();
+            }
+        }, true);
+
+        // Escape Key Listener to dismiss PayHere modal
+        window.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' || event.key === 'Esc' || event.keyCode === 27) {
+                const hasModal = !!(document.getElementById('ph-container') || document.getElementById('payhere-modal') || document.getElementById('ph-iframe') || document.querySelector('iframe[src*="payhere.lk"]'));
+                if (hasModal) {
+                    window.closePayHereModal();
+                }
+            }
+        });
+
+        // Watch DOM mutations to auto attach/remove floating close button & attach backdrop click
+        if (typeof MutationObserver !== 'undefined') {
+            const observer = new MutationObserver(function() {
+                syncPayHereCloseButton();
+
+                // Attach direct click to backdrop element if present
+                const backdrop = document.querySelector('.ph-backdrop');
+                if (backdrop && !backdrop.dataset.cfBound) {
+                    backdrop.dataset.cfBound = '1';
+                    backdrop.style.cursor = 'pointer';
+                    backdrop.addEventListener('click', function() {
+                        window.closePayHereModal();
+                    });
+                }
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+        }
+
         // PayHere SDK Modal Trigger
         window.triggerPayHereModal = function() {
             if (typeof payhere === 'undefined') {
@@ -990,6 +1145,7 @@ $payhereObj = [
 
             payhere.onDismissed = function() {
                 console.log('PayHere popup closed by customer.');
+                window.closePayHereModal();
             };
 
             payhere.onError = function(error) {
@@ -999,6 +1155,10 @@ $payhereObj = [
 
             // Start checkout modal
             payhere.startPayment(payherePayment);
+
+            // Sync floating button
+            setTimeout(syncPayHereCloseButton, 100);
+            setTimeout(syncPayHereCloseButton, 500);
         };
 
         // Auto trigger PayHere if redirected directly from checkout with paynow=1

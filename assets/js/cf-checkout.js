@@ -92,42 +92,8 @@
             // If already on the dedicated checkout page, don't intercept
             if (window.location.pathname.includes('/checkout')) return;
 
-            // 1. Intercept Domain Claim / Buy buttons that are NOT handled inline
-            const domainBuyBtn = e.target.closest('.cf-btn-domain-buy, .cf-btn-alt-buy, a[href*="domain=register"]');
-            if (domainBuyBtn && !domainBuyBtn.hasAttribute('onclick')) {
-                e.preventDefault();
-                e.stopPropagation();
-                let domainName = '';
-                if (domainBuyBtn.href) {
-                    const match = domainBuyBtn.href.match(/query=([^&]+)/i);
-                    if (match) domainName = decodeURIComponent(match[1]);
-                }
-                openCheckoutDrawer({
-                    pid: 'none',
-                    domain: domainName,
-                    domainType: 'register'
-                });
-                return;
-            }
-
-            // 1.1 Intercept Domain Transfer buttons that are NOT handled inline
-            const domainTransferBtn = e.target.closest('.cf-btn-domain-transfer, .cf-btn-alt-transfer, a[href*="domain=transfer"]');
-            if (domainTransferBtn && !domainTransferBtn.hasAttribute('onclick')) {
-                e.preventDefault();
-                e.stopPropagation();
-                let domainName = '';
-                if (domainTransferBtn.href) {
-                    const match = domainTransferBtn.href.match(/query=([^&]+)/i);
-                    if (match) domainName = decodeURIComponent(match[1]);
-                }
-                openCheckoutDrawer({
-                    pid: '201',
-                    cycle: 'annually',
-                    domain: domainName,
-                    domainType: 'transfer'
-                });
-                return;
-            }
+            // Direct checkout link clicks should always proceed to the checkout page naturally
+            if (e.target.closest('a[href*="checkout"]')) return;
 
             // 2. Intercept Plan Buy buttons
             const btn = e.target.closest('[data-pid], a[href*="cart.php?a=add"], .cf-table-cta-btn, .btn-plan-outline, .btn-plan-featured');
