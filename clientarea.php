@@ -15,11 +15,141 @@ $clientId    = (int)($_SESSION['cf_client_id'] ?? 0);
 $clientEmail = $_SESSION['cf_client_email'] ?? '';
 $clientName  = $_SESSION['cf_client_name'] ?? 'Client';
 
+$supportedCountries = [
+    'LK' => 'Sri Lanka',
+    'US' => 'United States',
+    'GB' => 'United Kingdom',
+    'AU' => 'Australia',
+    'CA' => 'Canada',
+    'IN' => 'India',
+    'SG' => 'Singapore',
+    'AE' => 'United Arab Emirates',
+    'DE' => 'Germany',
+    'FR' => 'France',
+    'MY' => 'Malaysia',
+    'JP' => 'Japan',
+    'NZ' => 'New Zealand',
+    'NL' => 'Netherlands',
+    'IT' => 'Italy',
+    'ES' => 'Spain',
+    'CH' => 'Switzerland',
+    'SE' => 'Sweden',
+    'NO' => 'Norway',
+    'IE' => 'Ireland',
+    'SA' => 'Saudi Arabia',
+    'QA' => 'Qatar',
+    'PK' => 'Pakistan',
+    'BD' => 'Bangladesh',
+    'MV' => 'Maldives',
+    'TH' => 'Thailand',
+    'ID' => 'Indonesia',
+    'PH' => 'Philippines',
+    'ZA' => 'South Africa',
+    'BR' => 'Brazil'
+];
+
+$profileSuccess = '';
+$profileError   = '';
+
+// Handle Profile Update POST
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_profile') {
+    $pFirstName   = trim($_POST['firstname'] ?? '');
+    $pLastName    = trim($_POST['lastname'] ?? '');
+    $pCompanyName = trim($_POST['companyname'] ?? '');
+    $pPhoneNumber = trim($_POST['phonenumber'] ?? '');
+    $pAddress1    = trim($_POST['address1'] ?? '');
+    $pAddress2    = trim($_POST['address2'] ?? '');
+    $pCity        = trim($_POST['city'] ?? '');
+    $pState       = trim($_POST['state'] ?? '');
+    $pPostcode    = trim($_POST['postcode'] ?? '');
+    $pCountry     = strtoupper(trim($_POST['country'] ?? 'LK'));
+    
+    $pNewPassword = $_POST['new_password'] ?? '';
+    $pConfirmPass = $_POST['confirm_password'] ?? '';
+
+    if (empty($pFirstName) || empty($pLastName)) {
+        $profileError = 'Please provide both your First Name and Last Name.';
+    } elseif (empty($pPhoneNumber)) {
+        $profileError = 'Please provide a valid contact phone number.';
+    } elseif (empty($pAddress1)) {
+        $profileError = 'Please enter your street address.';
+    } elseif (empty($pCity)) {
+        $profileError = 'Please enter your city.';
+    } elseif (!empty($pNewPassword) && strlen($pNewPassword) < 6) {
+        $profileError = 'New password must be at least 6 characters long.';
+    } elseif (!empty($pNewPassword) && $pNewPassword !== $pConfirmPass) {
+        $profileError = 'New passwords do not match. Please re-enter.';
+    } else {
+        try {
+            $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+            if (!$mysqli->connect_error && $clientId > 0) {
+                if (!empty($pNewPassword)) {
+                    $passHash = password_hash($pNewPassword, PASSWORD_DEFAULT);
+                    $up = $mysqli->prepare("UPDATE tblclients SET firstname = ?, lastname = ?, companyname = ?, phonenumber = ?, address1 = ?, address2 = ?, city = ?, state = ?, postcode = ?, country = ?, password = ?, updated_at = NOW() WHERE id = ?");
+                    if ($up) {
+                        $up->bind_param('sssssssssssi', $pFirstName, $pLastName, $pCompanyName, $pPhoneNumber, $pAddress1, $pAddress2, $pCity, $pState, $pPostcode, $pCountry, $passHash, $clientId);
+                        $up->execute();
+                        $up->close();
+                    }
+                } else {
+                    $up = $mysqli->prepare("UPDATE tblclients SET firstname = ?, lastname = ?, companyname = ?, phonenumber = ?, address1 = ?, address2 = ?, city = ?, state = ?, postcode = ?, country = ?, updated_at = NOW() WHERE id = ?");
+                    if ($up) {
+                        $up->bind_param('ssssssssssi', $pFirstName, $pLastName, $pCompanyName, $pPhoneNumber, $pAddress1, $pAddress2, $pCity, $pState, $pPostcode, $pCountry, $clientId);
+                        $up->execute();
+                        $up->close();
+                    }
+                }
+
+                // Sync with WHMCS API if available
+                try {
+                    $whmcsUpdateData = [
+                        'clientid'    => $clientId,
+                        'firstname'   => $pFirstName,
+                        'lastname'    => $pLastName,
+                        'companyname' => $pCompanyName,
+                        'phonenumber' => $pPhoneNumber,
+                        'address1'    => $pAddress1,
+                        'address2'    => $pAddress2,
+                        'city'        => $pCity,
+                        'state'       => $pState,
+                        'postcode'    => $pPostcode,
+                        'country'     => $pCountry
+                    ];
+                    if (!empty($pNewPassword)) {
+                        $whmcsUpdateData['password2'] = $pNewPassword;
+                    }
+                    WHMCSClient::call('UpdateClient', $whmcsUpdateData);
+                } catch (Exception $ex) {}
+
+                $clientName = trim($pFirstName . ' ' . $pLastName);
+                $_SESSION['cf_client_name'] = $clientName;
+                $profileSuccess = 'Your personal and billing information has been updated successfully!';
+            }
+        } catch (Exception $e) {
+            $profileError = 'An error occurred while saving your profile: ' . $e->getMessage();
+        }
+    }
+}
+
 // Initialize data containers
 $services = [];
 $domains  = [];
 $invoices = [];
 $tickets  = [];
+
+$clientProfile = [
+    'firstname'   => '',
+    'lastname'    => '',
+    'companyname' => '',
+    'email'       => $clientEmail,
+    'phonenumber' => '',
+    'address1'    => '',
+    'address2'    => '',
+    'city'        => '',
+    'state'       => '',
+    'postcode'    => '',
+    'country'     => 'LK'
+];
 
 $statServices = 0;
 $statDomains  = 0;
@@ -28,7 +158,7 @@ $statTicketsOpen = 0;
 
 // Fetch data from local WHMCS database or API fallback
 try {
-    $mysqli = @new mysqli('localhost', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+    $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
     if (!$mysqli->connect_error && $clientId > 0) {
         // 1. Fetch Services
         $stmt = $mysqli->prepare("SELECT h.id, h.domain, h.domainstatus, h.amount, h.billingcycle, h.nextduedate, p.name as product_name FROM tblhosting h LEFT JOIN tblproducts p ON p.id = h.packageid WHERE h.userid = ? ORDER BY h.id DESC");
@@ -66,6 +196,22 @@ try {
             $stmt->close();
         }
 
+        // 5. Fetch Client Profile Details
+        $stmt = $mysqli->prepare("SELECT id, firstname, lastname, companyname, email, phonenumber, address1, address2, city, state, postcode, country FROM tblclients WHERE id = ? LIMIT 1");
+        if ($stmt) {
+            $stmt->bind_param('i', $clientId);
+            $stmt->execute();
+            $profRes = $stmt->get_result();
+            if ($profRes && $profRow = $profRes->fetch_assoc()) {
+                $clientProfile = array_merge($clientProfile, $profRow);
+                if (empty($clientName) || $clientName === 'Client') {
+                    $clientName = trim(($profRow['firstname'] ?? '') . ' ' . ($profRow['lastname'] ?? ''));
+                    $_SESSION['cf_client_name'] = $clientName;
+                }
+            }
+            $stmt->close();
+        }
+
         // Calculate counts
         foreach ($services as $s) {
             if (strtolower($s['domainstatus']) === 'active') $statServices++;
@@ -83,6 +229,8 @@ try {
 } catch (Exception $e) {
     // Graceful error handling
 }
+
+$isProfileActive = (!empty($profileSuccess) || !empty($profileError) || (isset($_GET['tab']) && $_GET['tab'] === 'profile'));
 
 // Format status badge helper
 function getStatusBadge($status) {
@@ -174,6 +322,9 @@ function getStatusBadge($status) {
                         <a href="<?php echo $url; ?>domain" class="btn cf-btn-hero-white">
                             <i class="las la-globe text-primary"></i> New Domain
                         </a>
+                        <button type="button" class="btn cf-btn-hero-white" onclick="document.getElementById('profile-tab').click(); document.getElementById('clientDashboardTabs').scrollIntoView({behavior: 'smooth'});">
+                            <i class="las la-user-edit text-primary"></i> Edit Profile
+                        </button>
                         <a href="<?php echo $url; ?>login?action=logout" class="btn cf-btn-hero-logout" title="Sign out of your account">
                             <i class="las la-sign-out-alt"></i> Sign Out
                         </a>
@@ -250,7 +401,7 @@ function getStatusBadge($status) {
                 <!-- Nav Tabs -->
                 <ul class="nav cf-dashboard-nav-tabs mb-4" id="clientDashboardTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="services-tab" data-bs-toggle="tab" data-bs-target="#services-pane" type="button" role="tab">
+                        <button class="nav-link <?php echo !$isProfileActive ? 'active' : ''; ?>" id="services-tab" data-bs-toggle="tab" data-bs-target="#services-pane" type="button" role="tab">
                             <i class="las la-server me-1"></i> My Services (<?php echo count($services); ?>)
                         </button>
                     </li>
@@ -272,13 +423,18 @@ function getStatusBadge($status) {
                             <i class="las la-headset me-1"></i> Support Tickets (<?php echo count($tickets); ?>)
                         </button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link <?php echo $isProfileActive ? 'active' : ''; ?>" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-pane" type="button" role="tab">
+                            <i class="las la-user-edit me-1"></i> My Profile &amp; Details
+                        </button>
+                    </li>
                 </ul>
 
                 <!-- Tab Content -->
                 <div class="tab-content" id="clientDashboardContent">
 
                     <!-- 1. Services Tab -->
-                    <div class="tab-pane fade show active" id="services-pane" role="tabpanel">
+                    <div class="tab-pane fade <?php echo !$isProfileActive ? 'show active' : ''; ?>" id="services-pane" role="tabpanel">
                         <?php if (empty($services)): ?>
                             <div class="text-center py-5">
                                 <div class="fs-40 text-muted mb-2"><i class="las la-server"></i></div>
@@ -493,6 +649,190 @@ function getStatusBadge($status) {
                         <?php endif; ?>
                     </div>
 
+                    <!-- 5. Edit Profile & Details Tab -->
+                    <div class="tab-pane fade <?php echo $isProfileActive ? 'show active' : ''; ?>" id="profile-pane" role="tabpanel">
+                        <?php if (!empty($profileSuccess)): ?>
+                            <div class="alert alert-success d-flex align-items-center gap-2 mb-4 border-0 rounded-3 shadow-xs" role="alert">
+                                <i class="las la-check-circle fs-20 text-success"></i>
+                                <div><strong>Success!</strong> <?php echo htmlspecialchars($profileSuccess); ?></div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (!empty($profileError)): ?>
+                            <div class="alert alert-danger d-flex align-items-center gap-2 mb-4 border-0 rounded-3 shadow-xs" role="alert">
+                                <i class="las la-exclamation-circle fs-20 text-danger"></i>
+                                <div><strong>Error:</strong> <?php echo htmlspecialchars($profileError); ?></div>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4 pb-3 border-bottom">
+                            <div>
+                                <h4 class="fw-bold text-slate-900 mb-1">
+                                    <i class="las la-user-cog text-primary me-1.5"></i> Personal &amp; Billing Profile
+                                </h4>
+                                <p class="text-secondary fs-13 mb-0">Update your verified contact information, company name, billing address and account password.</p>
+                            </div>
+                            <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill fs-12">
+                                <i class="las la-id-badge text-primary me-1"></i> Client ID #<?php echo $clientId; ?>
+                            </span>
+                        </div>
+
+                        <form method="POST" action="<?php echo $url; ?>clientarea.php?tab=profile" class="needs-validation">
+                            <input type="hidden" name="action" value="update_profile">
+
+                            <!-- BLOCK 1: PERSONAL INFORMATION -->
+                            <div class="card border mb-4 shadow-none rounded-3 overflow-hidden">
+                                <div class="card-header bg-light py-3 px-3.5 border-bottom">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div style="width: 28px; height: 28px; border-radius: 50%; background: #EFF6FF; color: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                                            <i class="las la-user"></i>
+                                        </div>
+                                        <h6 class="fw-bold text-slate-900 mb-0 fs-14">1. Personal &amp; Contact Information</h6>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3.5 p-md-4">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">First Name <span class="text-danger">*</span></label>
+                                            <div class="position-relative">
+                                                <i class="las la-user position-absolute top-50 translate-middle-y text-muted fs-18 ms-3" style="pointer-events: none;"></i>
+                                                <input type="text" class="form-control ps-5" name="firstname" value="<?php echo htmlspecialchars($clientProfile['firstname']); ?>" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">Last Name <span class="text-danger">*</span></label>
+                                            <div class="position-relative">
+                                                <i class="las la-user position-absolute top-50 translate-middle-y text-muted fs-18 ms-3" style="pointer-events: none;"></i>
+                                                <input type="text" class="form-control ps-5" name="lastname" value="<?php echo htmlspecialchars($clientProfile['lastname']); ?>" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">Email Address</label>
+                                            <div class="position-relative">
+                                                <i class="las la-envelope position-absolute top-50 translate-middle-y text-muted fs-18 ms-3" style="pointer-events: none;"></i>
+                                                <input type="email" class="form-control ps-5 bg-light" name="email_display" value="<?php echo htmlspecialchars($clientProfile['email']); ?>" readonly>
+                                            </div>
+                                            <small class="text-muted fs-11 mt-1 d-block"><i class="las la-shield-alt text-success me-1"></i>Primary CloudFlox ID. Contact billing support to change email.</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">Phone Number <span class="text-danger">*</span></label>
+                                            <div class="position-relative">
+                                                <i class="las la-phone position-absolute top-50 translate-middle-y text-muted fs-18 ms-3" style="pointer-events: none;"></i>
+                                                <input type="tel" class="form-control ps-5" name="phonenumber" value="<?php echo htmlspecialchars($clientProfile['phonenumber']); ?>" placeholder="+94 77 123 4567" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">Company / Organization Name <span class="text-muted fw-normal fs-11">(Optional)</span></label>
+                                            <div class="position-relative">
+                                                <i class="las la-building position-absolute top-50 translate-middle-y text-muted fs-18 ms-3" style="pointer-events: none;"></i>
+                                                <input type="text" class="form-control ps-5" name="companyname" value="<?php echo htmlspecialchars($clientProfile['companyname']); ?>" placeholder="Company or Organization Name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BLOCK 2: BILLING & PHYSICAL ADDRESS -->
+                            <div class="card border mb-4 shadow-none rounded-3 overflow-hidden">
+                                <div class="card-header bg-light py-3 px-3.5 border-bottom">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div style="width: 28px; height: 28px; border-radius: 50%; background: #EFF6FF; color: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                                            <i class="las la-map-marker-alt"></i>
+                                        </div>
+                                        <h6 class="fw-bold text-slate-900 mb-0 fs-14">2. Billing &amp; Physical Address</h6>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3.5 p-md-4">
+                                    <div class="row g-3">
+                                        <div class="col-md-8">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">Street Address Line 1 <span class="text-danger">*</span></label>
+                                            <div class="position-relative">
+                                                <i class="las la-home position-absolute top-50 translate-middle-y text-muted fs-18 ms-3" style="pointer-events: none;"></i>
+                                                <input type="text" class="form-control ps-5" name="address1" value="<?php echo htmlspecialchars($clientProfile['address1']); ?>" placeholder="123 Main Street" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">Street Address Line 2 <span class="text-muted fw-normal fs-11">(Optional)</span></label>
+                                            <input type="text" class="form-control" name="address2" value="<?php echo htmlspecialchars($clientProfile['address2']); ?>" placeholder="Apt, Suite, Unit">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">City <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" name="city" value="<?php echo htmlspecialchars($clientProfile['city']); ?>" placeholder="City" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">State / Region</label>
+                                            <input type="text" class="form-control" name="state" value="<?php echo htmlspecialchars($clientProfile['state']); ?>" placeholder="Western Province">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">Postcode / ZIP</label>
+                                            <input type="text" class="form-control" name="postcode" value="<?php echo htmlspecialchars($clientProfile['postcode']); ?>" placeholder="00100">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">Country <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="country" required>
+                                                <?php foreach ($supportedCountries as $code => $cName): ?>
+                                                    <option value="<?php echo $code; ?>" <?php echo (strtoupper($clientProfile['country']) === $code) ? 'selected' : ''; ?>>
+                                                        <?php echo htmlspecialchars($cName); ?> (<?php echo $code; ?>)
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BLOCK 3: CHANGE PASSWORD (OPTIONAL) -->
+                            <div class="card border mb-4 shadow-none rounded-3 overflow-hidden">
+                                <div class="card-header bg-light py-3 px-3.5 border-bottom">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div style="width: 28px; height: 28px; border-radius: 50%; background: #EFF6FF; color: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                                                <i class="las la-lock"></i>
+                                            </div>
+                                            <h6 class="fw-bold text-slate-900 mb-0 fs-14">3. Security &amp; Password Update</h6>
+                                        </div>
+                                        <span class="badge bg-light text-muted border fs-11">Optional</span>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3.5 p-md-4">
+                                    <p class="text-secondary fs-12 mb-3">Leave both password fields blank if you do not want to change your current account password.</p>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">New Password</label>
+                                            <div class="position-relative">
+                                                <i class="las la-key position-absolute top-50 translate-middle-y text-muted fs-18 ms-3" style="pointer-events: none;"></i>
+                                                <input type="password" class="form-control ps-5 pe-5" id="profileNewPass" name="new_password" placeholder="Min. 6 characters">
+                                                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-secondary text-decoration-none pe-2.5" onclick="togglePassVisibility('profileNewPass', 'eyeNewPass')">
+                                                    <i class="las la-eye fs-18" id="eyeNewPass"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fs-13 fw-bold text-slate-800">Confirm New Password</label>
+                                            <div class="position-relative">
+                                                <i class="las la-check-double position-absolute top-50 translate-middle-y text-muted fs-18 ms-3" style="pointer-events: none;"></i>
+                                                <input type="password" class="form-control ps-5 pe-5" id="profileConfirmPass" name="confirm_password" placeholder="Re-enter new password">
+                                                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-secondary text-decoration-none pe-2.5" onclick="togglePassVisibility('profileConfirmPass', 'eyeConfirmPass')">
+                                                    <i class="las la-eye fs-18" id="eyeConfirmPass"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ACTION BAR -->
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 pt-2">
+                                <span class="text-secondary fs-12">
+                                    <i class="las la-shield-alt text-success me-1"></i> Changes take effect immediately across all active services and future invoices.
+                                </span>
+                                <button type="submit" class="btn btn-primary rounded-pill px-4 py-2.5 fw-bold shadow-sm">
+                                    <i class="las la-save me-1.5"></i> Save Profile Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
             </div>
 
@@ -515,9 +855,6 @@ function getStatusBadge($status) {
         </div>
     </main>
 
-        </div>
-    </main>
-
     <!-- =========== Footer Area =========== -->
     <?php include 'include/footer.inc.php'; ?>
     <!-- =========== Footer Area =========== -->
@@ -525,6 +862,23 @@ function getStatusBadge($status) {
     <!-- =========== Javascript Area =========== -->
     <?php include 'include/js.inc.php'; ?>
     <!-- =========== Javascript Area =========== -->
+
+    <script>
+    function togglePassVisibility(inputId, eyeId) {
+        const input = document.getElementById(inputId);
+        const eye = document.getElementById(eyeId);
+        if (!input || !eye) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            eye.classList.remove('la-eye');
+            eye.classList.add('la-eye-slash');
+        } else {
+            input.type = 'password';
+            eye.classList.remove('la-eye-slash');
+            eye.classList.add('la-eye');
+        }
+    }
+    </script>
 
 </body>
 </html>

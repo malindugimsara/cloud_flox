@@ -3,7 +3,7 @@
  * CloudFlox Modern Invoice & Payment Gateway Portal
  * -------------------------------------------------------------------------
  * Dedicated CloudFlox-styled invoice view and payment gateway integration.
- * Connects PayHere (Visa/Master/Amex/LKR), Card, and PayPal directly.
+ * Connects PayHere (Visa/Master/Amex/USD), Card, and PayPal directly.
  */
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -133,9 +133,8 @@ $isCancelled = ($statusRaw === 'cancelled');
 $totalUsd = (float)$invoice['total'];
 $subtotalUsd = (float)$invoice['subtotal'];
 $taxUsd = (float)($invoice['tax'] + $invoice['tax2']);
-$lkrRate = defined('CF_PAYHERE_EXCHANGE_RATE') ? CF_PAYHERE_EXCHANGE_RATE : 335.00;
-$totalLkr = number_format($totalUsd * $lkrRate, 2, '.', '');
-$totalLkrFormatted = number_format($totalUsd * $lkrRate, 2);
+$amountUsd = number_format($totalUsd, 2, '.', '');
+$amountUsdFormatted = number_format($totalUsd, 2);
 
 // Client Display Details
 $clientFullName = trim(($client['firstname'] ?? '') . ' ' . ($client['lastname'] ?? ''));
@@ -146,14 +145,14 @@ $clientEmail = $client['email'] ?? '';
 $clientPhone = $client['phonenumber'] ?? '';
 $clientAddress = trim(($client['address1'] ?? '') . ' ' . ($client['city'] ?? '') . ' ' . ($client['country'] ?? ''));
 
-// PayHere Secure Gateway Payload
+// PayHere Secure Gateway Payload (USD)
 $merchantId = defined('CF_PAYHERE_MERCHANT_ID') ? CF_PAYHERE_MERCHANT_ID : '230744';
 $merchantSecret = defined('CF_PAYHERE_MERCHANT_SECRET') ? CF_PAYHERE_MERCHANT_SECRET : 'Mjc4NjU2NTM4MDM5OTA5NTg3NDAyNzAyMzk2Mzc1MTM1ODYwMTUy';
 $payhereHash = strtoupper(md5(
     $merchantId .
     $invoice['id'] .
-    $totalLkr .
-    'LKR' .
+    $amountUsd .
+    'USD' .
     strtoupper(md5($merchantSecret))
 ));
 
@@ -184,8 +183,8 @@ $payhereObj = [
     'country'     => $client['country'] ?? 'Sri Lanka',
     'order_id'    => (string)$invoice['id'],
     'items'       => $firstItemDesc,
-    'currency'    => 'LKR',
-    'amount'      => $totalLkr,
+    'currency'    => 'USD',
+    'amount'      => $amountUsd,
     'hash'        => $payhereHash
 ];
 ?>
@@ -754,9 +753,9 @@ $payhereObj = [
                                     if ($selectedGateway === 'paypal') {
                                         echo '<i class="lab la-paypal text-info me-1"></i> PayPal (USD)';
                                     } elseif ($selectedGateway === 'card') {
-                                        echo '<i class="las la-credit-card text-primary me-1"></i> Credit / Debit Card';
+                                        echo '<i class="las la-credit-card text-primary me-1"></i> Credit / Debit Card (USD)';
                                     } else {
-                                        echo '<i class="las la-money-bill-wave text-emerald me-1"></i> PayHere (LKR / Cards)';
+                                        echo '<i class="las la-money-bill-wave text-emerald me-1"></i> PayHere (USD)';
                                     }
                                     ?>
                                 </div>
@@ -782,7 +781,7 @@ $payhereObj = [
                                                     <small class="cf-text-muted"><?php echo htmlspecialchars($item['notes'] ?? 'Standard Cloud Infrastructure Service'); ?></small>
                                                 </td>
                                                 <td class="text-end fw-extrabold text-slate-900 fs-15">
-                                                    $<?php echo number_format((float)$item['amount'], 2); ?>
+                                                    $<?php echo number_format((float)$item['amount'], 2); ?> USD
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -792,7 +791,7 @@ $payhereObj = [
                                                 <div class="fw-bold text-slate-900">CloudFlox Cloud Services</div>
                                             </td>
                                             <td class="text-end fw-extrabold text-slate-900 fs-15">
-                                                $<?php echo number_format($totalUsd, 2); ?>
+                                                $<?php echo number_format($totalUsd, 2); ?> USD
                                             </td>
                                         </tr>
                                     <?php endif; ?>
@@ -815,11 +814,6 @@ $payhereObj = [
                                     <span>Total Due:</span>
                                     <span class="total-amount">$<?php echo number_format($totalUsd, 2); ?> USD</span>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center pt-2 fs-13">
-                                    <span class="cf-text-sub">LKR Equivalent:</span>
-                                    <strong class="text-slate-900 fs-14">LKR <?php echo $totalLkrFormatted; ?></strong>
-                                </div>
-                                <small class="cf-text-muted d-block text-end mt-1">Rate: 1 USD = 335.00 LKR</small>
                             </div>
                         </div>
 
@@ -859,18 +853,18 @@ $payhereObj = [
                             <!-- 1. PayHere Gateway View -->
                             <div id="panePayHere" class="<?php echo ($selectedGateway === 'payhere') ? '' : 'd-none'; ?>">
                                 <div class="cf-amount-display-box">
-                                    <div class="cf-amount-display-label">Total Payable in LKR:</div>
-                                    <div class="cf-amount-display-value">LKR <?php echo $totalLkrFormatted; ?></div>
-                                    <span class="cf-amount-display-note">Includes Visa, Master, Amex, eZ Cash, Genie, FriMi</span>
+                                    <div class="cf-amount-display-label">Total Payable:</div>
+                                    <div class="cf-amount-display-value">$<?php echo number_format($totalUsd, 2); ?> USD</div>
+                                    <span class="cf-amount-display-note">Includes Visa, Master, Amex, Internet Banking &amp; Wallets</span>
                                 </div>
 
                                 <button type="button" class="cf-btn-payhere-cta mb-3" onclick="triggerPayHereModal()">
-                                    <i class="las la-shield-alt fs-18"></i> Pay with PayHere (LKR <?php echo $totalLkrFormatted; ?>)
+                                    <i class="las la-shield-alt fs-18"></i> Pay with PayHere ($<?php echo number_format($totalUsd, 2); ?> USD)
                                 </button>
 
                                 <div class="d-flex align-items-center justify-content-center gap-2 cf-text-muted fs-11.5 mb-2">
                                     <i class="las la-lock text-emerald"></i>
-                                    <span>PCI-DSS Level 1 Certified • PayHere Sri Lanka</span>
+                                    <span>PCI-DSS Level 1 Certified • PayHere Gateway</span>
                                 </div>
                             </div>
 
@@ -878,12 +872,12 @@ $payhereObj = [
                             <div id="paneCard" class="<?php echo ($selectedGateway === 'card') ? '' : 'd-none'; ?>">
                                 <div class="cf-amount-display-box">
                                     <div class="cf-amount-display-label">Card Payment Amount:</div>
-                                    <div class="cf-amount-display-value">LKR <?php echo $totalLkrFormatted; ?></div>
+                                    <div class="cf-amount-display-value">$<?php echo number_format($totalUsd, 2); ?> USD</div>
                                     <span class="cf-amount-display-note">Visa • MasterCard • American Express</span>
                                 </div>
 
                                 <button type="button" class="cf-btn-card-cta mb-3" onclick="triggerPayHereModal()">
-                                    <i class="las la-credit-card fs-18"></i> Pay with Credit/Debit Card
+                                    <i class="las la-credit-card fs-18"></i> Pay with Credit/Debit Card ($<?php echo number_format($totalUsd, 2); ?> USD)
                                 </button>
 
                                 <div class="d-flex align-items-center justify-content-center gap-2 cf-text-muted fs-11.5 mb-2">

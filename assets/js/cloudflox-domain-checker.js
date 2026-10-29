@@ -298,6 +298,24 @@
             `;
         }
 
+        // Live WHMCS Hosting Add-On Plans
+        const hp = data.hosting_plans || {};
+        const p1 = hp['1'] || { id: 1, name: 'Mini Plan', monthly: 2.99 };
+        const p2 = hp['2'] || { id: 2, name: 'Business Starter', monthly: 5.99 };
+        const p3 = hp['3'] || { id: 3, name: 'Business Growth', monthly: 9.99 };
+
+        const p1Id = String(p1.id || '1');
+        const p2Id = String(p2.id || '2');
+        const p3Id = String(p3.id || '3');
+
+        const p1Monthly = parseFloat(p1.monthly) || 2.99;
+        const p2Monthly = parseFloat(p2.monthly) || 5.99;
+        const p3Monthly = parseFloat(p3.monthly) || 9.99;
+
+        const p1PriceStr = p1Monthly.toFixed(2);
+        const p2PriceStr = p2Monthly.toFixed(2);
+        const p3PriceStr = p3Monthly.toFixed(2);
+
         // REDESIGNED HIGH-CLARITY & SIMPLE DOMAIN CART + OPTIONAL HOSTING WORKFLOW
         const upsellSectionHtml = `
             <div id="cfDomainCartUpsellContainer" class="cf-domain-cart-upsell-wrap" style="display: none;">
@@ -351,20 +369,20 @@
                         </div>
                     </div>
 
-                    <!-- 3 Clean, Polished Hosting Plan Cards -->
+                    <!-- 3 Clean, Polished Hosting Plan Cards (Live WHMCS Rates) -->
                     <div class="row g-3 cf-upsell-cards-row">
                         
                         <!-- Mini Plan -->
                         <div class="col-12 col-md-4">
-                            <div class="cf-upsell-plan-card-min" id="cfUpsellCard101" onclick="cfToggleHosting('101', 'Mini Plan', 3.00)">
+                            <div class="cf-upsell-plan-card-min" id="cfUpsellCard${p1Id}" onclick="cfToggleHosting('${p1Id}', '${escapeHtml(p1.name)}', ${p1PriceStr})">
                                 <div class="cf-card-top-row">
                                     <div>
                                         <span class="cf-plan-type-pill">Personal &amp; Blogs</span>
-                                        <h5 class="cf-plan-min-title mb-0">Mini Plan</h5>
+                                        <h5 class="cf-plan-min-title mb-0">${escapeHtml(p1.name)}</h5>
                                     </div>
                                     <div class="cf-plan-min-price">
                                         <span class="cf-price-currency">$</span>
-                                        <span class="cf-price-val">3.00</span>
+                                        <span class="cf-price-val">${p1PriceStr}</span>
                                         <span class="cf-price-cycle">/mo</span>
                                     </div>
                                 </div>
@@ -374,7 +392,7 @@
                                     <div class="cf-spec-item"><i class="las la-check text-success"></i><span>Free SSL &amp; Business Email</span></div>
                                     <div class="cf-spec-item"><i class="las la-check text-success"></i><span>99.99% Uptime Guarantee</span></div>
                                 </div>
-                                <button type="button" class="btn cf-btn-plan-toggle" id="cfBtnToggle101" onclick="event.stopPropagation(); cfToggleHosting('101', 'Mini Plan', 3.00)">
+                                <button type="button" class="btn cf-btn-plan-toggle" id="cfBtnToggle${p1Id}" onclick="event.stopPropagation(); cfToggleHosting('${p1Id}', '${escapeHtml(p1.name)}', ${p1PriceStr})">
                                     <i class="las la-plus me-1"></i>
                                     <span>Add to Order</span>
                                 </button>
@@ -383,16 +401,16 @@
 
                         <!-- Business Starter (Best Value / Recommended) -->
                         <div class="col-12 col-md-4">
-                            <div class="cf-upsell-plan-card-min featured" id="cfUpsellCard201" onclick="cfToggleHosting('201', 'Business Starter', 7.50)">
+                            <div class="cf-upsell-plan-card-min featured" id="cfUpsellCard${p2Id}" onclick="cfToggleHosting('${p2Id}', '${escapeHtml(p2.name)}', ${p2PriceStr})">
                                 <span class="cf-plan-badge-value"><i class="las la-crown me-1"></i>MOST POPULAR</span>
                                 <div class="cf-card-top-row">
                                     <div>
                                         <span class="cf-plan-type-pill featured">Small Business &amp; E-Com</span>
-                                        <h5 class="cf-plan-min-title mb-0">Business Starter</h5>
+                                        <h5 class="cf-plan-min-title mb-0">${escapeHtml(p2.name)}</h5>
                                     </div>
                                     <div class="cf-plan-min-price">
                                         <span class="cf-price-currency">$</span>
-                                        <span class="cf-price-val">7.50</span>
+                                        <span class="cf-price-val">${p2PriceStr}</span>
                                         <span class="cf-price-cycle">/mo</span>
                                     </div>
                                 </div>
@@ -402,7 +420,7 @@
                                     <div class="cf-spec-item"><i class="las la-check text-success"></i><span><strong>1 vCPU &amp; 2 GB</strong> Dedicated RAM</span></div>
                                     <div class="cf-spec-item"><i class="las la-check text-success"></i><span>Free Daily Backups &amp; SSL</span></div>
                                 </div>
-                                <button type="button" class="btn cf-btn-plan-toggle primary" id="cfBtnToggle201" onclick="event.stopPropagation(); cfToggleHosting('201', 'Business Starter', 7.50)">
+                                <button type="button" class="btn cf-btn-plan-toggle primary" id="cfBtnToggle${p2Id}" onclick="event.stopPropagation(); cfToggleHosting('${p2Id}', '${escapeHtml(p2.name)}', ${p2PriceStr})">
                                     <i class="las la-plus me-1"></i>
                                     <span>Add to Order</span>
                                 </button>
@@ -411,15 +429,15 @@
 
                         <!-- Business Growth -->
                         <div class="col-12 col-md-4">
-                            <div class="cf-upsell-plan-card-min" id="cfUpsellCard202" onclick="cfToggleHosting('202', 'Business Growth', 15.00)">
+                            <div class="cf-upsell-plan-card-min" id="cfUpsellCard${p3Id}" onclick="cfToggleHosting('${p3Id}', '${escapeHtml(p3.name)}', ${p3PriceStr})">
                                 <div class="cf-card-top-row">
                                     <div>
                                         <span class="cf-plan-type-pill">Multi-Site &amp; Agencies</span>
-                                        <h5 class="cf-plan-min-title mb-0">Business Growth</h5>
+                                        <h5 class="cf-plan-min-title mb-0">${escapeHtml(p3.name)}</h5>
                                     </div>
                                     <div class="cf-plan-min-price">
                                         <span class="cf-price-currency">$</span>
-                                        <span class="cf-price-val">15.00</span>
+                                        <span class="cf-price-val">${p3PriceStr}</span>
                                         <span class="cf-price-cycle">/mo</span>
                                     </div>
                                 </div>
@@ -429,7 +447,7 @@
                                     <div class="cf-spec-item"><i class="las la-check text-success"></i><span><strong>2 vCPU &amp; 4 GB</strong> Dedicated RAM</span></div>
                                     <div class="cf-spec-item"><i class="las la-check text-success"></i><span>Priority 24/7/365 Tech Support</span></div>
                                 </div>
-                                <button type="button" class="btn cf-btn-plan-toggle" id="cfBtnToggle202" onclick="event.stopPropagation(); cfToggleHosting('202', 'Business Growth', 15.00)">
+                                <button type="button" class="btn cf-btn-plan-toggle" id="cfBtnToggle${p3Id}" onclick="event.stopPropagation(); cfToggleHosting('${p3Id}', '${escapeHtml(p3.name)}', ${p3PriceStr})">
                                     <i class="las la-plus me-1"></i>
                                     <span>Add to Order</span>
                                 </button>
@@ -591,13 +609,21 @@
             }
         }
 
-        // Update 3 Hosting Plan Cards button states
-        ['101', '201', '202'].forEach(id => {
+        // Update Hosting Plan Cards button states
+        ['1', '2', '3', '101', '201', '202'].forEach(id => {
             const card = document.getElementById('cfUpsellCard' + id);
             const btn = document.getElementById('cfBtnToggle' + id);
             if (!card || !btn) return;
 
-            if (activeDomainCart.hostingPid === id) {
+            const isCurrent = (String(activeDomainCart.hostingPid) === String(id)) ||
+                (id === '101' && activeDomainCart.hostingPid === '1') ||
+                (id === '201' && activeDomainCart.hostingPid === '2') ||
+                (id === '202' && activeDomainCart.hostingPid === '3') ||
+                (id === '1' && activeDomainCart.hostingPid === '101') ||
+                (id === '2' && activeDomainCart.hostingPid === '201') ||
+                (id === '3' && activeDomainCart.hostingPid === '202');
+
+            if (isCurrent) {
                 card.classList.add('selected-hosting');
                 btn.className = 'btn cf-btn-plan-toggle selected';
                 btn.innerHTML = '<i class="las la-check me-1"></i> Added to Order ✓';

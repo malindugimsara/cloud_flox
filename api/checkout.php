@@ -264,47 +264,202 @@ if ($action === 'logout') {
     exit;
 }
 
+// =========================================================================
+// ACTION: GET PROFILE DETAILS (For logged-in client editing)
+// =========================================================================
+if ($action === 'get_profile') {
+    $clientId = !empty($_SESSION['cf_client_id']) ? (int)$_SESSION['cf_client_id'] : (int)($data['client_id'] ?? 0);
+    if (!$clientId) {
+        echo json_encode(['status' => 'error', 'message' => 'Not authenticated.']);
+        exit;
+    }
+    $profile = [];
+    try {
+        $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+        if (!$mysqli->connect_error) {
+            $s = $mysqli->prepare("SELECT id, firstname, lastname, companyname, email, phonenumber, address1, address2, city, state, postcode, country FROM tblclients WHERE id = ? LIMIT 1");
+            if ($s) {
+                $s->bind_param('i', $clientId);
+                $s->execute();
+                $r = $s->get_result();
+                if ($r && $row = $r->fetch_assoc()) {
+                    $profile = $row;
+                }
+                $s->close();
+            }
+        }
+    } catch (Exception $e) {}
+
+    echo json_encode([
+        'status'  => 'success',
+        'profile' => $profile
+    ]);
+    exit;
+}
+
+// =========================================================================
+// ACTION: UPDATE PROFILE (Edit personal and billing data)
+// =========================================================================
+if ($action === 'update_profile') {
+    $clientId = !empty($_SESSION['cf_client_id']) ? (int)$_SESSION['cf_client_id'] : (int)($data['client_id'] ?? 0);
+    if (!$clientId) {
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Please sign in to update your profile details.'
+        ]);
+        exit;
+    }
+
+    $firstName   = trim($data['firstname'] ?? '');
+    $lastName    = trim($data['lastname'] ?? '');
+    $companyName = trim($data['companyname'] ?? '');
+    $phoneNumber = trim($data['phonenumber'] ?? '');
+    $address1    = trim($data['address1'] ?? '');
+    $address2    = trim($data['address2'] ?? '');
+    $city        = trim($data['city'] ?? '');
+    $state       = trim($data['state'] ?? '');
+    $postcode    = trim($data['postcode'] ?? '');
+    $country     = strtoupper(trim($data['country'] ?? 'LK'));
+
+    if (empty($firstName) || empty($lastName)) {
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Please enter both your First Name and Last Name.'
+        ]);
+        exit;
+    }
+    if (empty($phoneNumber)) {
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Please enter a contact phone number.'
+        ]);
+        exit;
+    }
+    if (empty($address1)) {
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Please enter your street address.'
+        ]);
+        exit;
+    }
+    if (empty($city)) {
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Please enter your city.'
+        ]);
+        exit;
+    }
+
+    // Update in MySQL tblclients
+    try {
+        $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+        if (!$mysqli->connect_error) {
+            $up = $mysqli->prepare("UPDATE tblclients SET firstname = ?, lastname = ?, companyname = ?, phonenumber = ?, address1 = ?, address2 = ?, city = ?, state = ?, postcode = ?, country = ?, updated_at = NOW() WHERE id = ?");
+            if ($up) {
+                $up->bind_param('ssssssssssi', $firstName, $lastName, $companyName, $phoneNumber, $address1, $address2, $city, $state, $postcode, $country, $clientId);
+                $up->execute();
+                $up->close();
+            }
+
+            // Optional password update
+            if (!empty($data['password'])) {
+                $newPass = $data['password'];
+                if (strlen($newPass) >= 6) {
+                    $hp = password_hash($newPass, PASSWORD_DEFAULT);
+                    $upPass = $mysqli->prepare("UPDATE tblclients SET password = ? WHERE id = ?");
+                    if ($upPass) {
+                        $upPass->bind_param('si', $hp, $clientId);
+                        $upPass->execute();
+                        $upPass->close();
+                    }
+                }
+            }
+        }
+    } catch (Exception $e) {}
+
+    $fullName = trim($firstName . ' ' . $lastName);
+    $_SESSION['cf_client_name'] = $fullName;
+
+    echo json_encode([
+        'status'       => 'success',
+        'message'      => 'Your personal and billing details have been updated successfully!',
+        'client_id'    => $clientId,
+        'client_name'  => $fullName
+    ]);
+    exit;
+}
+
 // 1. Validate Product or Domain-Only Selection
 $pid = trim($data['pid'] ?? '');
 $hasHosting = (!empty($pid) && $pid !== 'none' && isset($CF_PRODUCTS[$pid]));
 
 // Domain Details
-$domainType = strtolower(trim($data['domain_type'] ?? 'subdomain'));
+$domainType = strtolower(trim($data['domain_type'] ?? 'register'));
+if ($domainType === 'existing') {
+    $domainType = 'owndomain';
+}
 $domainName = strtolower(trim($data['domain'] ?? ''));
 $domainTld  = strtolower(trim($data['domain_tld'] ?? ''));
+$eppCode    = trim($data['epp_code'] ?? '');
 
 if (!empty($domainTld) && !str_starts_with($domainTld, '.')) {
     $domainTld = '.' . $domainTld;
 }
 
+// Fetch live WHMCS Domain and Hosting pricing
+require_once __DIR__ . '/whmcs-pricing.php';
+$liveDomains = WHMCSPricing::getDomainPricing();
+$liveHosting = WHMCSPricing::getHostingProducts();
+
 $fullDomain = '';
 $domainFee = 0.00;
 
+// Clean domain input
+$domainName = preg_replace('#^https?://#i', '', $domainName);
+$domainName = preg_replace('#^www\.#i', '', $domainName);
+$domainName = preg_replace('#/.*$#', '', $domainName);
+
+if (!str_contains($domainName, '.') && !empty($domainTld)) {
+    $fullDomain = $domainName . $domainTld;
+} else {
+    $fullDomain = $domainName;
+}
+
+$tldKey = ltrim(substr($fullDomain, strrpos($fullDomain, '.')), '.');
+
 if ($domainType === 'register') {
-    if (empty($domainName)) {
+    if (empty($fullDomain)) {
         echo json_encode([
             'status'  => 'error',
             'message' => 'Please enter the domain name you wish to register.'
         ]);
         exit;
     }
-    // Clean domain
-    $domainName = preg_replace('#^https?://#i', '', $domainName);
-    $domainName = preg_replace('#^www\.#i', '', $domainName);
-    if (!str_contains($domainName, '.') && !empty($domainTld)) {
-        $fullDomain = $domainName . $domainTld;
-    } else {
-        $fullDomain = $domainName;
+    $domainFee = (float)($liveDomains[$tldKey]['register'] ?? $CF_TLDS[$tldKey]['price'] ?? 14.93);
+} elseif ($domainType === 'transfer') {
+    if (empty($fullDomain)) {
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Please enter the domain name you wish to transfer.'
+        ]);
+        exit;
     }
-
-    $tldKey = ltrim(substr($fullDomain, strrpos($fullDomain, '.')), '.');
-    $domainFee = $CF_TLDS[$tldKey]['price'] ?? 13.57;
-} elseif ($domainType === 'existing' || $domainType === 'transfer') {
-    $fullDomain = !empty($domainName) ? $domainName : 'mybusiness.com';
+    $domainFee = (float)($liveDomains[$tldKey]['transfer'] ?? 12.73);
+} elseif ($domainType === 'owndomain') {
+    if (empty($fullDomain)) {
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Please enter your existing domain name.'
+        ]);
+        exit;
+    }
+    // Existing domain has zero domain registration charge ($0.00)
+    $domainFee = 0.00;
 } else {
     // Free Subdomain
     $subPart = !empty($domainName) ? preg_replace('/[^a-z0-9\-]/', '', $domainName) : 'client-' . rand(100, 999);
     $fullDomain = $subPart . '.cloudflox.site';
+    $domainFee = 0.00;
 }
 
 // Ensure either hosting or a domain is chosen
@@ -324,13 +479,13 @@ if (!in_array($billingCycle, ['monthly', 'annually', 'yearly'])) {
 $isYearly = ($billingCycle === 'annually' || $billingCycle === 'yearly');
 
 if ($hasHosting) {
-    $plan = $CF_PRODUCTS[$pid];
+    $plan = $liveHosting[$pid] ?? $CF_PRODUCTS[$pid];
     $planName = $plan['name'];
     $planCategory = $plan['category'];
-    $planPrice = $isYearly ? $plan['yearly'] : $plan['monthly'];
+    $planPrice = $isYearly ? (float)$plan['yearly'] : (float)$plan['monthly'];
 } else {
     $plan = null;
-    $planName = 'Domain Registration Only';
+    $planName = ($domainType === 'transfer') ? 'Domain Transfer' : 'Domain Registration Only';
     $planCategory = 'Global Domains';
     $planPrice = 0.00;
 }
@@ -473,7 +628,15 @@ $orderPayload = [
 ];
 
 if ($hasHosting) {
-    $orderPayload['pid']          = [$pid];
+    // Map alias to WHMCS product ID (101->1, 201->2, 202->3, etc.)
+    $whmcsPid = $pid;
+    if ($pid === '101') $whmcsPid = '1';
+    elseif ($pid === '201') $whmcsPid = '2';
+    elseif ($pid === '202') $whmcsPid = '3';
+    elseif ($pid === '203') $whmcsPid = '4';
+    elseif ($pid === '301') $whmcsPid = '5';
+
+    $orderPayload['pid']          = [$whmcsPid];
     $orderPayload['domain']       = [$fullDomain];
     $orderPayload['billingcycle'] = [$isYearly ? 'annually' : 'monthly'];
 } else {
@@ -487,6 +650,11 @@ if ($domainType === 'register') {
 } elseif ($domainType === 'transfer') {
     $orderPayload['domaintype'] = ['transfer'];
     $orderPayload['regperiod']  = [1];
+    if (!empty($eppCode)) {
+        $orderPayload['eppcode'] = [$eppCode];
+    }
+} elseif ($domainType === 'owndomain') {
+    $orderPayload['domaintype'] = ['owndomain'];
 }
 
 // 4. Create Order in WHMCS
@@ -554,11 +722,10 @@ $fullInvoiceUrl = $fullSiteUrl . "invoice?id=" . urlencode($invoiceId) . "&gatew
 // PayHere SDK Data (synced with active gateway configuration)
 $payhereData = null;
 if ($paymentMethod === 'payhere' || $paymentMethod === 'card') {
-    $lkrRate = defined('CF_PAYHERE_EXCHANGE_RATE') ? CF_PAYHERE_EXCHANGE_RATE : 335.00;
-    $amountLkr = number_format($totalPrice * $lkrRate, 2, '.', '');
+    $amountUsd = number_format($totalPrice, 2, '.', '');
     $merchantId = defined('CF_PAYHERE_MERCHANT_ID') ? CF_PAYHERE_MERCHANT_ID : '230744';
     $merchantSecret = defined('CF_PAYHERE_MERCHANT_SECRET') ? CF_PAYHERE_MERCHANT_SECRET : 'Mjc4NjU2NTM4MDM5OTA5NTg3NDAyNzAyMzk2Mzc1MTM1ODYwMTUy';
-    $payHash = strtoupper(md5($merchantId . $invoiceId . $amountLkr . 'LKR' . strtoupper(md5($merchantSecret))));
+    $payHash = strtoupper(md5($merchantId . $invoiceId . $amountUsd . 'USD' . strtoupper(md5($merchantSecret))));
 
     $cName = $_SESSION['cf_client_name'] ?? 'CloudFlox Customer';
     $cEmail = $_SESSION['cf_client_email'] ?? 'billing@cloudflox.com';
@@ -581,8 +748,8 @@ if ($paymentMethod === 'payhere' || $paymentMethod === 'card') {
         'country'     => 'Sri Lanka',
         'order_id'    => (string)$invoiceId,
         'items'       => $planName . ($fullDomain ? ' (' . $fullDomain . ')' : ''),
-        'currency'    => 'LKR',
-        'amount'      => $amountLkr,
+        'currency'    => 'USD',
+        'amount'      => $amountUsd,
         'hash'        => $payHash
     ];
 }

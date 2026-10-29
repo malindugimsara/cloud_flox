@@ -31,8 +31,8 @@ define('CF_CHECKOUT_DEMO_MODE', empty(WHMCS_API_IDENTIFIER) || empty(WHMCS_API_S
 // Active Payment Gateways Configuration (Synced with cfwhmcs)
 define('CF_PAYHERE_MERCHANT_ID', '230744');
 define('CF_PAYHERE_MERCHANT_SECRET', 'Mjc4NjU2NTM4MDM5OTA5NTg3NDAyNzAyMzk2Mzc1MTM1ODYwMTUy');
-define('CF_PAYHERE_CURRENCY', 'LKR');
-define('CF_PAYHERE_EXCHANGE_RATE', 335.00); // 1 USD = 335 LKR
+define('CF_PAYHERE_CURRENCY', 'USD');
+define('CF_PAYHERE_EXCHANGE_RATE', 1.00); // USD
 define('CF_PAYHERE_SANDBOX', false);
 define('CF_PAYPAL_EMAIL', 'info@cloudflox.com');
 
@@ -198,14 +198,47 @@ $CF_PRODUCTS = [
     ]
 ];
 
-// Top TLD Pricing for On-Site Registration
+// Top TLD Pricing for On-Site Registration (Initial Fallbacks)
 $CF_TLDS = [
-    'com'    => ['price' => 13.57, 'badge' => 'Popular', 'tag' => 'Commercial'],
-    'net'    => ['price' => 15.49, 'badge' => 'Tech', 'tag' => 'Networking'],
-    'org'    => ['price' => 17.49, 'badge' => 'Org', 'tag' => 'Organizations'],
-    'cloud'  => ['price' => 9.99,  'badge' => 'Hot Deal', 'tag' => 'Cloud & SaaS'],
-    'io'     => ['price' => 39.99, 'badge' => 'Tech Fav', 'tag' => 'Startups & APIs'],
-    'co'     => ['price' => 24.99, 'badge' => 'Global', 'tag' => 'Company'],
-    'store'  => ['price' => 4.99,  'badge' => 'E-Com', 'tag' => 'Online Store'],
-    'online' => ['price' => 3.99,  'badge' => 'Sale', 'tag' => 'Web Presence']
+    'com'    => ['price' => 14.93, 'badge' => 'Popular', 'tag' => 'Commercial'],
+    'net'    => ['price' => 18.47, 'badge' => 'Tech', 'tag' => 'Networking'],
+    'org'    => ['price' => 9.89,  'badge' => 'Org', 'tag' => 'Organizations'],
+    'cloud'  => ['price' => 14.99, 'badge' => 'Hot Deal', 'tag' => 'Cloud & SaaS'],
+    'io'     => ['price' => 59.39, 'badge' => 'Tech Fav', 'tag' => 'Startups & APIs'],
+    'biz'    => ['price' => 29.05, 'badge' => 'Business', 'tag' => 'Business'],
+    'info'   => ['price' => 5.27,  'badge' => 'Global', 'tag' => 'Information'],
+    'store'  => ['price' => 2.63,  'badge' => 'E-Com', 'tag' => 'Online Store'],
+    'online' => ['price' => 2.63,  'badge' => 'Sale', 'tag' => 'Web Presence']
 ];
+
+// Dynamically sync and override with Live WHMCS Pricing & Products
+if (file_exists(__DIR__ . '/whmcs-pricing.php')) {
+    require_once __DIR__ . '/whmcs-pricing.php';
+    try {
+        $liveDomains = WHMCSPricing::getDomainPricing();
+        if (!empty($liveDomains)) {
+            foreach ($liveDomains as $k => $v) {
+                $CF_TLDS[$k] = [
+                    'price' => (float)$v['register'],
+                    'badge' => $v['badge'],
+                    'tag'   => $v['category'] ?? ''
+                ];
+            }
+        }
+        $liveHosting = WHMCSPricing::getHostingProducts();
+        if (!empty($liveHosting)) {
+            foreach ($liveHosting as $k => $v) {
+                $CF_PRODUCTS[$k] = [
+                    'name'        => $v['name'],
+                    'category'    => $v['category'],
+                    'monthly'     => (float)$v['monthly'],
+                    'yearly'      => (float)$v['yearly'],
+                    'specs'       => $v['specs'],
+                    'icon'        => $v['icon'],
+                    'tag'         => $v['tag'],
+                    'popular'     => !empty($v['popular'])
+                ];
+            }
+        }
+    } catch (Exception $e) {}
+}

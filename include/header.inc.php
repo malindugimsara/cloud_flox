@@ -1,3 +1,42 @@
+<?php
+// Ensure $url is loaded
+if (!isset($url)) {
+    include_once __DIR__ . '/url.inc.php';
+}
+
+// Safely ensure session is initialized before headers
+if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+    @session_start();
+}
+
+$cfIsLoggedIn = !empty($_SESSION['cf_client_logged_in']);
+$cfClientName = $_SESSION['cf_client_name'] ?? 'Client Area';
+$cfClientNameShort = $cfClientName;
+if (!empty($cfClientName) && strpos($cfClientName, ' ') !== false) {
+    $parts = explode(' ', trim($cfClientName));
+    $cfClientNameShort = $parts[0];
+}
+
+// Active menu page detection
+$cfCurrentPage = basename($_SERVER['PHP_SELF'] ?? '');
+$cfRequestPath = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+$cfPathParts = explode('/', $cfRequestPath);
+$cfCurrentSlug = end($cfPathParts);
+
+if (!function_exists('isCfPageActive')) {
+    function isCfPageActive($slug, $currentPage, $currentSlug) {
+        return ($currentPage === $slug . '.php' || $currentPage === $slug || $currentSlug === $slug);
+    }
+}
+
+$isHostingActive = (
+    isCfPageActive('budget-hosting', $cfCurrentPage, $cfCurrentSlug) ||
+    isCfPageActive('web-hosting', $cfCurrentPage, $cfCurrentSlug) ||
+    isCfPageActive('premium-hosting', $cfCurrentPage, $cfCurrentSlug)
+);
+?>
+    <script>window.CF_BASE_URL = <?php echo json_encode($url); ?>;</script>
+
     <!--preloader start-->
     <div class="preloader bg-light-subtle" id="cfMainPreloader">
         <div class="preloader-wrap">
@@ -28,43 +67,6 @@
     })();
     </script>
     <!--preloader end-->
-
-    <?php
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    // Ensure $url is loaded
-    if (!isset($url)) {
-        include_once __DIR__ . '/url.inc.php';
-    }
-
-    $cfIsLoggedIn = !empty($_SESSION['cf_client_logged_in']);
-    $cfClientName = $_SESSION['cf_client_name'] ?? 'Client Area';
-    $cfClientNameShort = $cfClientName;
-    if (!empty($cfClientName) && strpos($cfClientName, ' ') !== false) {
-        $parts = explode(' ', trim($cfClientName));
-        $cfClientNameShort = $parts[0];
-    }
-
-    // Active menu page detection
-    $cfCurrentPage = basename($_SERVER['PHP_SELF'] ?? '');
-    $cfRequestPath = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
-    $cfPathParts = explode('/', $cfRequestPath);
-    $cfCurrentSlug = end($cfPathParts);
-
-    if (!function_exists('isCfPageActive')) {
-        function isCfPageActive($slug, $currentPage, $currentSlug) {
-            return ($currentPage === $slug . '.php' || $currentPage === $slug || $currentSlug === $slug);
-        }
-    }
-
-    $isHostingActive = (
-        isCfPageActive('budget-hosting', $cfCurrentPage, $cfCurrentSlug) ||
-        isCfPageActive('web-hosting', $cfCurrentPage, $cfCurrentSlug) ||
-        isCfPageActive('premium-hosting', $cfCurrentPage, $cfCurrentSlug)
-    );
-    ?>
-    <script>window.CF_BASE_URL = <?php echo json_encode($url); ?>;</script>
 
 
     <!-- =========================================================================

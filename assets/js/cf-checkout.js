@@ -10,13 +10,19 @@
 
     // Products Catalog Cache
     const CF_PRODUCTS = {
+        '1':   { name: 'Mini Plan', category: 'Budget Cloud Hosting', monthly: 3.00, yearly: 28.80, specs: '5 GB NVMe • 1 Site • 250 GB Bandwidth' },
+        '2':   { name: 'Business Starter', category: 'Business NVMe Web Hosting', monthly: 5.99, yearly: 61.10, specs: '20 GB Pure NVMe • 1 vCPU • 2 GB RAM • 1 Site' },
+        '3':   { name: 'Business Growth', category: 'Business NVMe Web Hosting', monthly: 9.99, yearly: 101.90, specs: '40 GB Pure NVMe • 2 vCPU • 4 GB RAM • 5 Sites' },
+        '4':   { name: 'Enterprise NVMe Hosting', category: 'Enterprise Cloud Hosting', monthly: 19.99, yearly: 203.90, specs: '150 GB Pure NVMe • 4 vCPU • 8 GB RAM' },
+        '5':   { name: 'Entry Dedicated Server', category: 'Dedicated Infrastructure', monthly: 80.00, yearly: 800.00, specs: 'Xeon E3 • 16 GB DDR3 • 2x 240 GB SSD' },
+
         '101': { name: 'Mini Plan', category: 'Budget Cloud Hosting', monthly: 3.00, yearly: 28.80, specs: '5 GB NVMe • 1 Site • 250 GB Bandwidth' },
         '102': { name: 'Basic Plan', category: 'Budget Cloud Hosting', monthly: 4.50, yearly: 43.20, specs: '10 GB NVMe • 2 Sites • 500 GB Bandwidth' },
         '103': { name: 'Plus Plan', category: 'Budget Cloud Hosting', monthly: 6.00, yearly: 57.60, specs: '20 GB NVMe • 5 Sites • Unmetered Bandwidth' },
 
-        '201': { name: 'Business Starter', category: 'Business NVMe Web Hosting', monthly: 7.50, yearly: 72.00, specs: '20 GB Pure NVMe • 1 vCPU • 2 GB RAM • 1 Site' },
-        '202': { name: 'Business Growth', category: 'Business NVMe Web Hosting', monthly: 15.00, yearly: 144.00, specs: '40 GB Pure NVMe • 2 vCPU • 4 GB RAM • 5 Sites' },
-        '203': { name: 'Business Professional', category: 'Business NVMe Web Hosting', monthly: 27.00, yearly: 259.20, specs: '80 GB Pure NVMe • 4 vCPU • 8 GB RAM • 15 Sites' },
+        '201': { name: 'Business Starter', category: 'Business NVMe Web Hosting', monthly: 5.99, yearly: 61.10, specs: '20 GB Pure NVMe • 1 vCPU • 2 GB RAM • 1 Site' },
+        '202': { name: 'Business Growth', category: 'Business NVMe Web Hosting', monthly: 9.99, yearly: 101.90, specs: '40 GB Pure NVMe • 2 vCPU • 4 GB RAM • 5 Sites' },
+        '203': { name: 'Business Professional', category: 'Business NVMe Web Hosting', monthly: 19.99, yearly: 203.90, specs: '80 GB Pure NVMe • 4 vCPU • 8 GB RAM • 15 Sites' },
         '204': { name: 'Business Enterprise', category: 'Business NVMe Web Hosting', monthly: 48.00, yearly: 460.80, specs: '150 GB Pure NVMe • 6 vCPU • 12 GB RAM • Unlimited Sites' },
 
         '301': { name: 'Cloud-01 Starter', category: 'Premium Managed Cloud', monthly: 75.00, yearly: 720.00, specs: '100 GB NVMe • 4 vCPU Cores • 8 GB RAM' },

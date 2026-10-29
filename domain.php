@@ -1,4 +1,9 @@
-<?php include 'include/url.inc.php'; ?>
+<?php 
+include 'include/url.inc.php'; 
+require_once __DIR__ . '/api/whmcs-pricing.php';
+$whmcsDomains = WHMCSPricing::getDomainPricing();
+$whmcsHosting = WHMCSPricing::getHostingProducts();
+?>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 
@@ -161,24 +166,24 @@
 
 
 
-                    <!-- Compact Popular TLD Pills -->
+                    <!-- Compact Popular TLD Pills (Live from WHMCS) -->
                     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
                         <span class="fs-13 text-muted fw-semibold me-1">Popular:</span>
-                        <button type="button" class="btn btn-sm btn-light border py-1 px-3 rounded-pill fs-13 fw-bold text-slate-800 d-inline-flex align-items-center gap-1 hover-shadow transition" onclick="setDomainExt('.com', this)">
-                            <span class="text-blue">.com</span> <span class="text-muted fw-normal">$13.57</span>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-light border py-1 px-3 rounded-pill fs-13 fw-bold text-slate-800 d-inline-flex align-items-center gap-1 hover-shadow transition" onclick="setDomainExt('.net', this)">
-                            <span class="text-blue">.net</span> <span class="text-muted fw-normal">$15.49</span>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-light border py-1 px-3 rounded-pill fs-13 fw-bold text-slate-800 d-inline-flex align-items-center gap-1 hover-shadow transition" onclick="setDomainExt('.org', this)">
-                            <span class="text-blue">.org</span> <span class="text-muted fw-normal">$17.49</span>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-light border py-1 px-3 rounded-pill fs-13 fw-bold text-slate-800 d-inline-flex align-items-center gap-1 hover-shadow transition" onclick="setDomainExt('.cloud', this)">
-                            <span class="text-orange">.cloud</span> <span class="badge bg-orange-subtle text-orange ms-1 fs-10">DEAL $9.99</span>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-light border py-1 px-3 rounded-pill fs-13 fw-bold text-slate-800 d-inline-flex align-items-center gap-1 hover-shadow transition" onclick="setDomainExt('.co', this)">
-                            <span class="text-blue">.co</span> <span class="text-muted fw-normal">$24.99</span>
-                        </button>
+                        <?php 
+                        $highlightPills = ['com', 'net', 'org', 'store', 'io', 'online'];
+                        foreach ($highlightPills as $pKey):
+                            if (!isset($whmcsDomains[$pKey])) continue;
+                            $pItem = $whmcsDomains[$pKey];
+                            $colorClass = ($pKey === 'store' || $pKey === 'online') ? 'text-orange' : 'text-blue';
+                        ?>
+                            <button type="button" class="btn btn-sm btn-light border py-1 px-3 rounded-pill fs-13 fw-bold text-slate-800 d-inline-flex align-items-center gap-1 hover-shadow transition" onclick="setDomainExt('<?php echo htmlspecialchars($pItem['extension']); ?>', this)">
+                                <span class="<?php echo $colorClass; ?>"><?php echo htmlspecialchars($pItem['extension']); ?></span> 
+                                <span class="text-muted fw-normal"><?php echo htmlspecialchars($pItem['price']); ?></span>
+                                <?php if (!empty($pItem['badge'])): ?>
+                                    <span class="badge bg-blue-subtle text-blue ms-1 fs-10"><?php echo htmlspecialchars($pItem['badge']); ?></span>
+                                <?php endif; ?>
+                            </button>
+                        <?php endforeach; ?>
                     </div>
 
                     <!-- Understated Trust Perks & Transfer Link -->
@@ -295,43 +300,31 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- .com -->
-                            <tr data-cat="popular">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.com</span>
-                                        <span class="tld-tag tld-tag-popular">Popular</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Commercial / Global</span></td>
-                                <td><strong class="text-blue fs-15">$13.57</strong></td>
-                                <td><span class="text-slate-700">$15.99</span></td>
-                                <td><span class="text-slate-700">$13.57</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.com" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            <?php foreach ($whmcsDomains as $tldKey => $tldData): 
+                                $cats = ['all'];
+                                if (in_array($tldKey, ['com', 'net', 'org', 'store', 'online', 'io'])) $cats[] = 'popular';
+                                if (in_array($tldKey, ['io', 'tech', 'cloud', 'dev', 'icu', 'site', 'top', 'xyz'])) $cats[] = 'tech';
+                                if (in_array($tldKey, ['com', 'biz', 'co', 'info', 'pro', 'blog', 'store', 'club'])) $cats[] = 'business';
+                                if (in_array($tldKey, ['us', 'uk', 'co.uk', 'ca', 'de', 'eu', 'nl', 'cn', 'ru', 'tw', 'tk'])) $cats[] = 'regional';
+                                $catStr = implode(' ', $cats);
 
-                            <!-- .net -->
-                            <tr data-cat="popular tech">
+                                $regFee = '$' . number_format($tldData['register'], 2);
+                                $renFee = ($tldData['renew'] > 0) ? '$' . number_format($tldData['renew'], 2) : $regFee;
+                                $traFee = ($tldData['transfer'] > 0) ? '$' . number_format($tldData['transfer'], 2) : 'FREE';
+                            ?>
+                            <tr data-cat="<?php echo htmlspecialchars($catStr); ?>">
                                 <td>
                                     <div class="tld-ext-pill">
-                                        <span>.net</span>
-                                        <span class="tld-tag tld-tag-popular">Popular</span>
+                                        <span><?php echo htmlspecialchars($tldData['extension']); ?></span>
+                                        <?php if (!empty($tldData['badge'])): ?>
+                                            <span class="tld-tag tld-tag-popular"><?php echo htmlspecialchars($tldData['badge']); ?></span>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
-                                <td><span class="text-muted fs-13">Network &amp; Tech</span></td>
-                                <td><strong class="text-blue fs-15">$15.49</strong></td>
-                                <td><span class="text-slate-700">$17.99</span></td>
-                                <td><span class="text-slate-700">$15.49</span></td>
+                                <td><span class="text-muted fs-13"><?php echo htmlspecialchars($tldData['category'] ?? 'Standard Extension'); ?></span></td>
+                                <td><strong class="text-blue fs-15"><?php echo $regFee; ?></strong></td>
+                                <td><span class="text-slate-700"><?php echo $renFee; ?></span></td>
+                                <td><span class="text-slate-700"><?php echo $traFee; ?></span></td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
                                         <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
@@ -339,284 +332,12 @@
                                     </div>
                                 </td>
                                 <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.net" class="btn-tld-register">
+                                    <a href="checkout?domain=mybrand<?php echo urlencode($tldData['extension']); ?>&domainType=register" class="btn-tld-register">
                                         <span>Register</span> <i class="las la-arrow-right"></i>
                                     </a>
                                 </td>
                             </tr>
-
-                            <!-- .org -->
-                            <tr data-cat="popular">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.org</span>
-                                        <span class="tld-tag tld-tag-popular">Popular</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Organizations / Non-profit</span></td>
-                                <td><strong class="text-blue fs-15">$17.49</strong></td>
-                                <td><span class="text-slate-700">$18.99</span></td>
-                                <td><span class="text-slate-700">$17.49</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.org" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- .cloud -->
-                            <tr data-cat="tech">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.cloud</span>
-                                        <span class="tld-tag tld-tag-deal">Hot Deal</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Cloud &amp; DevOps</span></td>
-                                <td><strong class="text-orange fs-15">$9.99</strong></td>
-                                <td><span class="text-slate-700">$21.99</span></td>
-                                <td><span class="text-slate-700">$9.99</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.cloud" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- .io -->
-                            <tr data-cat="tech business">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.io</span>
-                                        <span class="tld-tag tld-tag-popular">Tech Favorite</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Startups &amp; Developer APIs</span></td>
-                                <td><strong class="text-blue fs-15">$39.99</strong></td>
-                                <td><span class="text-slate-700">$44.99</span></td>
-                                <td><span class="text-slate-700">$39.99</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.io" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- .co -->
-                            <tr data-cat="business popular">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.co</span>
-                                        <span class="tld-tag tld-tag-popular">Business</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Company / Innovation</span></td>
-                                <td><strong class="text-blue fs-15">$24.99</strong></td>
-                                <td><span class="text-slate-700">$29.99</span></td>
-                                <td><span class="text-slate-700">$24.99</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.co" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- .info -->
-                            <tr data-cat="popular">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.info</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Information &amp; Media</span></td>
-                                <td><strong class="text-blue fs-15">$15.99</strong></td>
-                                <td><span class="text-slate-700">$18.99</span></td>
-                                <td><span class="text-slate-700">$15.99</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.info" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- .store -->
-                            <tr data-cat="business">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.store</span>
-                                        <span class="tld-tag tld-tag-deal">eCommerce</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Online Shops &amp; Retail</span></td>
-                                <td><strong class="text-orange fs-15">$4.99</strong></td>
-                                <td><span class="text-slate-700">$34.99</span></td>
-                                <td><span class="text-slate-700">$4.99</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.store" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- .online -->
-                            <tr data-cat="business popular">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.online</span>
-                                        <span class="tld-tag tld-tag-deal">Top Value</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">General / Web Presence</span></td>
-                                <td><strong class="text-orange fs-15">$3.99</strong></td>
-                                <td><span class="text-slate-700">$32.99</span></td>
-                                <td><span class="text-slate-700">$3.99</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.online" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- .tech -->
-                            <tr data-cat="tech">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.tech</span>
-                                        <span class="tld-tag tld-tag-popular">Developers</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Software &amp; Hardware</span></td>
-                                <td><strong class="text-blue fs-15">$7.99</strong></td>
-                                <td><span class="text-slate-700">$36.99</span></td>
-                                <td><span class="text-slate-700">$7.99</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.tech" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- .biz -->
-                            <tr data-cat="business">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.biz</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Small Business</span></td>
-                                <td><strong class="text-blue fs-15">$14.99</strong></td>
-                                <td><span class="text-slate-700">$18.99</span></td>
-                                <td><span class="text-slate-700">$14.99</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.biz" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- .us -->
-                            <tr data-cat="regional">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.us</span>
-                                        <span class="tld-tag tld-tag-regional">United States</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Official US Domain</span></td>
-                                <td><strong class="text-blue fs-15">$9.99</strong></td>
-                                <td><span class="text-slate-700">$12.99</span></td>
-                                <td><span class="text-slate-700">$9.99</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.us" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- .io -->
-                            <tr data-cat="tech">
-                                <td>
-                                    <div class="tld-ext-pill">
-                                        <span>.io</span>
-                                        <span class="tld-tag tld-tag-popular">Tech &amp; AI</span>
-                                    </div>
-                                </td>
-                                <td><span class="text-muted fs-13">Startups &amp; Developers</span></td>
-                                <td><strong class="text-blue fs-15">$38.99</strong></td>
-                                <td><span class="text-slate-700">$42.99</span></td>
-                                <td><span class="text-slate-700">$38.99</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2 fs-12 text-slate-600">
-                                        <span class="badge bg-emerald-subtle text-emerald"><i class="las la-check me-1"></i>Privacy</span>
-                                        <span class="badge bg-blue-subtle text-blue"><i class="las la-check me-1"></i>DNS</span>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&domain=register&query=.io" class="btn-tld-register">
-                                        <span>Register</span> <i class="las la-arrow-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>

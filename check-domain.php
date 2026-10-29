@@ -11,21 +11,10 @@ header('Cache-Control: no-cache, no-store, must-revalidate');
 error_reporting(0);
 ini_set('display_errors', '0');
 
-// Curated CloudFlox TLD Catalog & Pricing
-$tldPricing = [
-    'com'    => ['price' => '$13.57', 'badge' => 'Popular', 'tag' => 'Commercial / Global'],
-    'net'    => ['price' => '$15.49', 'badge' => 'Popular', 'tag' => 'Network & Tech'],
-    'org'    => ['price' => '$17.49', 'badge' => 'Popular', 'tag' => 'Organizations'],
-    'cloud'  => ['price' => '$9.99',  'badge' => 'Hot Deal', 'tag' => 'Cloud & DevOps'],
-    'io'     => ['price' => '$39.99', 'badge' => 'Tech Favorite', 'tag' => 'Startups & APIs'],
-    'co'     => ['price' => '$24.99', 'badge' => 'Business', 'tag' => 'Company & Innovation'],
-    'store'  => ['price' => '$4.99',  'badge' => 'Special', 'tag' => 'E-Commerce'],
-    'online' => ['price' => '$3.99',  'badge' => 'Sale', 'tag' => 'Online Presence'],
-    'tech'   => ['price' => '$6.99',  'badge' => 'Tech', 'tag' => 'Technology'],
-    'info'   => ['price' => '$15.99', 'badge' => 'Global', 'tag' => 'Information'],
-    'biz'    => ['price' => '$14.99', 'badge' => 'Business', 'tag' => 'Business'],
-    'us'     => ['price' => '$11.99', 'badge' => 'USA', 'tag' => 'United States']
-];
+// Dynamic Live WHMCS Pricing Integration
+require_once __DIR__ . '/api/whmcs-pricing.php';
+$tldPricing = WHMCSPricing::getDomainPricing();
+$hostingPlans = WHMCSPricing::getHostingProducts();
 
 // Read input query
 $rawQuery = trim($_GET['domain'] ?? $_GET['query'] ?? $_POST['domain'] ?? $_POST['query'] ?? $_REQUEST['domain'] ?? $_REQUEST['query'] ?? '');
@@ -148,9 +137,9 @@ curl_multi_close($mh);
 
 // Primary result
 $isPrimaryAvailable = $availabilityMap[$fullDomain] ?? false;
-$primaryPrice = $tldPricing[$tld]['price'] ?? '$13.57';
+$primaryPrice = $tldPricing[$tld]['price'] ?? '$14.93';
 $primaryBadge = $tldPricing[$tld]['badge'] ?? '';
-$primaryTag   = $tldPricing[$tld]['tag'] ?? '';
+$primaryTag   = $tldPricing[$tld]['category'] ?? ($tldPricing[$tld]['tag'] ?? '');
 
 // Build suggestions
 $suggestions = [];
@@ -166,7 +155,7 @@ foreach ($suggestTlds as $altTld) {
         'is_available' => $altAvailable,
         'price'        => $tldPricing[$altTld]['price'] ?? '$14.99',
         'badge'        => $tldPricing[$altTld]['badge'] ?? '',
-        'tag'          => $tldPricing[$altTld]['tag'] ?? '',
+        'tag'          => $tldPricing[$altTld]['category'] ?? ($tldPricing[$altTld]['tag'] ?? ''),
         'register_url' => 'https://my.cloudflox.com/cart.php?a=add&domain=register&query=' . urlencode($altDomain)
     ];
 }
@@ -185,5 +174,10 @@ echo json_encode([
         'register_url' => 'https://my.cloudflox.com/cart.php?a=add&domain=register&query=' . urlencode($fullDomain),
         'transfer_url' => 'https://my.cloudflox.com/cart.php?a=add&domain=transfer&query=' . urlencode($fullDomain)
     ],
-    'suggestions'  => $suggestions
+    'suggestions'  => $suggestions,
+    'hosting_plans' => [
+        '1' => $hostingPlans['1'] ?? null,
+        '2' => $hostingPlans['2'] ?? null,
+        '3' => $hostingPlans['3'] ?? null
+    ]
 ]);

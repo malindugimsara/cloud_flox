@@ -1,0 +1,282 @@
+{
+    "com": {
+        "tld": "com",
+        "extension": ".com",
+        "register": 14.93,
+        "transfer": 12.73,
+        "renew": 13.81,
+        "price": "$14.93",
+        "badge": "Popular",
+        "category": "Commercial / Global"
+    },
+    "net": {
+        "tld": "net",
+        "extension": ".net",
+        "register": 18.47,
+        "transfer": 16.81,
+        "renew": 16.81,
+        "price": "$18.47",
+        "badge": "Popular",
+        "category": "Network & Tech"
+    },
+    "org": {
+        "tld": "org",
+        "extension": ".org",
+        "register": 9.89,
+        "transfer": 16.81,
+        "renew": 16.81,
+        "price": "$9.89",
+        "badge": "Popular",
+        "category": "Organizations"
+    },
+    "biz": {
+        "tld": "biz",
+        "extension": ".biz",
+        "register": 29.05,
+        "transfer": 26.41,
+        "renew": 26.41,
+        "price": "$29.05",
+        "badge": "Business",
+        "category": "Business & Innovation"
+    },
+    "info": {
+        "tld": "info",
+        "extension": ".info",
+        "register": 5.27,
+        "transfer": 28.81,
+        "renew": 28.81,
+        "price": "$5.27",
+        "badge": "Business",
+        "category": "Business & Innovation"
+    },
+    "blog": {
+        "tld": "blog",
+        "extension": ".blog",
+        "register": 6.59,
+        "transfer": 31.22,
+        "renew": 31.22,
+        "price": "$6.59",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "ca": {
+        "tld": "ca",
+        "extension": ".ca",
+        "register": 19.67,
+        "transfer": 17.88,
+        "renew": 17.88,
+        "price": "$19.67",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "club": {
+        "tld": "club",
+        "extension": ".club",
+        "register": 19.82,
+        "transfer": 18.02,
+        "renew": 18.02,
+        "price": "$19.82",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "cn": {
+        "tld": "cn",
+        "extension": ".cn",
+        "register": 30.35,
+        "transfer": 27.59,
+        "renew": 27.59,
+        "price": "$30.35",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "co.uk": {
+        "tld": "co.uk",
+        "extension": ".co.uk",
+        "register": 14.63,
+        "transfer": 0,
+        "renew": 13.3,
+        "price": "$14.63",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "de": {
+        "tld": "de",
+        "extension": ".de",
+        "register": 11.87,
+        "transfer": 10.79,
+        "renew": 10.79,
+        "price": "$11.87",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "eu": {
+        "tld": "eu",
+        "extension": ".eu",
+        "register": 11.87,
+        "transfer": 16.79,
+        "renew": 16.79,
+        "price": "$11.87",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "icu": {
+        "tld": "icu",
+        "extension": ".icu",
+        "register": 5.27,
+        "transfer": 18.01,
+        "renew": 18.01,
+        "price": "$5.27",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "io": {
+        "tld": "io",
+        "extension": ".io",
+        "register": 59.39,
+        "transfer": 69.59,
+        "renew": 69.59,
+        "price": "$59.39",
+        "badge": "Tech Favorite",
+        "category": "Technology & APIs"
+    },
+    "me": {
+        "tld": "me",
+        "extension": ".me",
+        "register": 7.3,
+        "transfer": 27.59,
+        "renew": 27.59,
+        "price": "$7.30",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "mobi": {
+        "tld": "mobi",
+        "extension": ".mobi",
+        "register": 7.27,
+        "transfer": 47.9,
+        "renew": 47.9,
+        "price": "$7.27",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "nl": {
+        "tld": "nl",
+        "extension": ".nl",
+        "register": 15.83,
+        "transfer": 14.39,
+        "renew": 14.39,
+        "price": "$15.83",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "online": {
+        "tld": "online",
+        "extension": ".online",
+        "register": 2.63,
+        "transfer": 41.24,
+        "renew": 41.24,
+        "price": "$2.63",
+        "badge": "Sale",
+        "category": "E-Commerce & Portfolios"
+    },
+    "ru": {
+        "tld": "ru",
+        "extension": ".ru",
+        "register": 52.67,
+        "transfer": 47.88,
+        "renew": 59.88,
+        "price": "$52.67",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "site": {
+        "tld": "site",
+        "extension": ".site",
+        "register": 1.31,
+        "transfer": 41.24,
+        "renew": 41.24,
+        "price": "$1.31",
+        "badge": "Special Offer",
+        "category": "E-Commerce & Portfolios"
+    },
+    "tk": {
+        "tld": "tk",
+        "extension": ".tk",
+        "register": 9.32,
+        "transfer": 8.47,
+        "renew": 8.47,
+        "price": "$9.32",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "top": {
+        "tld": "top",
+        "extension": ".top",
+        "register": 2.63,
+        "transfer": 8.41,
+        "renew": 8.41,
+        "price": "$2.63",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "tw": {
+        "tld": "tw",
+        "extension": ".tw",
+        "register": 40.39,
+        "transfer": 36.72,
+        "renew": 36.72,
+        "price": "$40.39",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "uk": {
+        "tld": "uk",
+        "extension": ".uk",
+        "register": 12.63,
+        "transfer": 0,
+        "renew": 11.48,
+        "price": "$12.63",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "us": {
+        "tld": "us",
+        "extension": ".us",
+        "register": 15.83,
+        "transfer": 14.39,
+        "renew": 14.39,
+        "price": "$15.83",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "vip": {
+        "tld": "vip",
+        "extension": ".vip",
+        "register": 43.56,
+        "transfer": 39.62,
+        "renew": 39.62,
+        "price": "$43.56",
+        "badge": "",
+        "category": "Global Domain"
+    },
+    "xyz": {
+        "tld": "xyz",
+        "extension": ".xyz",
+        "register": 2.63,
+        "transfer": 17.99,
+        "renew": 17.99,
+        "price": "$2.63",
+        "badge": "Sale",
+        "category": "E-Commerce & Portfolios"
+    },
+    "store": {
+        "tld": "store",
+        "extension": ".store",
+        "register": 2.63,
+        "transfer": 62.99,
+        "renew": 62.99,
+        "price": "$2.63",
+        "badge": "Special Offer",
+        "category": "E-Commerce & Portfolios"
+    }
+}
