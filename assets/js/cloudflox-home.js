@@ -82,12 +82,13 @@ function togglePricing(isYearly) {
         el.textContent = isYearly ? el.getAttribute("data-yearly") : el.getAttribute("data-monthly");
     });
 
-    // Update WHMCS URLs with appropriate billing cycle
+    // Update checkout URLs with appropriate billing cycle
     const cycleParam = isYearly ? "annually" : "monthly";
+    const baseUrl = window.CF_BASE_URL || "";
     planCtaBtns.forEach(function (btn) {
         const pid = btn.getAttribute("data-pid");
         if (pid) {
-            btn.setAttribute("href", "https://my.cloudflox.com/cart.php?a=add&pid=" + pid + "&billingcycle=" + cycleParam);
+            btn.setAttribute("href", baseUrl + "checkout?pid=" + pid + "&cycle=" + cycleParam);
         }
     });
 }
@@ -180,11 +181,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (note) el.textContent = note;
             });
 
-            // Update WHMCS buttons
+            // Update checkout buttons in comparison table
+            const baseUrl = window.CF_BASE_URL || "";
             document.querySelectorAll('.cf-comparison-section .cf-table-cta-btn').forEach(btn => {
                 const pid = btn.getAttribute('data-pid');
                 if (pid) {
-                    btn.setAttribute('href', 'https://my.cloudflox.com/cart.php?a=add&pid=' + pid + '&billingcycle=' + cycleParam);
+                    btn.setAttribute('href', baseUrl + 'checkout?pid=' + pid + '&cycle=' + cycleParam);
                 }
             });
         });
@@ -642,6 +644,30 @@ function submitCustomQuote(event) {
     const requirements = document.getElementById('cq_requirements') ? document.getElementById('cq_requirements').value.trim() : '';
     const hp = document.getElementById('cq_hp') ? document.getElementById('cq_hp').value : '';
 
+    // Turnstile security verification check
+    let turnstileToken = '';
+    const turnstileInput = document.querySelector('#customQuoteForm [name="cf-turnstile-response"]');
+    if (turnstileInput && turnstileInput.value) {
+        turnstileToken = turnstileInput.value;
+    } else if (typeof turnstile !== 'undefined') {
+        const quoteWidgetEl = document.querySelector('#customQuoteForm .cf-turnstile');
+        if (quoteWidgetEl && typeof turnstile.getResponse === 'function') {
+            try {
+                turnstileToken = turnstile.getResponse(quoteWidgetEl);
+            } catch(e) {}
+        }
+        if (!turnstileToken && typeof turnstile.getResponse === 'function') {
+            try {
+                turnstileToken = turnstile.getResponse();
+            } catch(e) {}
+        }
+    }
+
+    if (!turnstileToken || turnstileToken.length === 0) {
+        displayToast('Security Verification', 'Please complete the Cloudflare security verification before submitting.', 'error', '#c46a69');
+        return;
+    }
+
     if (!name || !email || !service || !budget || !requirements) {
         displayToast('Validation Error', 'Please complete all required fields before submitting your quote request.', 'error', '#c46a69');
         return;
@@ -666,6 +692,7 @@ function submitCustomQuote(event) {
     formData.append('budget', budget);
     formData.append('requirements', requirements);
     formData.append('cf_hp_field', hp);
+    formData.append('cf-turnstile-response', turnstileToken);
 
     // Dynamic root prefix resolution so fetch works across localhost, subfolders, and root domain
     let targetUrl = 'custom-quote-send.php';
@@ -708,6 +735,12 @@ function submitCustomQuote(event) {
             displayToast('Submission Failed', errorMsg, 'error', '#c46a69');
             if (submitBtn) submitBtn.classList.remove('d-none');
             if (loadingBtn) loadingBtn.classList.add('d-none');
+            if (typeof turnstile !== 'undefined' && typeof turnstile.reset === 'function') {
+                try {
+                    const quoteWidget = document.querySelector('#customQuoteForm .cf-turnstile');
+                    if (quoteWidget) { turnstile.reset(quoteWidget); } else { turnstile.reset(); }
+                } catch(e) {}
+            }
         }
     })
     .catch(err => {
@@ -716,6 +749,12 @@ function submitCustomQuote(event) {
         displayToast('Submission Failed', failMessage, 'error', '#c46a69');
         if (submitBtn) submitBtn.classList.remove('d-none');
         if (loadingBtn) loadingBtn.classList.add('d-none');
+        if (typeof turnstile !== 'undefined' && typeof turnstile.reset === 'function') {
+            try {
+                const quoteWidget = document.querySelector('#customQuoteForm .cf-turnstile');
+                if (quoteWidget) { turnstile.reset(quoteWidget); } else { turnstile.reset(); }
+            } catch(e) {}
+        }
     });
 }
 
@@ -728,6 +767,12 @@ function resetCustomQuoteForm() {
     const loadingBtn = document.getElementById('cq_loading_btn');
     if (submitBtn) submitBtn.classList.remove('d-none');
     if (loadingBtn) loadingBtn.classList.add('d-none');
+    if (typeof turnstile !== 'undefined' && typeof turnstile.reset === 'function') {
+        try {
+            const quoteWidget = document.querySelector('#customQuoteForm .cf-turnstile');
+            if (quoteWidget) { turnstile.reset(quoteWidget); } else { turnstile.reset(); }
+        } catch(e) {}
+    }
 }
 
 // =============================================================================

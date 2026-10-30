@@ -11404,11 +11404,13 @@ body.cf-domain-page .cf-modern-accordion .accordion-button:not(.collapsed) {
 
 /* Form card */
 .cf-contact-form-card {
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-radius: 20px;
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 20px !important;
     padding: 40px;
-    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06) !important;
+    position: relative;
+    overflow: hidden;
 }
 
 /* Form group */
@@ -11509,62 +11511,271 @@ body.cf-domain-page .cf-modern-accordion .accordion-button:not(.collapsed) {
     padding: 20px 0;
 }
 
-/* ---------- Sidebar ---------- */
-.cf-contact-sidebar-block {
-    background: #F8FAFC;
-    border: 1px solid #E2E8F0;
-    border-radius: 16px;
-    padding: 24px;
+/* ---------- Unified Contact Form & Sidebar Enhancements ---------- */
+.cf-form-card-highlighted {
+    border: 1px solid #CBD5E1 !important;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Sidebar list */
+.cf-form-top-accent,
+.cf-sidebar-top-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2563EB 0%, #7C3AED 100%);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    
+}
+
+.cf-form-desk-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #2563EB;
+    background: #EFF6FF;
+    border: 1px solid #DBEAFE;
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+}
+
+.cf-form-live-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #059669;
+    background: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    padding: 3px 10px;
+    border-radius: 999px;
+}
+
+.cf-form-live-status .cf-chip-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+    display: inline-block;
+    animation: cfPulse 2s infinite;
+}
+
+.cf-live-sla {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #047857;
+    background: #D1FAE5;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-left: 2px;
+}
+
+/* Sidebar Unified Card */
+.cf-contact-sidebar-unified {
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 20px !important;
+    padding: 32px 26px !important;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06) !important;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sidebar header */
+.cf-sidebar-unified-header {
+    border-bottom: 1px solid #F1F5F9;
+}
+
+/* Sidebar pillars */
+.cf-sidebar-pillars-wrap {
+    margin-bottom: 16px;
+}
+
 .cf-contact-sidebar-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 10px;
 }
 
 .cf-contact-sidebar-list li {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 13px;
+    padding: 10px 14px;
+    background: #F8FAFC;
+    border: 1px solid #F1F5F9;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.cf-contact-sidebar-list li:hover {
+    background: #F1F5F9;
+    border-color: #E2E8F0;
+    transform: translateX(2px);
 }
 
 .cf-sidebar-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
     border-radius: 10px;
-    font-size: 17px;
+    font-size: 19px;
+    flex-shrink: 0;
     margin-top: 1px;
 }
 
-/* Quick links */
-.cf-contact-quick-link {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #1E293B;
-    text-decoration: none;
-    transition: all 0.2s ease;
+.bg-blue-subtle { background: #EFF6FF !important; }
+.text-blue { color: #2563EB !important; }
+.bg-purple-subtle { background: #FAF5FF !important; }
+.text-purple { color: #7C3AED !important; }
+.bg-emerald-subtle { background: #ECFDF5 !important; }
+.text-emerald { color: #059669 !important; }
+
+/* Quick Portals section */
+.cf-sidebar-quick-section {
+    border-top: 1px solid #F1F5F9;
+    padding-top: 16px;
+    margin-top: auto;
 }
 
-.cf-contact-quick-link:hover {
-    border-color: #2563EB;
-    color: #2563EB;
-    transform: translateX(3px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+.cf-quick-links-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.cf-quick-action-card {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 12px 14px !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    color: #0F172A !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03) !important;
+}
+
+.cf-quick-action-card:hover {
+    background: #F8FAFC !important;
+    border-color: #93C5FD !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 18px -2px rgba(37, 99, 235, 0.1) !important;
+    color: #0F172A !important;
+}
+
+.cf-quick-icon-wrap {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 19px !important;
+    flex-shrink: 0 !important;
+    transition: transform 0.2s ease !important;
+}
+
+.cf-quick-action-card:hover .cf-quick-icon-wrap {
+    transform: scale(1.06) !important;
+}
+
+.icon-theme-blue { background: #EFF6FF !important; color: #2563EB !important; border: 1px solid #DBEAFE !important; }
+.icon-theme-purple { background: #FAF5FF !important; color: #7C3AED !important; border: 1px solid #E9D5FF !important; }
+.icon-theme-indigo { background: #EEF2FF !important; color: #4F46E5 !important; border: 1px solid #E0E7FF !important; }
+.icon-theme-cyan { background: #ECFEFF !important; color: #0891B2 !important; border: 1px solid #CFFAFE !important; }
+
+.cf-quick-content {
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+.cf-quick-title {
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.25 !important;
+    display: inline-block !important;
+}
+
+.cf-quick-action-card:hover .cf-quick-title {
+    color: #2563EB !important;
+}
+
+.cf-quick-sub {
+    font-size: 11.5px !important;
+    color: #64748B !important;
+    line-height: 1.25 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+    margin-top: 2px !important;
+}
+
+.cf-quick-pill {
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    padding: 2px 7px !important;
+    border-radius: 999px !important;
+    background: #F1F5F9 !important;
+    color: #475569 !important;
+    border: 1px solid #E2E8F0 !important;
+    white-space: nowrap !important;
+    line-height: 1.3 !important;
+    display: inline-block !important;
+}
+
+.cf-quick-pill.pill-pulse {
+    background: #ECFDF5 !important;
+    color: #059669 !important;
+    border-color: #A7F3D0 !important;
+}
+
+.cf-quick-arrow {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 50% !important;
+    background: #F1F5F9 !important;
+    color: #94A3B8 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 13px !important;
+    flex-shrink: 0 !important;
+    transition: all 0.2s ease !important;
+}
+
+.cf-quick-action-card:hover .cf-quick-arrow {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+    transform: translateX(3px) !important;
+}
+
+.cf-sidebar-unified-footer {
+    border-top: 1px solid #F1F5F9;
+    padding-top: 14px;
+    color: #64748B;
+    font-size: 12px;
 }
 
 /* ---------- Responsive ---------- */
@@ -17560,11 +17771,17 @@ body.cf-modal-open {
 }
 
 .cf-summary-line {
-    display: flex !important;
+    display: flex;
     align-items: center !important;
     justify-content: space-between !important;
     font-size: 13px !important;
     padding: 6px 0 !important;
+}
+
+.cf-summary-line.d-none,
+.cf-summary-line[style*="display: none"],
+.cf-summary-line[style*="display:none"] {
+    display: none !important;
 }
 
 .cf-side-total-due {
@@ -19106,3 +19323,64 @@ html, body {
         border-radius: 9px;
     }
 }
+
+/* ==========================================================================
+   DOMAIN MANAGEMENT MODAL & CONTROLS
+   ========================================================================== */
+.cf-dm-modal .modal-content {
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
+}
+
+.cf-dm-nav-pills {
+    background-color: #f1f5f9;
+    padding: 4px;
+    border-radius: 14px;
+    display: flex;
+    gap: 4px;
+}
+
+.cf-dm-nav-pills .nav-link {
+    color: #475569;
+    border-radius: 10px !important;
+    padding: 8px 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    border: none;
+    text-align: center;
+}
+
+.cf-dm-nav-pills .nav-link:hover {
+    color: #0d6efd;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.cf-dm-nav-pills .nav-link.active {
+    background-color: #ffffff !important;
+    color: #0d6efd !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+}
+
+.cf-dm-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 18px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cf-dm-card:hover {
+    border-color: #cbd5e1;
+}
+
+.cf-dm-card.active-selection {
+    border-color: #3b82f6;
+    background-color: #f8faff;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+

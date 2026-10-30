@@ -135,7 +135,7 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
                     <!-- Hero Badge -->
                     <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-blue-subtle text-blue fw-bold fs-13 mb-3 border border-blue-subtle">
                         <span class="cf-pulse-dot-blue"></span>
-                        <span>ICANN ACCREDITED REGISTRAR &amp; ANYCAST DNS</span>
+                        <span>Global Domain Registrar</span>
                     </div>
 
                     <!-- Hero Title -->
@@ -146,14 +146,15 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
 
                     <!-- Hero Lead -->
                     <p class="cf-domain-hero-lead text-slate-600 mb-4 lh-base">
-                        Search over 500+ top-level extensions with instant automated setup. Every CloudFlox domain includes free WHOIS privacy protection, high-speed Anycast DNS, domain theft lock, and 24/7 technical support.
+                        Search 500+ domain extensions with instant setup, free WHOIS privacy protection, and global Anycast DNS.
                     </p>
 
                     <!-- Streamlined Domain Search Box -->
-                    <form action="https://my.cloudflox.com/cart.php?a=add&domain=register" method="post"
+                    <form action="<?php echo $url; ?>checkout" method="get"
                         id="domainForm" class="domain-mega-search-box mx-0 mb-3" style="max-width: 100%;" aria-label="Domain Name Search">
+                        <input type="hidden" name="domainType" value="register">
                         <i class="las la-search domain-search-icon" aria-hidden="true"></i>
-                        <input type="text" name="query" id="domainInput"
+                        <input type="text" name="domain" id="domainInput"
                             placeholder="Type your domain name (e.g. mybrand.com)..." required
                             autocomplete="off" aria-label="Domain name to register">
                         <button type="submit" id="domainSearchBtn" class="domain-mega-btn"
@@ -187,21 +188,12 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
                     </div>
 
                     <!-- Understated Trust Perks & Transfer Link -->
-                    <div class="d-flex flex-wrap align-items-center gap-3 text-slate-600 fs-13 pt-1">
-                        <span class="d-inline-flex align-items-center gap-1">
-                            <i class="las la-shield-alt text-primary fs-15"></i> Free Privacy
-                        </span>
-                        <span class="text-muted d-none d-sm-inline">•</span>
-                        <span class="d-inline-flex align-items-center gap-1">
-                            <i class="las la-bolt text-warning fs-15"></i> Instant DNS
-                        </span>
-                        <span class="text-muted d-none d-sm-inline">•</span>
-                        <span class="d-inline-flex align-items-center gap-1">
-                            <i class="las la-lock text-success fs-15"></i> Theft Lock
-                        </span>
-                        <span class="text-muted d-none d-sm-inline">•</span>
-                        <a href="#domainTransfer" class="text-decoration-none text-blue fw-semibold">
-                            Transfer Domain <i class="las la-arrow-right ms-1"></i>
+                    <div class="d-flex flex-wrap gap-2 pt-1">
+                        <span class="cf-feature-chip"><i class="las la-shield-alt text-primary"></i> Free WHOIS Privacy</span>
+                        <span class="cf-feature-chip"><i class="las la-bolt text-warning"></i> Anycast DNS</span>
+                        <span class="cf-feature-chip"><i class="las la-lock text-success"></i> Theft Protection</span>
+                        <a href="#domainTransfer" class="cf-feature-chip text-decoration-none text-blue fw-semibold">
+                            <i class="las la-exchange-alt text-info"></i> Domain Transfers &rarr;
                         </a>
                     </div>
 
@@ -332,7 +324,7 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
                                     </div>
                                 </td>
                                 <td class="text-end">
-                                    <a href="checkout?domain=mybrand<?php echo urlencode($tldData['extension']); ?>&domainType=register" class="btn-tld-register">
+                                    <a href="<?php echo $url; ?>checkout?domain=mybrand<?php echo urlencode($tldData['extension']); ?>&domainType=register" class="btn-tld-register">
                                         <span>Register</span> <i class="las la-arrow-right"></i>
                                     </a>
                                 </td>
@@ -415,7 +407,7 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
 
                     <!-- Transfer CTA Buttons -->
                     <div class="d-flex flex-wrap gap-3">
-                        <a href="https://my.cloudflox.com/cart.php?a=add&domain=transfer" class="btn btn-primary rounded-3 px-4 py-2 fw-bold fs-15 shadow-sm">
+                        <a href="<?php echo $url; ?>checkout?domainType=transfer" class="btn btn-primary rounded-3 px-4 py-2 fw-bold fs-15 shadow-sm">
                             <i class="las la-exchange-alt me-1"></i> Start Domain Transfer
                         </a>
                         <a href="contact" class="btn btn-outline-secondary rounded-3 px-4 py-2 fw-semibold fs-15" style="color: #2563EB;">
@@ -587,8 +579,8 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
                     </ul>
 
                     <div class="pt-2">
-                        <a href="https://my.cloudflox.com/clientarea.php?action=domains" class="btn btn-primary rounded-3 px-4 py-2 fw-bold fs-15 shadow-sm">
-                            <i class="las la-external-link-alt me-1"></i> Access Domain Manager
+                        <a href="<?php echo $url; ?>clientarea?tab=domains" class="btn btn-primary rounded-3 px-4 py-2 fw-bold fs-15 shadow-sm">
+                            <i class="las la-globe me-1"></i> Access Domain Manager
                         </a>
                     </div>
                 </div>

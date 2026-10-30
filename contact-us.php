@@ -287,8 +287,8 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <div class="cf-recaptcha-wrapper p-2 bg-slate-50 rounded-3 border">
-                                        <div class="g-recaptcha" data-sitekey="6Le_PGssAAAAAIXSCvbRBvKbhGpoyiLAxd3fMA_H"></div>
+                                    <div class="cf-turnstile-wrapper p-2 bg-slate-50 rounded-3 border d-flex justify-content-center">
+                                        <div class="cf-turnstile" data-sitekey="<?php echo htmlspecialchars(defined('CF_TURNSTILE_SITE_KEY') ? CF_TURNSTILE_SITE_KEY : '0x4AAAAAAFsPGuQlAMYqY37j'); ?>" data-theme="light"></div>
                                     </div>
                                 </div>
 
@@ -666,7 +666,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
     <script>
         function displayToast(heading, text, icon, loaderBg) {
@@ -683,10 +683,16 @@
 
         function form_submit() {
 
-            var recaptchaResponse = grecaptcha.getResponse();
+            var turnstileToken = "";
+            var turnstileInput = document.querySelector('[name="cf-turnstile-response"]');
+            if (turnstileInput && turnstileInput.value) {
+                turnstileToken = turnstileInput.value;
+            } else if (typeof turnstile !== "undefined" && typeof turnstile.getResponse === "function") {
+                turnstileToken = turnstile.getResponse();
+            }
 
-            if (recaptchaResponse.length === 0) {
-                displayToast("Error", "Please verify that you are not a robot.", "error", "#c46a69");
+            if (!turnstileToken || turnstileToken.length === 0) {
+                displayToast("Security Verification", "Please complete the Cloudflare security verification check.", "error", "#c46a69");
                 return;
             }
 
@@ -705,7 +711,7 @@
             form.append("phone", phone);
             form.append("subject", subject);
             form.append("message", message);
-            form.append("g-recaptcha-response", recaptchaResponse);
+            form.append("cf-turnstile-response", turnstileToken);
 
             var r = new XMLHttpRequest();
             r.onreadystatechange = function() {
@@ -720,7 +726,9 @@
                         document.getElementById("form-btn").classList.remove("d-none");
                         document.getElementById("form-btn2").classList.add("d-none");
                         displayToast("Error", t, "error", "#c46a69");
-                        grecaptcha.reset();
+                        if (typeof turnstile !== "undefined" && typeof turnstile.reset === "function") {
+                            try { turnstile.reset(); } catch(e) {}
+                        }
                     }
                 }
             };

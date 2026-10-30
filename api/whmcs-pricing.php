@@ -270,6 +270,107 @@ class WHMCSPricing {
                 'icon'     => 'las la-server',
                 'tag'      => 'Dedicated Power',
                 'popular'  => false
+            ],
+            '13' => [
+                'alias'    => '13',
+                'name'     => 'Mini Plan',
+                'category' => 'Budget Web Hosting',
+                'specs'    => '5 GB Pure NVMe • 1 vCPU • 1 GB RAM • 1 Site • Free SSL',
+                'icon'     => 'las la-wallet',
+                'tag'      => 'Starter Pick',
+                'popular'  => false
+            ],
+            '14' => [
+                'alias'    => '14',
+                'name'     => 'Basic Plan',
+                'category' => 'Budget Web Hosting',
+                'specs'    => '15 GB Pure NVMe • 1.5 vCPU • 2 GB RAM • 3 Sites • Daily Backups',
+                'icon'     => 'las la-layer-group',
+                'tag'      => 'Recommended',
+                'popular'  => true
+            ],
+            '15' => [
+                'alias'    => '15',
+                'name'     => 'Plus Plan',
+                'category' => 'Budget Web Hosting',
+                'specs'    => '30 GB Pure NVMe • 2.0 vCPU • 3 GB RAM • 10 Sites • Free SSL',
+                'icon'     => 'las la-rocket',
+                'tag'      => 'Maximum Power',
+                'popular'  => false
+            ],
+            // Business Web Hosting (Live WHMCS PIDs 16, 17, 18, 19)
+            '16' => [
+                'alias'    => '16',
+                'name'     => 'Starter Plan',
+                'category' => 'Business Web Hosting',
+                'specs'    => '20 GB Pure NVMe • 1 vCPU • 2 GB RAM • 1 Site • LiteSpeed',
+                'icon'     => 'las la-bolt',
+                'tag'      => 'Starter Business',
+                'popular'  => false
+            ],
+            '17' => [
+                'alias'    => '17',
+                'name'     => 'Business Plan',
+                'category' => 'Business Web Hosting',
+                'specs'    => '50 GB Pure NVMe • 2 vCPU • 4 GB RAM • 5 Sites • LiteSpeed',
+                'icon'     => 'las la-fire',
+                'tag'      => 'Most Popular',
+                'popular'  => true
+            ],
+            '18' => [
+                'alias'    => '18',
+                'name'     => 'Professional Plan',
+                'category' => 'Business Web Hosting',
+                'specs'    => '100 GB Pure NVMe • 4 vCPU • 8 GB RAM • 15 Sites • Free Dedicated IP',
+                'icon'     => 'las la-crown',
+                'tag'      => 'Pro Scale',
+                'popular'  => false
+            ],
+            '19' => [
+                'alias'    => '19',
+                'name'     => 'Enterprise Plan',
+                'category' => 'Business Web Hosting',
+                'specs'    => '200 GB Pure NVMe • 6 vCPU • 12 GB RAM • Unlimited Sites • 2x Daily Backup',
+                'icon'     => 'las la-gem',
+                'tag'      => 'Maximum Scale',
+                'popular'  => false
+            ],
+            // Premium Cloud Hosting (Live WHMCS PIDs 22, 21, 23, 24)
+            '22' => [
+                'alias'    => '22',
+                'name'     => 'Starter Plan',
+                'category' => 'Premium Cloud Hosting',
+                'specs'    => '4 vCPU Cores • 16 GB ECC RAM • 100 GB Gen4 NVMe • 1 Free Dedicated IP',
+                'icon'     => 'las la-server',
+                'tag'      => 'Dedicated Managed',
+                'popular'  => false
+            ],
+            '21' => [
+                'alias'    => '21',
+                'name'     => 'Business Plan',
+                'category' => 'Premium Cloud Hosting',
+                'specs'    => '8 vCPU Cores • 32 GB ECC RAM • 250 GB Gen4 NVMe • 1 Free Dedicated IP',
+                'icon'     => 'las la-gem',
+                'tag'      => 'Recommended',
+                'popular'  => true
+            ],
+            '23' => [
+                'alias'    => '23',
+                'name'     => 'Pro Plan',
+                'category' => 'Premium Cloud Hosting',
+                'specs'    => '12 vCPU Cores • 64 GB ECC RAM • 500 GB Gen4 NVMe • 2 Free Dedicated IPs',
+                'icon'     => 'las la-tachometer-alt',
+                'tag'      => 'VIP Architecture',
+                'popular'  => false
+            ],
+            '24' => [
+                'alias'    => '24',
+                'name'     => 'Enterprise Plan',
+                'category' => 'Premium Cloud Hosting',
+                'specs'    => '16 vCPU Cores • 128 GB ECC RAM • 1 TB Gen4 NVMe • 4 Free Dedicated IPs',
+                'icon'     => 'las la-crown',
+                'tag'      => 'Enterprise Cluster',
+                'popular'  => false
             ]
         ];
 
@@ -280,7 +381,7 @@ class WHMCSPricing {
             $sql = "SELECT p.id, p.gid, p.name AS whmcs_name, p.type, pr.monthly, pr.quarterly, pr.semiannually, pr.annually, pr.biennially
                     FROM tblproducts p
                     LEFT JOIN tblpricing pr ON pr.relid = p.id AND pr.type = 'product' AND pr.currency = 1
-                    WHERE p.hidden = 0
+                    WHERE (p.retired = 0 OR p.retired IS NULL)
                     ORDER BY p.gid ASC, p.order ASC, p.id ASC";
 
             $res = $db->query($sql);

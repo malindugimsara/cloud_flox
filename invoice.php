@@ -129,6 +129,31 @@ $statusRaw = strtolower(trim($invoice['status'] ?? 'unpaid'));
 $isPaid = ($statusRaw === 'paid');
 $isCancelled = ($statusRaw === 'cancelled');
 
+// Check if this invoice contains domain or hosting services
+$hasDomainItem = false;
+$hasHostingItem = false;
+foreach ($invoiceItems as $it) {
+    $type = strtolower($it['type'] ?? '');
+    $desc = strtolower($it['description'] ?? '');
+
+    if (in_array($type, ['domain', 'domainregister', 'domaintransfer', 'domainrenew']) || 
+        str_contains($desc, 'domain registration') || 
+        str_contains($desc, 'domain transfer') ||
+        (str_contains($desc, 'domain') && !str_contains($desc, 'hosting') && !str_contains($desc, 'plan'))) {
+        $hasDomainItem = true;
+    }
+
+    if (in_array($type, ['hosting', 'service']) || 
+        str_contains($desc, 'hosting') || 
+        str_contains($desc, 'cpanel') || 
+        str_contains($desc, 'plan') || 
+        str_contains($desc, 'server') || 
+        str_contains($desc, 'nvme') ||
+        str_contains($desc, 'cloud')) {
+        $hasHostingItem = true;
+    }
+}
+
 // Exchange Rates & Amounts
 $totalUsd = (float)$invoice['total'];
 $subtotalUsd = (float)$invoice['subtotal'];
@@ -709,9 +734,12 @@ $payhereObj = [
                         </span>
                     <?php endif; ?>
 
-                    <button type="button" class="cf-btn-print" onclick="window.print()">
-                        <i class="las la-print"></i> Print
-                    </button>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="cf-btn-print" onclick="downloadInvoicePDF(this)" title="Save PDF to your computer">
+                            <i class="las la-file-pdf"></i> PDF
+                        </button>
+                        
+                    </div>
                 </div>
             </div>
 
@@ -731,14 +759,64 @@ $payhereObj = [
                             <p class="fs-13 cf-text-sub mb-3">
                                 Thank you for your payment! Your transaction has been recorded and services have been automatically activated.
                             </p>
-                            <div class="d-flex justify-content-center gap-2">
-                                <a href="<?php echo $url; ?>clientarea" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold">
-                                    <i class="las la-server me-1"></i> Manage Services
-                                </a>
-                                <button type="button" class="cf-btn-print" onclick="window.print()">
+                            <div class="d-flex justify-content-center gap-2 flex-wrap mb-3" style="margin-bottom: 20px !important;">
+                                <?php if ($hasHostingItem): ?>
+                                    <a href="<?php echo $url; ?>clientarea?tab=services" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-xs">
+                                        <i class="las la-server me-1"></i> Manage Hosting &amp; cPanel
+                                    </a>
+                                <?php endif; ?>
+                                <?php if ($hasDomainItem): ?>
+                                    <a href="<?php echo $url; ?>clientarea?tab=domains" class="btn <?php echo $hasHostingItem ? 'btn-outline-primary' : 'btn-primary'; ?> btn-sm rounded-pill px-4 fw-bold shadow-xs">
+                                        <i class="las la-globe me-1"></i> Manage Domains &amp; Nameservers
+                                    </a>
+                                <?php endif; ?>
+                                <?php if (!$hasHostingItem && !$hasDomainItem): ?>
+                                    <a href="<?php echo $url; ?>clientarea" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-xs">
+                                        <i class="las la-server me-1"></i> Client Area
+                                    </a>
+                                <?php endif; ?>
+                                <button type="button" class="cf-btn-print" id="btnDownloadPdfReceipt" onclick="downloadInvoicePDF(this)">
                                     <i class="las la-file-pdf me-1"></i> Download PDF Receipt
                                 </button>
                             </div>
+
+                            <!-- Hosting Activation & Password Notice -->
+                            <?php if ($hasHostingItem): ?>
+                                <div class="rounded-3 text-start border p-3" style="background: rgba(13, 110, 253, 0.05); border-color: rgba(13, 110, 253, 0.2) !important; margin-top: 18px;">
+                                    <div class="d-flex align-items-center gap-2 text-primary fw-bold fs-13 mb-1">
+                                        <i class="las la-server fs-18"></i> 
+                                        <span>Your Cloud Hosting Server is Ready!</span>
+                                    </div>
+                                    <p class="fs-12 text-slate-700 mb-2">
+                                        Your high-speed NVMe hosting account has been automatically provisioned. We have dispatched your initial cPanel username, server IP, and access credentials to your email (<strong><?php echo htmlspecialchars($client['email'] ?? 'your email'); ?></strong>). You can also reset your password or access server settings directly in your Client Area.
+                                    </p>
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <a href="<?php echo $url; ?>clientarea?tab=services" class="d-inline-flex align-items-center gap-1 fs-12 fw-bold text-primary text-decoration-none">
+                                            Go to Hosting Manager <i class="las la-arrow-right"></i>
+                                        </a>
+                                        <span class="text-muted fs-11">•</span>
+                                        <a href="https://sv.cloudflox.com:2083" target="_blank" rel="noopener" class="d-inline-flex align-items-center gap-1 fs-12 fw-bold text-slate-700 text-decoration-none">
+                                            Open cPanel Directly <i class="las la-external-link-alt fs-11"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Domain ICANN Notice -->
+                            <?php if ($hasDomainItem): ?>
+                                <div class="rounded-3 text-start border p-3" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.25) !important; margin-top: 14px;">
+                                    <div class="d-flex align-items-center gap-2 text-warning fw-bold fs-12.5 mb-1">
+                                        <i class="las la-shield-alt fs-18"></i> 
+                                        <span>Next Step: Verify Contact Email (ICANN Requirement)</span>
+                                    </div>
+                                    <p class="fs-12 text-slate-700 mb-2">
+                                        As mandated by ICANN regulations, an email verification link has been dispatched to <strong><?php echo htmlspecialchars($client['email'] ?? 'your email'); ?></strong>. Please confirm the link within 15 days to activate your domain. You can configure nameservers anytime in your Client Area.
+                                    </p>
+                                    <a href="<?php echo $url; ?>clientarea?tab=domains" class="d-inline-flex align-items-center gap-1 fs-12 fw-bold text-primary text-decoration-none">
+                                        Go to Domain Management <i class="las la-arrow-right"></i>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endif; ?>
 
@@ -792,10 +870,8 @@ $payhereObj = [
                                     <?php 
                                     if ($selectedGateway === 'paypal') {
                                         echo '<i class="lab la-paypal text-info me-1"></i> PayPal (USD)';
-                                    } elseif ($selectedGateway === 'card') {
-                                        echo '<i class="las la-credit-card text-primary me-1"></i> Credit / Debit Card (USD)';
                                     } else {
-                                        echo '<i class="las la-money-bill-wave text-emerald me-1"></i> PayHere (USD)';
+                                        echo '<i class="las la-credit-card text-primary me-1"></i> Credit / Debit Card (via PayHere)';
                                     }
                                     ?>
                                 </div>
@@ -877,52 +953,31 @@ $payhereObj = [
                                 Select your payment gateway to complete this invoice instantly.
                             </p>
 
-                            <!-- Gateway Switcher Pills -->
+                            <!-- Gateway Switcher Pills (Card via PayHere, PayPal) -->
                             <div class="cf-gateway-nav-pills" role="tablist">
-                                <button type="button" class="cf-gateway-nav-btn <?php echo ($selectedGateway === 'payhere') ? 'active' : ''; ?>" id="tabBtnPayHere" onclick="switchGateway('payhere')">
-                                    <i class="las la-bolt text-emerald fs-15"></i> PayHere
-                                </button>
-                                <button type="button" class="cf-gateway-nav-btn <?php echo ($selectedGateway === 'card') ? 'active' : ''; ?>" id="tabBtnCard" onclick="switchGateway('card')">
-                                    <i class="las la-credit-card text-primary fs-15"></i> Card
+                                <button type="button" class="cf-gateway-nav-btn <?php echo ($selectedGateway !== 'paypal') ? 'active' : ''; ?>" id="tabBtnCard" onclick="switchGateway('card')">
+                                    <i class="las la-credit-card text-primary fs-15"></i> Credit / Debit Card (PayHere)
                                 </button>
                                 <button type="button" class="cf-gateway-nav-btn <?php echo ($selectedGateway === 'paypal') ? 'active' : ''; ?>" id="tabBtnPayPal" onclick="switchGateway('paypal')">
                                     <i class="lab la-paypal text-info fs-15"></i> PayPal
                                 </button>
                             </div>
 
-                            <!-- 1. PayHere Gateway View -->
-                            <div id="panePayHere" class="<?php echo ($selectedGateway === 'payhere') ? '' : 'd-none'; ?>">
+                            <!-- 1. Credit / Debit Card via PayHere Gateway View -->
+                            <div id="paneCard" class="<?php echo ($selectedGateway !== 'paypal') ? '' : 'd-none'; ?>">
                                 <div class="cf-amount-display-box">
-                                    <div class="cf-amount-display-label">Total Payable:</div>
+                                    <div class="cf-amount-display-label">Total Payable with Card:</div>
                                     <div class="cf-amount-display-value">$<?php echo number_format($totalUsd, 2); ?> USD</div>
-                                    <span class="cf-amount-display-note">Includes Visa, Master, Amex, Internet Banking &amp; Wallets</span>
+                                    <span class="cf-amount-display-note">Visa • MasterCard • American Express (via PayHere)</span>
                                 </div>
 
                                 <button type="button" class="cf-btn-payhere-cta mb-3" onclick="triggerPayHereModal()">
-                                    <i class="las la-shield-alt fs-18"></i> Pay with PayHere ($<?php echo number_format($totalUsd, 2); ?> USD)
+                                    <i class="las la-credit-card fs-18"></i> Pay with Card ($<?php echo number_format($totalUsd, 2); ?> USD)
                                 </button>
 
                                 <div class="d-flex align-items-center justify-content-center gap-2 cf-text-muted fs-11.5 mb-2">
-                                    <i class="las la-lock text-emerald"></i>
-                                    <span>PCI-DSS Level 1 Certified • PayHere Gateway</span>
-                                </div>
-                            </div>
-
-                            <!-- 2. Card Direct Gateway View -->
-                            <div id="paneCard" class="<?php echo ($selectedGateway === 'card') ? '' : 'd-none'; ?>">
-                                <div class="cf-amount-display-box">
-                                    <div class="cf-amount-display-label">Card Payment Amount:</div>
-                                    <div class="cf-amount-display-value">$<?php echo number_format($totalUsd, 2); ?> USD</div>
-                                    <span class="cf-amount-display-note">Visa • MasterCard • American Express</span>
-                                </div>
-
-                                <button type="button" class="cf-btn-card-cta mb-3" onclick="triggerPayHereModal()">
-                                    <i class="las la-credit-card fs-18"></i> Pay with Credit/Debit Card ($<?php echo number_format($totalUsd, 2); ?> USD)
-                                </button>
-
-                                <div class="d-flex align-items-center justify-content-center gap-2 cf-text-muted fs-11.5 mb-2">
-                                    <i class="las la-shield-alt text-primary"></i>
-                                    <span>Secure 3D-Secure 2.0 Card Authentication</span>
+                                    <i class="las la-shield-alt text-emerald"></i>
+                                    <span>PCI-DSS Level 1 Certified • PayHere 3D-Secure 2.0</span>
                                 </div>
                             </div>
 
@@ -997,19 +1052,20 @@ $payhereObj = [
         // Switch Gateway View
         window.switchGateway = function(gw) {
             document.querySelectorAll('.cf-gateway-nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('panePayHere').classList.add('d-none');
-            document.getElementById('paneCard').classList.add('d-none');
-            document.getElementById('panePayPal').classList.add('d-none');
+            const paneCard = document.getElementById('paneCard');
+            const panePayPal = document.getElementById('panePayPal');
+            if (paneCard) paneCard.classList.add('d-none');
+            if (panePayPal) panePayPal.classList.add('d-none');
 
-            if (gw === 'card') {
-                document.getElementById('tabBtnCard').classList.add('active');
-                document.getElementById('paneCard').classList.remove('d-none');
-            } else if (gw === 'paypal') {
-                document.getElementById('tabBtnPayPal').classList.add('active');
-                document.getElementById('panePayPal').classList.remove('d-none');
+            if (gw === 'paypal') {
+                const btn = document.getElementById('tabBtnPayPal');
+                if (btn) btn.classList.add('active');
+                if (panePayPal) panePayPal.classList.remove('d-none');
             } else {
-                document.getElementById('tabBtnPayHere').classList.add('active');
-                document.getElementById('panePayHere').classList.remove('d-none');
+                // Both 'card' and 'payhere' activate the unified Card (PayHere) gateway
+                const btn = document.getElementById('tabBtnCard');
+                if (btn) btn.classList.add('active');
+                if (paneCard) paneCard.classList.remove('d-none');
             }
         };
 
@@ -1170,6 +1226,60 @@ $payhereObj = [
             });
         }
     })();
+    </script>
+
+    <!-- PDF Generation Engine (Local Offline-Ready Bundle) -->
+    <script src="<?php echo $url; ?>assets/js/vendors/html2pdf.bundle.min.js"></script>
+    <script>
+    window.downloadInvoicePDF = function(btnElement) {
+        const sheet = document.querySelector('.cf-invoice-sheet');
+        if (!sheet) {
+            window.print();
+            return;
+        }
+
+        const origHtml = btnElement ? btnElement.innerHTML : '';
+        if (btnElement) {
+            btnElement.disabled = true;
+            btnElement.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status"></span> Generating PDF...';
+        }
+
+        const invoiceId = '<?php echo htmlspecialchars($invoiceNumber); ?>';
+        const opt = {
+            margin:       [8, 8, 8, 8],
+            filename:     'CloudFlox-Invoice-' + invoiceId + '.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, letterRendering: true, logging: false },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        if (typeof html2pdf === 'undefined') {
+            console.warn('html2pdf not loaded, falling back to print dialog');
+            if (btnElement) {
+                btnElement.disabled = false;
+                btnElement.innerHTML = origHtml;
+            }
+            window.print();
+            return;
+        }
+
+        html2pdf().set(opt).from(sheet).save().then(function() {
+            if (btnElement) {
+                btnElement.disabled = false;
+                btnElement.innerHTML = '<i class="las la-check text-success me-1"></i> Saved to Downloads!';
+                setTimeout(function() {
+                    btnElement.innerHTML = origHtml;
+                }, 3000);
+            }
+        }).catch(function(err) {
+            console.error('PDF error:', err);
+            if (btnElement) {
+                btnElement.disabled = false;
+                btnElement.innerHTML = origHtml;
+            }
+            window.print();
+        });
+    };
     </script>
 </body>
 </html>

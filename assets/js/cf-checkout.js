@@ -20,6 +20,22 @@
         '102': { name: 'Basic Plan', category: 'Budget Cloud Hosting', monthly: 4.50, yearly: 43.20, specs: '10 GB NVMe • 2 Sites • 500 GB Bandwidth' },
         '103': { name: 'Plus Plan', category: 'Budget Cloud Hosting', monthly: 6.00, yearly: 57.60, specs: '20 GB NVMe • 5 Sites • Unmetered Bandwidth' },
 
+        '13':  { name: 'Mini Plan', category: 'Budget Web Hosting', monthly: 3.00, yearly: 30.60, specs: '5 GB Pure NVMe • 1 vCPU • 1 GB RAM • 1 Site • Free SSL' },
+        '14':  { name: 'Basic Plan', category: 'Budget Web Hosting', monthly: 4.50, yearly: 45.90, specs: '15 GB Pure NVMe • 1.5 vCPU • 2 GB RAM • 3 Sites • Daily Backups' },
+        '15':  { name: 'Plus Plan', category: 'Budget Web Hosting', monthly: 6.00, yearly: 61.20, specs: '30 GB Pure NVMe • 2.0 vCPU • 3 GB RAM • 10 Sites • Free SSL' },
+
+        // Business Web Hosting (Live WHMCS PIDs 16, 17, 18, 19)
+        '16':  { name: 'Starter Plan', category: 'Business Web Hosting', monthly: 7.50, yearly: 72.00, specs: '20 GB Pure NVMe • 1 vCPU • 2 GB RAM • 1 Site • LiteSpeed' },
+        '17':  { name: 'Business Plan', category: 'Business Web Hosting', monthly: 15.00, yearly: 144.00, specs: '50 GB Pure NVMe • 2 vCPU • 4 GB RAM • 5 Sites • LiteSpeed' },
+        '18':  { name: 'Professional Plan', category: 'Business Web Hosting', monthly: 27.00, yearly: 259.20, specs: '100 GB Pure NVMe • 4 vCPU • 8 GB RAM • 15 Sites • Free Dedicated IP' },
+        '19':  { name: 'Enterprise Plan', category: 'Business Web Hosting', monthly: 48.00, yearly: 460.80, specs: '200 GB Pure NVMe • 6 vCPU • 12 GB RAM • Unlimited Sites • 2x Daily Backup' },
+
+        // Premium Cloud Hosting (Live WHMCS PIDs 22, 21, 23, 24)
+        '22':  { name: 'Starter Plan', category: 'Premium Cloud Hosting', monthly: 75.00, yearly: 720.00, specs: '4 vCPU Cores • 16 GB ECC RAM • 100 GB Gen4 NVMe • 1 Free Dedicated IP' },
+        '21':  { name: 'Business Plan', category: 'Premium Cloud Hosting', monthly: 120.00, yearly: 1152.00, specs: '8 vCPU Cores • 32 GB ECC RAM • 250 GB Gen4 NVMe • 1 Free Dedicated IP' },
+        '23':  { name: 'Pro Plan', category: 'Premium Cloud Hosting', monthly: 210.00, yearly: 2016.00, specs: '12 vCPU Cores • 64 GB ECC RAM • 500 GB Gen4 NVMe • 2 Free Dedicated IPs' },
+        '24':  { name: 'Enterprise Plan', category: 'Premium Cloud Hosting', monthly: 350.00, yearly: 3360.00, specs: '16 vCPU Cores • 128 GB ECC RAM • 1 TB Gen4 NVMe • 4 Free Dedicated IPs' },
+
         '201': { name: 'Business Starter', category: 'Business NVMe Web Hosting', monthly: 5.99, yearly: 61.10, specs: '20 GB Pure NVMe • 1 vCPU • 2 GB RAM • 1 Site' },
         '202': { name: 'Business Growth', category: 'Business NVMe Web Hosting', monthly: 9.99, yearly: 101.90, specs: '40 GB Pure NVMe • 2 vCPU • 4 GB RAM • 5 Sites' },
         '203': { name: 'Business Professional', category: 'Business NVMe Web Hosting', monthly: 19.99, yearly: 203.90, specs: '80 GB Pure NVMe • 4 vCPU • 8 GB RAM • 15 Sites' },
@@ -96,7 +112,7 @@
             if (e.target.closest('a[href*="checkout"]')) return;
 
             // 2. Intercept Plan Buy buttons
-            const btn = e.target.closest('[data-pid], a[href*="cart.php?a=add"], .cf-table-cta-btn, .btn-plan-outline, .btn-plan-featured');
+            const btn = e.target.closest('[data-pid], a[href*="cart.php?a=add"], .cf-table-cta-btn, .btn-plan-outline, .btn-plan-featured, .btn-plan-budget-featured');
             if (!btn) return;
 
             // Extract PID

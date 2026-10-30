@@ -170,7 +170,7 @@ try {
         }
 
         // 2. Fetch Domains
-        $stmt = $mysqli->prepare("SELECT id, domain, status, registrationdate, nextduedate, recurringamount FROM tbldomains WHERE userid = ? ORDER BY id DESC");
+        $stmt = $mysqli->prepare("SELECT id, domain, status, registrationdate, nextduedate, expirydate, recurringamount, registrar, dnsmanagement, idprotection, donotrenew FROM tbldomains WHERE userid = ? ORDER BY id DESC");
         if ($stmt) {
             $stmt->bind_param('i', $clientId);
             $stmt->execute();
@@ -911,7 +911,7 @@ if (!function_exists('getStatusBadge')) {
                             </div>
                         <?php else: ?>
                             <div class="table-responsive">
-                                <table class="table cf-dash-table mb-0">
+                                <table class="table cf-dash-table mb-0 align-middle">
                                     <thead>
                                         <tr>
                                             <th>Product / Service</th>
@@ -919,20 +919,25 @@ if (!function_exists('getStatusBadge')) {
                                             <th>Pricing / Cycle</th>
                                             <th>Next Due Date</th>
                                             <th>Status</th>
+                                            <th class="text-end">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach ($services as $srv): ?>
                                             <tr>
                                                 <td>
-                                                    <div class="fw-bold text-slate-900"><?php echo htmlspecialchars($srv['product_name'] ?? 'Cloud Hosting'); ?></div>
-                                                    <span class="fs-11 text-muted">ID #<?php echo $srv['id']; ?></span>
+                                                    <div class="fw-bold text-slate-900 fs-14"><?php echo htmlspecialchars($srv['product_name'] ?? 'Cloud Hosting'); ?></div>
+                                                    <span class="fs-11 text-muted font-monospace">Service ID #<?php echo $srv['id']; ?></span>
                                                 </td>
                                                 <td>
-                                                    <a href="http://<?php echo htmlspecialchars($srv['domain']); ?>" target="_blank" rel="noopener" class="fw-semibold text-primary text-decoration-none">
-                                                        <?php echo htmlspecialchars($srv['domain']); ?>
-                                                        <i class="las la-external-link-alt fs-11 ms-1"></i>
-                                                    </a>
+                                                    <?php if (!empty($srv['domain'])): ?>
+                                                        <a href="http://<?php echo htmlspecialchars($srv['domain']); ?>" target="_blank" rel="noopener" class="fw-semibold text-primary text-decoration-none">
+                                                            <?php echo htmlspecialchars($srv['domain']); ?>
+                                                            <i class="las la-external-link-alt fs-11 ms-1"></i>
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <span class="text-muted fs-12">No domain attached</span>
+                                                    <?php endif; ?>
                                                 </td>
                                                 <td>
                                                     <div class="fw-semibold text-slate-800">$<?php echo number_format((float)$srv['amount'], 2); ?> USD</div>
@@ -943,6 +948,18 @@ if (!function_exists('getStatusBadge')) {
                                                 </td>
                                                 <td>
                                                     <?php echo getStatusBadge($srv['domainstatus']); ?>
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="d-inline-flex align-items-center gap-1.5 justify-content-end">
+                                                        <?php if (strtolower($srv['domainstatus']) === 'active'): ?>
+                                                            <a href="https://sv.cloudflox.com:2083" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1 fs-11 fw-bold" title="Open cPanel Direct Access">
+                                                                <i class="las la-external-link-alt me-0.5"></i> cPanel
+                                                            </a>
+                                                        <?php endif; ?>
+                                                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold d-inline-flex align-items-center gap-1 shadow-xs" onclick="openHostingManageModal(<?php echo (int)$srv['id']; ?>, '<?php echo htmlspecialchars($srv['domain'] ?? '', ENT_QUOTES); ?>')">
+                                                            <i class="las la-server fs-14"></i> Manage
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -964,22 +981,43 @@ if (!function_exists('getStatusBadge')) {
                                 </a>
                             </div>
                         <?php else: ?>
+                            <!-- ICANN Notice & Quick Action Banner -->
+                            <div class="p-3 mb-3.5 rounded-3 d-flex align-items-center justify-content-between gap-3 flex-wrap border" style="background: #fbfdff; border-color: #e2e8f0 !important;">
+                                <div class="d-flex align-items-center gap-2.5">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px; background: rgba(245, 158, 11, 0.12); color: #d97706;">
+                                        <i class="las la-shield-alt fs-18"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-slate-900 fs-13 mb-0">Domain Security &amp; Nameserver Management</div>
+                                        <div class="text-secondary fs-12">Point your domains to any server, toggle registrar transfer lock, manage WHOIS privacy, or view your transfer EPP codes below.</div>
+                                    </div>
+                                </div>
+                                <a href="<?php echo $url; ?>domain" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold flex-shrink-0">
+                                    <i class="las la-plus-circle me-1"></i> Register Another Domain
+                                </a>
+                            </div>
+
                             <div class="table-responsive">
-                                <table class="table cf-dash-table mb-0">
+                                <table class="table cf-dash-table mb-0 align-middle">
                                     <thead>
                                         <tr>
                                             <th>Domain Name</th>
                                             <th>Registration Date</th>
                                             <th>Next Due Date</th>
+                                            <th>Auto-Renew</th>
                                             <th>Renewal Amount</th>
                                             <th>Status</th>
+                                            <th class="text-end">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach ($domains as $dom): ?>
                                             <tr>
                                                 <td>
-                                                    <div class="fw-bold text-slate-900"><?php echo htmlspecialchars($dom['domain']); ?></div>
+                                                    <div class="fw-bold text-slate-900 fs-14"><?php echo htmlspecialchars($dom['domain']); ?></div>
+                                                    <a href="http://<?php echo htmlspecialchars($dom['domain']); ?>" target="_blank" rel="noopener" class="fs-11 text-muted text-decoration-none">
+                                                        Visit Website <i class="las la-external-link-alt fs-10"></i>
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <span class="fs-13 text-secondary"><?php echo htmlspecialchars($dom['registrationdate']); ?></span>
@@ -988,10 +1026,27 @@ if (!function_exists('getStatusBadge')) {
                                                     <span class="fs-13 text-secondary"><?php echo htmlspecialchars($dom['nextduedate']); ?></span>
                                                 </td>
                                                 <td>
+                                                    <?php if (empty($dom['donotrenew'])): ?>
+                                                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill fs-11 px-2.5 py-1">
+                                                            <i class="las la-check-circle me-1"></i>Active
+                                                        </span>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill fs-11 px-2.5 py-1">
+                                                            <i class="las la-times-circle me-1"></i>Disabled
+                                                        </span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
                                                     <div class="fw-semibold text-slate-800">$<?php echo number_format((float)$dom['recurringamount'], 2); ?> USD</div>
                                                 </td>
                                                 <td>
                                                     <?php echo getStatusBadge($dom['status']); ?>
+                                                </td>
+                                                <td class="text-end">
+                                                    <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold d-inline-flex align-items-center gap-1 shadow-xs" 
+                                                            onclick="openDomainManageModal(<?php echo (int)$dom['id']; ?>, '<?php echo htmlspecialchars($dom['domain'], ENT_QUOTES); ?>')">
+                                                        <i class="las la-sliders-h fs-14"></i> Manage
+                                                    </button>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -1390,6 +1445,520 @@ if (!function_exists('getStatusBadge')) {
         </div>
     </main>
 
+    <!-- =====================================================================
+         DOMAIN MANAGEMENT MODAL
+         ===================================================================== -->
+    <div class="modal fade cf-dm-modal" id="domainManageModal" tabindex="-1" aria-labelledby="dmModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0">
+                <div class="modal-header border-bottom py-3 px-4 bg-white align-items-center">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: rgba(13, 110, 253, 0.1); color: #0d6efd;">
+                            <i class="las la-globe fs-22"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h5 class="modal-title fw-bold text-slate-900 mb-0" id="dmModalTitle">Domain Management</h5>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill fs-11" id="dmModalStatusBadge">Active</span>
+                            </div>
+                            <span class="fs-12 text-primary font-monospace fw-semibold" id="dmModalDomainName">example.com</span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-4 bg-white">
+                    <!-- Loading Skeleton -->
+                    <div id="dmLoadingState" class="text-center py-5">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 2.5rem; height: 2.5rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="fw-bold text-slate-800 fs-15">Connecting to Registry Engine...</div>
+                        <div class="text-secondary fs-12">Retrieving live nameservers and security status</div>
+                    </div>
+
+                    <!-- Main Content (revealed after loading) -->
+                    <div id="dmLoadedContent" style="display: none;">
+                        <!-- Nav Tabs inside Modal -->
+                        <ul class="nav cf-dm-nav-pills mb-4" id="dmTabs" role="tablist">
+                            <li class="nav-item flex-fill text-center" role="presentation">
+                                <button class="nav-link active w-100" id="dm-tab-ns" data-bs-toggle="pill" data-bs-target="#dm-pane-ns" type="button" role="tab">
+                                    <i class="las la-server me-1"></i> Nameservers
+                                </button>
+                            </li>
+                            <li class="nav-item flex-fill text-center" role="presentation">
+                                <button class="nav-link w-100" id="dm-tab-security" data-bs-toggle="pill" data-bs-target="#dm-pane-security" type="button" role="tab">
+                                    <i class="las la-lock me-1"></i> Security &amp; Transfer
+                                </button>
+                            </li>
+                            <li class="nav-item flex-fill text-center" role="presentation">
+                                <button class="nav-link w-100" id="dm-tab-settings" data-bs-toggle="pill" data-bs-target="#dm-pane-settings" type="button" role="tab">
+                                    <i class="las la-shield-alt me-1"></i> Privacy &amp; Renew
+                                </button>
+                            </li>
+                            <li class="nav-item flex-fill text-center" role="presentation">
+                                <button class="nav-link w-100" id="dm-tab-guide" data-bs-toggle="pill" data-bs-target="#dm-pane-guide" type="button" role="tab">
+                                    <i class="las la-compass me-1"></i> DNS Setup Guide
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="dmTabsContent">
+                            
+                            <!-- TAB 1: NAMESERVERS -->
+                            <div class="tab-pane fade show active" id="dm-pane-ns" role="tabpanel">
+                                <div class="alert alert-info py-2.5 px-3 fs-12 mb-3 border-0 bg-blue-subtle text-primary rounded-3">
+                                    <i class="las la-info-circle me-1"></i> Point your domain to CloudFlox hosting or external platforms (Cloudflare, Shopify, AWS, etc.).
+                                </div>
+
+                                <!-- NS Feedback Alert -->
+                                <div id="dmNsAlert" class="alert d-none mb-3 py-2 px-3 fs-13" role="alert"></div>
+
+                                <form id="dmNameserversForm" onsubmit="saveDomainNameservers(event)">
+                                    <!-- Option 1: Default Nameservers -->
+                                    <div class="cf-dm-card mb-3 cursor-pointer" onclick="document.getElementById('dmNsRadioDefault').checked = true; toggleNsMode();">
+                                        <div class="form-check d-flex align-items-start gap-2 mb-0">
+                                            <input class="form-check-input mt-1" type="radio" name="dmNsType" id="dmNsRadioDefault" value="default" onchange="toggleNsMode()">
+                                            <label class="form-check-label flex-grow-1 cursor-pointer" for="dmNsRadioDefault">
+                                                <div class="fw-bold text-slate-900 fs-14">Use CloudFlox Anycast DNS <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill fs-10 ms-1">Recommended</span></div>
+                                                <div class="text-secondary fs-12">Global distributed Anycast network with built-in DDoS mitigation, zero routing hops, and 100% uptime SLA.</div>
+                                                <div class="mt-2 font-monospace fs-12 text-slate-700 bg-light p-2.5 rounded-2 border">
+                                                    <div><strong>NS1:</strong> ns1.cloudflox.com</div>
+                                                    <div><strong>NS2:</strong> ns2.cloudflox.com</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Option 2: Custom Nameservers -->
+                                    <div class="cf-dm-card mb-3">
+                                        <div class="form-check d-flex align-items-start gap-2 mb-2 cursor-pointer" onclick="document.getElementById('dmNsRadioCustom').checked = true; toggleNsMode();">
+                                            <input class="form-check-input mt-1" type="radio" name="dmNsType" id="dmNsRadioCustom" value="custom" onchange="toggleNsMode()">
+                                            <label class="form-check-label flex-grow-1 cursor-pointer" for="dmNsRadioCustom">
+                                                <div class="fw-bold text-slate-900 fs-14">Use Custom Nameservers</div>
+                                                <div class="text-secondary fs-12">Point your domain to external providers such as Cloudflare, Shopify, Google Cloud, or custom private nameservers.</div>
+                                            </label>
+                                        </div>
+
+                                        <!-- Custom NS Inputs -->
+                                        <div id="dmCustomNsContainer" style="display: none;" class="pt-2">
+                                            <div class="row g-2.5 mb-2.5">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fs-12 fw-bold text-slate-700 mb-1">Nameserver 1 <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm font-monospace" id="dmNs1" placeholder="e.g. ns1.example.com">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label fs-12 fw-bold text-slate-700 mb-1">Nameserver 2 <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm font-monospace" id="dmNs2" placeholder="e.g. ns2.example.com">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label fs-12 fw-bold text-slate-700 mb-1">Nameserver 3 <span class="text-muted fw-normal">(Optional)</span></label>
+                                                    <input type="text" class="form-control form-control-sm font-monospace" id="dmNs3" placeholder="e.g. ns3.example.com">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label fs-12 fw-bold text-slate-700 mb-1">Nameserver 4 <span class="text-muted fw-normal">(Optional)</span></label>
+                                                    <input type="text" class="form-control form-control-sm font-monospace" id="dmNs4" placeholder="e.g. ns4.example.com">
+                                                </div>
+                                            </div>
+
+                                            <!-- Presets -->
+                                            <div class="d-flex align-items-center gap-1.5 flex-wrap pt-1">
+                                                <span class="fs-11 text-muted me-1">Quick Presets:</span>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill fs-11 py-0.5 px-2" onclick="setNsPreset('cloudflare')">Cloudflare</button>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill fs-11 py-0.5 px-2" onclick="setNsPreset('shopify')">Shopify</button>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill fs-11 py-0.5 px-2" onclick="setNsPreset('google')">Google Cloud</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between pt-2">
+                                        <span class="fs-11 text-muted"><i class="las la-clock me-1"></i>Changes propagate globally within 2 to 24 hours</span>
+                                        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold fs-13" id="dmBtnSaveNs">
+                                            <span id="dmSaveNsSpinner" class="spinner-border spinner-border-sm me-1 d-none" role="status"></span>
+                                            <i class="las la-save me-1" id="dmSaveNsIcon"></i> Save Nameservers
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- TAB 2: TRANSFER & SECURITY -->
+                            <div class="tab-pane fade" id="dm-pane-security" role="tabpanel">
+                                <!-- Registrar Lock -->
+                                <div class="cf-dm-card mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <h6 class="fw-bold text-slate-900 mb-0">Registrar Transfer Lock</h6>
+                                                <span class="badge" id="dmLockBadge">LOCKED</span>
+                                            </div>
+                                            <p class="text-secondary fs-12 mb-0">Locks the domain at the registry level to prevent unauthorized transfer attempts. Keep enabled unless moving to another registrar.</p>
+                                        </div>
+                                        <div class="form-check form-switch fs-22 ms-3">
+                                            <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="dmLockSwitch" onchange="toggleDomainLock(this.checked)">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- EPP / Auth Code -->
+                                <div class="cf-dm-card">
+                                    <div class="d-flex align-items-start justify-content-between gap-3 mb-2">
+                                        <div>
+                                            <h6 class="fw-bold text-slate-900 mb-1">EPP / Authorization Code</h6>
+                                            <p class="text-secondary fs-12 mb-0">The secret verification code required if you choose to transfer this domain to an external registrar.</p>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold flex-shrink-0" id="dmBtnGetEpp" onclick="fetchEppCode()">
+                                            <span id="dmEppSpinner" class="spinner-border spinner-border-sm me-1 d-none" role="status"></span>
+                                            <i class="las la-key me-1" id="dmEppIcon"></i> Request EPP Code
+                                        </button>
+                                    </div>
+                                    
+                                    <div id="dmEppResultContainer" class="d-none mt-2 p-3 bg-light rounded-3 border">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                            <div>
+                                                <span class="fs-11 text-muted d-block">Your Transfer Authorization Code:</span>
+                                                <code class="fs-15 fw-bold text-primary font-monospace" id="dmEppCodeDisplay">--</code>
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-white border rounded-pill px-3 py-1 fs-12 fw-bold" onclick="copyEppCode()">
+                                                <i class="las la-copy me-1"></i> <span id="dmCopyText">Copy Code</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB 3: PRIVACY & AUTO-RENEW -->
+                            <div class="tab-pane fade" id="dm-pane-settings" role="tabpanel">
+                                <!-- WHOIS ID Protection -->
+                                <div class="cf-dm-card mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: rgba(16, 185, 129, 0.12); color: #10b981;">
+                                                <i class="las la-user-shield fs-22"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="fw-bold text-slate-900 mb-0.5">WHOIS ID Privacy Protection</h6>
+                                                <p class="text-secondary fs-12 mb-0">Shields your contact details (name, address, email, phone) from public WHOIS directory queries to prevent spam and identity theft.</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-check form-switch fs-22 ms-3">
+                                            <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="dmIdProtectSwitch" onchange="toggleIdProtection(this.checked)">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Auto-Renew Setting -->
+                                <div class="cf-dm-card mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: rgba(13, 110, 253, 0.1); color: #0d6efd;">
+                                                <i class="las la-sync-alt fs-22"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="fw-bold text-slate-900 mb-0.5">Domain Auto-Renewal</h6>
+                                                <p class="text-secondary fs-12 mb-0">Automatically issues renewal invoices 30 days before expiration so your domain name and cloud services never experience downtime.</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-check form-switch fs-22 ms-3">
+                                            <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="dmAutoRenewSwitch" onchange="toggleAutoRenew(this.checked)">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Lifecycle Meta Box -->
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <div class="row g-2 text-center">
+                                        <div class="col-4 border-end">
+                                            <span class="fs-11 text-muted d-block">Registered Date</span>
+                                            <strong class="fs-12 text-slate-800" id="dmMetaRegDate">--</strong>
+                                        </div>
+                                        <div class="col-4 border-end">
+                                            <span class="fs-11 text-muted d-block">Next Due / Expiry</span>
+                                            <strong class="fs-12 text-slate-800" id="dmMetaDueDate">--</strong>
+                                        </div>
+                                        <div class="col-4">
+                                            <span class="fs-11 text-muted d-block">Annual Renewal Rate</span>
+                                            <strong class="fs-12 text-primary" id="dmMetaPrice">--</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB 4: QUICK DNS SETUP GUIDE -->
+                            <div class="tab-pane fade" id="dm-pane-guide" role="tabpanel">
+                                <div class="cf-dm-card mb-3">
+                                    <div class="fw-bold text-slate-900 fs-13 mb-2 d-flex align-items-center gap-1.5">
+                                        <i class="las la-server text-primary fs-16"></i> Point Domain to Cloud VPS / Dedicated Server
+                                    </div>
+                                    <p class="text-secondary fs-12 mb-2">If you have a VPS or server, configure an <strong>A Record</strong> pointing to your server's public IPv4 address:</p>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered fs-12 font-monospace mb-0">
+                                            <thead class="table-light"><tr><th>Type</th><th>Host / Name</th><th>Value / Target</th><th>TTL</th></tr></thead>
+                                            <tbody>
+                                                <tr><td>A</td><td>@</td><td>YOUR.SERVER.IP.ADDRESS</td><td>Automatic (3600)</td></tr>
+                                                <tr><td>CNAME</td><td>www</td><td><span class="dmGuideDomainName">yourdomain.com</span></td><td>Automatic (3600)</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="cf-dm-card mb-3">
+                                    <div class="fw-bold text-slate-900 fs-13 mb-2 d-flex align-items-center gap-1.5">
+                                        <i class="las la-shopping-bag text-success fs-16"></i> Point Domain to Shopify Store
+                                    </div>
+                                    <p class="text-secondary fs-12 mb-2">Inside your DNS Zone or DNS manager, configure these standard Shopify records:</p>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered fs-12 font-monospace mb-0">
+                                            <thead class="table-light"><tr><th>Type</th><th>Host / Name</th><th>Points To</th><th>TTL</th></tr></thead>
+                                            <tbody>
+                                                <tr><td>A</td><td>@</td><td>23.227.38.65</td><td>Automatic</td></tr>
+                                                <tr><td>CNAME</td><td>www</td><td>shops.myshopify.com</td><td>Automatic</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="cf-dm-card">
+                                    <div class="fw-bold text-slate-900 fs-13 mb-2 d-flex align-items-center gap-1.5">
+                                        <i class="las la-envelope text-info fs-16"></i> Google Workspace &amp; Custom Mail
+                                    </div>
+                                    <p class="text-secondary fs-12 mb-0">To connect Google Workspace or custom mailboxes, add Google's MX records (`ASPMX.L.GOOGLE.COM`, priority 1). If you require custom DNS assistance, our NOC team is available 24/7 via ticket support to configure it for you.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top py-2.5 px-4 bg-light d-flex align-items-center justify-content-between">
+                    <span class="fs-11 text-muted"><i class="las la-shield-alt text-success me-1"></i>Protected by CloudFlox Anycast DNS Engine</span>
+                    <button type="button" class="btn btn-secondary rounded-pill px-4 fw-bold fs-13" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         HOSTING & CPANEL MANAGEMENT MODAL
+         ===================================================================== -->
+    <div class="modal fade cf-dm-modal" id="hostingManageModal" tabindex="-1" aria-labelledby="hmModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0">
+                <div class="modal-header border-bottom py-3 px-4 bg-white align-items-center">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: rgba(13, 110, 253, 0.1); color: #0d6efd;">
+                            <i class="las la-server fs-22"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h5 class="modal-title fw-bold text-slate-900 mb-0" id="hmModalTitle">Hosting Management</h5>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill fs-11" id="hmModalStatusBadge">Active</span>
+                            </div>
+                            <span class="fs-12 text-primary font-monospace fw-semibold" id="hmModalDomainName">example.com</span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-4 bg-white">
+                    <!-- Loading State -->
+                    <div id="hmLoadingState" class="text-center py-5">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 2.5rem; height: 2.5rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="fw-bold text-slate-800 fs-15">Connecting to Cloud Server Node...</div>
+                        <div class="text-secondary fs-12">Retrieving live cPanel server status and resource quotas</div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div id="hmLoadedContent" style="display: none;">
+                        <!-- Nav Tabs inside Modal -->
+                        <ul class="nav cf-dm-nav-pills mb-4" id="hmTabs" role="tablist">
+                            <li class="nav-item flex-fill text-center" role="presentation">
+                                <button class="nav-link active w-100" id="hm-tab-overview" data-bs-toggle="pill" data-bs-target="#hm-pane-overview" type="button" role="tab">
+                                    <i class="las la-tachometer-alt me-1"></i> Overview &amp; cPanel
+                                </button>
+                            </li>
+                            <li class="nav-item flex-fill text-center" role="presentation">
+                                <button class="nav-link w-100" id="hm-tab-password" data-bs-toggle="pill" data-bs-target="#hm-pane-password" type="button" role="tab">
+                                    <i class="las la-key me-1"></i> Change Password
+                                </button>
+                            </li>
+                            <li class="nav-item flex-fill text-center" role="presentation">
+                                <button class="nav-link w-100" id="hm-tab-ftp" data-bs-toggle="pill" data-bs-target="#hm-pane-ftp" type="button" role="tab">
+                                    <i class="las la-cog me-1"></i> FTP &amp; Mail Settings
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="hmTabsContent">
+                            
+                            <!-- TAB 1: OVERVIEW & CPANEL -->
+                            <div class="tab-pane fade show active" id="hm-pane-overview" role="tabpanel">
+                                <!-- 1-Click Launch Action Card -->
+                                <div class="p-3.5 mb-3.5 rounded-3 d-flex align-items-center justify-content-between gap-3 flex-wrap border" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff;">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: rgba(255,255,255,0.15); color: #38bdf8;">
+                                            <i class="las la-terminal fs-24"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold fs-14 text-white">Direct Control Panel Access</div>
+                                            <div class="fs-12 text-slate-300">Open your cPanel dashboard directly on our high-speed NVMe cloud node.</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <a href="#" target="_blank" rel="noopener" id="hmBtnCpanelSso" class="btn btn-primary rounded-pill px-3.5 py-2 fw-bold fs-12.5 d-inline-flex align-items-center gap-1.5 shadow-sm">
+                                            <i class="las la-external-link-alt fs-14"></i> Log in to cPanel
+                                        </a>
+                                        <a href="#" target="_blank" rel="noopener" id="hmBtnWebmail" class="btn btn-outline-light rounded-pill px-3 py-2 fw-bold fs-12.5 d-inline-flex align-items-center gap-1">
+                                            <i class="las la-envelope fs-14"></i> Webmail
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Credentials & Connection Details -->
+                                <div class="cf-dm-card mb-3.5">
+                                    <div class="fw-bold text-slate-900 fs-13 mb-3 d-flex align-items-center gap-1.5">
+                                        <i class="las la-network-wired text-primary fs-16"></i> Server &amp; Connection Details
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-sm-6">
+                                            <span class="fs-11 text-muted d-block mb-0.5">cPanel Username</span>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <code class="fs-13 fw-bold text-slate-900 font-monospace bg-light px-2 py-1 rounded border" id="hmUsername">--</code>
+                                                <button type="button" class="btn btn-xs btn-light border rounded-pill px-2 py-0.5 fs-11" onclick="copyText('hmUsername', this)" title="Copy Username"><i class="las la-copy"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <span class="fs-11 text-muted d-block mb-0.5">Server IP Address</span>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <code class="fs-13 fw-bold text-slate-900 font-monospace bg-light px-2 py-1 rounded border" id="hmServerIp">--</code>
+                                                <button type="button" class="btn btn-xs btn-light border rounded-pill px-2 py-0.5 fs-11" onclick="copyText('hmServerIp', this)" title="Copy IP"><i class="las la-copy"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <span class="fs-11 text-muted d-block mb-0.5">Server Hostname</span>
+                                            <span class="fs-13 fw-bold text-slate-800 font-monospace" id="hmServerHost">--</span>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <span class="fs-11 text-muted d-block mb-0.5">Assigned Nameservers</span>
+                                            <span class="fs-12 font-monospace text-slate-700" id="hmNameservers">ns1.cloudflox.com, ns2.cloudflox.com</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Resource Quotas -->
+                                <div class="cf-dm-card">
+                                    <div class="fw-bold text-slate-900 fs-13 mb-3 d-flex align-items-center gap-1.5">
+                                        <i class="las la-chart-pie text-success fs-16"></i> Resource Allocations
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between fs-12 mb-1">
+                                            <span class="fw-semibold text-slate-700">Disk Space Quota</span>
+                                            <span class="text-secondary" id="hmDiskUsageText">0 MB / 5,120 MB (0%)</span>
+                                        </div>
+                                        <div class="progress" style="height: 8px;">
+                                            <div class="progress-bar bg-primary" id="hmDiskProgressBar" role="progressbar" style="width: 0%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex justify-content-between fs-12 mb-1">
+                                            <span class="fw-semibold text-slate-700">Monthly Bandwidth</span>
+                                            <span class="text-secondary" id="hmBwUsageText">0 MB / 250,000 MB (0%)</span>
+                                        </div>
+                                        <div class="progress" style="height: 8px;">
+                                            <div class="progress-bar bg-success" id="hmBwProgressBar" role="progressbar" style="width: 0%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB 2: CHANGE PASSWORD -->
+                            <div class="tab-pane fade" id="hm-pane-password" role="tabpanel">
+                                <div class="alert alert-info py-2.5 px-3 fs-12 mb-3 border-0 bg-blue-subtle text-primary rounded-3">
+                                    <i class="las la-info-circle me-1"></i> Changing this password updates both your cPanel and primary FTP account access credentials immediately.
+                                </div>
+
+                                <div id="hmPassAlert" class="alert d-none mb-3 py-2 px-3 fs-13" role="alert"></div>
+
+                                <form id="hmPasswordForm" onsubmit="changeHostingPassword(event)">
+                                    <div class="cf-dm-card mb-3">
+                                        <div class="mb-3">
+                                            <label class="form-label fs-12 fw-bold text-slate-700 mb-1">New cPanel Password <span class="text-danger">*</span></label>
+                                            <div class="position-relative">
+                                                <input type="password" class="form-control form-control-sm pe-5" id="hmNewPassword" placeholder="Minimum 8 characters (letters, numbers, symbols)" required>
+                                                <button type="button" class="btn btn-sm text-secondary position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent" onclick="togglePassVisibility('hmNewPassword', 'hmEyeIcon1')">
+                                                    <i class="las la-eye fs-16" id="hmEyeIcon1"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="form-label fs-12 fw-bold text-slate-700 mb-1">Confirm New Password <span class="text-danger">*</span></label>
+                                            <div class="position-relative">
+                                                <input type="password" class="form-control form-control-sm pe-5" id="hmConfirmPassword" placeholder="Re-enter new password" required>
+                                                <button type="button" class="btn btn-sm text-secondary position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent" onclick="togglePassVisibility('hmConfirmPassword', 'hmEyeIcon2')">
+                                                    <i class="las la-eye fs-16" id="hmEyeIcon2"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between pt-1">
+                                        <span class="fs-11 text-muted"><i class="las la-shield-alt text-success me-1"></i>256-bit Encrypted Update</span>
+                                        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold fs-13" id="hmBtnSavePass">
+                                            <span id="hmSavePassSpinner" class="spinner-border spinner-border-sm me-1 d-none" role="status"></span>
+                                            <i class="las la-save me-1" id="hmSavePassIcon"></i> Update Password
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- TAB 3: FTP & EMAIL SETTINGS -->
+                            <div class="tab-pane fade" id="hm-pane-ftp" role="tabpanel">
+                                <div class="cf-dm-card mb-3">
+                                    <div class="fw-bold text-slate-900 fs-13 mb-2 d-flex align-items-center gap-1.5">
+                                        <i class="las la-folder text-warning fs-16"></i> File Transfer Protocol (FTP) Access
+                                    </div>
+                                    <p class="text-secondary fs-12 mb-2">Connect via FileZilla, Cyberduck, or WinSCP to upload your website source files:</p>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered fs-12 font-monospace mb-0">
+                                            <tbody>
+                                                <tr><td class="fw-bold text-slate-700" style="width: 140px;">FTP Host:</td><td id="hmFtpHost">ftp.yourdomain.com (or Server IP)</td></tr>
+                                                <tr><td class="fw-bold text-slate-700">Port:</td><td>21</td></tr>
+                                                <tr><td class="fw-bold text-slate-700">Username:</td><td id="hmFtpUser">cpanel_username</td></tr>
+                                                <tr><td class="fw-bold text-slate-700">Directory:</td><td>/public_html</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="cf-dm-card">
+                                    <div class="fw-bold text-slate-900 fs-13 mb-2 d-flex align-items-center gap-1.5">
+                                        <i class="las la-envelope text-info fs-16"></i> Mail Client Manual Configuration (Outlook, iOS, Android)
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered fs-12 font-monospace mb-0">
+                                            <tbody>
+                                                <tr><td class="fw-bold text-slate-700" style="width: 140px;">Incoming Server:</td><td id="hmMailIncoming">sv.cloudflox.com (Port 993 IMAP SSL)</td></tr>
+                                                <tr><td class="fw-bold text-slate-700">Outgoing Server:</td><td id="hmMailOutgoing">sv.cloudflox.com (Port 465 SMTP SSL)</td></tr>
+                                                <tr><td class="fw-bold text-slate-700">Webmail Access:</td><td><a href="#" target="_blank" rel="noopener" id="hmWebmailDirectLink" class="text-primary text-decoration-none">https://sv.cloudflox.com:2096</a></td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top py-2.5 px-4 bg-light d-flex align-items-center justify-content-between">
+                    <span class="fs-11 text-muted"><i class="las la-lock text-success me-1"></i>Protected by CloudFlox SSO Gateway</span>
+                    <button type="button" class="btn btn-secondary rounded-pill px-4 fw-bold fs-13" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- =========== Footer Area =========== -->
     <?php include 'include/footer.inc.php'; ?>
     <!-- =========== Footer Area =========== -->
@@ -1412,6 +1981,530 @@ if (!function_exists('getStatusBadge')) {
             eye.classList.remove('la-eye-slash');
             eye.classList.add('la-eye');
         }
+    }
+
+    // =========================================================================
+    // DOMAIN MANAGEMENT ENGINE
+    // =========================================================================
+    let currentDmDomainId = null;
+    let currentDmDomainName = '';
+
+    function openDomainManageModal(domainId, domainName) {
+        currentDmDomainId = domainId;
+        currentDmDomainName = domainName;
+
+        // Reset modal fields
+        document.getElementById('dmModalTitle').innerText = 'Domain Management';
+        document.getElementById('dmModalDomainName').innerText = domainName;
+        document.querySelectorAll('.dmGuideDomainName').forEach(el => el.innerText = domainName);
+
+        document.getElementById('dmLoadingState').style.display = 'block';
+        document.getElementById('dmLoadedContent').style.display = 'none';
+        
+        const alertBox = document.getElementById('dmNsAlert');
+        alertBox.className = 'alert d-none';
+        alertBox.innerText = '';
+
+        document.getElementById('dmEppResultContainer').classList.add('d-none');
+        document.getElementById('dmEppCodeDisplay').innerText = '--';
+
+        // Activate first tab (Nameservers)
+        const firstTab = document.getElementById('dm-tab-ns');
+        if (firstTab && window.bootstrap) {
+            bootstrap.Tab.getOrCreateInstance(firstTab).show();
+        }
+
+        // Show Modal
+        const modalEl = document.getElementById('domainManageModal');
+        const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        bsModal.show();
+
+        // Query Domain Data from API
+        fetch('api/domain-manage.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'get_info',
+                domain_id: domainId
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status !== 'success') {
+                alert(data.message || 'Unable to retrieve domain data.');
+                bsModal.hide();
+                return;
+            }
+
+            document.getElementById('dmLoadingState').style.display = 'none';
+            document.getElementById('dmLoadedContent').style.display = 'block';
+
+            // Status Badge
+            const badge = document.getElementById('dmModalStatusBadge');
+            badge.innerText = data.domain.status;
+            if (data.domain.status.toLowerCase() === 'active') {
+                badge.className = 'badge bg-success-subtle text-success border border-success-subtle rounded-pill fs-11';
+            } else {
+                badge.className = 'badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill fs-11';
+            }
+
+            // Nameservers
+            const isDefault = data.nameservers.is_default;
+            if (isDefault) {
+                document.getElementById('dmNsRadioDefault').checked = true;
+                document.getElementById('dmCustomNsContainer').style.display = 'none';
+            } else {
+                document.getElementById('dmNsRadioCustom').checked = true;
+                document.getElementById('dmCustomNsContainer').style.display = 'block';
+            }
+            document.getElementById('dmNs1').value = data.nameservers.ns1 || '';
+            document.getElementById('dmNs2').value = data.nameservers.ns2 || '';
+            document.getElementById('dmNs3').value = data.nameservers.ns3 || '';
+            document.getElementById('dmNs4').value = data.nameservers.ns4 || '';
+
+            // Lock Status
+            const isLocked = (data.lock_status === 'locked');
+            document.getElementById('dmLockSwitch').checked = isLocked;
+            updateLockBadge(isLocked);
+
+            // WHOIS Privacy
+            document.getElementById('dmIdProtectSwitch').checked = (data.domain.idprotection === 1);
+
+            // Auto-Renew
+            document.getElementById('dmAutoRenewSwitch').checked = (data.domain.auto_renew === 1);
+
+            // Meta Info
+            document.getElementById('dmMetaRegDate').innerText = data.domain.registrationdate || 'N/A';
+            document.getElementById('dmMetaDueDate').innerText = data.domain.nextduedate || 'N/A';
+            document.getElementById('dmMetaPrice').innerText = '$' + data.domain.recurringamount + ' USD';
+        })
+        .catch(err => {
+            console.error('Error loading domain:', err);
+            alert('Failed to connect to the domain registry engine.');
+            bsModal.hide();
+        });
+    }
+
+    function updateLockBadge(isLocked) {
+        const badge = document.getElementById('dmLockBadge');
+        if (isLocked) {
+            badge.innerText = 'LOCKED (Protected)';
+            badge.className = 'badge bg-success-subtle text-success border border-success-subtle rounded-pill fs-11';
+        } else {
+            badge.innerText = 'UNLOCKED (Transfer Ready)';
+            badge.className = 'badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill fs-11';
+        }
+    }
+
+    function toggleNsMode() {
+        const isCustom = document.getElementById('dmNsRadioCustom').checked;
+        const container = document.getElementById('dmCustomNsContainer');
+        if (isCustom) {
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    }
+
+    function setNsPreset(preset) {
+        document.getElementById('dmNsRadioCustom').checked = true;
+        document.getElementById('dmCustomNsContainer').style.display = 'block';
+
+        if (preset === 'cloudflare') {
+            document.getElementById('dmNs1').value = 'elena.ns.cloudflare.com';
+            document.getElementById('dmNs2').value = 'dane.ns.cloudflare.com';
+            document.getElementById('dmNs3').value = '';
+            document.getElementById('dmNs4').value = '';
+        } else if (preset === 'shopify') {
+            document.getElementById('dmNs1').value = 'ns1.shops.myshopify.com';
+            document.getElementById('dmNs2').value = 'ns2.shops.myshopify.com';
+            document.getElementById('dmNs3').value = '';
+            document.getElementById('dmNs4').value = '';
+        } else if (preset === 'google') {
+            document.getElementById('dmNs1').value = 'ns-cloud-a1.googledomains.com';
+            document.getElementById('dmNs2').value = 'ns-cloud-a2.googledomains.com';
+            document.getElementById('dmNs3').value = 'ns-cloud-a3.googledomains.com';
+            document.getElementById('dmNs4').value = 'ns-cloud-a4.googledomains.com';
+        }
+    }
+
+    function saveDomainNameservers(e) {
+        e.preventDefault();
+        if (!currentDmDomainId) return;
+
+        const isDefault = document.getElementById('dmNsRadioDefault').checked;
+        const nsType = isDefault ? 'default' : 'custom';
+        const ns1 = document.getElementById('dmNs1').value.trim();
+        const ns2 = document.getElementById('dmNs2').value.trim();
+        const ns3 = document.getElementById('dmNs3').value.trim();
+        const ns4 = document.getElementById('dmNs4').value.trim();
+
+        const btn = document.getElementById('dmBtnSaveNs');
+        const spinner = document.getElementById('dmSaveNsSpinner');
+        const icon = document.getElementById('dmSaveNsIcon');
+        const alertBox = document.getElementById('dmNsAlert');
+
+        btn.disabled = true;
+        spinner.classList.remove('d-none');
+        icon.classList.add('d-none');
+        alertBox.className = 'alert d-none';
+
+        fetch('api/domain-manage.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'save_nameservers',
+                domain_id: currentDmDomainId,
+                type: nsType,
+                ns1: ns1,
+                ns2: ns2,
+                ns3: ns3,
+                ns4: ns4
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            icon.classList.remove('d-none');
+
+            alertBox.classList.remove('d-none');
+            if (data.status === 'success') {
+                alertBox.className = 'alert alert-success py-2.5 px-3 fs-13 mb-3 border-0 bg-success-subtle text-success rounded-3';
+                alertBox.innerHTML = '<i class="las la-check-circle me-1 fs-15"></i> ' + data.message;
+            } else {
+                alertBox.className = 'alert alert-danger py-2.5 px-3 fs-13 mb-3 border-0 bg-danger-subtle text-danger rounded-3';
+                alertBox.innerHTML = '<i class="las la-exclamation-circle me-1 fs-15"></i> ' + (data.message || 'Failed to update nameservers.');
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            icon.classList.remove('d-none');
+            alertBox.className = 'alert alert-danger py-2.5 px-3 fs-13 mb-3 border-0 bg-danger-subtle text-danger rounded-3';
+            alertBox.innerHTML = '<i class="las la-times-circle me-1 fs-15"></i> An unexpected network error occurred.';
+        });
+    }
+
+    function toggleDomainLock(isLocked) {
+        if (!currentDmDomainId) return;
+        const toggle = document.getElementById('dmLockSwitch');
+        toggle.disabled = true;
+
+        fetch('api/domain-manage.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'toggle_lock',
+                domain_id: currentDmDomainId,
+                lockstatus: isLocked ? 'locked' : 'unlocked'
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            toggle.disabled = false;
+            if (data.status === 'success') {
+                updateLockBadge(data.lock_status === 'locked');
+            } else {
+                toggle.checked = !isLocked;
+                alert(data.message || 'Failed to update transfer lock status.');
+            }
+        })
+        .catch(err => {
+            toggle.disabled = false;
+            toggle.checked = !isLocked;
+            alert('Communication error updating transfer lock.');
+        });
+    }
+
+    function fetchEppCode() {
+        if (!currentDmDomainId) return;
+        const btn = document.getElementById('dmBtnGetEpp');
+        const spinner = document.getElementById('dmEppSpinner');
+        const icon = document.getElementById('dmEppIcon');
+        const container = document.getElementById('dmEppResultContainer');
+        const display = document.getElementById('dmEppCodeDisplay');
+
+        btn.disabled = true;
+        spinner.classList.remove('d-none');
+        icon.classList.add('d-none');
+
+        fetch('api/domain-manage.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'get_epp',
+                domain_id: currentDmDomainId
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            icon.classList.remove('d-none');
+
+            if (data.status === 'success') {
+                container.classList.remove('d-none');
+                display.innerText = data.eppcode || 'Sent via email';
+                if (!data.eppcode) {
+                    display.innerText = 'Dispatched to registered contact email';
+                }
+            } else {
+                alert(data.message || 'Unable to retrieve EPP authorization code.');
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            icon.classList.remove('d-none');
+            alert('Communication error requesting EPP code.');
+        });
+    }
+
+    function copyEppCode() {
+        const codeText = document.getElementById('dmEppCodeDisplay').innerText;
+        if (!codeText || codeText === '--') return;
+
+        navigator.clipboard.writeText(codeText).then(() => {
+            const copyBtnText = document.getElementById('dmCopyText');
+            copyBtnText.innerText = 'Copied!';
+            setTimeout(() => {
+                copyBtnText.innerText = 'Copy Code';
+            }, 2000);
+        }).catch(() => {
+            alert('Unable to copy code to clipboard.');
+        });
+    }
+
+    function toggleIdProtection(isChecked) {
+        if (!currentDmDomainId) return;
+        const toggle = document.getElementById('dmIdProtectSwitch');
+        toggle.disabled = true;
+
+        fetch('api/domain-manage.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'toggle_idprotect',
+                domain_id: currentDmDomainId,
+                protect: isChecked ? 1 : 0
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            toggle.disabled = false;
+            if (data.status !== 'success') {
+                toggle.checked = !isChecked;
+                alert(data.message || 'Failed to update WHOIS privacy protection.');
+            }
+        })
+        .catch(err => {
+            toggle.disabled = false;
+            toggle.checked = !isChecked;
+            alert('Communication error updating WHOIS privacy protection.');
+        });
+    }
+
+    function toggleAutoRenew(isChecked) {
+        if (!currentDmDomainId) return;
+        const toggle = document.getElementById('dmAutoRenewSwitch');
+        toggle.disabled = true;
+
+        fetch('api/domain-manage.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'toggle_autorenew',
+                domain_id: currentDmDomainId,
+                auto_renew: isChecked ? 1 : 0
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            toggle.disabled = false;
+            if (data.status !== 'success') {
+                toggle.checked = !isChecked;
+                alert(data.message || 'Failed to update auto-renewal preference.');
+            }
+        })
+        .catch(err => {
+            toggle.disabled = false;
+            toggle.checked = !isChecked;
+            alert('Communication error updating auto-renewal preference.');
+        });
+    }
+
+    // =========================================================================
+    // HOSTING & CPANEL MANAGEMENT ENGINE
+    // =========================================================================
+    let currentHmServiceId = null;
+    let currentHmDomain = '';
+
+    function openHostingManageModal(serviceId, domainName) {
+        currentHmServiceId = serviceId;
+        currentHmDomain = domainName;
+
+        document.getElementById('hmModalTitle').innerText = 'Hosting Management';
+        document.getElementById('hmModalDomainName').innerText = domainName || 'Cloud Server';
+
+        document.getElementById('hmLoadingState').style.display = 'block';
+        document.getElementById('hmLoadedContent').style.display = 'none';
+
+        const alertBox = document.getElementById('hmPassAlert');
+        alertBox.className = 'alert d-none';
+        alertBox.innerText = '';
+
+        // Activate first tab (Overview)
+        const firstTab = document.getElementById('hm-tab-overview');
+        if (firstTab && window.bootstrap) {
+            bootstrap.Tab.getOrCreateInstance(firstTab).show();
+        }
+
+        // Show Modal
+        const modalEl = document.getElementById('hostingManageModal');
+        const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        bsModal.show();
+
+        // Query Hosting Data from API
+        fetch('api/hosting-manage.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'get_info',
+                service_id: serviceId
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status !== 'success') {
+                alert(data.message || 'Unable to retrieve hosting service data.');
+                bsModal.hide();
+                return;
+            }
+
+            document.getElementById('hmLoadingState').style.display = 'none';
+            document.getElementById('hmLoadedContent').style.display = 'block';
+
+            const s = data.service;
+            document.getElementById('hmModalTitle').innerText = s.product_name;
+
+            // Status badge
+            const badge = document.getElementById('hmModalStatusBadge');
+            badge.innerText = s.status;
+            if (s.status.toLowerCase() === 'active') {
+                badge.className = 'badge bg-success-subtle text-success border border-success-subtle rounded-pill fs-11';
+            } else {
+                badge.className = 'badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill fs-11';
+            }
+
+            // Credentials
+            document.getElementById('hmUsername').innerText = s.username;
+            document.getElementById('hmServerIp').innerText = s.server_ip;
+            document.getElementById('hmServerHost').innerText = s.server_hostname;
+            document.getElementById('hmNameservers').innerText = s.ns1 + ', ' + s.ns2;
+
+            // Links (Direct to cPanel, completely bypassing external WHMCS)
+            document.getElementById('hmBtnCpanelSso').href = s.cpanel_launch_url || s.cpanel_url;
+            document.getElementById('hmBtnWebmail').href = s.webmail_url;
+
+            // Quotas
+            document.getElementById('hmDiskUsageText').innerText = s.disk_usage_mb + ' MB / ' + s.disk_limit_mb + ' MB (' + s.disk_percent + '%)';
+            document.getElementById('hmDiskProgressBar').style.width = s.disk_percent + '%';
+
+            document.getElementById('hmBwUsageText').innerText = s.bw_usage_mb + ' MB / ' + s.bw_limit_mb + ' MB (' + s.bw_percent + '%)';
+            document.getElementById('hmBwProgressBar').style.width = s.bw_percent + '%';
+
+            // FTP & Mail
+            document.getElementById('hmFtpHost').innerText = (s.domain ? 'ftp.' + s.domain + ' (or ' + s.server_ip + ')' : s.server_ip);
+            document.getElementById('hmFtpUser').innerText = s.username;
+            document.getElementById('hmMailIncoming').innerText = s.server_hostname + ' (Port 993 IMAP SSL)';
+            document.getElementById('hmMailOutgoing').innerText = s.server_hostname + ' (Port 465 SMTP SSL)';
+            document.getElementById('hmWebmailDirectLink').href = s.webmail_url;
+            document.getElementById('hmWebmailDirectLink').innerText = s.webmail_url;
+        })
+        .catch(err => {
+            console.error('Error loading hosting:', err);
+            alert('Failed to connect to cloud server manager.');
+            bsModal.hide();
+        });
+    }
+
+    function changeHostingPassword(e) {
+        e.preventDefault();
+        if (!currentHmServiceId) return;
+
+        const newPass = document.getElementById('hmNewPassword').value.trim();
+        const confPass = document.getElementById('hmConfirmPassword').value.trim();
+        const btn = document.getElementById('hmBtnSavePass');
+        const spinner = document.getElementById('hmSavePassSpinner');
+        const icon = document.getElementById('hmSavePassIcon');
+        const alertBox = document.getElementById('hmPassAlert');
+
+        if (newPass.length < 8) {
+            alertBox.className = 'alert alert-danger py-2.5 px-3 fs-13 mb-3 border-0 bg-danger-subtle text-danger rounded-3';
+            alertBox.innerHTML = '<i class="las la-exclamation-circle me-1 fs-15"></i> Password must be at least 8 characters long.';
+            alertBox.classList.remove('d-none');
+            return;
+        }
+        if (newPass !== confPass) {
+            alertBox.className = 'alert alert-danger py-2.5 px-3 fs-13 mb-3 border-0 bg-danger-subtle text-danger rounded-3';
+            alertBox.innerHTML = '<i class="las la-exclamation-circle me-1 fs-15"></i> Passwords do not match.';
+            alertBox.classList.remove('d-none');
+            return;
+        }
+
+        btn.disabled = true;
+        spinner.classList.remove('d-none');
+        icon.classList.add('d-none');
+        alertBox.className = 'alert d-none';
+
+        fetch('api/hosting-manage.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'change_password',
+                service_id: currentHmServiceId,
+                new_password: newPass,
+                confirm_password: confPass
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            icon.classList.remove('d-none');
+
+            alertBox.classList.remove('d-none');
+            if (data.status === 'success') {
+                alertBox.className = 'alert alert-success py-2.5 px-3 fs-13 mb-3 border-0 bg-success-subtle text-success rounded-3';
+                alertBox.innerHTML = '<i class="las la-check-circle me-1 fs-15"></i> ' + data.message;
+                document.getElementById('hmNewPassword').value = '';
+                document.getElementById('hmConfirmPassword').value = '';
+            } else {
+                alertBox.className = 'alert alert-danger py-2.5 px-3 fs-13 mb-3 border-0 bg-danger-subtle text-danger rounded-3';
+                alertBox.innerHTML = '<i class="las la-exclamation-circle me-1 fs-15"></i> ' + (data.message || 'Failed to update password.');
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            icon.classList.remove('d-none');
+            alertBox.className = 'alert alert-danger py-2.5 px-3 fs-13 mb-3 border-0 bg-danger-subtle text-danger rounded-3';
+            alertBox.innerHTML = '<i class="las la-times-circle me-1 fs-15"></i> Network error communicating with server.';
+        });
+    }
+
+    function copyText(elementId, btn) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        const txt = el.innerText.trim();
+        if (!txt || txt === '--') return;
+
+        navigator.clipboard.writeText(txt).then(() => {
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="las la-check text-success"></i>';
+            setTimeout(() => { btn.innerHTML = orig; }, 2000);
+        });
     }
     </script>
 

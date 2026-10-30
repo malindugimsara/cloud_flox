@@ -121,55 +121,36 @@
                     <!-- Hero Badge -->
                     <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-cyan-subtle text-cyan fw-bold fs-13 mb-3 border border-cyan-subtle">
                         <span class="cf-pulse-dot-cyan"></span>
-                        <span>100% KVM VIRTUALIZATION &amp; ISOLATED RESOURCES</span>
+                        <span>High-Speed KVM Cloud VPS</span>
                     </div>
 
-                    <!-- Hero Title -->
                     <h1 class="cf-vps-hero-title fw-extrabold text-slate-900 tracking-tight mb-3">
-                        Ultra-Fast KVM Cloud VPS <br class="d-none d-sm-inline">
-                        <span class="text-gradient-vps">Engineered for Velocity</span>
+                        High-Speed KVM <br class="d-none d-sm-inline">
+                        <span class="text-gradient-vps">Cloud VPS Hosting</span>
                     </h1>
 
-                    <!-- Hero Lead -->
                     <p class="cf-vps-hero-lead text-slate-600 mb-4 lh-base">
-                        Deploy scalable, isolated virtual private servers powered by high-frequency compute, pure NVMe/SSD storage, and 1Gbps uplink. Full root/administrator access with fast automated cloud provisioning.
+                        Deploy scalable virtual private servers with dedicated NVMe storage, full root access, and instant cloud provisioning.
                     </p>
 
                     <!-- Trust Chips -->
-                    <div class="d-flex flex-wrap gap-2 mb-4 pb-2">
-                        <span class="cf-feature-chip">
-                            <i class="las la-microchip text-primary"></i> High-Speed vCPU &amp; ECC Memory
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-hdd text-info"></i> Pure SSD / NVMe Storage
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-terminal text-success"></i> Full Root &amp; KVM Console
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-network-wired text-cyan"></i> 1Gbps Port &amp; Dedicated IPv4
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-shield-alt text-danger"></i> Multi-Tbps DDoS Defense
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-check-circle text-success"></i> 99.95% Network &amp; Hardware SLA
-                        </span>
+                    <div class="d-flex flex-wrap gap-2 mb-4 pb-1">
+                        <span class="cf-feature-chip"><i class="las la-microchip text-primary"></i> High-Speed vCPU</span>
+                        <span class="cf-feature-chip"><i class="las la-bolt text-warning"></i> Pure NVMe Storage</span>
+                        <span class="cf-feature-chip"><i class="las la-terminal text-success"></i> Full Root Access</span>
+                        <span class="cf-feature-chip"><i class="las la-shield-alt text-danger"></i> 1Gbps Anti-DDoS</span>
                     </div>
 
                     <!-- Hero Action Buttons -->
                     <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-3 cf-hero-btn-group">
                         <a href="#vpsPlans" class="cf-btn-vps-glow text-center">
-                            <span>Explore VPS Plans</span>
+                            <span>Explore Plans</span>
                             <i class="las la-arrow-down ms-1"></i>
                         </a>
-                        <a href="#vpsConfigurator" class="btn btn-outline-secondary rounded-3 py-2 px-3 fs-15 fw-semibold text-center">
-                            <i class="las la-sliders-h me-1" style="color:#2563EB;"></i>
-                            <span style="color:#2563EB;">Custom Configurator</span>
+                        <a href="#vpsConfigurator" class="cf-btn-secondary-light text-center">
+                            <i class="las la-sliders-h me-1"></i>
+                            <span>Custom Configurator</span>
                         </a>
-                        <!-- <a href="#vpsComparison" class="btn btn-link text-decoration-none text-slate-700 fs-14 fw-semibold p-0 text-center">
-                            <span>Compare Specs</span> <i class="las la-angle-right ms-1"></i>
-                        </a> -->
                     </div>
                 </div>
 

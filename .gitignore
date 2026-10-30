@@ -14,7 +14,7 @@
 !assets/**
 
 # 3. Environment & Configuration Secrets
-.env
+!.env
 .env.*
 !.env.example
 

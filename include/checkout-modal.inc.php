@@ -379,7 +379,7 @@
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <label class="form-label fs-12 fw-semibold text-slate-700 mb-0">Password <span class="text-danger">*</span></label>
-                                <a href="https://my.cloudflox.com/password/reset" target="_blank" class="fs-11 text-primary text-decoration-none">Forgot password?</a>
+                                <a href="<?php echo $url; ?>forgot-password" class="fs-11 text-primary text-decoration-none">Forgot password?</a>
                             </div>
                             <div class="input-group">
                                 <span class="input-group-text bg-light text-muted px-3"><i class="las la-lock"></i></span>
@@ -425,15 +425,7 @@
                                 <input type="radio" name="paymentmethod" value="card" checked>
                                 <div class="cf-pm-icon text-primary"><i class="las la-credit-card"></i></div>
                                 <span class="cf-pm-title">Credit / Debit Card</span>
-                                <small class="text-muted">Visa, Mastercard, Amex</small>
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label class="cf-payment-method-card" onclick="cfSelectPaymentMethod('payhere')">
-                                <input type="radio" name="paymentmethod" value="payhere">
-                                <div class="cf-pm-icon text-emerald"><i class="las la-money-bill-wave"></i></div>
-                                <span class="cf-pm-title">PayHere / LKR</span>
-                                <small class="text-muted">Local Bank / Genie / Frimi</small>
+                                <small class="text-muted">Visa, Master, Amex (PayHere)</small>
                             </label>
                         </div>
                         <div class="col-6">
@@ -441,15 +433,7 @@
                                 <input type="radio" name="paymentmethod" value="paypal">
                                 <div class="cf-pm-icon text-info"><i class="lab la-paypal"></i></div>
                                 <span class="cf-pm-title">PayPal</span>
-                                <small class="text-muted">International Checkout</small>
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label class="cf-payment-method-card" onclick="cfSelectPaymentMethod('banktransfer')">
-                                <input type="radio" name="paymentmethod" value="banktransfer">
-                                <div class="cf-pm-icon text-slate-700"><i class="las la-university"></i></div>
-                                <span class="cf-pm-title">Bank Transfer</span>
-                                <small class="text-muted">Direct Deposit / Wire</small>
+                                <small class="text-muted">Instant Global Checkout</small>
                             </label>
                         </div>
                     </div>

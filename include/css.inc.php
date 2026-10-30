@@ -15,8 +15,8 @@
 
           <!-- Preload Core Stylesheets for Fastest First Paint -->
           <link rel="preload" href="assets/css/main.min.css" as="style">
-          <link rel="preload" href="assets/css/cloudflox-redesign.css?v=100" as="style">
+          <link rel="preload" href="assets/css/cloudflox-redesign.css?v=103" as="style">
           <link rel="preload" href="assets/css/cf-checkout.css?v=7" as="style">
           <link rel="stylesheet" href="assets/css/main.min.css">
-          <link rel="stylesheet" href="assets/css/cloudflox-redesign.css?v=100">
+          <link rel="stylesheet" href="assets/css/cloudflox-redesign.css?v=103">
           <link rel="stylesheet" href="assets/css/cf-checkout.css?v=7">

@@ -37,6 +37,59 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
+// Cloudflare Turnstile Security Verification
+require_once __DIR__ . '/include/env.inc.php';
+
+$turnstileSecret = defined('CF_TURNSTILE_SECRET_KEY') ? CF_TURNSTILE_SECRET_KEY : (getenv('CLOUDFLARE_TURNSTILE_SECRET_KEY') ?: '0x4AAAAAAFsPGj4XQp1O1pc9PnrNzozwjKM');
+$turnstileResponse = $_POST['cf-turnstile-response'] ?? '';
+
+if (empty($turnstileResponse)) {
+    echo json_encode(['status' => 'error', 'message' => 'Please complete the Cloudflare security verification check.']);
+    exit;
+}
+
+$verifyData = [
+    'secret' => $turnstileSecret,
+    'response' => $turnstileResponse,
+    'remoteip' => $_SERVER['REMOTE_ADDR'] ?? ''
+];
+
+$verifyUrl = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+$turnstileSuccess = false;
+
+if (function_exists('curl_init')) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $verifyUrl);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($verifyData));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+    $turnstileResult = curl_exec($ch);
+    curl_close($ch);
+} else {
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($verifyData),
+            'timeout' => 10
+        ]
+    ];
+    $context = stream_context_create($options);
+    $turnstileResult = @file_get_contents($verifyUrl, false, $context);
+}
+
+$responseData = json_decode($turnstileResult, true);
+if (is_array($responseData) && !empty($responseData['success'])) {
+    $turnstileSuccess = true;
+}
+
+if (!$turnstileSuccess) {
+    echo json_encode(['status' => 'error', 'message' => 'Cloudflare Turnstile verification failed. Please try again.']);
+    exit;
+}
+
 // Generate Reference ID
 $ref_id = 'CFX-REQ-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 6));
 $timestamp = date('Y-m-d H:i:s');

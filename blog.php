@@ -9,6 +9,9 @@ if (empty($slug)) {
         $slug = $matches[1];
     }
 }
+if ($slug === 'blog' || $slug === 'index' || $slug === 'blog.php') {
+    $slug = '';
+}
 
 // Technical Guides Catalog Database
 $articles = [
@@ -666,7 +669,7 @@ if ($isSingleArticle) {
                         <a href="<?php echo $url; ?>" class="text-decoration-none text-muted">Home</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="blog/" class="text-decoration-none text-muted">Blog / Guides</a>
+                        <a href="<?php echo $url; ?>blog" class="text-decoration-none text-muted">Blog / Guides</a>
                     </li>
                     <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
                         <?php echo htmlspecialchars($currentArticle['category']); ?>
@@ -796,7 +799,7 @@ if ($isSingleArticle) {
 
                         <!-- Return to Index -->
                         <div class="mt-3 text-center">
-                            <a href="blog/" class="text-decoration-none fs-13 text-muted">
+                            <a href="<?php echo $url; ?>blog" class="text-decoration-none fs-13 text-muted">
                                 <i class="las la-arrow-left me-1"></i> All Guides &amp; Tutorials
                             </a>
                         </div>
@@ -812,7 +815,7 @@ if ($isSingleArticle) {
         <div class="container">
             <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
                 <h3 class="fs-20 fw-bold text-slate-900 mb-0">More Engineering Guides</h3>
-                <a href="blog/" class="fs-13 text-decoration-none fw-semibold text-primary">
+                <a href="<?php echo $url; ?>blog" class="fs-13 text-decoration-none fw-semibold text-primary">
                     View All <i class="las la-arrow-right ms-1"></i>
                 </a>
             </div>
@@ -828,7 +831,7 @@ if ($isSingleArticle) {
                 <div class="col-12 col-md-4">
                     <article class="cf-article-grid-card">
                         <div class="cf-article-thumb-wrap">
-                            <a href="blog/<?php echo $relArt['slug']; ?>/">
+                            <a href="<?php echo $url; ?>blog/<?php echo $relArt['slug']; ?>">
                                 <img src="<?php echo htmlspecialchars($relArt['image']); ?>"
                                     alt="<?php echo htmlspecialchars($relArt['title']); ?>"
                                     class="img-fluid" loading="lazy">
@@ -841,7 +844,7 @@ if ($isSingleArticle) {
                                 <span><?php echo htmlspecialchars($relArt['read_time']); ?></span>
                             </div>
                             <h4 class="cf-card-title">
-                                <a href="blog/<?php echo $relArt['slug']; ?>/">
+                                <a href="<?php echo $url; ?>blog/<?php echo $relArt['slug']; ?>">
                                     <?php echo htmlspecialchars($relArt['title']); ?>
                                 </a>
                             </h4>
@@ -850,7 +853,7 @@ if ($isSingleArticle) {
                             </p>
                             <div class="cf-card-footer">
                                 <span class="text-muted"><?php echo htmlspecialchars($relArt['date']); ?></span>
-                                <a href="blog/<?php echo $relArt['slug']; ?>/" class="cf-link-arrow">
+                                <a href="<?php echo $url; ?>blog/<?php echo $relArt['slug']; ?>" class="cf-link-arrow">
                                     Read <i class="las la-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1003,7 +1006,7 @@ if ($isSingleArticle) {
                     <!-- Left: Featured Image -->
                     <div class="col-12 col-lg-6">
                         <div class="cf-featured-img-box">
-                            <a href="blog/nvme-vs-sata-ssd-iops-benchmarks/">
+                            <a href="<?php echo $url; ?>blog/nvme-vs-sata-ssd-iops-benchmarks">
                                 <img src="assets/imgs/banners/cloudflox-vps-infrastructure.webp"
                                     alt="NVMe Gen4 vs SATA SSD VPS Performance Benchmarks"
                                     class="img-fluid w-100 h-100 object-fit-cover"
@@ -1024,7 +1027,7 @@ if ($isSingleArticle) {
                             </div>
 
                             <h2 class="cf-featured-title">
-                                <a href="blog/nvme-vs-sata-ssd-iops-benchmarks/">
+                                <a href="<?php echo $url; ?>blog/nvme-vs-sata-ssd-iops-benchmarks">
                                     NVMe Gen4 vs. Legacy SATA SSDs: How Storage Fabric Dictates Database &amp; Web Server IOPS
                                 </a>
                             </h2>
@@ -1037,7 +1040,7 @@ if ($isSingleArticle) {
                                 <span class="fs-13 text-dark fw-semibold">
                                     Alex Rivera <span class="text-muted fw-normal fs-12">• Cloud Architect</span>
                                 </span>
-                                <a href="blog/nvme-vs-sata-ssd-iops-benchmarks/" class="cf-link-arrow">
+                                <a href="<?php echo $url; ?>blog/nvme-vs-sata-ssd-iops-benchmarks" class="cf-link-arrow">
                                     Read guide <i class="las la-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1066,7 +1069,7 @@ if ($isSingleArticle) {
                 <div class="col-12 col-md-6 col-lg-4 blog-item" data-category="security" data-keywords="firewall ufw fail2ban security linux vps hardened ssh">
                     <article class="cf-article-grid-card">
                         <div class="cf-article-thumb-wrap">
-                            <a href="blog/hardening-linux-vps-firewalls-ufw-fail2ban/">
+                            <a href="<?php echo $url; ?>blog/hardening-linux-vps-firewalls-ufw-fail2ban">
                                 <img src="assets/imgs/banners/cloud-hosting.webp"
                                     alt="Hardening Linux Server Firewalls with UFW and Fail2ban"
                                     class="img-fluid" width="400" height="210" loading="lazy">
@@ -1079,7 +1082,7 @@ if ($isSingleArticle) {
                                 <span>6 min read</span>
                             </div>
                             <h4 class="cf-card-title">
-                                <a href="blog/hardening-linux-vps-firewalls-ufw-fail2ban/">
+                                <a href="<?php echo $url; ?>blog/hardening-linux-vps-firewalls-ufw-fail2ban">
                                     Hardening Linux Firewalls: UFW &amp; Fail2ban Rules for Production VPS
                                 </a>
                             </h4>
@@ -1088,7 +1091,7 @@ if ($isSingleArticle) {
                             </p>
                             <div class="cf-card-footer">
                                 <span class="text-muted">Oct 18, 2026</span>
-                                <a href="blog/hardening-linux-vps-firewalls-ufw-fail2ban/" class="cf-link-arrow">
+                                <a href="<?php echo $url; ?>blog/hardening-linux-vps-firewalls-ufw-fail2ban" class="cf-link-arrow">
                                     Read <i class="las la-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1100,7 +1103,7 @@ if ($isSingleArticle) {
                 <div class="col-12 col-md-6 col-lg-4 blog-item" data-category="vps" data-keywords="kvm virtualization containers docker lxc microservices cloud vps">
                     <article class="cf-article-grid-card">
                         <div class="cf-article-thumb-wrap">
-                            <a href="blog/kvm-virtualization-vs-containers-guide/">
+                            <a href="<?php echo $url; ?>blog/kvm-virtualization-vs-containers-guide">
                                 <img src="assets/imgs/banners/cloudflox-hero-infrastructure.webp"
                                     alt="KVM Virtualization vs Containers for Cloud Microservices"
                                     class="img-fluid" width="400" height="210" loading="lazy">
@@ -1113,7 +1116,7 @@ if ($isSingleArticle) {
                                 <span>7 min read</span>
                             </div>
                             <h4 class="cf-card-title">
-                                <a href="blog/kvm-virtualization-vs-containers-guide/">
+                                <a href="<?php echo $url; ?>blog/kvm-virtualization-vs-containers-guide">
                                     KVM Virtualization vs. Containers: Which Architecture Fits Your Workloads?
                                 </a>
                             </h4>
@@ -1122,7 +1125,7 @@ if ($isSingleArticle) {
                             </p>
                             <div class="cf-card-footer">
                                 <span class="text-muted">Oct 15, 2026</span>
-                                <a href="blog/kvm-virtualization-vs-containers-guide/" class="cf-link-arrow">
+                                <a href="<?php echo $url; ?>blog/kvm-virtualization-vs-containers-guide" class="cf-link-arrow">
                                     Read <i class="las la-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1134,7 +1137,7 @@ if ($isSingleArticle) {
                 <div class="col-12 col-md-6 col-lg-4 blog-item" data-category="security" data-keywords="ddos anti-ddos mitigation anycast scrubbing dedicated server network syn flood">
                     <article class="cf-article-grid-card">
                         <div class="cf-article-thumb-wrap">
-                            <a href="blog/mitigating-100gbps-volumetric-ddos-attacks/">
+                            <a href="<?php echo $url; ?>blog/mitigating-100gbps-volumetric-ddos-attacks">
                                 <img src="assets/imgs/banners/cloudflox-dedicated-server-infrastructure.webp"
                                     alt="Mitigating 100Gbps+ DDoS Attacks using Carrier Scrubbing"
                                     class="img-fluid" width="400" height="210" loading="lazy">
@@ -1147,7 +1150,7 @@ if ($isSingleArticle) {
                                 <span>6 min read</span>
                             </div>
                             <h4 class="cf-card-title">
-                                <a href="blog/mitigating-100gbps-volumetric-ddos-attacks/">
+                                <a href="<?php echo $url; ?>blog/mitigating-100gbps-volumetric-ddos-attacks">
                                     Mitigating 100Gbps+ Volumetric DDoS: Anycast &amp; Scrubbing Centers Explained
                                 </a>
                             </h4>
@@ -1156,7 +1159,7 @@ if ($isSingleArticle) {
                             </p>
                             <div class="cf-card-footer">
                                 <span class="text-muted">Oct 12, 2026</span>
-                                <a href="blog/mitigating-100gbps-volumetric-ddos-attacks/" class="cf-link-arrow">
+                                <a href="<?php echo $url; ?>blog/mitigating-100gbps-volumetric-ddos-attacks" class="cf-link-arrow">
                                     Read <i class="las la-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1168,7 +1171,7 @@ if ($isSingleArticle) {
                 <div class="col-12 col-md-6 col-lg-4 blog-item" data-category="optimization" data-keywords="nginx litespeed apache web server benchmark wordpress php-fpm tuning">
                     <article class="cf-article-grid-card">
                         <div class="cf-article-thumb-wrap">
-                            <a href="blog/nginx-vs-litespeed-vs-apache-benchmarks/">
+                            <a href="<?php echo $url; ?>blog/nginx-vs-litespeed-vs-apache-benchmarks">
                                 <img src="assets/imgs/banners/cloudflox-business-infrastructure.webp"
                                     alt="NGINX vs LiteSpeed vs Apache Web Server Benchmark"
                                     class="img-fluid" width="400" height="210" loading="lazy">
@@ -1181,7 +1184,7 @@ if ($isSingleArticle) {
                                 <span>6 min read</span>
                             </div>
                             <h4 class="cf-card-title">
-                                <a href="blog/nginx-vs-litespeed-vs-apache-benchmarks/">
+                                <a href="<?php echo $url; ?>blog/nginx-vs-litespeed-vs-apache-benchmarks">
                                     NGINX vs. LiteSpeed vs. Apache: Real Benchmarks on High-Traffic WordPress
                                 </a>
                             </h4>
@@ -1190,7 +1193,7 @@ if ($isSingleArticle) {
                             </p>
                             <div class="cf-card-footer">
                                 <span class="text-muted">Oct 09, 2026</span>
-                                <a href="blog/nginx-vs-litespeed-vs-apache-benchmarks/" class="cf-link-arrow">
+                                <a href="<?php echo $url; ?>blog/nginx-vs-litespeed-vs-apache-benchmarks" class="cf-link-arrow">
                                     Read <i class="las la-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1202,7 +1205,7 @@ if ($isSingleArticle) {
                 <div class="col-12 col-md-6 col-lg-4 blog-item" data-category="sysadmin" data-keywords="migration cpanel vps zero downtime rsync mysql transfer dns ttl">
                     <article class="cf-article-grid-card">
                         <div class="cf-article-thumb-wrap">
-                            <a href="blog/zero-downtime-cpanel-to-kvm-migration/">
+                            <a href="<?php echo $url; ?>blog/zero-downtime-cpanel-to-kvm-migration">
                                 <img src="assets/imgs/banners/cloud-hosting-technology.webp"
                                     alt="Zero Downtime Server Migration from cPanel to Cloud VPS"
                                     class="img-fluid" width="400" height="210" loading="lazy">
@@ -1215,7 +1218,7 @@ if ($isSingleArticle) {
                                 <span>9 min read</span>
                             </div>
                             <h4 class="cf-card-title">
-                                <a href="blog/zero-downtime-cpanel-to-kvm-migration/">
+                                <a href="<?php echo $url; ?>blog/zero-downtime-cpanel-to-kvm-migration">
                                     Zero-Downtime Server Migration: Step-by-Step cPanel to KVM Transfer
                                 </a>
                             </h4>
@@ -1224,7 +1227,7 @@ if ($isSingleArticle) {
                             </p>
                             <div class="cf-card-footer">
                                 <span class="text-muted">Oct 04, 2026</span>
-                                <a href="blog/zero-downtime-cpanel-to-kvm-migration/" class="cf-link-arrow">
+                                <a href="<?php echo $url; ?>blog/zero-downtime-cpanel-to-kvm-migration" class="cf-link-arrow">
                                     Read <i class="las la-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1236,7 +1239,7 @@ if ($isSingleArticle) {
                 <div class="col-12 col-md-6 col-lg-4 blog-item" data-category="optimization" data-keywords="dns ttfb geodns latency nameserver anycast domain cloudflare">
                     <article class="cf-article-grid-card">
                         <div class="cf-article-thumb-wrap">
-                            <a href="blog/optimizing-global-dns-resolution-anycast/">
+                            <a href="<?php echo $url; ?>blog/optimizing-global-dns-resolution-anycast">
                                 <img src="assets/imgs/banners/cloudflox-domain-infrastructure.webp"
                                     alt="Optimizing DNS Resolution Times with Anycast Nameservers"
                                     class="img-fluid" width="400" height="210" loading="lazy">
@@ -1249,7 +1252,7 @@ if ($isSingleArticle) {
                                 <span>5 min read</span>
                             </div>
                             <h4 class="cf-card-title">
-                                <a href="blog/optimizing-global-dns-resolution-anycast/">
+                                <a href="<?php echo $url; ?>blog/optimizing-global-dns-resolution-anycast">
                                     Optimizing Global DNS Resolution: Anycast vs. Unicast Nameserver Speeds
                                 </a>
                             </h4>
@@ -1258,7 +1261,7 @@ if ($isSingleArticle) {
                             </p>
                             <div class="cf-card-footer">
                                 <span class="text-muted">Sep 28, 2026</span>
-                                <a href="blog/optimizing-global-dns-resolution-anycast/" class="cf-link-arrow">
+                                <a href="<?php echo $url; ?>blog/optimizing-global-dns-resolution-anycast" class="cf-link-arrow">
                                     Read <i class="las la-arrow-right ms-1"></i>
                                 </a>
                             </div>

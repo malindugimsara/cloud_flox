@@ -389,9 +389,14 @@ if ($action === 'update_profile') {
     exit;
 }
 
+// Fetch live WHMCS Domain and Hosting pricing
+require_once __DIR__ . '/whmcs-pricing.php';
+$liveDomains = WHMCSPricing::getDomainPricing();
+$liveHosting = WHMCSPricing::getHostingProducts();
+
 // 1. Validate Product or Domain-Only Selection
 $pid = trim($data['pid'] ?? '');
-$hasHosting = (!empty($pid) && $pid !== 'none' && isset($CF_PRODUCTS[$pid]));
+$hasHosting = (!empty($pid) && $pid !== 'none' && (isset($liveHosting[$pid]) || is_numeric($pid)));
 
 // Domain Details
 $domainType = strtolower(trim($data['domain_type'] ?? 'register'));
@@ -405,11 +410,6 @@ $eppCode    = trim($data['epp_code'] ?? '');
 if (!empty($domainTld) && !str_starts_with($domainTld, '.')) {
     $domainTld = '.' . $domainTld;
 }
-
-// Fetch live WHMCS Domain and Hosting pricing
-require_once __DIR__ . '/whmcs-pricing.php';
-$liveDomains = WHMCSPricing::getDomainPricing();
-$liveHosting = WHMCSPricing::getHostingProducts();
 
 $fullDomain = '';
 $domainFee = 0.00;
@@ -483,10 +483,10 @@ if (!in_array($billingCycle, ['monthly', 'annually', 'yearly'])) {
 $isYearly = ($billingCycle === 'annually' || $billingCycle === 'yearly');
 
 if ($hasHosting) {
-    $plan = $liveHosting[$pid] ?? $CF_PRODUCTS[$pid];
-    $planName = $plan['name'];
-    $planCategory = $plan['category'];
-    $planPrice = $isYearly ? (float)$plan['yearly'] : (float)$plan['monthly'];
+    $plan = $liveHosting[$pid] ?? null;
+    $planName = $plan ? $plan['name'] : "Hosting Plan #{$pid}";
+    $planCategory = $plan ? $plan['category'] : 'Cloud Hosting';
+    $planPrice = $plan ? ($isYearly ? (float)$plan['yearly'] : (float)$plan['monthly']) : 0.00;
 } else {
     $plan = null;
     $planName = ($domainType === 'transfer') ? 'Domain Transfer' : 'Domain Registration Only';
@@ -603,7 +603,7 @@ if (!$clientId) {
     }
 }
 
-// Payment Method: Card, PayHere, PayPal (matching cfwhmcs gateways)
+// Payment Method: Card (via PayHere), PayPal (matching cfwhmcs gateways)
 $paymentMethod = strtolower(trim($data['paymentmethod'] ?? 'card'));
 $validMethods = ['card', 'payhere', 'paypal'];
 if (!in_array($paymentMethod, $validMethods)) {
@@ -613,14 +613,12 @@ if (!in_array($paymentMethod, $validMethods)) {
 // Map to WHMCS gateway modules in cfwhmcs:
 // - 'payheresdk' is the active gateway in cfwhmcs for PayHere / Visa / Master
 // - 'paypal' is the active gateway in cfwhmcs for PayPal
-$whmcsGateway = 'payheresdk';
 if ($paymentMethod === 'paypal') {
     $whmcsGateway = 'paypal';
-} elseif ($paymentMethod === 'payhere') {
+} else {
+    // In cfwhmcs, payheresdk handles all Card payments (Visa, Master, Amex)
     $whmcsGateway = 'payheresdk';
-} elseif ($paymentMethod === 'card') {
-    // In cfwhmcs, payheresdk handles Visa, Master, Amex
-    $whmcsGateway = 'payheresdk';
+    $paymentMethod = 'card';
 }
 
 // 3. Prepare WHMCS Order Payload

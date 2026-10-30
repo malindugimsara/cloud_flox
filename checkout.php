@@ -51,7 +51,7 @@ if ($isLoggedIn && $loggedInClientId > 0) {
 // Read pre-selected query parameters from URL
 $initialDomain = trim($_GET['domain'] ?? '');
 $initialPrice  = trim($_GET['price'] ?? $_GET['domain_price'] ?? '');
-$initialType   = strtolower(trim($_GET['domainType'] ?? $_GET['domain_type'] ?? 'register'));
+$initialType   = strtolower(trim($_GET['type'] ?? $_GET['domainType'] ?? $_GET['domain_type'] ?? 'register'));
 $initialPid    = trim($_GET['pid'] ?? '');
 $hasDomainPreselected = !empty($initialDomain);
 
@@ -630,6 +630,27 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                                     </div>
                                 </div>
 
+                                <!-- Notice when Domain Only is selected in Step 2 -->
+                                <div class="cf-checkout-card p-4 border bg-white mb-4 shadow-xs" id="step2NoHostingCard" style="display: none;">
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div style="width: 48px; height: 48px; border-radius: 12px; background: #DCFCE7; color: #15803D; display: flex; align-items: center; justify-content: center; font-size: 26px;">
+                                                <i class="las la-globe"></i>
+                                            </div>
+                                            <div>
+                                                <div class="d-flex align-items-center gap-2 mb-0.5">
+                                                    <h5 class="fw-bold text-slate-900 mb-0 fs-17">Domain Registration Only</h5>
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-0.5 fs-11 fw-bold">NO HOSTING REQUIRED</span>
+                                                </div>
+                                                <span class="text-secondary fs-12">Pure domain registration with free WHOIS privacy, Anycast DNS, and full nameserver management.</span>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1.5 fs-12 fw-bold" onclick="pageGoToStep(1)">
+                                            <i class="las la-plus-circle me-1"></i> Add Web Hosting
+                                        </button>
+                                    </div>
+                                </div>
+
                                 <!-- Hosting Plan Showcase Card -->
                                 <div class="cf-checkout-card p-4 border bg-white mb-4 shadow-xs" id="step2HostingShowcase">
                                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
@@ -712,6 +733,9 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                                                     <?php echo htmlspecialchars($hItem['name']); ?> (<?php echo $hItem['monthly_formatted']; ?>/mo)
                                                 </button>
                                             <?php endforeach; ?>
+                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 fs-12" id="switchPlanBtn_none" onclick="pageSelectHostingPlan('none')">
+                                                <i class="las la-times-circle me-1"></i> No Hosting (Domain Only)
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -757,7 +781,7 @@ if ($hasDomainPreselected && empty($initialPrice)) {
 
                                 <!-- PANE A: ALREADY SIGNED IN -->
                                 <div id="paneAccountLoggedIn" class="<?php echo $isLoggedIn ? '' : 'd-none'; ?>">
-                                    <div class="p-3.5 rounded-3 border bg-white mb-3 shadow-xs">
+                                    <div class="rounded-3 border bg-white mb-3 shadow-xs" style="padding: 15px;">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
                                             <div class="d-flex align-items-center gap-3">
                                                 <div style="width: 48px; height: 48px; border-radius: 50%; background: #EFF6FF; color: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">
@@ -1134,7 +1158,7 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                                                         <label for="pageLoginPassword" class="form-label fs-13 fw-bold text-slate-800 mb-0">
                                                             Password <span class="text-danger">*</span>
                                                         </label>
-                                                        <a href="https://my.cloudflox.com/password/reset" target="_blank" class="fs-12 text-primary text-decoration-none hover-underline">Forgot?</a>
+                                                        <a href="<?php echo $url; ?>forgot-password" class="fs-12 text-primary text-decoration-none hover-underline">Forgot?</a>
                                                     </div>
                                                     <div class="position-relative">
                                                         <i class="las la-lock cf-input-icon"></i>
@@ -1179,36 +1203,45 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                                     </div>
                                 </div>
 
-                                <!-- Payment Cards Grid (Card, PayHere, PayPal in USD) -->
+                                <!-- Payment Cards Grid (Card via PayHere, PayPal in USD) -->
                                 <div class="row g-3 mb-4">
-                                    <div class="col-12 col-md-4">
+                                    <div class="col-12 col-md-6">
                                         <label class="cf-pay-option-pill active w-100" onclick="pageSelectPay('card')">
                                             <input type="radio" name="paymentmethod" value="card" checked>
-                                            <i class="las la-credit-card fs-30 text-primary mb-1.5"></i>
-                                            <strong class="d-block fs-14">Card Payment</strong>
-                                            <small class="text-muted fs-11.5">Visa / Mastercard / Amex (USD)</small>
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <i class="las la-credit-card fs-28 text-primary"></i>
+                                                <span class="badge bg-primary-subtle text-primary rounded-pill fs-11 px-2.5 py-1 fw-bold">PayHere 3D-Secure</span>
+                                            </div>
+                                            <strong class="d-block fs-15 text-slate-900 mb-0.5">Credit / Debit Card</strong>
+                                            <small class="text-secondary fs-12 d-block mb-2">Visa • Mastercard • American Express</small>
+                                            <div class="d-flex align-items-center gap-1.5 pt-2 border-top border-slate-100 flex-wrap">
+                                                <span class="badge text-slate-700 border fs-10 px-2 py-0.5 fw-semibold" style="color: #3d3b3bff;">Visa</span>
+                                                <span class="badge text-slate-700 border fs-10 px-2 py-0.5 fw-semibold" style="color: #3d3b3bff;">Mastercard</span>
+                                                <span class="badge text-slate-700 border fs-10 px-2 py-0.5 fw-semibold" style="color: #3d3b3bff;">Amex</span>
+                                                <span class="text-secondary fs-11 ms-auto"><i class="las la-shield-alt text-emerald me-1"></i>via PayHere</span>
+                                            </div>
                                         </label>
                                     </div>
-                                    <div class="col-12 col-md-4">
-                                        <label class="cf-pay-option-pill w-100" onclick="pageSelectPay('payhere')">
-                                            <input type="radio" name="paymentmethod" value="payhere">
-                                            <i class="las la-money-bill-wave fs-30 text-emerald mb-1.5"></i>
-                                            <strong class="d-block fs-14">PayHere</strong>
-                                            <small class="text-muted fs-11.5">Cards &amp; Online Payment (USD)</small>
-                                        </label>
-                                    </div>
-                                    <div class="col-12 col-md-4">
+                                    <div class="col-12 col-md-6">
                                         <label class="cf-pay-option-pill w-100" onclick="pageSelectPay('paypal')">
                                             <input type="radio" name="paymentmethod" value="paypal">
-                                            <i class="lab la-paypal fs-30 text-info mb-1.5"></i>
-                                            <strong class="d-block fs-14">PayPal</strong>
-                                            <small class="text-muted fs-11.5">Instant Global Checkout (USD)</small>
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <i class="lab la-paypal fs-28 text-info"></i>
+                                                <span class="badge bg-info-subtle text-info rounded-pill fs-11 px-2.5 py-1 fw-bold">Global Checkout</span>
+                                            </div>
+                                            <strong class="d-block fs-15 text-slate-900 mb-0.5">PayPal</strong>
+                                            <small class="text-secondary fs-12 d-block mb-2">PayPal Balance &amp; Global Credit Cards</small>
+                                            <div class="d-flex align-items-center gap-1.5 pt-2 border-top border-slate-100 flex-wrap">
+                                                <span class="badge bg-light text-slate-700 border fs-10 px-2 py-0.5 fw-semibold" style="color: #3d3b3bff;">PayPal Balance</span>
+                                                <span class="badge bg-light text-slate-700 border fs-10 px-2 py-0.5 fw-semibold" style="color: #3d3b3bff;">International</span>
+                                                <span class="text-secondary fs-11 ms-auto"><i class="las la-lock text-info me-1"></i>Buyer Protection</span>
+                                            </div>
                                         </label>
                                     </div>
                                 </div>
 
                                 <!-- Final Itemized Order Review in Step 4 -->
-                                <div class="p-3.5 bg-light rounded-3 border mb-4">
+                                <div class="p-3.5 bg-light rounded-3 border mb-4" style="padding: 15px;">
                                     <span class="fs-12 fw-bold text-slate-700 text-uppercase letter-spacing-1 d-block mb-2">Order Breakdown:</span>
                                     <div class="d-flex justify-content-between py-1.5 border-bottom">
                                         <span class="text-secondary fs-13" id="finalPlanItemName">Hosting Plan:</span>
@@ -1258,12 +1291,17 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                             <div class="cf-sidebar-summary-card sticky-top" style="top: 80px;">
                                 <h5 class="cf-summary-title mb-3 pb-2 border-bottom">Order Summary</h5>
 
-                                <div class="cf-summary-line" id="sideHostingRow" style="display: none;">
-                                    <span class="text-secondary" id="sideHostingLabel">Hosting:</span>
+                                <div class="cf-summary-line d-none" id="sideHostingRow" style="display: none;">
+                                    <div class="d-flex align-items-center gap-1.5">
+                                        <span class="text-secondary" id="sideHostingLabel">Hosting:</span>
+                                        <button type="button" class="btn btn-link p-0 text-danger text-decoration-none fs-11" id="sideRemoveHostingBtn" onclick="pageSelectHostingPlan('none')" title="Remove hosting plan" style="line-height: 1;">
+                                            <i class="las la-times-circle"></i> <span class="fs-10">Remove</span>
+                                        </button>
+                                    </div>
                                     <strong class="text-slate-900" id="sideHostingFee">None ($0.00)</strong>
                                 </div>
 
-                                <div class="cf-summary-line" id="sideDomainRow" style="display: none;">
+                                <div class="cf-summary-line d-none" id="sideDomainRow" style="display: none;">
                                     <span class="text-secondary" id="sideDomainLabel">Domain:</span>
                                     <strong class="text-slate-900" id="sideDomainFee">$14.93</strong>
                                 </div>
@@ -1341,7 +1379,7 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                     <a href="#" target="_blank" class="btn btn-primary fw-bold py-2.5 px-4 rounded-pill shadow-sm fs-14" id="btnSuccessInvoice">
                         <i class="las la-file-invoice-dollar me-1"></i> View &amp; Pay Invoice
                     </a>
-                    <a href="https://my.cloudflox.com/clientarea.php" target="_blank" class="btn btn-outline-secondary fw-semibold py-2.5 px-4 rounded-pill fs-14">
+                    <a href="<?php echo $url; ?>clientarea" class="btn btn-outline-secondary fw-semibold py-2.5 px-4 rounded-pill fs-14">
                         <i class="las la-user me-1"></i> Client Portal
                     </a>
                 </div>
@@ -1407,7 +1445,7 @@ if ($hasDomainPreselected && empty($initialPrice)) {
         function initFromUrl() {
             const params = new URLSearchParams(window.location.search);
             const domainParam     = params.get('domain') || '';
-            const domainTypeParam = (params.get('domainType') || params.get('domain_type') || 'register').toLowerCase();
+            const domainTypeParam = (params.get('type') || params.get('domainType') || params.get('domain_type') || 'register').toLowerCase();
             const priceParam      = params.get('price') || params.get('domain_price') || '';
             const pidParam        = params.get('pid') || '';
             const cycleParam      = params.get('cycle') || params.get('billingcycle') || 'monthly';
@@ -1419,13 +1457,11 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             // 2. Hosting Plan
             if (pidParam && pidParam !== 'none' && PRODUCTS[pidParam]) {
                 state.pid = pidParam;
-            } else if (!domainParam && !pidParam) {
-                state.pid = '201'; // Default recommended when purchasing hosting
             } else if (pidParam === 'none' || domainParam) {
-                // If coming with domain search: default to domain-only unless pid specifically set
-                state.pid = (pidParam && PRODUCTS[pidParam]) ? pidParam : 'none';
+                // If coming with domain search or explicitly 'none': default to domain-only
+                state.pid = (pidParam && pidParam !== 'none' && PRODUCTS[pidParam]) ? pidParam : 'none';
             } else {
-                state.pid = '201';
+                state.pid = 'none';
             }
 
             // 3. Billing Cycle
@@ -1472,7 +1508,7 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             document.getElementById('pageAccountAction').value = state.accountAction;
 
             const isYearly = state.billingcycle === 'annually';
-            const hasHosting = (state.pid !== 'none' && PRODUCTS[state.pid]);
+            const hasHosting = Boolean(state.pid && state.pid !== 'none' && PRODUCTS[state.pid]);
             const plan = hasHosting ? PRODUCTS[state.pid] : null;
 
             // 1. STEP 1: Domain Connection Rendering
@@ -1537,7 +1573,11 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                 ['none', '1', '2', '3'].forEach(k => {
                     const card = document.getElementById('hostingAddon' + (k === 'none' ? 'None' : k));
                     if (card) {
-                        const isMatch = (state.pid === k) || (k === '2' && state.pid === '201') || (k === '1' && state.pid === '101') || (k === '3' && state.pid === '202');
+                        const isMatch = (k === 'none' && (!state.pid || state.pid === 'none')) ||
+                                        (state.pid === k) ||
+                                        (k === '1' && (state.pid === '1' || state.pid === '13' || state.pid === '101')) ||
+                                        (k === '2' && (state.pid === '2' || state.pid === '14' || state.pid === '16' || state.pid === '201')) || 
+                                        (k === '3' && (state.pid === '3' || state.pid === '15' || state.pid === '17' || state.pid === '202'));
                         card.classList.toggle('active', isMatch);
                     }
                 });
@@ -1594,11 +1634,17 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                 }
             }
 
-            // Step 2 Hosting Showcase Card
+            // Step 2 Hosting Showcase Card & Domain Only Notice
             const step2HostingCard = document.getElementById('step2HostingShowcase');
+            const step2NoHostingCard = document.getElementById('step2NoHostingCard');
             if (step2HostingCard) {
                 if (hasHosting) {
                     step2HostingCard.style.display = 'block';
+                    step2HostingCard.classList.remove('d-none');
+                    if (step2NoHostingCard) {
+                        step2NoHostingCard.style.display = 'none';
+                        step2NoHostingCard.classList.add('d-none');
+                    }
                     document.getElementById('step2PlanName').textContent = plan.name;
                     document.getElementById('step2PlanBadge').textContent = plan.category.toUpperCase();
                     document.getElementById('step2PlanSpecs').textContent = plan.specs;
@@ -1618,8 +1664,30 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                             btn.classList.toggle('btn-outline-secondary', pKey !== state.pid);
                         }
                     });
+                    const btnNone = document.getElementById('switchPlanBtn_none');
+                    if (btnNone) {
+                        btnNone.classList.remove('btn-danger');
+                        btnNone.classList.add('btn-outline-danger');
+                    }
                 } else {
                     step2HostingCard.style.display = 'none';
+                    step2HostingCard.classList.add('d-none');
+                    if (step2NoHostingCard) {
+                        step2NoHostingCard.style.display = 'block';
+                        step2NoHostingCard.classList.remove('d-none');
+                    }
+                    Object.keys(PRODUCTS).forEach(pKey => {
+                        const btn = document.getElementById('switchPlanBtn_' + pKey);
+                        if (btn) {
+                            btn.classList.remove('btn-primary');
+                            btn.classList.add('btn-outline-secondary');
+                        }
+                    });
+                    const btnNone = document.getElementById('switchPlanBtn_none');
+                    if (btnNone) {
+                        btnNone.classList.add('btn-danger');
+                        btnNone.classList.remove('btn-outline-danger');
+                    }
                 }
             }
 
@@ -1651,16 +1719,24 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             const sideTotalDue     = document.getElementById('sideTotalDue');
 
             if (sideHostingRow) {
-                sideHostingRow.style.display = hasHosting ? 'flex' : 'none';
                 if (hasHosting) {
+                    sideHostingRow.style.setProperty('display', 'flex', 'important');
+                    sideHostingRow.classList.remove('d-none');
                     sideHostingLabel.textContent = 'Hosting (' + plan.name + '):';
                     sideHostingFee.textContent = '$' + hostingFee.toFixed(2) + (isYearly ? '/yr' : '/mo');
+                } else {
+                    sideHostingRow.style.setProperty('display', 'none', 'important');
+                    sideHostingRow.classList.add('d-none');
+                    sideHostingLabel.textContent = 'Hosting:';
+                    sideHostingFee.textContent = 'None ($0.00)';
                 }
             }
 
             if (sideDomainRow) {
-                sideDomainRow.style.display = state.domain ? 'flex' : 'none';
-                if (state.domain) {
+                const hasDomain = Boolean(state.domain);
+                if (hasDomain) {
+                    sideDomainRow.style.setProperty('display', 'flex', 'important');
+                    sideDomainRow.classList.remove('d-none');
                     let sLabel = 'Domain:';
                     if (state.domainType === 'owndomain') {
                         sLabel = 'Domain (Existing):';
@@ -1671,6 +1747,9 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                     }
                     sideDomainLabel.textContent = sLabel;
                     sideDomainFee.textContent = domainTotal > 0 ? ('$' + domainTotal.toFixed(2)) : 'FREE ($0.00)';
+                } else {
+                    sideDomainRow.style.setProperty('display', 'none', 'important');
+                    sideDomainRow.classList.add('d-none');
                 }
             }
 
@@ -1859,6 +1938,13 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             state.domainType = 'register';
             state.domainPrice = price;
 
+            // If user did not arrive with an explicit hosting plan PID in URL, ensure default is domain-only
+            const params = new URLSearchParams(window.location.search);
+            const pidParam = params.get('pid');
+            if (!pidParam || pidParam === 'none') {
+                state.pid = 'none';
+            }
+
             renderState();
 
             if (window.cfToast) {
@@ -1877,6 +1963,13 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             state.domain = domain;
             state.domainType = 'register';
             state.domainPrice = price;
+
+            // If user did not arrive with an explicit hosting plan PID in URL, ensure default is domain-only
+            const params = new URLSearchParams(window.location.search);
+            const pidParam = params.get('pid');
+            if (!pidParam || pidParam === 'none') {
+                state.pid = 'none';
+            }
 
             renderState();
 

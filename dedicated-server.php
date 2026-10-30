@@ -125,52 +125,35 @@
                 <div class="col-12 col-lg-7">
                     <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-crimson-subtle text-crimson fw-bold fs-13 mb-3 border border-crimson-subtle">
                         <span class="cf-pulse-dot-crimson"></span>
-                        <span>100% SINGLE-TENANT BARE METAL HARDWARE</span>
+                        <span>100% Dedicated Bare Metal</span>
                     </div>
 
                     <h1 class="cf-dedicated-hero-title fw-extrabold text-slate-900 tracking-tight mb-3">
-                        Enterprise-Grade Bare Metal <br class="d-none d-sm-inline">
+                        Enterprise Bare Metal <br class="d-none d-sm-inline">
                         <span class="text-gradient-dedicated">Dedicated Servers</span>
                     </h1>
 
                     <p class="cf-dedicated-hero-lead text-slate-600 mb-4 lh-base">
-                        Experience uncompromised physical computing power with CloudFlox bare metal dedicated servers. Featuring the latest <strong>Intel Xeon Scalable</strong> &amp; <strong>AMD Ryzen High-Clock</strong> processors, enterprise <strong>Gen4 NVMe storage arrays</strong>, <strong>1Gbps unmetered bandwidth</strong>, and complete out-of-band <strong>IPMI / iDRAC root control</strong> starting at <strong>$79.00/month</strong>.
+                        High-performance physical servers with 100% dedicated hardware, enterprise Gen4 NVMe storage, and complete IPMI root control starting at $79/mo.
                     </p>
 
                     <!-- Trust Chips -->
-                    <div class="d-flex flex-wrap gap-2 mb-4 pb-2">
-                        <span class="cf-feature-chip">
-                            <i class="las la-server text-danger"></i> 100% Single-Tenant Bare Metal
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-microchip text-primary"></i> Intel Xeon &amp; AMD Ryzen OC
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-bolt text-warning"></i> Enterprise NVMe RAID Arrays
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-network-wired text-info"></i> 1Gbps Unmetered Backbone
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-terminal text-success"></i> Out-of-band IPMI / KVM Root
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-shield-alt text-danger"></i> Multi-Tbps DDoS Scrubbing
-                        </span>
-                        <!-- <span class="cf-feature-chip">
-                            <i class="las la-check-circle text-success"></i> 99.99% Hardware SLA
-                        </span> -->
+                    <div class="d-flex flex-wrap gap-2 mb-4 pb-1">
+                        <span class="cf-feature-chip"><i class="las la-server text-danger"></i> Dedicated Hardware</span>
+                        <span class="cf-feature-chip"><i class="las la-microchip text-primary"></i> Intel &amp; AMD Processors</span>
+                        <span class="cf-feature-chip"><i class="las la-bolt text-warning"></i> Gen4 NVMe Storage</span>
+                        <span class="cf-feature-chip"><i class="las la-terminal text-success"></i> Full IPMI Root Control</span>
                     </div>
 
                     <!-- Hero Action Buttons -->
                     <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-3 cf-hero-btn-group">
                         <a href="#serverPlans" class="cf-btn-dedicated-glow text-center">
-                            <span>Explore Bare Metal Servers</span>
+                            <span>Explore Servers</span>
                             <i class="las la-arrow-down ms-1"></i>
                         </a>
                         <a href="#serverComparison" class="cf-btn-secondary-light text-center">
                             <i class="las la-sliders-h me-1"></i>
-                            <span>Compare Hardware Specs</span>
+                            <span>Compare Specs</span>
                         </a>
                     </div>
                 </div>

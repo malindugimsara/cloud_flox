@@ -16,7 +16,7 @@
             if (form.getAttribute('data-checker-bound') === 'true') return;
             form.setAttribute('data-checker-bound', 'true');
 
-            const input = form.querySelector('input[name="query"], #domainInput');
+            const input = form.querySelector('input[name="domain"], input[name="query"], #domainInput');
             const submitBtn = form.querySelector('button[type="submit"], #domainSearchBtn');
 
             // Find or create results container directly after form

@@ -66,7 +66,7 @@
           },
           "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://my.cloudflox.com/cart.php?a=add&domain=register&query={search_term_string}",
+            "target": "<?php echo $url; ?>checkout?domain={search_term_string}&domainType=register",
             "query-input": "required name=search_term_string"
           }
         }
@@ -81,6 +81,9 @@
 
     <!-- =========== CSS Area =========== -->
     <?php include 'include/css.inc.php'; ?>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" as="style">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"></noscript>
     <!-- =========== CSS Area =========== -->
 </head>
 
@@ -266,10 +269,11 @@
                         </p>
 
                         <!-- Large Highlighted Search Form -->
-                        <form action="https://my.cloudflox.com/cart.php?a=add&domain=register" method="post"
+                        <form action="<?php echo $url; ?>checkout" method="get"
                             id="domainForm" class="domain-mega-search-box" aria-label="Domain Name Search">
+                            <input type="hidden" name="domainType" value="register">
                             <i class="las la-search domain-search-icon" aria-hidden="true"></i>
-                            <input type="text" name="query" id="domainInput"
+                            <input type="text" name="domain" id="domainInput"
                                 placeholder="Type your desired domain name (e.g. mybrand.com)..." required
                                 autocomplete="off" aria-label="Domain name to register">
                             <button type="submit" id="domainSearchBtn" class="domain-mega-btn"
@@ -480,7 +484,7 @@
                                 data-yearly="Billed $28.80 yearly (Save 20%)">Billed $3.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly" data-pid="101"
+                        <a href="<?php echo $url; ?>checkout?pid=13&cycle=monthly" data-pid="13"
                             class="plan-cta-btn btn-plan-outline">
                             Choose Mini Plan
                         </a>
@@ -528,7 +532,7 @@
                                 data-yearly="Billed $43.20 yearly (Save 20%)">Billed $4.50 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly" data-pid="102"
+                        <a href="<?php echo $url; ?>checkout?pid=14&cycle=monthly" data-pid="14"
                             class="plan-cta-btn btn-plan-featured">
                             <span>Choose Basic Plan</span>
                             <i class="las la-arrow-right ms-2"></i>
@@ -574,7 +578,7 @@
                                 data-yearly="Billed $57.60 yearly (Save 20%)">Billed $6.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly" data-pid="103"
+                        <a href="<?php echo $url; ?>checkout?pid=15&cycle=monthly" data-pid="15"
                             class="plan-cta-btn btn-plan-outline">
                             Choose Plus Plan
                         </a>
@@ -625,7 +629,7 @@
                                 data-yearly="Billed $72.00 yearly (Save 20%)">Billed $7.50 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" data-pid="201"
+                        <a href="<?php echo $url; ?>checkout?pid=16&cycle=monthly" data-pid="16"
                             class="plan-cta-btn btn-plan-outline">
                             Choose Starter
                         </a>
@@ -673,7 +677,7 @@
                                 data-yearly="Billed $144.00 yearly (Save 20%)">Billed $15.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" data-pid="202"
+                        <a href="<?php echo $url; ?>checkout?pid=17&cycle=monthly" data-pid="17"
                             class="plan-cta-btn btn-plan-featured">
                             <span>Choose Business</span>
                             <i class="las la-arrow-right ms-2"></i>
@@ -719,7 +723,7 @@
                                 data-yearly="Billed $259.20 yearly (Save 20%)">Billed $27.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" data-pid="203"
+                        <a href="<?php echo $url; ?>checkout?pid=18&cycle=monthly" data-pid="18"
                             class="plan-cta-btn btn-plan-outline">
                             Choose Professional
                         </a>
@@ -764,7 +768,7 @@
                                 data-yearly="Billed $460.80 yearly (Save 20%)">Billed $48.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" data-pid="204"
+                        <a href="<?php echo $url; ?>checkout?pid=19&cycle=monthly" data-pid="19"
                             class="plan-cta-btn btn-plan-outline">
                             Choose Enterprise
                         </a>
@@ -815,7 +819,7 @@
                                 data-yearly="Billed $720.00 yearly (Save 20%)">Billed $75.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly" data-pid="301"
+                        <a href="<?php echo $url; ?>checkout?pid=22&cycle=monthly" data-pid="22"
                             class="plan-cta-btn btn-plan-outline">
                             Choose Starter
                         </a>
@@ -863,7 +867,7 @@
                                 data-yearly="Billed $1,152.00 yearly (Save 20%)">Billed $120.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly" data-pid="302"
+                        <a href="<?php echo $url; ?>checkout?pid=21&cycle=monthly" data-pid="21"
                             class="plan-cta-btn btn-plan-featured">
                             <span>Choose Business</span>
                             <i class="las la-arrow-right ms-2"></i>
@@ -909,7 +913,7 @@
                                 data-yearly="Billed $2,016.00 yearly (Save 20%)">Billed $210.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly" data-pid="303"
+                        <a href="<?php echo $url; ?>checkout?pid=23&cycle=monthly" data-pid="23"
                             class="plan-cta-btn btn-plan-outline">
                             Choose Pro
                         </a>
@@ -954,7 +958,7 @@
                                 data-yearly="Billed $3,360.00 yearly (Save 20%)">Billed $350.00 monthly</div>
                         </div>
 
-                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly" data-pid="304"
+                        <a href="<?php echo $url; ?>checkout?pid=24&cycle=monthly" data-pid="24"
                             class="plan-cta-btn btn-plan-outline">
                             Choose Enterprise
                         </a>
@@ -1369,28 +1373,28 @@
                                         </div>
                                     </th>
                                     <td class="text-center p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" data-pid="201"
+                                        <a href="<?php echo $url; ?>checkout?pid=16&cycle=monthly" data-pid="16"
                                             class="cf-table-cta-btn btn-cta-subtle">
                                             <span>Buy Starter</span>
                                             <i class="las la-arrow-right ms-1"></i>
                                         </a>
                                     </td>
                                     <td class="text-center popular-col-business p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" data-pid="202"
+                                        <a href="<?php echo $url; ?>checkout?pid=17&cycle=monthly" data-pid="17"
                                             class="cf-table-cta-btn btn-cta-featured">
                                             <span>Buy Business</span>
                                             <i class="las la-arrow-right ms-1"></i>
                                         </a>
                                     </td>
                                     <td class="text-center p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" data-pid="203"
+                                        <a href="<?php echo $url; ?>checkout?pid=18&cycle=monthly" data-pid="18"
                                             class="cf-table-cta-btn btn-cta-subtle">
                                             <span>Buy Professional</span>
                                             <i class="las la-arrow-right ms-1"></i>
                                         </a>
                                     </td>
                                     <td class="text-center p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" data-pid="204"
+                                        <a href="<?php echo $url; ?>checkout?pid=19&cycle=monthly" data-pid="19"
                                             class="cf-table-cta-btn btn-cta-primary">
                                             <span>Buy Enterprise</span>
                                             <i class="las la-arrow-right ms-1"></i>
@@ -1576,21 +1580,21 @@
                                         </div>
                                     </th>
                                     <td class="text-center p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly" data-pid="101"
+                                        <a href="<?php echo $url; ?>checkout?pid=13&cycle=monthly" data-pid="13"
                                             class="cf-table-cta-btn btn-cta-subtle">
                                             <span>Buy Mini</span>
                                             <i class="las la-arrow-right ms-1"></i>
                                         </a>
                                     </td>
                                     <td class="text-center popular-col-budget p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly" data-pid="102"
+                                        <a href="<?php echo $url; ?>checkout?pid=14&cycle=monthly" data-pid="14"
                                             class="cf-table-cta-btn btn-cta-featured">
                                             <span>Buy Basic</span>
                                             <i class="las la-arrow-right ms-1"></i>
                                         </a>
                                     </td>
                                     <td class="text-center p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly" data-pid="103"
+                                        <a href="<?php echo $url; ?>checkout?pid=15&cycle=monthly" data-pid="15"
                                             class="cf-table-cta-btn btn-cta-subtle">
                                             <span>Buy Plus</span>
                                             <i class="las la-arrow-right ms-1"></i>
@@ -1782,28 +1786,28 @@
                                         </div>
                                     </th>
                                     <td class="text-center p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly" data-pid="301"
+                                        <a href="<?php echo $url; ?>checkout?pid=22&cycle=monthly" data-pid="22"
                                             class="cf-table-cta-btn btn-cta-subtle">
                                             <span>Buy Starter</span>
                                             <i class="las la-arrow-right ms-1"></i>
                                         </a>
                                     </td>
                                     <td class="text-center popular-col-premium p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly" data-pid="302"
+                                        <a href="<?php echo $url; ?>checkout?pid=21&cycle=monthly" data-pid="21"
                                             class="cf-table-cta-btn btn-cta-featured">
                                             <span>Buy Business</span>
                                             <i class="las la-arrow-right ms-1"></i>
                                         </a>
                                     </td>
                                     <td class="text-center p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly" data-pid="303"
+                                        <a href="<?php echo $url; ?>checkout?pid=23&cycle=monthly" data-pid="23"
                                             class="cf-table-cta-btn btn-cta-subtle">
                                             <span>Buy Pro</span>
                                             <i class="las la-arrow-right ms-1"></i>
                                         </a>
                                     </td>
                                     <td class="text-center p-3">
-                                        <a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly" data-pid="304"
+                                        <a href="<?php echo $url; ?>checkout?pid=24&cycle=monthly" data-pid="24"
                                             class="cf-table-cta-btn btn-cta-primary">
                                             <span>Buy Enterprise</span>
                                             <i class="las la-arrow-right ms-1"></i>
@@ -2016,17 +2020,17 @@
                                             <small class="text-muted fs-11">Instant Setup</small>
                                         </div>
                                     </th>
-                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=101&billingcycle=monthly" data-pid="101" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Mini</a></td>
-                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=102&billingcycle=monthly" data-pid="102" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Basic</a></td>
-                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=103&billingcycle=monthly" data-pid="103" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Plus</a></td>
-                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" data-pid="201" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Starter</a></td>
-                                    <td class="text-center popular-col-business p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" data-pid="202" class="cf-table-cta-btn btn-cta-featured py-1 px-2 fs-12 text-nowrap">Buy Business</a></td>
-                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" data-pid="203" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Pro</a></td>
-                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" data-pid="204" class="cf-table-cta-btn btn-cta-primary py-1 px-2 fs-12 text-nowrap">Buy Ent</a></td>
-                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=301&billingcycle=monthly" data-pid="301" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Starter</a></td>
-                                    <td class="text-center popular-col-premium p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=302&billingcycle=monthly" data-pid="302" class="cf-table-cta-btn btn-cta-featured py-1 px-2 fs-12 text-nowrap">Buy Business</a></td>
-                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=303&billingcycle=monthly" data-pid="303" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Pro</a></td>
-                                    <td class="text-center p-2"><a href="https://my.cloudflox.com/cart.php?a=add&pid=304&billingcycle=monthly" data-pid="304" class="cf-table-cta-btn btn-cta-primary py-1 px-2 fs-12 text-nowrap">Buy Ent</a></td>
+                                    <td class="text-center p-2"><a href="<?php echo $url; ?>checkout?pid=13&cycle=monthly" data-pid="13" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Mini</a></td>
+                                    <td class="text-center p-2"><a href="<?php echo $url; ?>checkout?pid=14&cycle=monthly" data-pid="14" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Basic</a></td>
+                                    <td class="text-center p-2"><a href="<?php echo $url; ?>checkout?pid=15&cycle=monthly" data-pid="15" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Plus</a></td>
+                                    <td class="text-center p-2"><a href="<?php echo $url; ?>checkout?pid=16&cycle=monthly" data-pid="16" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Starter</a></td>
+                                    <td class="text-center popular-col-business p-2"><a href="<?php echo $url; ?>checkout?pid=17&cycle=monthly" data-pid="17" class="cf-table-cta-btn btn-cta-featured py-1 px-2 fs-12 text-nowrap">Buy Business</a></td>
+                                    <td class="text-center p-2"><a href="<?php echo $url; ?>checkout?pid=18&cycle=monthly" data-pid="18" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Pro</a></td>
+                                    <td class="text-center p-2"><a href="<?php echo $url; ?>checkout?pid=19&cycle=monthly" data-pid="19" class="cf-table-cta-btn btn-cta-primary py-1 px-2 fs-12 text-nowrap">Buy Ent</a></td>
+                                    <td class="text-center p-2"><a href="<?php echo $url; ?>checkout?pid=22&cycle=monthly" data-pid="22" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Starter</a></td>
+                                    <td class="text-center popular-col-premium p-2"><a href="<?php echo $url; ?>checkout?pid=21&cycle=monthly" data-pid="21" class="cf-table-cta-btn btn-cta-featured py-1 px-2 fs-12 text-nowrap">Buy Business</a></td>
+                                    <td class="text-center p-2"><a href="<?php echo $url; ?>checkout?pid=23&cycle=monthly" data-pid="23" class="cf-table-cta-btn btn-cta-subtle py-1 px-2 fs-12 text-nowrap">Buy Pro</a></td>
+                                    <td class="text-center p-2"><a href="<?php echo $url; ?>checkout?pid=24&cycle=monthly" data-pid="24" class="cf-table-cta-btn btn-cta-primary py-1 px-2 fs-12 text-nowrap">Buy Ent</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -3970,6 +3974,11 @@
                             <!-- Anti-spam Honeypot (Hidden) -->
                             <input type="text" name="cf_hp_field" id="cq_hp" style="display:none !important; position:absolute; left:-9999px;" tabindex="-1" autocomplete="new-password" aria-hidden="true">
 
+                            <!-- Cloudflare Turnstile Verification -->
+                            <div class="cq-form-group d-flex justify-content-center my-3">
+                                <div class="cf-turnstile" data-sitekey="<?php echo htmlspecialchars(defined('CF_TURNSTILE_SITE_KEY') ? CF_TURNSTILE_SITE_KEY : '0x4AAAAAAFsPGuQlAMYqY37j'); ?>" data-theme="dark"></div>
+                            </div>
+
                             <!-- Submit Buttons -->
                             <button type="submit" id="cq_submit_btn" class="btn-cq-submit">
                                 <i class="las la-paper-plane"></i>
@@ -4441,7 +4450,9 @@
     <!-- =========== JS Area =========== -->
 
     <!-- CloudFlox Homepage Interactive Scripts (Pricing, Comparison, Matchmaker, Quotes) -->
-    <script src="assets/js/cloudflox-home.js?v=8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="assets/js/cloudflox-home.js?v=9"></script>
 
 </body>
 

@@ -130,49 +130,35 @@
                 <div class="col-12 col-lg-7">
                     <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-indigo-subtle text-indigo fw-bold fs-13 mb-3 border border-indigo-subtle">
                         <span class="cf-pulse-dot-indigo"></span>
-                        <span>BUSINESS-CLASS NVME CPANEL HOSTING</span>
+                        <span>Business-Class Cloud Hosting</span>
                     </div>
 
                     <h1 class="cf-business-hero-title fw-extrabold text-slate-900 tracking-tight mb-3">
-                        High-Performance, Enterprise-Ready <br class="d-none d-sm-inline">
+                        High-Performance <br class="d-none d-sm-inline">
                         <span class="text-gradient-business">Business Web Hosting</span>
                     </h1>
 
                     <p class="cf-business-hero-lead text-slate-600 mb-4 lh-base">
-                        Accelerate your e-commerce store, corporate portal, or client web applications with blazing-fast <strong>LiteSpeed Enterprise</strong> and pure <strong>NVMe Gen4 storage</strong>. Enjoy guaranteed vCPU &amp; RAM allocations, AI-driven Imunify360 security, and 24/7 priority support starting at <strong>$7.50/month</strong>.
+                        Optimized for business websites and stores with LiteSpeed Enterprise, pure NVMe storage, and Imunify360 security.
                     </p>
 
                     <!-- Trust Chips -->
-                    <div class="d-flex flex-wrap gap-2 mb-4 pb-2">
-                        <span class="cf-feature-chip">
-                            <i class="las la-tachometer-alt text-cyan"></i> LiteSpeed Enterprise + LSCache
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-bolt text-warning"></i> Pure NVMe Gen4 Storage
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-shield-alt text-indigo"></i> Imunify360 AI Defense
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-microchip text-primary"></i> CloudLinux Isolated LVE
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-history text-info"></i> Daily JetBackup Recovery
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-check-circle text-success"></i> 99.9% Uptime Guarantee
-                        </span>
+                    <div class="d-flex flex-wrap gap-2 mb-4 pb-1">
+                        <span class="cf-feature-chip"><i class="las la-tachometer-alt text-cyan"></i> LiteSpeed Enterprise</span>
+                        <span class="cf-feature-chip"><i class="las la-bolt text-warning"></i> Pure NVMe Gen4</span>
+                        <span class="cf-feature-chip"><i class="las la-shield-alt text-indigo"></i> Imunify360 Security</span>
+                        <span class="cf-feature-chip"><i class="las la-history text-info"></i> Daily JetBackups</span>
                     </div>
 
                     <!-- Hero Action Buttons -->
                     <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-3 cf-hero-btn-group">
                         <a href="#businessPlans" class="cf-btn-business-glow text-center">
-                            <span>Explore Business Plans</span>
+                            <span>Explore Plans</span>
                             <i class="las la-arrow-down ms-1"></i>
                         </a>
                         <a href="#planComparison" class="cf-btn-secondary-light text-center">
                             <i class="las la-sliders-h me-1"></i>
-                            <span>Compare Specifications</span>
+                            <span>Compare Specs</span>
                         </a>
                     </div>
                 </div>
@@ -300,7 +286,7 @@
 
                         <!-- CTA Button -->
                         <div class="plan-cta-btn">
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" class="btn-plan-outline" data-pid="201">
+                            <a href="<?php echo $url; ?>checkout?pid=16&cycle=monthly" class="btn-plan-outline" data-pid="16">
                                 <span>Choose Starter</span>
                                 <i class="las la-arrow-right ms-2"></i>
                             </a>
@@ -401,7 +387,7 @@
 
                         <!-- CTA Button -->
                         <div class="plan-cta-btn">
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" class="btn-plan-business-featured" data-pid="202">
+                            <a href="<?php echo $url; ?>checkout?pid=17&cycle=monthly" class="btn-plan-business-featured" data-pid="17">
                                 <span>Choose Business</span>
                                 <i class="las la-arrow-right ms-2"></i>
                             </a>
@@ -497,7 +483,7 @@
 
                         <!-- CTA Button -->
                         <div class="plan-cta-btn">
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" class="btn-plan-outline" data-pid="203">
+                            <a href="<?php echo $url; ?>checkout?pid=18&cycle=monthly" class="btn-plan-outline" data-pid="18">
                                 <span>Choose Professional</span>
                                 <i class="las la-arrow-right ms-2"></i>
                             </a>
@@ -593,7 +579,7 @@
 
                         <!-- CTA Button -->
                         <div class="plan-cta-btn">
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" class="btn-plan-outline" data-pid="204">
+                            <a href="<?php echo $url; ?>checkout?pid=19&cycle=monthly" class="btn-plan-outline" data-pid="19">
                                 <span>Choose Enterprise</span>
                                 <i class="las la-arrow-right ms-2"></i>
                             </a>
@@ -937,22 +923,22 @@
                             <tr>
                                 <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Order Action</th>
                                 <td class="text-center p-3">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=201&billingcycle=monthly" data-pid="201" class="btn btn-outline-indigo btn-sm px-3 fw-bold rounded-pill">
+                                    <a href="<?php echo $url; ?>checkout?pid=16&cycle=monthly" data-pid="16" class="btn btn-outline-indigo btn-sm px-3 fw-bold rounded-pill">
                                         Choose Starter
                                     </a>
                                 </td>
                                 <td class="text-center popular-col-business p-3">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=202&billingcycle=monthly" data-pid="202" class="btn btn-plan-business-featured btn-sm px-4 fw-bold rounded-pill text-white">
+                                    <a href="<?php echo $url; ?>checkout?pid=17&cycle=monthly" data-pid="17" class="btn btn-plan-business-featured btn-sm px-4 fw-bold rounded-pill text-white">
                                         Choose Business
                                     </a>
                                 </td>
                                 <td class="text-center p-3">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=203&billingcycle=monthly" data-pid="203" class="btn btn-outline-indigo btn-sm px-3 fw-bold rounded-pill">
+                                    <a href="<?php echo $url; ?>checkout?pid=18&cycle=monthly" data-pid="18" class="btn btn-outline-indigo btn-sm px-3 fw-bold rounded-pill">
                                         Choose Pro
                                     </a>
                                 </td>
                                 <td class="text-center p-3">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=204&billingcycle=monthly" data-pid="204" class="btn btn-outline-indigo btn-sm px-3 fw-bold rounded-pill">
+                                    <a href="<?php echo $url; ?>checkout?pid=19&cycle=monthly" data-pid="19" class="btn btn-outline-indigo btn-sm px-3 fw-bold rounded-pill">
                                         Choose Enterprise
                                     </a>
                                 </td>
@@ -1254,7 +1240,8 @@
             ctaButtons.forEach(btn => {
                 const pid = btn.getAttribute('data-pid');
                 if (pid) {
-                    btn.href = `https://my.cloudflox.com/cart.php?a=add&pid=${pid}&billingcycle=${cycleParam}`;
+                    const siteUrl = '<?php echo $url; ?>';
+                    btn.href = `${siteUrl}checkout?pid=${pid}&cycle=${cycleParam}`;
                 }
             });
         }

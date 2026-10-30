@@ -130,46 +130,35 @@
                 <div class="col-12 col-lg-7">
                     <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-emerald-subtle text-emerald fw-bold fs-13 mb-3 border border-emerald-subtle">
                         <span class="cf-pulse-dot-green"></span>
-                        <span>ENTRY-LEVEL NVME CPANEL HOSTING</span>
+                        <span>Affordable NVMe Hosting</span>
                     </div>
 
                     <h1 class="cf-budget-hero-title fw-extrabold text-slate-900 tracking-tight mb-3">
-                        Affordable, High-Speed <br class="d-none d-sm-inline">
+                        High-Speed, Affordable <br class="d-none d-sm-inline">
                         <span class="text-gradient-budget-green">Budget Web Hosting</span>
                     </h1>
 
                     <p class="cf-budget-hero-lead text-slate-600 mb-4 lh-base">
-                        Launch your personal blog, portfolio, or starter website on ultra-fast <strong>NVMe Gen4 storage</strong> powered by <strong>cPanel</strong>. Get guaranteed resources, free AutoSSL certificates, and standard ticket support starting at just <strong>$3.00/month</strong>.
+                        Fast, reliable cPanel hosting with pure NVMe storage, free SSL certificates, and 99.9% uptime starting at $3/mo.
                     </p>
 
                     <!-- Trust Chips -->
-                    <div class="d-flex flex-wrap gap-2 mb-4 pb-2">
-                        <span class="cf-feature-chip">
-                            <i class="las la-bolt text-emerald"></i> Pure NVMe Gen4 Storage
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-shield-alt text-emerald"></i> CloudLinux CageFS Isolation
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-lock text-emerald"></i> Free Automated SSL
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-headset text-emerald"></i> Standard Ticket Support
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-check-circle text-emerald"></i> 99.9% Uptime SLA
-                        </span>
+                    <div class="d-flex flex-wrap gap-2 mb-4 pb-1">
+                        <span class="cf-feature-chip"><i class="las la-bolt text-emerald"></i> NVMe Gen4 Storage</span>
+                        <span class="cf-feature-chip"><i class="las la-shield-alt text-emerald"></i> cPanel &amp; CageFS</span>
+                        <span class="cf-feature-chip"><i class="las la-lock text-emerald"></i> Free AutoSSL</span>
+                        <span class="cf-feature-chip"><i class="las la-check-circle text-emerald"></i> 99.9% Uptime SLA</span>
                     </div>
 
                     <!-- Hero Action Buttons -->
                     <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-3 cf-hero-btn-group">
                         <a href="#budgetPlans" class="cf-btn-budget-glow text-center">
-                            <span>Explore Budget Plans</span>
+                            <span>Explore Plans</span>
                             <i class="las la-arrow-down ms-1"></i>
                         </a>
                         <a href="#planComparison" class="cf-btn-secondary-light text-center">
                             <i class="las la-sliders-h me-1"></i>
-                            <span>Compare Specifications</span>
+                            <span>Compare Specs</span>
                         </a>
                     </div>
                 </div>
@@ -297,7 +286,7 @@
 
                         <!-- CTA Button -->
                         <div class="plan-cta-btn">
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=1&carttpl=lagom2" class="btn-plan-outline">
+                            <a href="<?php echo $url; ?>checkout?pid=13&cycle=monthly" data-pid="13" class="btn-plan-outline">
                                 <span>Get Mini Plan</span>
                                 <i class="las la-arrow-right ms-2"></i>
                             </a>
@@ -402,7 +391,7 @@
 
                         <!-- CTA Button -->
                         <div class="plan-cta-btn">
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=2&carttpl=lagom2" class="btn-plan-budget-featured">
+                            <a href="<?php echo $url; ?>checkout?pid=14&cycle=monthly" data-pid="14" class="btn-plan-budget-featured">
                                 <span>Get Basic Plan</span>
                                 <i class="las la-arrow-right ms-2"></i>
                             </a>
@@ -502,7 +491,7 @@
 
                         <!-- CTA Button -->
                         <div class="plan-cta-btn">
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=3&carttpl=lagom2" class="btn-plan-outline">
+                            <a href="<?php echo $url; ?>checkout?pid=15&cycle=monthly" data-pid="15" class="btn-plan-outline">
                                 <span>Get Plus Plan</span>
                                 <i class="las la-arrow-right ms-2"></i>
                             </a>
@@ -828,17 +817,17 @@
                             <tr>
                                 <th scope="row" class="cf-sticky-feature-cell fw-semibold text-slate-800">Order Action</th>
                                 <td class="text-center p-3">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=1&carttpl=lagom2" class="btn btn-outline-emerald btn-sm px-3 fw-bold rounded-pill">
+                                    <a href="<?php echo $url; ?>checkout?pid=13&cycle=monthly" data-pid="13" class="btn btn-outline-emerald btn-sm px-3 fw-bold rounded-pill">
                                         Choose Mini
                                     </a>
                                 </td>
                                 <td class="text-center popular-col-budget p-3">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=2&carttpl=lagom2" class="btn btn-plan-budget-featured btn-sm px-4 fw-bold rounded-pill text-white">
+                                    <a href="<?php echo $url; ?>checkout?pid=14&cycle=monthly" data-pid="14" class="btn btn-plan-budget-featured btn-sm px-4 fw-bold rounded-pill text-white">
                                         Choose Basic
                                     </a>
                                 </td>
                                 <td class="text-center p-3">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=3&carttpl=lagom2" class="btn btn-outline-emerald btn-sm px-3 fw-bold rounded-pill">
+                                    <a href="<?php echo $url; ?>checkout?pid=15&cycle=monthly" data-pid="15" class="btn btn-outline-emerald btn-sm px-3 fw-bold rounded-pill">
                                         Choose Plus
                                     </a>
                                 </td>
@@ -1121,6 +1110,14 @@
                         el.textContent = val;
                         el.style.opacity = '1';
                     }, 120);
+                }
+            });
+
+            const cycleParam = isYearly ? 'annually' : 'monthly';
+            document.querySelectorAll('[data-pid]').forEach(btn => {
+                const pid = btn.getAttribute('data-pid');
+                if (pid) {
+                    btn.href = '<?php echo $url; ?>checkout?pid=' + pid + '&cycle=' + cycleParam;
                 }
             });
 

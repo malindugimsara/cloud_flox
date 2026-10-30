@@ -30,7 +30,7 @@ $cfFooterUrl = $url ?? '/';
                     </div>
                     <div class="col-lg-4 text-center text-lg-end">
                         <div class="d-flex flex-column flex-sm-row flex-lg-column gap-3 justify-content-center">
-                            <a href="https://my.cloudflox.com/cart.php?a=view" class="cf-btn-primary-glow">
+                            <a href="<?php echo $cfFooterUrl; ?>web-hosting" class="cf-btn-primary-glow">
                                 <span>Get Started Today</span>
                                 <i class="las la-arrow-right"></i>
                             </a>

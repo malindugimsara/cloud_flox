@@ -12,6 +12,7 @@ error_reporting(0);
 ini_set('display_errors', '0');
 
 // Dynamic Live WHMCS Pricing Integration
+require_once __DIR__ . '/include/url.inc.php';
 require_once __DIR__ . '/api/whmcs-pricing.php';
 $tldPricing = WHMCSPricing::getDomainPricing();
 $hostingPlans = WHMCSPricing::getHostingProducts();
@@ -156,7 +157,8 @@ foreach ($suggestTlds as $altTld) {
         'price'        => $tldPricing[$altTld]['price'] ?? '$14.99',
         'badge'        => $tldPricing[$altTld]['badge'] ?? '',
         'tag'          => $tldPricing[$altTld]['category'] ?? ($tldPricing[$altTld]['tag'] ?? ''),
-        'register_url' => 'https://my.cloudflox.com/cart.php?a=add&domain=register&query=' . urlencode($altDomain)
+        'register_url' => $url . 'checkout?domain=' . urlencode($altDomain) . '&domainType=register',
+        'transfer_url' => $url . 'checkout?domain=' . urlencode($altDomain) . '&domainType=transfer'
     ];
 }
 
@@ -171,8 +173,8 @@ echo json_encode([
         'price'        => $primaryPrice,
         'badge'        => $primaryBadge,
         'tag'          => $primaryTag,
-        'register_url' => 'https://my.cloudflox.com/cart.php?a=add&domain=register&query=' . urlencode($fullDomain),
-        'transfer_url' => 'https://my.cloudflox.com/cart.php?a=add&domain=transfer&query=' . urlencode($fullDomain)
+        'register_url' => $url . 'checkout?domain=' . urlencode($fullDomain) . '&domainType=register',
+        'transfer_url' => $url . 'checkout?domain=' . urlencode($fullDomain) . '&domainType=transfer'
     ],
     'suggestions'  => $suggestions,
     'hosting_plans' => [

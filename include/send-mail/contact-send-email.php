@@ -6,11 +6,11 @@ require "Exception.php";
 
 use PHPMailer\PHPMailer\PHPMailer;
 
-$name = $_POST["name"];
-$email = $_POST["email"];
-$phone = $_POST["phone"];
-$subject = $_POST["subject"];
-$message = $_POST["message"];
+$name = $_POST["name"] ?? "";
+$email = $_POST["email"] ?? "";
+$phone = $_POST["phone"] ?? "";
+$subject = $_POST["subject"] ?? "";
+$message = $_POST["message"] ?? "";
 
 // Check if required fields are filled
 if ($name == "" || $email == "" || $subject == "" || $message == "") {
@@ -21,15 +21,51 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
     echo "Invalid phone number! Please enter a valid telephone number.";
 } else {
 
-    $recaptchaSecret = "6Le_PGssAAAAAJi3rY9BgtOBDe8VZ4NmR0loBkNX";
-    $recaptchaResponse = $_POST['g-recaptcha-response'] ?? '';
+    require_once __DIR__ . '/../env.inc.php';
+    $turnstileSecret = defined('CF_TURNSTILE_SECRET_KEY') ? CF_TURNSTILE_SECRET_KEY : (getenv('CLOUDFLARE_TURNSTILE_SECRET_KEY') ?: '0x4AAAAAAFsPGj4XQp1O1pc9PnrNzozwjKM');
+    $turnstileResponse = $_POST['cf-turnstile-response'] ?? $_POST['g-recaptcha-response'] ?? '';
 
-    $verifyUrl = "https://www.google.com/recaptcha/api/siteverify";
-    $response = file_get_contents($verifyUrl . "?secret=" . $recaptchaSecret . "&response=" . $recaptchaResponse);
-    $responseData = json_decode($response);
+    if (empty($turnstileResponse)) {
+        echo "Please complete the Cloudflare security verification.";
+        exit;
+    }
 
-    if (!$responseData->success) {
-        echo "reCAPTCHA verification failed!";
+    $verifyUrl = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+    $verifyData = [
+        'secret' => $turnstileSecret,
+        'response' => $turnstileResponse,
+        'remoteip' => $_SERVER['REMOTE_ADDR'] ?? ''
+    ];
+    $turnstileSuccess = false;
+    if (function_exists('curl_init')) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $verifyUrl);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($verifyData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        $turnstileResult = curl_exec($ch);
+        curl_close($ch);
+    } else {
+        $options = [
+            'http' => [
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($verifyData),
+                'timeout' => 10
+            ]
+        ];
+        $context = stream_context_create($options);
+        $turnstileResult = @file_get_contents($verifyUrl, false, $context);
+    }
+    $responseData = json_decode($turnstileResult, true);
+    if (is_array($responseData) && !empty($responseData['success'])) {
+        $turnstileSuccess = true;
+    }
+
+    if (!$turnstileSuccess) {
+        echo "Cloudflare Turnstile verification failed. Please try again.";
         exit;
     }
 
