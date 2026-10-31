@@ -46,7 +46,7 @@ $cfClientName = $_SESSION['cf_client_name'] ?? 'Client Area';
      DEDICATED MINIMALIST AUTH HEADER (Stripe / Vercel Style)
      ========================================================================= -->
 <header class="cf-auth-minimal-header">
-    <div class="container cf-checkout-container">
+    <div class="container cf-auth-container">
         <!-- Brand Logo & Secure Tag -->
         <div class="cf-auth-brand-wrap">
             <a href="<?php echo $url; ?>" class="cf-auth-brand-link" title="CloudFlox Cloud Infrastructure">

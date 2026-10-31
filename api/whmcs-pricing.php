@@ -429,6 +429,73 @@ class WHMCSPricing {
             }
         }
 
+        // Inject KVM Cloud VPS series (PIDs 401, 402, 403, 404)
+        $vpsCatalog = [
+            '401' => [
+                'id'         => 401,
+                'pid'        => '401',
+                'whmcs_name' => 'Launch VPS - 1 Core',
+                'name'       => 'Launch VPS',
+                'category'   => 'Linux Cloud VPS',
+                'monthly'    => 7.99,
+                'yearly'     => 76.70,
+                'monthly_formatted' => '$7.99',
+                'yearly_formatted'  => '$76.70',
+                'specs'      => '1 vCPU • 2 GB RAM • 30 GB NVMe • 1 TB Traffic • 1 Dedicated IPv4',
+                'icon'       => 'las la-terminal',
+                'tag'        => 'Starter Pick',
+                'popular'    => false
+            ],
+            '402' => [
+                'id'         => 402,
+                'pid'        => '402',
+                'whmcs_name' => 'Scale VPS - 2 Cores',
+                'name'       => 'Scale VPS',
+                'category'   => 'Linux Cloud VPS',
+                'monthly'    => 14.99,
+                'yearly'     => 143.90,
+                'monthly_formatted' => '$14.99',
+                'yearly_formatted'  => '$143.90',
+                'specs'      => '2 vCPU • 4 GB RAM • 60 GB NVMe • 2 TB Traffic • 1 Dedicated IPv4',
+                'icon'       => 'las la-server',
+                'tag'        => 'Growth Tier',
+                'popular'    => false
+            ],
+            '403' => [
+                'id'         => 403,
+                'pid'        => '403',
+                'whmcs_name' => 'Pro VPS - 4 Cores',
+                'name'       => 'Pro VPS',
+                'category'   => 'Linux Cloud VPS',
+                'monthly'    => 24.99,
+                'yearly'     => 239.90,
+                'monthly_formatted' => '$24.99',
+                'yearly_formatted'  => '$239.90',
+                'specs'      => '4 vCPU • 8 GB RAM • 120 GB NVMe • 4 TB Traffic • 1 Dedicated IPv4',
+                'icon'       => 'las la-microchip',
+                'tag'        => 'Popular Choice',
+                'popular'    => true
+            ],
+            '404' => [
+                'id'         => 404,
+                'pid'        => '404',
+                'whmcs_name' => 'Power VPS - 8 Cores',
+                'name'       => 'Power VPS',
+                'category'   => 'Linux Cloud VPS',
+                'monthly'    => 39.99,
+                'yearly'     => 383.90,
+                'monthly_formatted' => '$39.99',
+                'yearly_formatted'  => '$383.90',
+                'specs'      => '8 vCPU • 16 GB RAM • 240 GB NVMe • 8 TB Traffic • 1 Dedicated IPv4',
+                'icon'       => 'las la-network-wired',
+                'tag'        => 'Maximum Compute',
+                'popular'    => false
+            ]
+        ];
+        foreach ($vpsCatalog as $vKey => $vItem) {
+            $results[$vKey] = $vItem;
+        }
+
         // Fallback defaults if offline
         if (empty($results)) {
             $defaultData = [

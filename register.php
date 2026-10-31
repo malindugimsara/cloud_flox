@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
     <!-- =========== CSS Area =========== -->
 </head>
 
-<body class="pure-white-theme cf-checkout-page">
+<body class="pure-white-theme cf-auth-page cf-checkout-page">
 
     <!-- =========== Dedicated Minimalist Auth Header Area =========== -->
     <?php include 'include/auth-header.inc.php'; ?>
@@ -159,14 +159,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
     <!-- =========================================================================
          2. AUTH MAIN SECTION (Minimalistic, Highly Focused)
          ========================================================================= -->
-    <section class="cf-checkout-body-wrap py-4 py-md-5">
-        <div class="container cf-checkout-container">
+    <section class="cf-auth-page-wrap py-4 py-lg-5">
+        <div class="container cf-auth-container">
 
-            <div class="row g-4 justify-content-center">
+            <div class="row g-4 g-xl-5 justify-content-center align-items-start">
                 
-                <!-- LEFT COLUMN: REGISTRATION FORM (col-lg-7) -->
-                <div class="col-12 col-lg-7">
-                    <div class="cf-step-card-box">
+                <!-- LEFT COLUMN: REGISTRATION FORM (col-lg-7 col-xl-7) -->
+                <div class="col-12 col-lg-7 col-xl-7">
+                    <div class="cf-step-card-box cf-auth-card-box">
                         
                         <!-- Mode Switcher Tabs (Short, Punchy, Focused) -->
                         <div class="cf-auth-tabs-wrap">
@@ -178,15 +178,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                             </a>
                         </div>
 
-                        <!-- Card Heading -->
-                        <div class="mb-4 pb-2 border-bottom">
-                            <h2 class="fw-extrabold text-slate-900 mb-1.5 fs-22">Get Started in 60 Seconds</h2>
-                            <p class="text-secondary fs-13.5 mb-0">Create your CloudFlox profile to deploy high-speed cloud infrastructure.</p>
+                        <!-- Card Heading Wrap -->
+                        <div class="cf-auth-heading-wrap">
+                            <div class="cf-auth-badge">
+                                <span class="cf-pulse-dot-blue"></span>
+                                <span>Instant Account Setup</span>
+                            </div>
+                            <h2 class="cf-auth-title">Get Started in 60 Seconds</h2>
+                            <p class="cf-auth-subtitle">Create your CloudFlox profile to deploy high-speed cloud infrastructure.</p>
                         </div>
 
                         <!-- Error Alert Banner -->
                         <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger d-flex align-items-center gap-2 mb-3 rounded-3 shadow-sm py-2.5 px-3 fs-13" role="alert">
+                            <div class="alert alert-danger d-flex align-items-center gap-2 mb-4 rounded-3 shadow-sm py-3 px-3 fs-13" role="alert">
                                 <i class="las la-exclamation-circle fs-18 flex-shrink-0 text-danger"></i>
                                 <div><?php echo $error; ?></div>
                             </div>
@@ -194,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
 
                         <!-- Success Alert Banner -->
                         <?php if (!empty($success)): ?>
-                            <div class="alert alert-success d-flex align-items-center gap-2 mb-3 rounded-3 shadow-sm py-2.5 px-3 fs-13" role="alert">
+                            <div class="alert alert-success d-flex align-items-center gap-2 mb-4 rounded-3 shadow-sm py-3 px-3 fs-13" role="alert">
                                 <i class="las la-check-circle fs-18 flex-shrink-0 text-success"></i>
                                 <div><?php echo htmlspecialchars($success); ?></div>
                             </div>
@@ -215,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                                         <p>Your primary identity, contact email and phone number</p>
                                     </div>
                                 </div>
-                                <div class="row g-3.5 mb-3.5">
+                                <div class="row g-3 mb-3">
                                     <div class="col-sm-6">
                                         <div class="cf-minimal-input-wrap mb-0">
                                             <label for="regFirstName" class="form-label fs-13 fw-bold text-slate-800 mb-2">
@@ -257,7 +261,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                                     </div>
                                 </div>
 
-                                <div class="row g-3.5">
+                                <div class="row g-3">
                                     <div class="col-sm-6">
                                         <div class="cf-minimal-input-wrap mb-0">
                                             <label for="regEmail" class="form-label fs-13 fw-bold text-slate-800 mb-2">
@@ -311,7 +315,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                                     </div>
                                 </div>
 
-                                <div class="row g-3.5 mb-3.5">
+                                <div class="row g-3 mb-3">
                                     <div class="col-sm-6">
                                         <div class="cf-minimal-input-wrap mb-0">
                                             <label for="regCompany" class="form-label fs-13 fw-bold text-slate-800 mb-2">
@@ -356,7 +360,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                                     </div>
                                 </div>
 
-                                <div class="row g-3.5 mb-3.5">
+                                <div class="row g-3 mb-3">
                                     <div class="col-sm-6">
                                         <div class="cf-minimal-input-wrap mb-0">
                                             <label for="regAddress1" class="form-label fs-13 fw-bold text-slate-800 mb-2">
@@ -396,7 +400,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                                     </div>
                                 </div>
 
-                                <div class="row g-3.5">
+                                <div class="row g-3">
                                     <div class="col-sm-4">
                                         <div class="cf-minimal-input-wrap mb-0">
                                             <label for="regCity" class="form-label fs-13 fw-bold text-slate-800 mb-2">
@@ -458,7 +462,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                                     </div>
                                 </div>
 
-                                <div class="row g-3.5">
+                                <div class="row g-3">
                                     <div class="col-sm-6">
                                         <div class="cf-minimal-input-wrap mb-0">
                                             <label for="regPassword" class="form-label fs-13 fw-bold text-slate-800 mb-2">
@@ -510,7 +514,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                             </div>
 
                             <!-- Primary Action CTA Button (Clearly Highlighted!) -->
-                            <div class="mb-4">
+                            <div class="cf-auth-btn-wrap">
                                 <button type="submit" class="cf-minimal-cta-btn" id="btnSubmitRegister">
                                     <span class="btn-text">
                                         Create Account &amp; Deploy <i class="las la-arrow-right ms-2 fs-16"></i>
@@ -522,11 +526,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                         </form>
 
                         <!-- Bottom Link -->
-                        <div class="text-center pt-4 border-top">
-                            <span class="fs-13.5 text-secondary">
-                                Already have a CloudFlox account?
-                            </span>
-                            <a href="<?php echo $url; ?>login" class="fs-13.5 fw-bold text-primary text-decoration-none ms-1 hover-underline">
+                        <div class="cf-auth-footer-link">
+                            <span>Already have a CloudFlox account?</span>
+                            <a href="<?php echo $url; ?>login">
                                 Sign In &rarr;
                             </a>
                         </div>
@@ -534,9 +536,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN: MINIMALISTIC ONBOARDING SHOWCASE (col-lg-5) -->
-                <div class="col-12 col-lg-5">
-                    <div class="cf-sidebar-summary-card text-center sticky-top" style="top: 88px;">
+                <!-- RIGHT COLUMN: MINIMALISTIC ONBOARDING SHOWCASE (col-lg-5 col-xl-5) -->
+                <div class="col-12 col-lg-5 col-xl-5">
+                    <div class="cf-sidebar-summary-card cf-auth-showcase-card text-center sticky-top" style="top: 88px;">
                         
                         <!-- 3D Cloud Registration Visual Showcase -->
                         <div class="cf-auth-side-img-wrap">

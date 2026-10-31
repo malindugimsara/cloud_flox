@@ -17310,12 +17310,29 @@ body.cf-modal-open {
 }
 
 .cf-checkout-container {
-    max-width: 1140px !important;
+    max-width: 1140px;
+    width: 100% !important;
     margin-left: auto !important;
     margin-right: auto !important;
     padding-left: 20px !important;
     padding-right: 20px !important;
     box-sizing: border-box !important;
+}
+
+@media (min-width: 1200px) {
+    .cf-checkout-container {
+        max-width: 1240px;
+        padding-left: 28px !important;
+        padding-right: 28px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .cf-checkout-container {
+        max-width: 1340px;
+        padding-left: 32px !important;
+        padding-right: 32px !important;
+    }
 }
 
 /* Three Steps Progress Indicator */
@@ -17859,6 +17876,261 @@ body.cf-modal-open {
     pointer-events: none;
 }
 
+/* ==========================================================================
+   CF AUTHENTICATION ARCHITECTURE & RESPONSIVE WIDESCREEN SYSTEM
+   (login.php, register.php, forgot-password.php, auth-header.inc.php)
+   ========================================================================== */
+
+/* 1. Body & Smooth Background Canvas */
+body.cf-auth-page,
+body.pure-white-theme.cf-auth-page {
+    background-color: #F8FAFC !important;
+    min-height: 100vh;
+}
+
+.cf-auth-page-wrap {
+    position: relative;
+    padding: 44px 0 80px 0 !important;
+    min-height: calc(100vh - 72px);
+    background-color: #F8FAFC !important;
+    background-image: 
+        radial-gradient(circle at 50% -20%, rgba(37, 99, 235, 0.07) 0%, rgba(248, 250, 252, 0) 55%),
+        radial-gradient(circle at 100% 100%, rgba(37, 99, 235, 0.03) 0%, rgba(248, 250, 252, 0) 40%),
+        linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 25%, #F1F5F9 100%) !important;
+}
+
+/* 2. Responsive Multi-Tier Container (Eliminates excessive side whitespace on widescreen) */
+.cf-auth-container {
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+}
+
+@media (min-width: 576px) {
+    .cf-auth-container {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .cf-auth-container {
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .cf-auth-container {
+        max-width: 960px !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .cf-auth-container {
+        max-width: 1240px !important;
+        padding-left: 28px !important;
+        padding-right: 28px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .cf-auth-container {
+        max-width: 1360px !important;
+        padding-left: 32px !important;
+        padding-right: 32px !important;
+    }
+}
+
+@media (min-width: 1600px) {
+    .cf-auth-container {
+        max-width: 1420px !important;
+        padding-left: 40px !important;
+        padding-right: 40px !important;
+    }
+}
+
+/* 3. Auth Form Card (Elevated & Crisp) */
+.cf-auth-card-box {
+    background: #FFFFFF !important;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 22px !important;
+    padding: 38px 40px !important;
+    box-shadow: 0 10px 30px -4px rgba(15, 23, 42, 0.06), 0 4px 10px -2px rgba(15, 23, 42, 0.03) !important;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease !important;
+}
+
+@media (min-width: 1400px) {
+    .cf-auth-card-box {
+        padding: 44px 46px !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .cf-auth-card-box {
+        padding: 24px 20px !important;
+        border-radius: 16px !important;
+    }
+}
+
+/* 4. Auth Showcase Card */
+.cf-auth-showcase-card {
+    background: #FFFFFF !important;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 22px !important;
+    padding: 34px 30px !important;
+    box-shadow: 0 10px 30px -4px rgba(15, 23, 42, 0.06), 0 4px 10px -2px rgba(15, 23, 42, 0.03) !important;
+}
+
+@media (min-width: 1400px) {
+    .cf-auth-showcase-card {
+        padding: 40px 36px !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .cf-auth-showcase-card {
+        padding: 24px 20px !important;
+        border-radius: 16px !important;
+    }
+}
+
+.cf-auth-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.22);
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #2563EB;
+    letter-spacing: 0.02em;
+    margin-bottom: 14px;
+}
+
+.cf-auth-badge .cf-pulse-dot-blue {
+    width: 8px;
+    height: 8px;
+    background-color: #2563EB;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.cf-auth-heading-wrap {
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.cf-auth-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.cf-auth-subtitle {
+    font-size: 14px;
+    color: #64748B;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.cf-auth-card-box .cf-minimal-input-wrap {
+    position: relative !important;
+    margin-bottom: 24px !important;
+}
+
+.cf-auth-card-box .cf-minimal-input-wrap .form-label {
+    display: block !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #1E293B !important;
+    margin-bottom: 9px !important;
+    letter-spacing: -0.01em;
+}
+
+.cf-auth-card-box .cf-minimal-input-wrap .form-control {
+    height: 52px !important;
+    border-radius: 12px !important;
+    border: 1.5px solid #CBD5E1 !important;
+    padding: 12px 18px 12px 48px !important;
+    font-size: 14px !important;
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    transition: all 0.2s ease !important;
+}
+
+.cf-auth-card-box .cf-minimal-input-wrap .form-control:focus {
+    border-color: #2563EB !important;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12) !important;
+    background-color: #FFFFFF !important;
+}
+
+.cf-auth-card-box .cf-input-icon {
+    position: absolute !important;
+    left: 17px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 20px !important;
+    color: #94A3B8 !important;
+    pointer-events: none !important;
+    transition: color 0.2s ease !important;
+    z-index: 4 !important;
+}
+
+.cf-auth-card-box .cf-minimal-input-wrap:focus-within .cf-input-icon {
+    color: #2563EB !important;
+}
+
+.cf-auth-input-helper {
+    font-size: 12px !important;
+    color: #64748B !important;
+    margin-top: 8px !important;
+    margin-bottom: 0 !important;
+    display: block !important;
+    line-height: 1.4 !important;
+}
+
+.cf-auth-btn-wrap {
+    margin-top: 8px !important;
+    margin-bottom: 28px !important;
+}
+
+.cf-auth-footer-link {
+    padding-top: 24px !important;
+    border-top: 1px solid #F1F5F9 !important;
+    text-align: center !important;
+}
+
+.cf-auth-footer-link span {
+    font-size: 13.5px !important;
+    color: #64748B !important;
+}
+
+.cf-auth-footer-link a {
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: #2563EB !important;
+    text-decoration: none !important;
+    margin-left: 6px !important;
+    transition: color 0.15s ease !important;
+}
+
+.cf-auth-footer-link a:hover {
+    color: #1D4ED8 !important;
+    text-decoration: underline !important;
+}
+
 .cf-auth-tabs-wrap {
     display: inline-flex;
     align-items: center;
@@ -18150,11 +18422,11 @@ body.cf-modal-open {
 }
 
 .cf-auth-side-img-wrap {
-    border-radius: 20px;
+    border-radius: 18px;
     overflow: hidden;
     background: radial-gradient(circle at center, #F0F7FF 0%, #F8FAFC 100%);
     border: 1.5px solid #E2E8F0;
-    padding: 16px;
+    padding: 18px;
     margin-bottom: 22px;
     text-align: center;
 }
@@ -18162,11 +18434,16 @@ body.cf-modal-open {
 .cf-auth-side-img {
     width: 100%;
     height: auto;
-    max-height: 220px;
+    max-height: 240px;
     object-fit: contain;
-    border-radius: 14px;
+    border-radius: 12px;
     display: block;
     margin: 0 auto;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cf-auth-side-img-wrap:hover .cf-auth-side-img {
+    transform: scale(1.02);
 }
 
 /* =========================================================================
@@ -18248,8 +18525,8 @@ body.cf-modal-open {
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    margin-bottom: 22px;
+    padding-bottom: 22px;
     border-bottom: 1px solid #F1F5F9;
 }
 
@@ -18260,13 +18537,14 @@ body.cf-modal-open {
     background: #F8FAFC !important;
     border: 1px solid #E2E8F0 !important;
     border-radius: 999px !important;
-    padding: 6px 13px !important;
+    padding: 6px 14px !important;
     font-size: 12px !important;
     font-weight: 600 !important;
     color: #1E293B !important; /* DARK CRISP TEXT - NEVER WASHED OUT */
     line-height: 1.2 !important;
     transition: all 0.2s ease !important;
     text-decoration: none !important;
+    white-space: nowrap !important;
 }
 
 .cf-auth-trust-pill:hover {
@@ -18310,12 +18588,6 @@ body.cf-modal-open {
 .cf-auth-side-footer-link a:hover {
     color: #1D4ED8 !important;
     text-decoration: underline !important;
-}
-
-.cf-auth-container {
-    max-width: 1160px;
-    width: 100%;
-    margin: 0 auto;
 }
 
 /* =========================================================================
@@ -19383,4 +19655,375 @@ html, body {
 .cursor-pointer {
     cursor: pointer !important;
 }
+
+/* ==========================================================================
+   MULTI-DOMAIN SEARCH, BULK CHECK & STICKY CART BAR
+   ========================================================================== */
+
+/* Search Mode Selector Tabs */
+.cf-search-mode-tabs {
+    display: inline-flex;
+    background: #F1F5F9;
+    padding: 4px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+    border: 1px solid #E2E8F0;
+    gap: 4px;
+}
+.cf-search-mode-btn {
+    border: none;
+    background: transparent;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748B;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+.cf-search-mode-btn:hover {
+    color: #1E293B;
+}
+.cf-search-mode-btn.active {
+    background: #FFFFFF;
+    color: #2563EB;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+/* Bulk Search Card */
+.cf-bulk-search-box {
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1.5px solid #E2E8F0;
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06);
+    padding: 20px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.cf-bulk-search-box:focus-within {
+    border-color: #2563EB;
+    box-shadow: 0 12px 35px -5px rgba(37, 99, 235, 0.15);
+}
+
+/* Bulk Results Table / List */
+.cf-bulk-results-box {
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1.5px solid #E2E8F0;
+    box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+    margin-top: 18px;
+    animation: cfDomainFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.cf-bulk-header-bar {
+    padding: 16px 22px;
+    background: #F8FAFC;
+    border-bottom: 1.5px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.cf-bulk-item-row {
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #F1F5F9;
+    transition: background 0.15s ease;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.cf-bulk-item-row:last-child {
+    border-bottom: none;
+}
+.cf-bulk-item-row:hover {
+    background: #F8FAFC;
+}
+
+/* Cart Toggle Buttons */
+.cf-btn-domain-cart-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: 999px;
+    background: #2563EB;
+    color: #FFFFFF !important;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    text-decoration: none;
+}
+.cf-btn-domain-cart-toggle:hover {
+    background: #1D4ED8;
+    color: #FFFFFF !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+.cf-btn-domain-cart-toggle.in-cart {
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+.cf-btn-domain-cart-toggle.in-cart:hover {
+    background: #DC2626 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+}
+
+.cf-btn-alt-cart-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: #EFF6FF;
+    color: #2563EB !important;
+    border: 1px solid #BFDBFE;
+    font-size: 12.5px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+.cf-btn-alt-cart-toggle:hover {
+    background: #2563EB;
+    color: #FFFFFF !important;
+    border-color: #2563EB;
+}
+.cf-btn-alt-cart-toggle.in-cart {
+    background: #ECFDF5 !important;
+    color: #059669 !important;
+    border-color: #A7F3D0 !important;
+}
+.cf-btn-alt-cart-toggle.in-cart:hover {
+    background: #FEF2F2 !important;
+    color: #DC2626 !important;
+    border-color: #FECACA !important;
+}
+
+/* Floating Sticky Multi-Domain Cart Drawer */
+.cf-floating-cart-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1060;
+    width: calc(100% - 32px);
+    max-width: 920px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.5px solid #2563EB;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px -10px rgba(37, 99, 235, 0.3), 0 4px 16px rgba(15, 23, 42, 0.08);
+    padding: 12px 20px;
+    animation: cfCartBarSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes cfCartBarSlideUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 30px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+.cf-cart-bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.cf-cart-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.cf-cart-bar-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #2563EB;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+.cf-cart-count-pill {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #10B981;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 800;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 4px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #FFFFFF;
+}
+.cf-cart-chips-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    max-width: 460px;
+    padding: 4px 0;
+    scrollbar-width: none;
+}
+.cf-cart-chips-wrap::-webkit-scrollbar {
+    display: none;
+}
+.cf-cart-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    color: #1E293B;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+.cf-cart-chip-del {
+    color: #94A3B8;
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.15s ease;
+}
+.cf-cart-chip-del:hover {
+    color: #DC2626;
+}
+.cf-cart-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+.cf-cart-total-box {
+    text-align: right;
+    line-height: 1.15;
+}
+.cf-cart-total-amount {
+    font-size: 20px;
+    font-weight: 800;
+    color: #059669;
+}
+.cf-btn-checkout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+    color: #FFFFFF !important;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 999px;
+    border: none;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+.cf-btn-checkout:hover {
+    background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.45);
+}
+
+/* Multi-Domain Cart Box in checkout.php */
+.cf-multi-domain-cart-box {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 18px;
+    padding: 20px;
+}
+.cf-cart-domain-card {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    transition: all 0.2s ease;
+}
+.cf-cart-domain-card:hover {
+    border-color: #BFDBFE;
+    background: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+.cf-cart-domain-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-width: 200px;
+}
+.cf-cart-domain-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #EFF6FF;
+    color: #2563EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+.cf-cart-domain-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 767.98px) {
+    .cf-floating-cart-bar {
+        bottom: 16px;
+        padding: 10px 14px;
+        border-radius: 18px;
+    }
+    .cf-cart-chips-wrap {
+        max-width: 180px;
+    }
+    .cf-cart-total-amount {
+        font-size: 17px;
+    }
+    .cf-btn-checkout {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}
+
 

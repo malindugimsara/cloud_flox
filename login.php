@@ -108,7 +108,7 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
     <!-- =========== CSS Area =========== -->
 </head>
 
-<body class="pure-white-theme cf-checkout-page">
+<body class="pure-white-theme cf-auth-page cf-checkout-page">
 
     <!-- =========== Dedicated Minimalist Auth Header Area =========== -->
     <?php include 'include/auth-header.inc.php'; ?>
@@ -117,14 +117,14 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
     <!-- =========================================================================
          2. AUTH MAIN SECTION (Minimalistic, Highly Focused)
          ========================================================================= -->
-    <section class="cf-checkout-body-wrap py-4 py-md-5">
-        <div class="container cf-checkout-container">
+    <section class="cf-auth-page-wrap py-4 py-lg-5">
+        <div class="container cf-auth-container">
 
-            <div class="row g-4 justify-content-center">
+            <div class="row g-4 g-xl-5 justify-content-center align-items-start">
                 
-                <!-- LEFT COLUMN: AUTH FORM (col-lg-7) -->
-                <div class="col-12 col-lg-7">
-                    <div class="cf-step-card-box">
+                <!-- LEFT COLUMN: AUTH FORM (col-lg-7 col-xl-7) -->
+                <div class="col-12 col-lg-7 col-xl-7">
+                    <div class="cf-step-card-box cf-auth-card-box">
                         
                         <!-- Mode Switcher Tabs (Short, Punchy, Focused) -->
                         <div class="cf-auth-tabs-wrap">
@@ -136,15 +136,19 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
                             </a>
                         </div>
 
-                        <!-- Card Heading -->
-                        <div class="mb-4 pb-2 border-bottom">
-                            <h2 class="fw-extrabold text-slate-900 mb-1.5 fs-22">Welcome Back</h2>
-                            <p class="text-secondary fs-13.5 mb-0">Enter your credentials below to access your cloud dashboard.</p>
+                        <!-- Card Heading Wrap -->
+                        <div class="cf-auth-heading-wrap">
+                            <div class="cf-auth-badge">
+                                <span class="cf-pulse-dot-blue"></span>
+                                <span>Client Portal Sign In</span>
+                            </div>
+                            <h2 class="cf-auth-title">Welcome Back</h2>
+                            <p class="cf-auth-subtitle">Enter your registered credentials below to access your cloud hosting dashboard.</p>
                         </div>
 
                         <!-- Error Alert Banner -->
                         <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger d-flex align-items-center gap-2 mb-3 rounded-3 shadow-sm py-2.5 px-3 fs-13" role="alert">
+                            <div class="alert alert-danger d-flex align-items-center gap-2 mb-4 rounded-3 shadow-sm py-3 px-3 fs-13" role="alert">
                                 <i class="las la-exclamation-circle fs-18 flex-shrink-0 text-danger"></i>
                                 <div><?php echo htmlspecialchars($error); ?></div>
                             </div>
@@ -152,7 +156,7 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
 
                         <!-- Success Alert Banner -->
                         <?php if (!empty($success)): ?>
-                            <div class="alert alert-success d-flex align-items-center gap-2 mb-3 rounded-3 shadow-sm py-2.5 px-3 fs-13" role="alert">
+                            <div class="alert alert-success d-flex align-items-center gap-2 mb-4 rounded-3 shadow-sm py-3 px-3 fs-13" role="alert">
                                 <i class="las la-check-circle fs-18 flex-shrink-0 text-success"></i>
                                 <div><?php echo htmlspecialchars($success); ?></div>
                             </div>
@@ -181,7 +185,7 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
 
                             <!-- Email Field -->
                             <div class="cf-minimal-input-wrap">
-                                <label for="loginEmail" class="form-label fs-13 fw-bold text-slate-800 mb-2">
+                                <label for="loginEmail" class="form-label">
                                     Email Address <span class="text-danger">*</span>
                                 </label>
                                 <div class="position-relative">
@@ -202,10 +206,10 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
                             <!-- Password Field -->
                             <div class="cf-minimal-input-wrap">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <label for="loginPassword" class="form-label fs-13 fw-bold text-slate-800 mb-0">
+                                    <label for="loginPassword" class="form-label mb-0">
                                         Password <span class="text-danger">*</span>
                                     </label>
-                                    <a href="<?php echo $url; ?>forgot-password" class="fs-12.5 text-primary fw-semibold text-decoration-none hover-underline">
+                                    <a href="<?php echo $url; ?>forgot-password" class="text-primary fw-semibold text-decoration-none hover-underline" style="font-size: 13px;">
                                         Forgot password?
                                     </a>
                                 </div>
@@ -234,7 +238,7 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
                             </div>
 
                             <!-- Primary Action CTA Button (Clearly Highlighted!) -->
-                            <div class="mb-4">
+                            <div class="cf-auth-btn-wrap">
                                 <button type="submit" class="cf-minimal-cta-btn" id="btnSubmitLogin">
                                     <span class="btn-text">
                                         Sign In to Dashboard <i class="las la-arrow-right ms-2 fs-16"></i>
@@ -246,11 +250,9 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
                         </form>
 
                         <!-- Bottom Link -->
-                        <div class="text-center pt-4 border-top">
-                            <span class="fs-13.5 text-secondary">
-                                New to CloudFlox?
-                            </span>
-                            <a href="<?php echo $url; ?>register" class="fs-13.5 fw-bold text-primary text-decoration-none ms-1 hover-underline">
+                        <div class="cf-auth-footer-link">
+                            <span>New to CloudFlox?</span>
+                            <a href="<?php echo $url; ?>register">
                                 Create an account &rarr;
                             </a>
                         </div>
@@ -258,9 +260,9 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN: MINIMALISTIC PORTAL SHOWCASE (col-lg-5) -->
-                <div class="col-12 col-lg-5">
-                    <div class="cf-sidebar-summary-card text-center sticky-top" style="top: 88px;">
+                <!-- RIGHT COLUMN: MINIMALISTIC PORTAL SHOWCASE (col-lg-5 col-xl-5) -->
+                <div class="col-12 col-lg-5 col-xl-5">
+                    <div class="cf-sidebar-summary-card cf-auth-showcase-card text-center sticky-top" style="top: 88px;">
                         
                         <!-- 3D Cloud Portal Visual Showcase -->
                         <div class="cf-auth-side-img-wrap">

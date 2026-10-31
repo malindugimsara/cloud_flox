@@ -196,7 +196,17 @@ try {
             $stmt->close();
         }
 
-        // 5. Fetch Client Profile Details
+        // 5. Fetch Server Quotes & Enterprise RFQs
+        $quotes = [];
+        $stmt = $mysqli->prepare("SELECT id, subject, stage, validuntil, subtotal, total, proposal, customernotes, adminnotes, datecreated, lastmodified, datesent, dateaccepted FROM tblquotes WHERE userid = ? ORDER BY id DESC LIMIT 30");
+        if ($stmt) {
+            $stmt->bind_param('i', $clientId);
+            $stmt->execute();
+            $quotes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+            $stmt->close();
+        }
+
+        // 6. Fetch Client Profile Details
         $stmt = $mysqli->prepare("SELECT id, firstname, lastname, companyname, email, phonenumber, address1, address2, city, state, postcode, country FROM tblclients WHERE id = ? LIMIT 1");
         if ($stmt) {
             $stmt->bind_param('i', $clientId);
@@ -213,6 +223,13 @@ try {
         }
 
         // Calculate counts
+        $statQuotesPending = 0;
+        $statQuotesDelivered = 0;
+        foreach ($quotes as $q) {
+            $st = strtolower($q['stage'] ?? '');
+            if ($st === 'draft' || $st === 'on hold') $statQuotesPending++;
+            if ($st === 'delivered') $statQuotesDelivered++;
+        }
         foreach ($services as $s) {
             if (strtolower($s['domainstatus']) === 'active') $statServices++;
         }
@@ -238,7 +255,8 @@ $isProfileActive = ($activeTab === 'profile');
 $isTicketsActive = ($activeTab === 'tickets' || $activeTab === 'ticket');
 $isInvoicesActive = ($activeTab === 'invoices' || $activeTab === 'billing');
 $isDomainsActive = ($activeTab === 'domains');
-$isServicesActive = ($activeTab === 'services' || (!$isProfileActive && !$isTicketsActive && !$isInvoicesActive && !$isDomainsActive));
+$isQuotesActive = ($activeTab === 'quotes' || $activeTab === 'quote' || $activeTab === 'rfq');
+$isServicesActive = ($activeTab === 'services' || (!$isProfileActive && !$isTicketsActive && !$isInvoicesActive && !$isDomainsActive && !$isQuotesActive));
 
 $clientInitials = 'CF';
 if (!empty($clientName)) {
@@ -250,7 +268,7 @@ if (!empty($clientName)) {
     }
 }
 
-// Format status badge helper
+// Format status badge helpers
 if (!function_exists('getStatusBadge')) {
     function getStatusBadge($status) {
         $st = strtolower(trim($status));
@@ -262,6 +280,21 @@ if (!function_exists('getStatusBadge')) {
             return '<span class="cf-badge-unpaid"><i class="las la-exclamation-circle"></i> ' . htmlspecialchars($status) . '</span>';
         } else {
             return '<span class="cf-badge-suspended"><i class="las la-info-circle"></i> ' . htmlspecialchars($status) . '</span>';
+        }
+    }
+}
+
+if (!function_exists('getQuoteStageBadge')) {
+    function getQuoteStageBadge($stage) {
+        $st = strtolower(trim($stage));
+        if ($st === 'delivered') {
+            return '<span class="badge bg-emerald-subtle text-emerald border border-emerald-subtle rounded-pill px-2.5 py-1 fs-11.5 fw-bold"><i class="las la-bell me-1"></i>Delivered (Action Required)</span>';
+        } elseif ($st === 'accepted') {
+            return '<span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2.5 py-1 fs-11.5 fw-bold"><i class="las la-check-circle me-1"></i>Accepted &amp; Invoiced</span>';
+        } elseif ($st === 'draft' || $st === 'on hold') {
+            return '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2.5 py-1 fs-11.5 fw-bold"><i class="las la-clock me-1"></i>Under Engineering Review</span>';
+        } else {
+            return '<span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2.5 py-1 fs-11.5 fw-semibold"><i class="las la-times-circle me-1"></i>' . htmlspecialchars(ucfirst($stage)) . '</span>';
         }
     }
 }
@@ -853,6 +886,17 @@ if (!function_exists('getStatusBadge')) {
                                 <?php endif; ?>
                             </button>
 
+                            <!-- Server Quotes & RFQs Tab -->
+                            <button class="nav-link <?php echo $isQuotesActive ? 'active' : ''; ?>" id="quotes-tab" data-bs-toggle="pill" data-bs-target="#quotes-pane" type="button" role="tab" aria-controls="quotes-pane" aria-selected="<?php echo $isQuotesActive ? 'true' : 'false'; ?>">
+                                <i class="las la-file-signature cf-nav-icon"></i>
+                                <span class="cf-nav-label">Server Quotes &amp; RFQs</span>
+                                <?php if ($statQuotesDelivered > 0): ?>
+                                    <span class="badge bg-success text-white rounded-pill ms-auto" title="<?php echo $statQuotesDelivered; ?> quote(s) ready to review & accept"><?php echo $statQuotesDelivered; ?> New</span>
+                                <?php elseif (count($quotes) > 0): ?>
+                                    <span class="badge cf-nav-badge ms-auto"><?php echo count($quotes); ?></span>
+                                <?php endif; ?>
+                            </button>
+
                             <!-- Support Tickets Tab -->
                             <button class="nav-link <?php echo $isTicketsActive ? 'active' : ''; ?>" id="tickets-tab" data-bs-toggle="pill" data-bs-target="#tickets-pane" type="button" role="tab" aria-controls="tickets-pane" aria-selected="<?php echo $isTicketsActive ? 'true' : 'false'; ?>">
                                 <i class="las la-headset cf-nav-icon"></i>
@@ -1104,6 +1148,104 @@ if (!function_exists('getStatusBadge')) {
                                                         <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>" class="btn btn-light btn-sm rounded-pill px-3 py-1 fs-12 fw-semibold text-secondary border">
                                                             <i class="las la-file-invoice me-1"></i> View
                                                         </a>
+                                                    <?php endif; ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- 3.5. Server Quotes & Enterprise RFQs Tab -->
+                    <div class="tab-pane fade <?php echo $isQuotesActive ? 'show active' : ''; ?>" id="quotes-pane" role="tabpanel">
+                        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4 pb-3 border-bottom">
+                            <div>
+                                <h5 class="fw-bold text-slate-900 mb-1 fs-17 d-flex align-items-center gap-2">
+                                    <i class="las la-file-signature text-primary fs-20"></i> Server Quotes &amp; Enterprise RFQs
+                                </h5>
+                                <p class="text-secondary fs-13 mb-0">Custom Bare Metal &amp; KVM VPS configurations reviewed and tailored by CloudFlox senior infrastructure engineers.</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <a href="<?php echo $url; ?>request-quote" class="btn btn-primary rounded-pill px-3.5 py-2 fs-12.5 fw-bold shadow-sm d-inline-flex align-items-center gap-1.5">
+                                    <i class="las la-plus-circle fs-16"></i> Request New Server Quote
+                                </a>
+                            </div>
+                        </div>
+
+                        <?php if (empty($quotes)): ?>
+                            <div class="text-center py-5 px-3">
+                                <div style="width: 72px; height: 72px; border-radius: 20px; background: #EFF6FF; color: #2563EB; display: inline-flex; align-items: center; justify-content: center; font-size: 34px; margin-bottom: 16px;">
+                                    <i class="las la-server"></i>
+                                </div>
+                                <h5 class="fw-bold text-slate-800 mb-2">No Server Quotations Found</h5>
+                                <p class="text-secondary fs-13 mx-auto mb-4" style="max-width: 480px;">
+                                    Need dedicated bare-metal hardware, high-bandwidth streaming pipes, or specialized Cloud VPS specs? Submit your technical requirements and our engineering team will tailor an official quotation for you.
+                                </p>
+                                <a href="<?php echo $url; ?>request-quote" class="btn btn-outline-primary rounded-pill px-4 py-2 fs-13 fw-bold">
+                                    <i class="las la-sliders-h me-1.5"></i> Configure &amp; Request Server Quote
+                                </a>
+                            </div>
+                        <?php else: ?>
+                            <div class="table-responsive">
+                                <table class="table cf-dash-table mb-0 align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Quote #</th>
+                                            <th>Server Specification / Subject</th>
+                                            <th>Date Requested</th>
+                                            <th>Valid Until</th>
+                                            <th>Total Price</th>
+                                            <th>Status</th>
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($quotes as $q): 
+                                            $qStage = strtolower($q['stage'] ?? 'draft');
+                                            $isDelivered = ($qStage === 'delivered');
+                                            $isAccepted = ($qStage === 'accepted');
+                                            $isDraft = ($qStage === 'draft' || $qStage === 'on hold');
+                                            $totalNum = (float)($q['total'] ?? 0);
+                                        ?>
+                                            <tr>
+                                                <td>
+                                                    <span class="fw-bold text-slate-900">#RFQ-<?php echo htmlspecialchars($q['id']); ?></span>
+                                                </td>
+                                                <td>
+                                                    <div class="fw-bold text-slate-800 fs-13"><?php echo htmlspecialchars($q['subject'] ?: 'Custom Server Specification'); ?></div>
+                                                    <div class="text-muted fs-11 mt-0.5"><i class="las la-shield-alt text-primary me-1"></i>Dedicated SLA &amp; Direct Datacenter Provisioning</div>
+                                                </td>
+                                                <td>
+                                                    <span class="fs-12.5 text-secondary"><?php echo !empty($q['datecreated']) ? date('M d, Y', strtotime($q['datecreated'])) : '--'; ?></span>
+                                                </td>
+                                                <td>
+                                                    <span class="fs-12.5 text-secondary"><?php echo !empty($q['validuntil']) ? date('M d, Y', strtotime($q['validuntil'])) : '30 Days'; ?></span>
+                                                </td>
+                                                <td>
+                                                    <?php if ($totalNum > 0): ?>
+                                                        <div class="fw-800 text-slate-900 fs-14">$<?php echo number_format($totalNum, 2); ?> <span class="fs-11 text-muted fw-normal">USD</span></div>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-light text-secondary border rounded-pill fs-11">Under Pricing</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo getQuoteStageBadge($q['stage']); ?>
+                                                </td>
+                                                <td class="text-end">
+                                                    <?php if ($isDelivered): ?>
+                                                        <button type="button" class="btn btn-success btn-sm rounded-pill px-3 py-1 fs-12 fw-bold shadow-xs text-white" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
+                                                            <i class="las la-check-circle me-1"></i> Review &amp; Accept
+                                                        </button>
+                                                    <?php elseif ($isAccepted): ?>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1 fs-12 fw-semibold" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
+                                                            <i class="las la-eye me-1"></i> View Specs
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button type="button" class="btn btn-light btn-sm rounded-pill px-3 py-1 fs-12 fw-semibold text-secondary border" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
+                                                            <i class="las la-info-circle me-1"></i> Details
+                                                        </button>
                                                     <?php endif; ?>
                                                 </td>
                                             </tr>
@@ -1959,6 +2101,103 @@ if (!function_exists('getStatusBadge')) {
         </div>
     </div>
 
+    <!-- =====================================================================
+         SERVER QUOTATION & ACCEPTANCE MODAL
+         ===================================================================== -->
+    <div class="modal fade" id="quoteDetailsModal" tabindex="-1" aria-labelledby="quoteModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 18px; overflow: hidden;">
+                <div class="modal-header border-bottom py-3 px-4 bg-white align-items-center">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; background: rgba(37, 99, 235, 0.1); color: #2563EB;">
+                            <i class="las la-file-invoice fs-24"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h5 class="modal-title fw-bold text-slate-900 fs-16 mb-0" id="quoteModalTitle">Quotation #RFQ-XXXX</h5>
+                                <span id="quoteModalBadge"></span>
+                            </div>
+                            <small class="text-secondary fs-12" id="quoteModalDates">Created: -- &bull; Valid Until: --</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-4 bg-white">
+                    <!-- Loading State -->
+                    <div id="quoteLoadingState" class="text-center py-5">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 2.5rem; height: 2.5rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="text-secondary fs-13 mb-0">Retrieving official server quotation details...</p>
+                    </div>
+
+                    <!-- Loaded Content -->
+                    <div id="quoteLoadedContent" style="display: none;">
+                        <!-- Alert Box for Accept Action -->
+                        <div id="quoteAcceptAlert" class="alert d-none mb-3" role="alert"></div>
+
+                        <!-- Quote Subject & Proposal Overview -->
+                        <div class="card border border-light-subtle rounded-3 p-3 mb-3" style="background: #F8FAFC;">
+                            <h6 class="fw-bold text-slate-900 fs-14 mb-1" id="quoteModalSubject">Custom Server Architecture</h6>
+                            <p class="text-secondary fs-12.5 mb-2" id="quoteModalProposal">CloudFlox tailored server proposal.</p>
+                            <div id="quoteModalCustNotesWrap" class="fs-12 text-muted border-top pt-2 mt-2 d-none">
+                                <strong>Your Technical Requirements:</strong> <span id="quoteModalCustNotes"></span>
+                            </div>
+                        </div>
+
+                        <!-- Line Items Table -->
+                        <h6 class="fw-bold text-slate-900 fs-13 mb-2 text-uppercase letter-spacing-1">Allocated Hardware &amp; Services</h6>
+                        <div class="table-responsive mb-3 border rounded-3 overflow-hidden">
+                            <table class="table mb-0 fs-13">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-3 py-2">Item / Specification</th>
+                                        <th class="text-center py-2" style="width: 70px;">Qty</th>
+                                        <th class="text-end py-2" style="width: 110px;">Unit Price</th>
+                                        <th class="text-end pe-3 py-2" style="width: 120px;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="quoteModalItemsBody">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                                <tfoot class="border-top" style="background: #F8FAFC;">
+                                    <tr>
+                                        <td colspan="3" class="text-end fw-bold py-2.5 ps-3">Total Quoted Amount:</td>
+                                        <td class="text-end fw-800 text-slate-900 pe-3 py-2.5 fs-15" id="quoteModalGrandTotal">$0.00 USD</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- Under Review Notice (If Draft) -->
+                        <div id="quoteDraftNotice" class="alert alert-info py-2.5 px-3 fs-12.5 mb-0 border-0 rounded-3 d-none">
+                            <i class="las la-clock me-1.5 fs-15"></i>
+                            <strong>Under Review:</strong> Our senior infrastructure team is confirming hardware availability and network routing. Once finalized, pricing will be posted and this quotation will be delivered for your acceptance.
+                        </div>
+
+                        <!-- Ready To Accept Notice (If Delivered) -->
+                        <div id="quoteDeliveredNotice" class="alert alert-success py-2.5 px-3 fs-12.5 mb-0 border-0 rounded-3 d-none">
+                            <i class="las la-check-circle me-1.5 fs-15"></i>
+                            <strong>Quotation Ready:</strong> You can accept this quotation below. Upon acceptance, an official payable invoice will be generated and you will be routed to complete payment.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top py-2.5 px-4 bg-light d-flex align-items-center justify-content-between">
+                    <span class="fs-11 text-muted"><i class="las la-shield-alt text-success me-1"></i>Backed by CloudFlox 99.95% Network SLA</span>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-secondary rounded-pill px-3 py-1.5 fw-bold fs-12" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success rounded-pill px-4 py-1.5 fw-bold fs-12 text-white shadow-sm d-none" id="btnAcceptQuote" onclick="submitQuoteAcceptance()">
+                            <span class="btn-text"><i class="las la-check-circle me-1"></i> Accept Quotation &amp; Pay Invoice</span>
+                            <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- =========== Footer Area =========== -->
     <?php include 'include/footer.inc.php'; ?>
     <!-- =========== Footer Area =========== -->
@@ -2506,6 +2745,181 @@ if (!function_exists('getStatusBadge')) {
             setTimeout(() => { btn.innerHTML = orig; }, 2000);
         });
     }
+
+    // =========================================================================
+    // SERVER QUOTATIONS & RFQ WORKFLOW ENGINE
+    // =========================================================================
+    let currentActiveQuoteId = null;
+
+    function openQuoteModal(quoteId) {
+        currentActiveQuoteId = quoteId;
+        const modalEl = document.getElementById('quoteDetailsModal');
+        const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        
+        document.getElementById('quoteLoadingState').style.display = 'block';
+        document.getElementById('quoteLoadedContent').style.display = 'none';
+        document.getElementById('btnAcceptQuote').classList.add('d-none');
+        document.getElementById('quoteAcceptAlert').className = 'alert d-none';
+        document.getElementById('quoteAcceptAlert').innerHTML = '';
+        
+        document.getElementById('quoteModalTitle').innerText = 'Quotation #RFQ-' + quoteId;
+        
+        bsModal.show();
+
+        fetch('api/quote-manage.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'get_quote', quote_id: quoteId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('quoteLoadingState').style.display = 'none';
+            if (data.status === 'success' && data.quote) {
+                const q = data.quote;
+                document.getElementById('quoteLoadedContent').style.display = 'block';
+                document.getElementById('quoteModalSubject').innerText = q.subject || 'Custom Server Architecture';
+                document.getElementById('quoteModalProposal').innerText = q.proposal || 'Tailored enterprise server specification prepared by CloudFlox engineering.';
+                document.getElementById('quoteModalDates').innerText = 'Created: ' + (q.datecreated || '--') + ' • Valid Until: ' + (q.validuntil || '30 Days');
+                
+                // Customer notes
+                const notesWrap = document.getElementById('quoteModalCustNotesWrap');
+                if (q.customernotes && q.customernotes.trim()) {
+                    document.getElementById('quoteModalCustNotes').innerText = q.customernotes;
+                    notesWrap.classList.remove('d-none');
+                } else {
+                    notesWrap.classList.add('d-none');
+                }
+
+                // Stage badge
+                const stage = (q.stage || 'Draft').toLowerCase();
+                const badgeEl = document.getElementById('quoteModalBadge');
+                if (stage === 'delivered') {
+                    badgeEl.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fs-11 fw-bold"><i class="las la-bell me-1"></i>Delivered</span>';
+                } else if (stage === 'accepted') {
+                    badgeEl.innerHTML = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2.5 py-1 fs-11 fw-bold"><i class="las la-check-circle me-1"></i>Accepted</span>';
+                } else {
+                    badgeEl.innerHTML = '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2.5 py-1 fs-11 fw-bold"><i class="las la-clock me-1"></i>Under Review</span>';
+                }
+
+                // Notices & Accept Button
+                const draftNotice = document.getElementById('quoteDraftNotice');
+                const deliveredNotice = document.getElementById('quoteDeliveredNotice');
+                const btnAccept = document.getElementById('btnAcceptQuote');
+
+                if (stage === 'delivered') {
+                    draftNotice.classList.add('d-none');
+                    deliveredNotice.classList.remove('d-none');
+                    btnAccept.classList.remove('d-none');
+                } else if (stage === 'draft' || stage === 'on hold') {
+                    draftNotice.classList.remove('d-none');
+                    deliveredNotice.classList.add('d-none');
+                    btnAccept.classList.add('d-none');
+                } else {
+                    draftNotice.classList.add('d-none');
+                    deliveredNotice.classList.add('d-none');
+                    btnAccept.classList.add('d-none');
+                }
+
+                // Line items
+                const tbody = document.getElementById('quoteModalItemsBody');
+                tbody.innerHTML = '';
+                if (q.items && q.items.length > 0) {
+                    q.items.forEach(it => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="ps-3 py-2 fw-semibold text-slate-800">${escapeHtml(it.description)}</td>
+                            <td class="text-center py-2 text-muted">${escapeHtml(it.quantity)}</td>
+                            <td class="text-end py-2 text-secondary">$${it.unitprice}</td>
+                            <td class="text-end pe-3 py-2 fw-bold text-slate-900">$${it.total}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Awaiting engineering line item pricing.</td></tr>';
+                }
+
+                document.getElementById('quoteModalGrandTotal').innerText = '$' + q.total + ' USD';
+            } else {
+                alert('Error loading quotation: ' + (data.message || 'Unknown error'));
+                bsModal.hide();
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('quoteLoadingState').style.display = 'none';
+            alert('Network error while retrieving quote.');
+            bsModal.hide();
+        });
+    }
+
+    function submitQuoteAcceptance() {
+        if (!currentActiveQuoteId) return;
+        const btn = document.getElementById('btnAcceptQuote');
+        const btnText = btn.querySelector('.btn-text');
+        const spinner = btn.querySelector('.spinner-border');
+        const alertBox = document.getElementById('quoteAcceptAlert');
+
+        btn.disabled = true;
+        btnText.classList.add('d-none');
+        spinner.classList.remove('d-none');
+
+        fetch('api/quote-manage.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'accept_quote', quote_id: currentActiveQuoteId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btnText.classList.remove('d-none');
+            spinner.classList.add('d-none');
+
+            alertBox.classList.remove('d-none');
+            if (data.status === 'success') {
+                alertBox.className = 'alert alert-success py-2.5 px-3 fs-13 mb-3 border-0 bg-success-subtle text-success rounded-3';
+                alertBox.innerHTML = '<i class="las la-check-circle me-1 fs-15"></i> ' + data.message + '<br><small class="text-secondary">Redirecting to payable invoice...</small>';
+                btn.classList.add('d-none');
+                setTimeout(() => {
+                    if (data.invoice_url) {
+                        window.location.href = data.invoice_url;
+                    } else {
+                        window.location.reload();
+                    }
+                }, 1500);
+            } else {
+                alertBox.className = 'alert alert-danger py-2.5 px-3 fs-13 mb-3 border-0 bg-danger-subtle text-danger rounded-3';
+                alertBox.innerHTML = '<i class="las la-exclamation-circle me-1 fs-15"></i> ' + (data.message || 'Failed to accept quote.');
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            btnText.classList.remove('d-none');
+            spinner.classList.add('d-none');
+            alertBox.classList.remove('d-none');
+            alertBox.className = 'alert alert-danger py-2.5 px-3 fs-13 mb-3 border-0 bg-danger-subtle text-danger rounded-3';
+            alertBox.innerHTML = '<i class="las la-times-circle me-1 fs-15"></i> Network error communicating with server.';
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Auto-open quote if query parameter exists
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const autoQuoteId = urlParams.get('new_quote') || urlParams.get('quote_id');
+        if (autoQuoteId) {
+            const quotesTabBtn = document.getElementById('quotes-tab');
+            if (quotesTabBtn && window.bootstrap) {
+                bootstrap.Tab.getOrCreateInstance(quotesTabBtn).show();
+            }
+            setTimeout(() => {
+                openQuoteModal(parseInt(autoQuoteId, 10));
+            }, 300);
+        }
+    });
     </script>
 
 </body>

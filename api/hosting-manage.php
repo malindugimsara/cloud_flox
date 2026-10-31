@@ -38,9 +38,7 @@ if (!empty($raw)) {
         $data = $decoded;
     }
 }
-if (empty($data)) {
-    $data = $_POST;
-}
+$data = array_merge($_GET, $_POST, $data);
 
 $action    = trim($data['action'] ?? '');
 $serviceId = (int)($data['service_id'] ?? 0);

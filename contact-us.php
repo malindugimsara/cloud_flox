@@ -125,7 +125,7 @@
                             <span>Send Us a Message</span>
                             <i class="las la-arrow-down ms-2"></i>
                         </a>
-                        <a href="https://my.cloudflox.com/submitticket.php" class="cf-btn-contact-outline text-center">
+                        <a href="<?php echo $url; ?>ticket?action=new" class="cf-btn-contact-outline text-center">
                             <i class="las la-ticket-alt me-2"></i>
                             <span>Open Support Ticket</span>
                         </a>
@@ -394,14 +394,14 @@
 
                             <div class="cf-quick-links-group d-flex flex-column gap-2">
                                 <!-- Link 1: Client Area Portal -->
-                                <a href="https://my.cloudflox.com" target="_blank" rel="noopener" class="cf-quick-action-card">
+                                <a href="<?php echo $url; ?>clientarea" class="cf-quick-action-card">
                                     <div class="cf-quick-icon-wrap icon-theme-blue">
                                         <i class="las la-user-circle"></i>
                                     </div>
                                     <div class="cf-quick-content">
                                         <div class="d-flex align-items-center justify-content-between">
                                             <strong class="cf-quick-title">Client Area Portal</strong>
-                                            <span class="cf-quick-pill">my.cloudflox</span>
+                                            <span class="cf-quick-pill">Client Area</span>
                                         </div>
                                         <span class="cf-quick-sub">Manage DNS, services &amp; billing</span>
                                     </div>
@@ -411,7 +411,7 @@
                                 </a>
 
                                 <!-- Link 2: Open Support Ticket -->
-                                <a href="https://my.cloudflox.com/submitticket.php" target="_blank" rel="noopener" class="cf-quick-action-card">
+                                <a href="<?php echo $url; ?>ticket?action=new" class="cf-quick-action-card">
                                     <div class="cf-quick-icon-wrap icon-theme-purple">
                                         <i class="las la-ticket-alt"></i>
                                     </div>
@@ -515,12 +515,12 @@
                             <span>Guaranteed <strong>&lt; 15 Mins</strong> Response SLA</span>
                         </div>
                         <div class="cf-channel-actions">
-                            <a href="https://my.cloudflox.com/submitticket.php" target="_blank" rel="noopener" class="cf-btn-channel-primary w-100">
+                            <a href="<?php echo $url; ?>ticket?action=new" class="cf-btn-channel-primary w-100">
                                 <span>Open Priority Ticket</span>
                                 <i class="las la-arrow-right ms-2"></i>
                             </a>
                             <div class="text-center mt-2">
-                                <a href="https://my.cloudflox.com" target="_blank" rel="noopener" class="cf-channel-sublink">
+                                <a href="<?php echo $url; ?>clientarea" class="cf-channel-sublink">
                                     <i class="las la-sign-in-alt me-1"></i> Client Portal Login &rarr;
                                 </a>
                             </div>

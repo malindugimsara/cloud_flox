@@ -353,7 +353,7 @@
                             <i class="las la-user-check text-primary"></i> 3. Account Responsibilities &amp; Security
                         </h2>
                         <p>
-                            When registering a Client Portal account with CloudFlox (<a href="https://my.cloudflox.com" target="_blank" rel="noopener">my.cloudflox.com</a>), you undertake the following mandatory obligations:
+                            When registering a Client Portal account with CloudFlox (<a href="<?php echo $url; ?>clientarea" class="text-primary text-decoration-underline">Client Portal</a>), you undertake the following mandatory obligations:
                         </p>
                         <ul class="cf-legal-list">
                             <li><strong>Accurate Information:</strong> You must maintain accurate, current, and complete legal contact details, valid billing addresses, and a monitored primary email address. Providing fictitious or fraudulent details will lead to immediate account suspension.</li>
@@ -582,7 +582,7 @@
                                         <strong class="text-slate-900">Client Portal Support</strong>
                                     </div>
                                     <p class="fs-13 text-muted mb-2">Open an authenticated support ticket 24/7:</p>
-                                    <a href="https://my.cloudflox.com/submitticket.php" target="_blank" rel="noopener" class="fw-bold text-success text-decoration-none fs-14">Submit Legal / Billing Ticket &rarr;</a>
+                                    <a href="<?php echo $url; ?>ticket?action=new" class="fw-bold text-success text-decoration-none fs-14">Submit Legal / Billing Ticket &rarr;</a>
                                 </div>
                             </div>
                         </div>

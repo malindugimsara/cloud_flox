@@ -96,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $foundUser = false;
             $clientId = 0;
+            $clientName = '';
 
             if ($mysqli && !$mysqli->connect_error) {
                 $stmt = $mysqli->prepare("SELECT id, firstname, lastname, email FROM tblclients WHERE email = ? LIMIT 1");
@@ -106,8 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($client = $res->fetch_assoc()) {
                         $foundUser = true;
                         $clientId = $client['id'];
+                        $clientName = trim(($client['firstname'] ?? '') . ' ' . ($client['lastname'] ?? ''));
 
-                        // Generate secure 32-character hex token
+                        // Generate secure 48-character hex token
                         $generatedToken = bin2hex(random_bytes(24));
                         $expiryTime = date('Y-m-d H:i:s', time() + 3600); // 1 hour
 
@@ -117,16 +119,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $updStmt->execute();
                             $updStmt->close();
 
-                            // Construct reset URL
-                            $demoResetUrl = $url . 'forgot-password?token=' . $generatedToken . '&email=' . urlencode($email);
+                            // Construct full absolute reset URL (works seamlessly both on localhost:8080 and production)
+                            require_once __DIR__ . '/include/email-service.php';
+                            $resetUrl = CloudFloxEmailService::getAbsoluteUrl('forgot-password?token=' . $generatedToken . '&email=' . urlencode($email));
+                            
+                            // Security: Only show demo reset shortcut on localhost development environment
+                            $isLocalDevHost = (
+                                strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') !== false ||
+                                strpos($_SERVER['HTTP_HOST'] ?? '', '127.0.0.1') !== false
+                            );
+                            if ($isLocalDevHost) {
+                                $demoResetUrl = $resetUrl;
+                            }
+
+                            // Dispatch branded password reset email via authenticated SMTP
+                            CloudFloxEmailService::sendPasswordResetEmail($email, $resetUrl, $clientName);
                         }
                     }
                     $stmt->close();
                 }
             }
 
-            // Friendly message
-            $success = 'Password reset instructions have been generated for <strong>' . htmlspecialchars($email) . '</strong>. If an account is associated with this email, you will be able to set a new password.';
+            // Security best practice: Always show friendly dispatch notice regardless of email existence
+            $success = 'If an active account is registered with <strong>' . htmlspecialchars($email) . '</strong>, we have dispatched a password reset link to your email. Please check your inbox (and spam folder) within the next hour.';
         }
     }
 }
@@ -153,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- =========== CSS Area =========== -->
 </head>
 
-<body class="pure-white-theme cf-checkout-page">
+<body class="pure-white-theme cf-auth-page cf-checkout-page">
 
     <!-- =========== Dedicated Minimalist Auth Header Area =========== -->
     <?php include 'include/auth-header.inc.php'; ?>
@@ -162,14 +177,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- =========================================================================
          2. AUTH MAIN SECTION (Minimalistic, Highly Focused)
          ========================================================================= -->
-    <section class="cf-checkout-body-wrap py-4 py-md-5">
-        <div class="container cf-checkout-container">
+    <section class="cf-auth-page-wrap py-4 py-lg-5">
+        <div class="container cf-auth-container">
 
-            <div class="row g-4 justify-content-center">
+            <div class="row g-4 g-xl-5 justify-content-center align-items-start">
                 
-                <!-- LEFT COLUMN: RESET FORM (col-lg-7) -->
-                <div class="col-12 col-lg-7">
-                    <div class="cf-step-card-box">
+                <!-- LEFT COLUMN: RESET FORM (col-lg-7 col-xl-7) -->
+                <div class="col-12 col-lg-7 col-xl-7">
+                    <div class="cf-step-card-box cf-auth-card-box">
                         
                         <!-- Mode Switcher Tabs -->
                         <div class="cf-auth-tabs-wrap">
@@ -181,15 +196,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </a>
                         </div>
 
-                        <!-- Card Heading -->
-                        <div class="mb-4 pb-2 border-bottom">
-                            <div class="d-inline-flex align-items-center gap-1.5 px-2.5 py-0.5 rounded-pill bg-primary-subtle text-primary fw-bold fs-11 mb-2 border border-primary-subtle">
-                                <span class="cf-pulse-dot-blue"></span> Account Recovery
+                        <!-- Card Heading Wrap -->
+                        <div class="cf-auth-heading-wrap">
+                            <div class="cf-auth-badge">
+                                <span class="cf-pulse-dot-blue"></span>
+                                <span>Account Recovery</span>
                             </div>
-                            <h2 class="fw-extrabold text-slate-900 mb-1.5 fs-22">
+                            <h2 class="cf-auth-title">
                                 <?php echo $tokenValid ? 'Create Your New Password' : 'Forgot Your Password?'; ?>
                             </h2>
-                            <p class="text-secondary fs-13.5 mb-0">
+                            <p class="cf-auth-subtitle">
                                 <?php echo $tokenValid 
                                     ? 'Please enter and confirm your new secure password below.' 
                                     : 'Enter the email address registered with your account and we\'ll send you instructions to safely reset it.'; ?>
@@ -198,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <!-- Error Alert Banner -->
                         <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger d-flex align-items-center gap-2 mb-3 rounded-3 shadow-sm py-2.5 px-3 fs-13" role="alert">
+                            <div class="alert alert-danger d-flex align-items-center gap-2 mb-4 rounded-3 shadow-sm py-3 px-3 fs-13" role="alert">
                                 <i class="las la-exclamation-circle fs-18 flex-shrink-0 text-danger"></i>
                                 <div><?php echo $error; ?></div>
                             </div>
@@ -206,19 +222,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <!-- Success Alert Banner -->
                         <?php if (!empty($success)): ?>
-                            <div class="alert alert-success d-flex align-items-center gap-2 mb-3 rounded-3 shadow-sm py-2.5 px-3 fs-13" role="alert">
+                            <div class="alert alert-success d-flex align-items-center gap-2 mb-4 rounded-3 shadow-sm py-3 px-3 fs-13" role="alert">
                                 <i class="las la-check-circle fs-18 flex-shrink-0 text-success"></i>
                                 <div><?php echo $success; ?></div>
                             </div>
 
                             <!-- Developer / Localhost One-Click Test Notification -->
                             <?php if (!empty($demoResetUrl)): ?>
-                                <div class="p-3 mb-3 rounded-3 border border-primary-subtle bg-primary-subtle fs-12.5 text-slate-800">
+                                <div class="p-3 mb-4 rounded-3 border border-primary-subtle bg-primary-subtle fs-12.5 text-slate-800">
                                     <div class="d-flex align-items-center gap-2 mb-1.5 fw-bold text-primary">
-                                        <i class="las la-key fs-16"></i> Secure Reset Link Generated:
+                                        <i class="las la-envelope fs-16"></i> Reset Instructions Dispatched!
                                     </div>
                                     <p class="mb-2 text-secondary fs-12">
-                                        Click the button below to proceed to the password update screen:
+                                        An email with reset instructions has been sent to <strong><?php echo htmlspecialchars($email); ?></strong> via CloudFlox SMTP. For localhost testing convenience, you can also proceed directly:
                                     </p>
                                     <a href="<?php echo htmlspecialchars($demoResetUrl); ?>" class="btn btn-primary btn-sm rounded-pill px-3.5 py-1.5 fw-bold">
                                         Proceed to Set New Password &rarr;
@@ -235,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>">
 
                                 <div class="cf-minimal-input-wrap">
-                                    <label for="newPassword" class="form-label fs-13 fw-bold text-slate-800 mb-2">
+                                    <label for="newPassword" class="form-label">
                                         New Password <span class="text-danger">*</span>
                                     </label>
                                     <div class="position-relative">
@@ -256,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
 
                                 <div class="cf-minimal-input-wrap">
-                                    <label for="confirmPassword" class="form-label fs-13 fw-bold text-slate-800 mb-2">
+                                    <label for="confirmPassword" class="form-label">
                                         Confirm New Password <span class="text-danger">*</span>
                                     </label>
                                     <div class="position-relative">
@@ -272,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                 </div>
 
-                                <div class="mb-4">
+                                <div class="cf-auth-btn-wrap">
                                     <button type="submit" class="cf-minimal-cta-btn" id="btnSubmitNewPass">
                                         <span class="btn-text">
                                             Update Password &amp; Sign In <i class="las la-arrow-right ms-2 fs-16"></i>
@@ -288,7 +304,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="hidden" name="request_reset" value="1">
 
                                 <div class="cf-minimal-input-wrap">
-                                    <label for="recoveryEmail" class="form-label fs-13 fw-bold text-slate-800 mb-2">
+                                    <label for="recoveryEmail" class="form-label">
                                         Registered Email Address <span class="text-danger">*</span>
                                     </label>
                                     <div class="position-relative">
@@ -304,10 +320,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             autofocus
                                         >
                                     </div>
-                                    <small class="text-muted fs-11 mt-1 d-block">We will send instructions to this address if it is registered.</small>
+                                    <small class="cf-auth-input-helper">We will send instructions to this address if it is registered.</small>
                                 </div>
 
-                                <div class="mb-4">
+                                <div class="cf-auth-btn-wrap">
                                     <button type="submit" class="cf-minimal-cta-btn" id="btnSubmitReset">
                                         <span class="btn-text">
                                             Send Reset Instructions <i class="las la-arrow-right ms-2 fs-16"></i>
@@ -319,11 +335,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
 
                         <!-- Bottom Link -->
-                        <div class="text-center pt-4 border-top">
-                            <span class="fs-13.5 text-secondary">
-                                Remembered your password?
-                            </span>
-                            <a href="<?php echo $url; ?>login" class="fs-13.5 fw-bold text-primary text-decoration-none ms-1 hover-underline">
+                        <div class="cf-auth-footer-link">
+                            <span>Remembered your password?</span>
+                            <a href="<?php echo $url; ?>login">
                                 Sign In &rarr;
                             </a>
                         </div>
@@ -331,9 +345,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN: MINIMALISTIC RECOVERY SHOWCASE (col-lg-5) -->
-                <div class="col-12 col-lg-5">
-                    <div class="cf-sidebar-summary-card text-center sticky-top" style="top: 88px;">
+                <!-- RIGHT COLUMN: MINIMALISTIC RECOVERY SHOWCASE (col-lg-5 col-xl-5) -->
+                <div class="col-12 col-lg-5 col-xl-5">
+                    <div class="cf-sidebar-summary-card cf-auth-showcase-card text-center sticky-top" style="top: 88px;">
                         
                         <!-- 3D Security Portal Visual Showcase -->
                         <div class="cf-auth-side-img-wrap">

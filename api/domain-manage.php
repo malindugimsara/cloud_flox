@@ -41,9 +41,7 @@ if (!empty($raw)) {
         $data = $decoded;
     }
 }
-if (empty($data)) {
-    $data = $_POST;
-}
+$data = array_merge($_GET, $_POST, $data);
 
 $action   = trim($data['action'] ?? '');
 $domainId = (int)($data['domain_id'] ?? 0);

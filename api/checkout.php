@@ -398,74 +398,109 @@ $liveHosting = WHMCSPricing::getHostingProducts();
 $pid = trim($data['pid'] ?? '');
 $hasHosting = (!empty($pid) && $pid !== 'none' && (isset($liveHosting[$pid]) || is_numeric($pid)));
 
-// Domain Details
-$domainType = strtolower(trim($data['domain_type'] ?? 'register'));
-if ($domainType === 'existing') {
-    $domainType = 'owndomain';
-}
-$domainName = strtolower(trim($data['domain'] ?? ''));
-$domainTld  = strtolower(trim($data['domain_tld'] ?? ''));
-$eppCode    = trim($data['epp_code'] ?? '');
+// Domain Details (Single or Multi-Domain Support)
+$rawDomainsList = $data['domains'] ?? [];
+$parsedDomains = [];
 
-if (!empty($domainTld) && !str_starts_with($domainTld, '.')) {
-    $domainTld = '.' . $domainTld;
-}
-
-$fullDomain = '';
-$domainFee = 0.00;
-
-// Clean domain input
-$domainName = preg_replace('#^https?://#i', '', $domainName);
-$domainName = preg_replace('#^www\.#i', '', $domainName);
-$domainName = preg_replace('#/.*$#', '', $domainName);
-
-if (!str_contains($domainName, '.') && !empty($domainTld)) {
-    $fullDomain = $domainName . $domainTld;
-} else {
-    $fullDomain = $domainName;
+// Helper function to extract and sanitize domain
+function sanitizeDomainEntry($rawName) {
+    $rawName = preg_replace('#^https?://#i', '', $rawName);
+    $rawName = preg_replace('#^www\.#i', '', $rawName);
+    $rawName = preg_replace('#/.*$#', '', $rawName);
+    $rawName = strtolower(trim($rawName));
+    return preg_replace('/[^a-z0-9\.\-]/i', '', $rawName);
 }
 
-$tldKey = ltrim(substr($fullDomain, strrpos($fullDomain, '.')), '.');
+// 1. Process Multi-Domain Array if provided
+if (is_array($rawDomainsList) && !empty($rawDomainsList)) {
+    foreach ($rawDomainsList as $dItem) {
+        if (is_string($dItem)) {
+            $dName = sanitizeDomainEntry($dItem);
+            $dType = 'register';
+            $dYears = 1;
+        } elseif (is_array($dItem)) {
+            $dName = sanitizeDomainEntry($dItem['name'] ?? $dItem['domain'] ?? '');
+            $dType = strtolower(trim($dItem['type'] ?? 'register'));
+            if ($dType === 'existing') $dType = 'owndomain';
+            $dYears = max(1, min(5, (int)($dItem['years'] ?? 1)));
+        } else {
+            continue;
+        }
 
-$domainYears = max(1, min(5, (int)($data['domain_years'] ?? 1)));
+        if (empty($dName) || !str_contains($dName, '.')) continue;
 
-if ($domainType === 'register') {
-    if (empty($fullDomain)) {
-        echo json_encode([
-            'status'  => 'error',
-            'message' => 'Please enter the domain name you wish to register.'
-        ]);
-        exit;
+        $tld = ltrim(substr($dName, strrpos($dName, '.')), '.');
+        if ($dType === 'transfer') {
+            $dYears = 1;
+            $fee = (float)($liveDomains[$tld]['transfer'] ?? 12.73);
+        } elseif ($dType === 'owndomain') {
+            $fee = 0.00;
+        } else {
+            $yearlyRate = (float)($liveDomains[$tld]['register'] ?? $CF_TLDS[$tld]['price'] ?? 14.93);
+            $fee = round($yearlyRate * $dYears, 2);
+        }
+
+        $parsedDomains[] = [
+            'domain' => $dName,
+            'type'   => $dType,
+            'years'  => $dYears,
+            'fee'    => $fee,
+            'tld'    => $tld
+        ];
     }
-    $yearlyRate = (float)($liveDomains[$tldKey]['register'] ?? $CF_TLDS[$tldKey]['price'] ?? 14.93);
-    $domainFee = round($yearlyRate * $domainYears, 2);
-} elseif ($domainType === 'transfer') {
-    if (empty($fullDomain)) {
-        echo json_encode([
-            'status'  => 'error',
-            'message' => 'Please enter the domain name you wish to transfer.'
-        ]);
-        exit;
-    }
-    $domainYears = 1;
-    $domainFee = (float)($liveDomains[$tldKey]['transfer'] ?? 12.73);
-} elseif ($domainType === 'owndomain') {
-    if (empty($fullDomain)) {
-        echo json_encode([
-            'status'  => 'error',
-            'message' => 'Please enter your existing domain name.'
-        ]);
-        exit;
-    }
-    // Existing domain has zero domain registration charge ($0.00)
-    $domainFee = 0.00;
-} else {
-    // Free Subdomain
-    $subPart = !empty($domainName) ? preg_replace('/[^a-z0-9\-]/', '', $domainName) : 'client-' . rand(100, 999);
-    $fullDomain = $subPart . '.cloudflox.site';
-    $domainFee = 0.00;
 }
 
+// 2. Fallback to Single Domain fields if parsedDomains is empty
+if (empty($parsedDomains)) {
+    $singleType = strtolower(trim($data['domain_type'] ?? 'register'));
+    if ($singleType === 'existing') $singleType = 'owndomain';
+    $singleName = sanitizeDomainEntry($data['domain'] ?? '');
+    $singleTld  = strtolower(trim($data['domain_tld'] ?? ''));
+    if (!empty($singleTld) && !str_starts_with($singleTld, '.')) {
+        $singleTld = '.' . $singleTld;
+    }
+
+    if (!str_contains($singleName, '.') && !empty($singleTld)) {
+        $singleFull = $singleName . $singleTld;
+    } else {
+        $singleFull = $singleName;
+    }
+
+    if (!empty($singleFull) && str_contains($singleFull, '.')) {
+        $tld = ltrim(substr($singleFull, strrpos($singleFull, '.')), '.');
+        $sYears = max(1, min(5, (int)($data['domain_years'] ?? 1)));
+
+        if ($singleType === 'transfer') {
+            $sYears = 1;
+            $fee = (float)($liveDomains[$tld]['transfer'] ?? 12.73);
+        } elseif ($singleType === 'owndomain') {
+            $fee = 0.00;
+        } else {
+            $yearlyRate = (float)($liveDomains[$tld]['register'] ?? $CF_TLDS[$tld]['price'] ?? 14.93);
+            $fee = round($yearlyRate * $sYears, 2);
+        }
+
+        $parsedDomains[] = [
+            'domain' => $singleFull,
+            'type'   => $singleType,
+            'years'  => $sYears,
+            'fee'    => $fee,
+            'tld'    => $tld
+        ];
+    }
+}
+
+// Calculate total domain fees across all selected domains
+$totalDomainFee = 0.00;
+foreach ($parsedDomains as $pd) {
+    $totalDomainFee += (float)$pd['fee'];
+}
+$domainFee = $totalDomainFee;
+
+// Primary domain representation for hosting attachment and backward compatibility
+$fullDomain = !empty($parsedDomains) ? $parsedDomains[0]['domain'] : '';
+$domainType = !empty($parsedDomains) ? $parsedDomains[0]['type'] : 'register';
+$domainYears = !empty($parsedDomains) ? $parsedDomains[0]['years'] : 1;
 // Ensure either hosting or a domain is chosen
 if (!$hasHosting && $domainType !== 'register' && $domainType !== 'transfer') {
     echo json_encode([
@@ -674,43 +709,176 @@ if (empty($orderResult['orderid'])) {
 $orderId   = $orderResult['orderid'];
 $invoiceId = 0;
 
-// If local database is connected, insert genuine invoice record into tblinvoices
+// If local database is connected, insert genuine order, hosting, domain, and invoice records
 try {
     $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
     if (!$mysqli->connect_error) {
-        $today   = date('Y-m-d');
-        $dueDate = date('Y-m-d', strtotime('+7 days'));
-        $now     = date('Y-m-d H:i:s');
+        $today    = date('Y-m-d');
+        $dueDate  = date('Y-m-d', strtotime('+7 days'));
+        $now      = date('Y-m-d H:i:s');
+        $clientIp = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+
+        // 1. Create Invoice
         $invStmt = $mysqli->prepare("INSERT INTO tblinvoices (userid, invoicenum, date, duedate, datepaid, subtotal, credit, tax, tax2, total, taxrate, taxrate2, status, paymentmethod, notes, created_at, updated_at) VALUES (?, '', ?, ?, '0000-00-00 00:00:00', ?, 0.00, 0.00, 0.00, ?, 0.000, 0.000, 'Unpaid', ?, '', ?, ?)");
         if ($invStmt) {
             $invStmt->bind_param('isssssss', $clientId, $today, $dueDate, $totalPrice, $totalPrice, $whmcsGateway, $now, $now);
             $invStmt->execute();
             if ($invStmt->insert_id > 0) {
                 $invoiceId = $invStmt->insert_id;
+            }
+            $invStmt->close();
+        }
 
-                if ($hasHosting) {
-                    $itemDesc = $planName . ($fullDomain ? ' - ' . $fullDomain : '');
-                    if ($domainType === 'register' && $domainFee > 0) {
-                        $itemDesc .= " + Domain ({$domainYears} Yr" . ($domainYears > 1 ? 's' : '') . ")";
-                    }
-                } elseif ($domainType === 'register') {
-                    $itemDesc = "Domain Registration - {$fullDomain} ({$domainYears} Year" . ($domainYears > 1 ? 's' : '') . ")";
-                } elseif ($domainType === 'transfer') {
-                    $itemDesc = "Domain Transfer - {$fullDomain} (1 Year Extension)";
-                } else {
-                    $itemDesc = $planName . ($fullDomain ? ' - ' . $fullDomain : '');
+        // 2. Create Order in tblorders
+        $orderNum = rand(1000000000, 9999999999);
+        $ordNotes = "Order via CloudFlox On-Site Checkout";
+        $ordStmt  = $mysqli->prepare("INSERT INTO tblorders (ordernum, userid, contactid, date, nameservers, transfersecret, renewals, promocode, promotype, promovalue, orderdata, amount, paymentmethod, invoiceid, status, ipaddress, fraudmodule, fraudoutput, notes) VALUES (?, ?, 0, ?, '', '', '', '', '', '', '', ?, ?, ?, 'Pending', ?, '', '', ?)");
+        if ($ordStmt) {
+            $ordStmt->bind_param('sisdssis', $orderNum, $clientId, $now, $totalPrice, $whmcsGateway, $invoiceId, $clientIp, $ordNotes);
+            $ordStmt->execute();
+            if ($ordStmt->insert_id > 0) {
+                $orderId = $ordStmt->insert_id;
+            }
+            $ordStmt->close();
+        }
+
+        $hostingServiceId = 0;
+        $domainServiceId  = 0;
+
+        // 3. Create Hosting Record in tblhosting
+        if ($hasHosting) {
+            // Clean username generation
+            $domainPart = explode('.', $fullDomain)[0];
+            $cleanUser  = preg_replace('/[^a-z0-9]/', '', strtolower($domainPart));
+            if (empty($cleanUser) || is_numeric($cleanUser[0])) {
+                $cpanelUser = 'cf' . substr($cleanUser . rand(10, 99), 0, 6);
+            } else {
+                $cpanelUser = substr($cleanUser, 0, 7) . rand(1, 9);
+            }
+
+            // High-entropy 12-char temporary password
+            $charsUpper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+            $charsLower = 'abcdefghjkmnpqrstuvwxyz';
+            $charsNum   = '23456789';
+            $charsSym   = '!@#$%&*';
+            $tempPass = 'Cf' . $charsSym[rand(0, strlen($charsSym)-1)] . 
+                        $charsUpper[rand(0, strlen($charsUpper)-1)] . 
+                        $charsLower[rand(0, strlen($charsLower)-1)] . 
+                        $charsNum[rand(0, strlen($charsNum)-1)] . 
+                        $charsLower[rand(0, strlen($charsLower)-1)] . 
+                        $charsNum[rand(0, strlen($charsNum)-1)] . 
+                        $charsUpper[rand(0, strlen($charsUpper)-1)] . 
+                        $charsSym[rand(0, strlen($charsSym)-1)] . 
+                        $charsNum[rand(0, strlen($charsNum)-1)];
+            $hashedPass = password_hash($tempPass, PASSWORD_DEFAULT);
+
+            $serverId       = 1; // SV-CF1
+            $cycle          = $isYearly ? 'Annually' : 'Monthly';
+            $hostingNextDue = $isYearly ? date('Y-m-d', strtotime('+1 year')) : date('Y-m-d', strtotime('+1 month'));
+            $hostingNotes   = "Auto-provisioned via CloudFlox Checkout. InitialPass: " . $tempPass;
+
+            $hostStmt = $mysqli->prepare("INSERT INTO tblhosting (
+                userid, orderid, packageid, server, regdate, domain, paymentmethod,
+                firstpaymentamount, amount, billingcycle, nextduedate, nextinvoicedate,
+                domainstatus, username, password, notes, subscriptionid, promoid,
+                suspendreason, overideautosuspend, overidesuspenduntil, dedicatedip,
+                assignedips, ns1, ns2, created_at, updated_at
+            ) VALUES (
+                ?, ?, ?, ?, ?, ?, ?,
+                ?, ?, ?, ?, ?,
+                'Pending', ?, ?, ?, '', 0,
+                '', 0, '0000-00-00', '',
+                '', 'ns1.cloudflox.com', 'ns2.cloudflox.com', ?, ?
+            )");
+            if ($hostStmt) {
+                $hostStmt->bind_param(
+                    'iiiisssddssssssss',
+                    $clientId, $orderId, $whmcsPid, $serverId, $today, $fullDomain, $whmcsGateway,
+                    $planPrice, $planPrice, $cycle, $hostingNextDue, $hostingNextDue,
+                    $cpanelUser, $hashedPass, $hostingNotes, $now, $now
+                );
+                $hostStmt->execute();
+                if ($hostStmt->insert_id > 0) {
+                    $hostingServiceId = $hostStmt->insert_id;
                 }
-                $relType  = $hasHosting ? 'Hosting' : 'Item';
-                $itemStmt = $mysqli->prepare("INSERT INTO tblinvoiceitems (invoiceid, userid, type, relid, description, amount, taxed, duedate, paymentmethod) VALUES (?, ?, ?, 0, ?, ?, 0, ?, ?)");
+                $hostStmt->close();
+            }
+        }
+
+        // 4. Create Domain Records in tbldomains for ALL selected domains
+        $domainServiceIds = [];
+        foreach ($parsedDomains as $pDom) {
+            $curDomName  = $pDom['domain'];
+            $curDomType  = $pDom['type'];
+            $curDomYears = $pDom['years'];
+            $curDomFee   = (float)$pDom['fee'];
+
+            if ($curDomType === 'register' || $curDomType === 'transfer') {
+                $domTypeFormatted = ($curDomType === 'transfer') ? 'Transfer' : 'Register';
+                $domainExpiry     = date('Y-m-d', strtotime('+' . $curDomYears . ' years'));
+                $domainNotes      = "Ordered via CloudFlox Checkout (" . $curDomYears . " yr)";
+
+                $domStmt = $mysqli->prepare("INSERT INTO tbldomains (
+                    userid, orderid, type, registrationdate, domain, firstpaymentamount,
+                    recurringamount, registrar, registrationperiod, expirydate, subscriptionid,
+                    promoid, status, nextduedate, nextinvoicedate, additionalnotes,
+                    paymentmethod, dnsmanagement, emailforwarding, idprotection, donotrenew,
+                    reminders, synced, created_at, updated_at
+                ) VALUES (
+                    ?, ?, ?, ?, ?, ?,
+                    ?, 'namecheap', ?, ?, '',
+                    0, 'Pending', ?, ?, ?,
+                    ?, 1, 0, 1, 0,
+                    '', 0, ?, ?
+                )");
+                if ($domStmt) {
+                    $domStmt->bind_param(
+                        'iisssddisssssss',
+                        $clientId, $orderId, $domTypeFormatted, $today, $curDomName, $curDomFee,
+                        $curDomFee, $curDomYears, $domainExpiry, $domainExpiry, $domainExpiry, $domainNotes,
+                        $whmcsGateway, $now, $now
+                    );
+                    $domStmt->execute();
+                    if ($domStmt->insert_id > 0) {
+                        $domainServiceIds[$curDomName] = $domStmt->insert_id;
+                    }
+                    $domStmt->close();
+                }
+            }
+        }
+
+        // 5. Create Line Items in tblinvoiceitems linked with service IDs
+        if ($invoiceId > 0) {
+            if ($hasHosting) {
+                $itemDesc = $planName . ($fullDomain ? ' - ' . $fullDomain : '');
+                $itemStmt = $mysqli->prepare("INSERT INTO tblinvoiceitems (invoiceid, userid, type, relid, description, amount, taxed, duedate, paymentmethod) VALUES (?, ?, 'Hosting', ?, ?, ?, 0, ?, ?)");
                 if ($itemStmt) {
-                    $itemStmt->bind_param('iisssss', $invoiceId, $clientId, $relType, $itemDesc, $totalPrice, $dueDate, $whmcsGateway);
+                    $itemStmt->bind_param('iiisdss', $invoiceId, $clientId, $hostingServiceId, $itemDesc, $planPrice, $dueDate, $whmcsGateway);
                     $itemStmt->execute();
                     $itemStmt->close();
                 }
             }
-            $invStmt->close();
-        }
-    }
+
+            // Create individual line item for EACH domain in tblinvoiceitems
+            foreach ($parsedDomains as $pDom) {
+                $curDomName  = $pDom['domain'];
+                $curDomType  = $pDom['type'];
+                $curDomYears = $pDom['years'];
+                $curDomFee   = (float)$pDom['fee'];
+                $curServiceId = $domainServiceIds[$curDomName] ?? 0;
+
+                if ($curDomFee > 0 || $curDomType === 'register' || $curDomType === 'transfer') {
+                    $domItemDesc = ($curDomType === 'transfer' ? 'Domain Transfer - ' : 'Domain Registration - ') . $curDomName . " ({$curDomYears} Yr" . ($curDomYears > 1 ? 's' : '') . ")";
+                    $domRelType  = ($curDomType === 'transfer') ? 'DomainTransfer' : 'DomainRegister';
+                    $dItemStmt   = $mysqli->prepare("INSERT INTO tblinvoiceitems (invoiceid, userid, type, relid, description, amount, taxed, duedate, paymentmethod) VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?)");
+                    if ($dItemStmt) {
+                        $dItemStmt->bind_param('iisisdss', $invoiceId, $clientId, $domRelType, $curServiceId, $domItemDesc, $curDomFee, $dueDate, $whmcsGateway);
+                        $dItemStmt->execute();
+                        $dItemStmt->close();
+                    }
+                }
+            }
+        }    }
 } catch (Exception $e) {}
 
 if (empty($invoiceId)) {

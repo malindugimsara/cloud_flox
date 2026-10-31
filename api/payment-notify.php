@@ -48,22 +48,9 @@ if ($action === 'verify' || $action === 'status') {
     }
 
     if ($action === 'verify') {
-        // Mark as paid upon JS onCompleted notification
-        $now = date('Y-m-d H:i:s');
-        $upd = $mysqli->prepare("UPDATE tblinvoices SET status = 'Paid', datepaid = ?, updated_at = ? WHERE id = ?");
-        if ($upd) {
-            $upd->bind_param('ssi', $now, $now, $invoiceId);
-            $upd->execute();
-            $upd->close();
-        }
-
-        // Also update any orders associated with this invoice
-        $ordUpd = $mysqli->prepare("UPDATE tblorders SET status = 'Active' WHERE invoiceid = ?");
-        if ($ordUpd) {
-            $ordUpd->bind_param('i', $invoiceId);
-            $ordUpd->execute();
-            $ordUpd->close();
-        }
+        // Settle invoice, activate hosting/domains, and dispatch welcome credentials email
+        require_once __DIR__ . '/../include/email-service.php';
+        CloudFloxEmailService::settleAndActivateInvoice($invoiceId, $mysqli);
     }
 
     // Check status
@@ -116,21 +103,9 @@ if (!empty($merchantId) && !empty($orderId) && !empty($statusCode) && !empty($md
             $invoiceId = intval($orderId);
             $mysqli = getDbConnection($dbHost, $dbUser, $dbPass, $dbName);
             if ($mysqli) {
-                $now = date('Y-m-d H:i:s');
-                $stmt = $mysqli->prepare("UPDATE tblinvoices SET status = 'Paid', datepaid = ?, updated_at = ? WHERE id = ?");
-                if ($stmt) {
-                    $stmt->bind_param('ssi', $now, $now, $invoiceId);
-                    $stmt->execute();
-                    $stmt->close();
-                }
-
-                // Update tblorders
-                $ordStmt = $mysqli->prepare("UPDATE tblorders SET status = 'Active' WHERE invoiceid = ?");
-                if ($ordStmt) {
-                    $ordStmt->bind_param('i', $invoiceId);
-                    $ordStmt->execute();
-                    $ordStmt->close();
-                }
+                // Settle invoice, activate hosting/domains, and dispatch welcome credentials email
+                require_once __DIR__ . '/../include/email-service.php';
+                CloudFloxEmailService::settleAndActivateInvoice($invoiceId, $mysqli);
 
                 // Log into tblaccounts if invoice exists
                 $invQuery = $mysqli->query("SELECT userid, total FROM tblinvoices WHERE id = " . intval($invoiceId));
@@ -157,6 +132,41 @@ if (!empty($merchantId) && !empty($orderId) && !empty($statusCode) && !empty($md
     } else {
         http_response_code(400);
         echo json_encode(['status' => 'error', 'message' => 'Hash signature verification failed']);
+        exit;
+    }
+}
+
+// -------------------------------------------------------------------------
+// 3. PAYPAL IPN WEBHOOK HANDLER
+// -------------------------------------------------------------------------
+$paymentStatus = strtolower(trim($_POST['payment_status'] ?? ''));
+$customData    = $_POST['custom'] ?? '';
+$paypalTxnId   = $_POST['txn_id'] ?? '';
+$mcGross       = $_POST['mc_gross'] ?? '';
+
+if ($paymentStatus === 'completed' && !empty($customData)) {
+    $invoiceId = intval($customData);
+    if ($invoiceId > 0) {
+        $mysqli = getDbConnection($dbHost, $dbUser, $dbPass, $dbName);
+        if ($mysqli) {
+            require_once __DIR__ . '/../include/email-service.php';
+            CloudFloxEmailService::settleAndActivateInvoice($invoiceId, $mysqli);
+
+            // Log into tblaccounts if invoice exists
+            $invQuery = $mysqli->query("SELECT userid, total FROM tblinvoices WHERE id = " . intval($invoiceId));
+            if ($invQuery && $invRow = $invQuery->fetch_assoc()) {
+                $desc = "PayPal Payment for Invoice #" . $invoiceId . " (Ref: " . $paypalTxnId . ")";
+                $accStmt = $mysqli->prepare("INSERT INTO tblaccounts (date, description, amountin, fees, amountout, transid, invoiceid) VALUES (?, ?, ?, 0.00, 0.00, ?, ?)");
+                if ($accStmt) {
+                    $today = date('Y-m-d');
+                    $accStmt->bind_param('ssssi', $today, $desc, $invRow['total'], $paypalTxnId, $invoiceId);
+                    $accStmt->execute();
+                    $accStmt->close();
+                }
+            }
+        }
+        http_response_code(200);
+        echo json_encode(['status' => 'success', 'message' => 'PayPal payment verified and invoice settled']);
         exit;
     }
 }

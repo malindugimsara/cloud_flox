@@ -6,7 +6,11 @@ Allow: /
 
 # Disallow private and administrative assets
 Disallow: /include/
+Disallow: /api/
 Disallow: /cgi-bin/
+Disallow: /clientarea
+Disallow: /invoice
+Disallow: /ticket
 
 # Official XML Sitemap
 Sitemap: https://cloudflox.com/sitemap.xml

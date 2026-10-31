@@ -33,20 +33,8 @@ if (!$mysqli->connect_error) {
 
 // Handle payment status auto-update if requested
 if ($markPaid && $mysqli && $invoiceId > 0) {
-    $now = date('Y-m-d H:i:s');
-    $stmt = $mysqli->prepare("UPDATE tblinvoices SET status = 'Paid', datepaid = ?, updated_at = ? WHERE id = ?");
-    if ($stmt) {
-        $stmt->bind_param('ssi', $now, $now, $invoiceId);
-        $stmt->execute();
-        $stmt->close();
-    }
-    // Update order
-    $ordStmt = $mysqli->prepare("UPDATE tblorders SET status = 'Active' WHERE invoiceid = ?");
-    if ($ordStmt) {
-        $ordStmt->bind_param('i', $invoiceId);
-        $ordStmt->execute();
-        $ordStmt->close();
-    }
+    require_once __DIR__ . '/include/email-service.php';
+    CloudFloxEmailService::settleAndActivateInvoice($invoiceId, $mysqli);
 }
 
 // Invoice default placeholder values
@@ -759,19 +747,19 @@ $payhereObj = [
                             <p class="fs-13 cf-text-sub mb-3">
                                 Thank you for your payment! Your transaction has been recorded and services have been automatically activated.
                             </p>
-                            <div class="d-flex justify-content-center gap-2 flex-wrap mb-3" style="margin-bottom: 20px !important;">
+                            <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mb-4" style="margin-bottom: 24px !important;">
                                 <?php if ($hasHostingItem): ?>
-                                    <a href="<?php echo $url; ?>clientarea?tab=services" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-xs">
+                                    <a href="<?php echo $url; ?>clientarea?tab=services" class="btn btn-primary rounded-pill fw-bold shadow-xs d-inline-flex align-items-center" style="padding: 8px 20px; font-size: 13px;">
                                         <i class="las la-server me-1"></i> Manage Hosting &amp; cPanel
                                     </a>
                                 <?php endif; ?>
                                 <?php if ($hasDomainItem): ?>
-                                    <a href="<?php echo $url; ?>clientarea?tab=domains" class="btn <?php echo $hasHostingItem ? 'btn-outline-primary' : 'btn-primary'; ?> btn-sm rounded-pill px-4 fw-bold shadow-xs">
+                                    <a href="<?php echo $url; ?>clientarea?tab=domains" class="btn <?php echo $hasHostingItem ? 'btn-outline-primary' : 'btn-primary'; ?> rounded-pill fw-bold shadow-xs d-inline-flex align-items-center" style="padding: 8px 20px; font-size: 13px;">
                                         <i class="las la-globe me-1"></i> Manage Domains &amp; Nameservers
                                     </a>
                                 <?php endif; ?>
                                 <?php if (!$hasHostingItem && !$hasDomainItem): ?>
-                                    <a href="<?php echo $url; ?>clientarea" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-xs">
+                                    <a href="<?php echo $url; ?>clientarea" class="btn btn-primary rounded-pill fw-bold shadow-xs d-inline-flex align-items-center" style="padding: 8px 20px; font-size: 13px;">
                                         <i class="las la-server me-1"></i> Client Area
                                     </a>
                                 <?php endif; ?>

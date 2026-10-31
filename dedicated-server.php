@@ -297,8 +297,8 @@
                                     </ul>
                                 </div>
                                 <div class="plan-cta mt-auto">
-                                    <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="cf-btn-plan-secondary">
-                                        <span>Order E3 Basic</span>
+                                    <a href="<?php echo $url; ?>request-quote?pid=501" class="cf-btn-plan-secondary">
+                                        <span>Request Quote</span>
                                         <i class="las la-arrow-right ms-1"></i>
                                     </a>
                                 </div>
@@ -347,8 +347,8 @@
                                     </ul>
                                 </div>
                                 <div class="plan-cta mt-auto">
-                                    <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="cf-btn-plan-secondary">
-                                        <span>Order E5 Advanced</span>
+                                    <a href="<?php echo $url; ?>request-quote?pid=502" class="cf-btn-plan-secondary">
+                                        <span>Request Quote</span>
                                         <i class="las la-arrow-right ms-1"></i>
                                     </a>
                                 </div>
@@ -398,7 +398,7 @@
                                     </ul>
                                 </div>
                                 <div class="plan-cta mt-auto">
-                                    <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-plan-dedicated-featured">
+                                    <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-plan-dedicated-featured">
                                         <span>Deploy Silver 4314</span>
                                         <i class="las la-arrow-right ms-1"></i>
                                     </a>
@@ -448,8 +448,8 @@
                                     </ul>
                                 </div>
                                 <div class="plan-cta mt-auto">
-                                    <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="cf-btn-plan-secondary">
-                                        <span>Order Platinum</span>
+                                    <a href="<?php echo $url; ?>request-quote?pid=504" class="cf-btn-plan-secondary">
+                                        <span>Request Quote</span>
                                         <i class="las la-arrow-right ms-1"></i>
                                     </a>
                                 </div>
@@ -503,7 +503,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -533,7 +533,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -563,7 +563,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -593,7 +593,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -623,7 +623,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -653,7 +653,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order" style="background:#E11D48; border-color:#E11D48;">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order" style="background:#E11D48; border-color:#E11D48;">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -683,7 +683,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -713,7 +713,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -743,7 +743,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -773,7 +773,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -835,8 +835,8 @@
                                     </ul>
                                 </div>
                                 <div class="plan-cta mt-auto">
-                                    <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="cf-btn-plan-secondary">
-                                        <span>Order Ryzen 3600</span>
+                                    <a href="<?php echo $url; ?>request-quote?pid=511" class="cf-btn-plan-secondary">
+                                        <span>Request Quote</span>
                                         <i class="las la-arrow-right ms-1"></i>
                                     </a>
                                 </div>
@@ -885,8 +885,8 @@
                                     </ul>
                                 </div>
                                 <div class="plan-cta mt-auto">
-                                    <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="cf-btn-plan-secondary">
-                                        <span>Order Ryzen 5800X</span>
+                                    <a href="<?php echo $url; ?>request-quote?pid=512" class="cf-btn-plan-secondary">
+                                        <span>Request Quote</span>
                                         <i class="las la-arrow-right ms-1"></i>
                                     </a>
                                 </div>
@@ -936,7 +936,7 @@
                                     </ul>
                                 </div>
                                 <div class="plan-cta mt-auto">
-                                    <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-plan-dedicated-featured">
+                                    <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-plan-dedicated-featured">
                                         <span>Deploy Ryzen 7950X</span>
                                         <i class="las la-arrow-right ms-1"></i>
                                     </a>
@@ -986,8 +986,8 @@
                                     </ul>
                                 </div>
                                 <div class="plan-cta mt-auto">
-                                    <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="cf-btn-plan-secondary">
-                                        <span>Order Enterprise Max</span>
+                                    <a href="<?php echo $url; ?>request-quote?pid=514" class="cf-btn-plan-secondary">
+                                        <span>Request Quote</span>
                                         <i class="las la-arrow-right ms-1"></i>
                                     </a>
                                 </div>
@@ -1041,7 +1041,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -1071,7 +1071,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -1101,7 +1101,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -1131,7 +1131,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -1161,7 +1161,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -1191,7 +1191,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -1221,7 +1221,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -1251,7 +1251,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order" style="background:#E11D48; border-color:#E11D48;">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order" style="background:#E11D48; border-color:#E11D48;">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -1281,7 +1281,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -1311,7 +1311,7 @@
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <a href="https://my.cloudflox.com/index.php?rp=/store/dedicated-servers" class="btn-server-order">
+                                            <a href="<?php echo $url; ?>request-quote?type=dedicated" class="btn-server-order">
                                                 <span>Order</span>
                                                 <i class="las la-arrow-right"></i>
                                             </a>
@@ -1719,7 +1719,7 @@
                         </p>
                     </div>
                     <div class="col-12 col-lg-4 text-lg-end">
-                        <a href="https://my.cloudflox.com/submitticket.php" class="cf-btn-dedicated-glow d-inline-flex">
+                        <a href="<?php echo $url; ?>request-quote?type=dedicated" class="cf-btn-dedicated-glow d-inline-flex">
                             <span>Request Custom Quote</span>
                             <i class="las la-arrow-right ms-1"></i>
                         </a>

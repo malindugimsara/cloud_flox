@@ -403,7 +403,7 @@
                             To ensure swift processing and prevent unauthorized account terminations, all refund requests must be formally initiated through our verified client portal:
                         </p>
                         <ul class="cf-legal-list">
-                            <li><strong>Step 1 &mdash; Submit Service Cancellation:</strong> Log into your verified Client Area (<a href="https://my.cloudflox.com" class="text-primary text-decoration-underline" target="_blank" rel="noopener">my.cloudflox.com</a>), navigate to <em>Services &gt; My Services</em>, select the eligible hosting plan, and click <em>Request Cancellation</em>.</li>
+                            <li><strong>Step 1 &mdash; Submit Service Cancellation:</strong> Log into your verified Client Area (<a href="<?php echo $url; ?>clientarea" class="text-primary text-decoration-underline">Client Area</a>), navigate to <em>Services &gt; My Services</em>, select the eligible hosting plan, and click <em>Request Cancellation</em>.</li>
                             <li><strong>Step 2 &mdash; Open a Billing Ticket:</strong> Submit a support ticket under the <strong>Billing &amp; Invoicing Department</strong> referencing the relevant Invoice Number and stating that you are requesting a refund under the 7-day guarantee.</li>
                             <li><strong>Step 3 &mdash; Security Verification:</strong> Our billing specialists will verify your account credentials, confirm refund eligibility according to invoice timestamps, and confirm cancellation.</li>
                         </ul>
@@ -520,7 +520,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <span class="text-muted d-block fs-12">Client Billing Portal:</span>
-                                    <a href="https://my.cloudflox.com" target="_blank" rel="noopener" class="text-primary fw-bold">my.cloudflox.com</a>
+                                    <a href="<?php echo $url; ?>clientarea" class="text-primary fw-bold">Client Area</a>
                                 </div>
                                 <div class="col-md-6">
                                     <span class="text-muted d-block fs-12">Billing Ticket SLA:</span>

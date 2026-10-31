@@ -200,7 +200,7 @@ $cfFooterUrl = $url ?? '/';
                         <li><a href="<?php echo $cfFooterUrl; ?>ticket" class="cf-footer-link">Submit Support
                                 Ticket</a></li>
                         <li><a href="<?php echo $cfFooterUrl; ?>knowledgebase" class="cf-footer-link">Knowledgebase &amp; FAQs</a></li>
-                        <li><a href="https://my.cloudflox.com/index.php?rp=/announcements"
+                        <li><a href="<?php echo $cfFooterUrl; ?>server-status"
                                 class="cf-footer-link">Network Announcements</a></li>
                         <li><a href="<?php echo $cfFooterUrl; ?>server-status" class="cf-footer-link">Server Status
                                 &amp; Metrics</a></li>

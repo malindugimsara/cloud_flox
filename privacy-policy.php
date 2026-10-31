@@ -265,7 +265,7 @@
                             <i class="las la-shield-alt text-primary"></i> 1. Overview &amp; Data Controller
                         </h2>
                         <p>
-                            Welcome to <strong>CloudFlox LLC</strong> (&ldquo;CloudFlox&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;). This Privacy Policy explains our practices regarding the collection, processing, transfer, and safeguarding of personal data when you interact with our websites, client portal (<a href="https://my.cloudflox.com" class="text-primary text-decoration-underline" target="_blank" rel="noopener">my.cloudflox.com</a>), API endpoints, and global infrastructure services.
+                            Welcome to <strong>CloudFlox LLC</strong> (&ldquo;CloudFlox&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;). This Privacy Policy explains our practices regarding the collection, processing, transfer, and safeguarding of personal data when you interact with our websites, client portal (<a href="<?php echo $url; ?>clientarea" class="text-primary text-decoration-underline">Client Portal</a>), API endpoints, and global infrastructure services.
                         </p>
                         <p>
                             Under applicable data protection laws, including the <strong>General Data Protection Regulation (EU GDPR)</strong>, the <strong>UK Data Protection Act</strong>, and the <strong>California Consumer Privacy Act (CCPA)</strong>, CloudFlox LLC acts as the <em>Data Controller</em> for personal account information and billing data, and as a <em>Data Processor</em> for customer-hosted workloads and database contents stored on our virtual and dedicated servers.
@@ -505,7 +505,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <span class="text-muted d-block fs-12">Client Support Portal:</span>
-                                    <a href="https://my.cloudflox.com" target="_blank" rel="noopener" class="text-primary fw-bold">my.cloudflox.com</a>
+                                    <a href="<?php echo $url; ?>clientarea" class="text-primary fw-bold">Client Area</a>
                                 </div>
                                 <div class="col-md-6">
                                     <span class="text-muted d-block fs-12">Response Commitment:</span>

@@ -49,13 +49,27 @@ if ($isLoggedIn && $loggedInClientId > 0) {
 }
 
 // Read pre-selected query parameters from URL
-$initialDomain = trim($_GET['domain'] ?? '');
-$initialPrice  = trim($_GET['price'] ?? $_GET['domain_price'] ?? '');
-$initialType   = strtolower(trim($_GET['type'] ?? $_GET['domainType'] ?? $_GET['domain_type'] ?? 'register'));
-$initialPid    = trim($_GET['pid'] ?? '');
-$hasDomainPreselected = !empty($initialDomain);
+$initialDomain  = trim($_GET['domain'] ?? '');
+$initialDomains = trim($_GET['domains'] ?? '');
+$initialPrice   = trim($_GET['price'] ?? $_GET['domain_price'] ?? '');
+$initialType    = strtolower(trim($_GET['type'] ?? $_GET['domainType'] ?? $_GET['domain_type'] ?? 'register'));
+$initialPid     = trim($_GET['pid'] ?? '');
 
-if ($hasDomainPreselected && empty($initialPrice)) {
+// Server and VPS products require formal quotation and custom infrastructure provisioning
+$serverPids = [401, 402, 403, 404, 501, 502, 503, 504, 511, 512, 513, 514];
+if (!empty($initialPid) && in_array((int)$initialPid, $serverPids, true)) {
+    header('Location: ' . $url . 'request-quote?pid=' . (int)$initialPid);
+    exit;
+}
+
+if (!empty($initialDomains) && empty($initialDomain)) {
+    $firstDom = explode(',', $initialDomains)[0] ?? '';
+    $initialDomain = trim($firstDom);
+}
+
+$hasDomainPreselected = !empty($initialDomain) || !empty($initialDomains);
+
+if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
     $lastDot = strrpos($initialDomain, '.');
     $ext = ($lastDot !== false) ? substr($initialDomain, $lastDot) : '.com';
     $tldKey = ltrim($ext, '.');
@@ -203,6 +217,44 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                                     <div class="cf-plan-banner-right text-end">
                                         <span class="fs-16 fw-bold text-primary" id="step1BannerPrice">$5.99</span>
                                         <small class="text-secondary d-block fs-11" id="step1BannerCycle">/month</small>
+                                    </div>
+                                </div>
+
+                                <!-- Multi-Domain Cart Box in Step 1 -->
+                                <div class="cf-multi-domain-cart-box mb-4" id="pageMultiDomainCartWrap" style="display: none;">
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                        <div>
+                                            <h5 class="fw-bold text-slate-900 mb-0.5">
+                                                <i class="las la-globe text-primary me-1.5"></i>Connected Domains (<span id="chkDomainsCount">0</span>)
+                                            </h5>
+                                            <p class="text-secondary fs-13 mb-0">Configure registration period for each domain or add more domains to this order.</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 fs-12" onclick="pageClearAllDomains()">
+                                                <i class="las la-trash-alt me-1"></i> Clear All
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fs-12" onclick="pageToggleDomainOptions(true)">
+                                                <i class="las la-plus me-1"></i> Search More
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dynamic Domain Items List -->
+                                    <div class="cf-domain-cart-items-list mb-3" id="checkoutDomainItemsList"></div>
+
+                                    <!-- Inline Quick Add Another Domain -->
+                                    <div class="p-3 bg-light rounded-3 border">
+                                        <label class="fs-12 fw-bold text-slate-800 mb-1.5 d-flex align-items-center gap-1.5">
+                                            <i class="las la-plus-circle text-primary"></i> Add Another Domain to This Order:
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="chkInlineAddDomainInput" placeholder="Enter domain name (e.g. brand.store, startup.io)" autocomplete="off">
+                                            <button class="btn btn-primary fw-bold px-3 fs-13" type="button" id="btnChkInlineAddDomain" onclick="pageInlineAddDomain()">
+                                                <span class="btn-text"><i class="las la-plus me-1"></i> Add to Order</span>
+                                                <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                                            </button>
+                                        </div>
+                                        <div id="chkInlineAddFeedback" class="fs-12 mt-1.5" style="display: none;"></div>
                                     </div>
                                 </div>
 
@@ -1247,9 +1299,11 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                                         <span class="text-secondary fs-13" id="finalPlanItemName">Hosting Plan:</span>
                                         <strong class="text-slate-900 fs-13" id="finalPlanItemPrice">$5.99</strong>
                                     </div>
-                                    <div class="d-flex justify-content-between py-1.5 border-bottom">
-                                        <span class="text-secondary fs-13" id="finalDomainItemName">Domain:</span>
-                                        <strong class="text-slate-900 fs-13" id="finalDomainItemPrice">$14.93</strong>
+                                    <div id="finalDomainsListWrap">
+                                        <div class="d-flex justify-content-between py-1.5 border-bottom" id="finalDomainSingleRow">
+                                            <span class="text-secondary fs-13" id="finalDomainItemName">Domain:</span>
+                                            <strong class="text-slate-900 fs-13" id="finalDomainItemPrice">$14.93</strong>
+                                        </div>
                                     </div>
                                     <div class="d-flex justify-content-between py-1.5 border-bottom">
                                         <span class="text-secondary fs-13">Server Setup &amp; DNS:</span>
@@ -1301,9 +1355,11 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                                     <strong class="text-slate-900" id="sideHostingFee">None ($0.00)</strong>
                                 </div>
 
-                                <div class="cf-summary-line d-none" id="sideDomainRow" style="display: none;">
-                                    <span class="text-secondary" id="sideDomainLabel">Domain:</span>
-                                    <strong class="text-slate-900" id="sideDomainFee">$14.93</strong>
+                                <div id="sideDomainsListWrap">
+                                    <div class="cf-summary-line d-none" id="sideDomainRow" style="display: none;">
+                                        <span class="text-secondary" id="sideDomainLabel">Domain:</span>
+                                        <strong class="text-slate-900" id="sideDomainFee">$14.93</strong>
+                                    </div>
                                 </div>
 
                                 <div class="cf-summary-line">
@@ -1427,12 +1483,13 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             return div.innerHTML;
         }
 
-        // Stepped State
+        // Stepped State with Multi-Domain Support
         let state = {
             domain: '',
             domainType: 'register', // 'register', 'transfer', 'owndomain'
             domainPrice: 0.00,
             domainYears: 1, // 1 to 5 years registration term
+            domains: [], // Array of { name, price, type, years }
             eppCode: '',
             pid: 'none', // 'none' for domain-only or product ID (e.g. 1, 2, 3)
             billingcycle: 'monthly',
@@ -1441,10 +1498,23 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             step: 1
         };
 
-        // Initialize from URL Query Params
+        function getTldRegisterPrice(domName) {
+            const lastDot = domName.lastIndexOf('.');
+            const ext = lastDot !== -1 ? domName.substring(lastDot) : '.com';
+            return TLD_PRICES[ext] ? TLD_PRICES[ext].register : 14.93;
+        }
+
+        function getTldTransferPrice(domName) {
+            const lastDot = domName.lastIndexOf('.');
+            const ext = lastDot !== -1 ? domName.substring(lastDot) : '.com';
+            return TLD_PRICES[ext] ? TLD_PRICES[ext].transfer : 12.73;
+        }
+
+        // Initialize from URL Query Params or LocalStorage Cart
         function initFromUrl() {
             const params = new URLSearchParams(window.location.search);
             const domainParam     = params.get('domain') || '';
+            const domainsParam    = params.get('domains') || '';
             const domainTypeParam = (params.get('type') || params.get('domainType') || params.get('domain_type') || 'register').toLowerCase();
             const priceParam      = params.get('price') || params.get('domain_price') || '';
             const pidParam        = params.get('pid') || '';
@@ -1457,7 +1527,7 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             // 2. Hosting Plan
             if (pidParam && pidParam !== 'none' && PRODUCTS[pidParam]) {
                 state.pid = pidParam;
-            } else if (pidParam === 'none' || domainParam) {
+            } else if (pidParam === 'none' || domainParam || domainsParam) {
                 // If coming with domain search or explicitly 'none': default to domain-only
                 state.pid = (pidParam && pidParam !== 'none' && PRODUCTS[pidParam]) ? pidParam : 'none';
             } else {
@@ -1467,26 +1537,92 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             // 3. Billing Cycle
             state.billingcycle = (cycleParam === 'annually' || cycleParam === 'yearly') ? 'annually' : 'monthly';
 
-            // 4. Domain Details
-            if (domainParam) {
-                state.domain = domainParam.toLowerCase().trim();
-                state.domainType = (domainTypeParam === 'owndomain' || domainTypeParam === 'existing') ? 'owndomain' : (domainTypeParam === 'transfer' ? 'transfer' : 'register');
+            // 4. Multi-Domain Cart Population
+            state.domains = [];
 
-                if (state.domainType === 'owndomain') {
-                    state.domainPrice = 0.00;
-                } else if (state.domainType === 'transfer') {
-                    const lastDot = state.domain.lastIndexOf('.');
-                    const ext = lastDot !== -1 ? state.domain.substring(lastDot) : '.com';
-                    state.domainPrice = TLD_PRICES[ext] ? TLD_PRICES[ext].transfer : 12.73;
-                } else {
-                    let parsedPrice = parseFloat(priceParam.replace(/[^0-9\.]/g, ''));
-                    if (!parsedPrice || isNaN(parsedPrice)) {
-                        const lastDot = state.domain.lastIndexOf('.');
-                        const ext = lastDot !== -1 ? state.domain.substring(lastDot) : '.com';
-                        parsedPrice = TLD_PRICES[ext] ? TLD_PRICES[ext].register : 14.93;
+            // 4A. If ?domains=d1.com,d2.net in URL
+            if (domainsParam) {
+                const parts = domainsParam.split(',');
+                parts.forEach(dStr => {
+                    const clean = dStr.toLowerCase().trim().replace(/[^a-z0-9\.\-]/g, '');
+                    if (clean && clean.includes('.')) {
+                        const price = getTldRegisterPrice(clean);
+                        state.domains.push({
+                            name: clean,
+                            type: 'register',
+                            price: price,
+                            years: 1
+                        });
                     }
-                    state.domainPrice = parsedPrice;
+                });
+            }
+
+            // 4B. Check localStorage if no URL domains or if localStorage has items
+            if (state.domains.length === 0) {
+                try {
+                    const storedCart = localStorage.getItem('cf_domain_cart');
+                    if (storedCart) {
+                        const parsed = JSON.parse(storedCart);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            parsed.forEach(it => {
+                                if (it && it.domain) {
+                                    const clean = it.domain.toLowerCase().trim().replace(/[^a-z0-9\.\-]/g, '');
+                                    if (clean && clean.includes('.')) {
+                                        let numPrice = parseFloat(it.raw_price);
+                                        if (isNaN(numPrice) || numPrice <= 0) {
+                                            numPrice = it.type === 'transfer' ? getTldTransferPrice(clean) : getTldRegisterPrice(clean);
+                                        }
+                                        state.domains.push({
+                                            name: clean,
+                                            type: it.type || 'register',
+                                            price: numPrice,
+                                            years: parseInt(it.years, 10) || 1
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            // 4C. Fallback to single ?domain= parameter
+            if (state.domains.length === 0 && domainParam) {
+                const clean = domainParam.toLowerCase().trim().replace(/[^a-z0-9\.\-]/g, '');
+                if (clean && clean.includes('.')) {
+                    const dType = (domainTypeParam === 'owndomain' || domainTypeParam === 'existing') ? 'owndomain' : (domainTypeParam === 'transfer' ? 'transfer' : 'register');
+                    let dPrice = 0.00;
+                    if (dType === 'owndomain') {
+                        dPrice = 0.00;
+                    } else if (dType === 'transfer') {
+                        dPrice = getTldTransferPrice(clean);
+                    } else {
+                        let parsedPrice = parseFloat(priceParam.replace(/[^0-9\.]/g, ''));
+                        if (!parsedPrice || isNaN(parsedPrice)) {
+                            parsedPrice = getTldRegisterPrice(clean);
+                        }
+                        dPrice = parsedPrice;
+                    }
+                    state.domains.push({
+                        name: clean,
+                        type: dType,
+                        price: dPrice,
+                        years: state.domainYears
+                    });
                 }
+            }
+
+            // Sync primary domain for compatibility
+            if (state.domains.length > 0) {
+                state.domain = state.domains[0].name;
+                state.domainType = state.domains[0].type;
+                state.domainPrice = state.domains[0].price;
+                state.domainYears = state.domains[0].years || 1;
+            } else {
+                state.domain = '';
+                state.domainType = 'register';
+                state.domainPrice = 0.00;
+                state.domainYears = 1;
             }
 
             renderState();
@@ -1513,6 +1649,7 @@ if ($hasDomainPreselected && empty($initialPrice)) {
 
             // 1. STEP 1: Domain Connection Rendering
             const planBanner = document.getElementById('pageStep1PlanBanner');
+            const multiCartWrap = document.getElementById('pageMultiDomainCartWrap');
             const domainStrip = document.getElementById('pageConnectedDomainStrip');
             const domainOptionsWrap = document.getElementById('pageDomainOptionsWrap');
             const domainUpsellWrap = document.getElementById('pageDomainUpsellHostingWrap');
@@ -1531,41 +1668,83 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                 if (planBanner) planBanner.style.display = 'none';
             }
 
-            const domainRate = state.domainPrice;
-            const domainYears = (state.domainType === 'register') ? (state.domainYears || 1) : 1;
-            const domainTotal = (state.domainType === 'owndomain') ? 0.00 : (domainRate * domainYears);
+            // Calculate total domain fees across all state.domains
+            let domainTotal = 0.00;
+            state.domains.forEach(d => {
+                const yrs = (d.type === 'register') ? (d.years || 1) : 1;
+                const cost = (d.type === 'owndomain') ? 0.00 : (d.price * yrs);
+                domainTotal += cost;
+            });
+
             const hostingFee = hasHosting ? (isYearly ? plan.yearly : plan.monthly) : 0.00;
             const total = domainTotal + hostingFee;
 
-            // If a domain is already connected
-            if (state.domain) {
-                if (domainStrip) {
-                    domainStrip.style.display = 'flex';
-                    document.getElementById('connectedDomainName').textContent = state.domain;
-                    
-                    const typeBadge = document.getElementById('connectedDomainTypeBadge');
-                    const noteEl = document.getElementById('connectedDomainNote');
-                    const feeEl = document.getElementById('connectedDomainFeeText');
+            // Multi-Domain Cart Box Rendering
+            if (state.domains.length > 0) {
+                if (multiCartWrap) {
+                    multiCartWrap.style.display = 'block';
+                    const countEl = document.getElementById('chkDomainsCount');
+                    if (countEl) countEl.textContent = state.domains.length;
 
-                    if (state.domainType === 'owndomain') {
-                        typeBadge.textContent = 'Existing Domain';
-                        typeBadge.className = 'badge bg-success text-white rounded-pill fs-11';
-                        noteEl.textContent = 'Point DNS nameservers to ns1.cloudflox.com & ns2.cloudflox.com';
-                        feeEl.textContent = 'FREE ($0.00)';
-                    } else if (state.domainType === 'transfer') {
-                        typeBadge.textContent = 'Transfer';
-                        typeBadge.className = 'badge bg-info text-dark rounded-pill fs-11';
-                        noteEl.textContent = 'Transfer from external registrar • 1 Year Extension';
-                        feeEl.textContent = '$' + state.domainPrice.toFixed(2);
-                    } else {
-                        typeBadge.textContent = 'New Registration';
-                        typeBadge.className = 'badge bg-primary text-white rounded-pill fs-11';
-                        noteEl.textContent = (domainYears > 1 ? (domainYears + ' Years') : '1 Year') + ' • Free Privacy Protection & Anycast DNS';
-                        feeEl.textContent = '$' + domainTotal.toFixed(2);
+                    const listEl = document.getElementById('checkoutDomainItemsList');
+                    if (listEl) {
+                        listEl.innerHTML = state.domains.map((d, idx) => {
+                            const yrs = d.type === 'register' ? (d.years || 1) : 1;
+                            const itemTotal = (d.type === 'owndomain') ? 0.00 : (d.price * yrs);
+                            const lastDot = d.name.lastIndexOf('.');
+                            const ext = lastDot !== -1 ? d.name.substring(lastDot).toUpperCase() : '.COM';
+
+                            let typeBadgeClass = 'bg-primary text-white';
+                            let typeBadgeLabel = 'Register';
+                            if (d.type === 'transfer') {
+                                typeBadgeClass = 'bg-info text-dark';
+                                typeBadgeLabel = 'Transfer';
+                            } else if (d.type === 'owndomain') {
+                                typeBadgeClass = 'bg-success text-white';
+                                typeBadgeLabel = 'Own DNS';
+                            }
+
+                            return `
+                                <div class="cf-cart-domain-card">
+                                    <div class="cf-cart-domain-info">
+                                        <div class="cf-cart-domain-icon">
+                                            <i class="las la-globe"></i>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                <strong class="fs-15 text-slate-900">${escapeHtml(d.name)}</strong>
+                                                <span class="badge ${typeBadgeClass} rounded-pill fs-11">${typeBadgeLabel}</span>
+                                                <span class="badge bg-light text-slate-700 border rounded-pill fs-11">${escapeHtml(ext)}</span>
+                                            </div>
+                                            <small class="text-secondary fs-12">Free WHOIS Privacy &amp; Anycast DNS included</small>
+                                        </div>
+                                    </div>
+                                    <div class="cf-cart-domain-controls">
+                                        ${d.type === 'register' ? `
+                                            <div class="d-flex align-items-center gap-1.5">
+                                                <label class="fs-11 text-muted fw-bold text-uppercase d-none d-sm-inline">Term:</label>
+                                                <select class="form-select form-select-sm" style="width: auto; min-width: 140px; font-weight: 600;" onchange="pageUpdateDomainYears(${idx}, this.value)">
+                                                    <option value="1" ${yrs === 1 ? 'selected' : ''}>1 Year ($${(d.price * 1).toFixed(2)})</option>
+                                                    <option value="2" ${yrs === 2 ? 'selected' : ''}>2 Years ($${(d.price * 2).toFixed(2)})</option>
+                                                    <option value="3" ${yrs === 3 ? 'selected' : ''}>3 Years ($${(d.price * 3).toFixed(2)})</option>
+                                                    <option value="4" ${yrs === 4 ? 'selected' : ''}>4 Years ($${(d.price * 4).toFixed(2)})</option>
+                                                    <option value="5" ${yrs === 5 ? 'selected' : ''}>5 Years ($${(d.price * 5).toFixed(2)})</option>
+                                                </select>
+                                            </div>
+                                        ` : (d.type === 'transfer' ? `<span class="badge bg-light text-slate-700 fs-12 border py-1.5 px-2.5">1-Yr Extension</span>` : `<span class="badge bg-success-subtle text-success fs-12 border py-1.5 px-2.5">Free DNS Link</span>`)}
+                                        <strong class="fs-16 text-slate-900 text-nowrap">$${itemTotal.toFixed(2)}</strong>
+                                        <button type="button" class="btn btn-sm btn-outline-danger p-1 rounded-circle" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;" onclick="pageRemoveDomain(${idx})" title="Remove domain">
+                                            <i class="las la-trash-alt fs-16"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
                     }
                 }
 
-                // If coming with domain: HIDE the 3 cards and SHOW Step 1 hosting upsell
+                // Hide single strip & default 3 options
+                if (domainStrip) domainStrip.style.display = 'none';
                 if (domainOptionsWrap) domainOptionsWrap.style.display = 'none';
                 if (domainUpsellWrap) domainUpsellWrap.style.display = 'block';
 
@@ -1584,6 +1763,7 @@ if ($hasDomainPreselected && empty($initialPrice)) {
 
                 if (step1ContinueBar) step1ContinueBar.style.display = 'block';
             } else {
+                if (multiCartWrap) multiCartWrap.style.display = 'none';
                 if (domainStrip) domainStrip.style.display = 'none';
                 if (domainUpsellWrap) domainUpsellWrap.style.display = 'none';
                 if (domainOptionsWrap) domainOptionsWrap.style.display = 'block';
@@ -1592,42 +1772,54 @@ if ($hasDomainPreselected && empty($initialPrice)) {
 
             // 2. STEP 2: Plan & Configuration Rendering
             const step2DomainText = document.getElementById('step2DomainText');
-            if (step2DomainText) step2DomainText.textContent = state.domain || 'Not connected yet';
+            if (step2DomainText) {
+                if (state.domains.length === 1) {
+                    step2DomainText.textContent = state.domains[0].name;
+                } else if (state.domains.length > 1) {
+                    step2DomainText.textContent = state.domains.length + ' Domains (' + state.domains.map(d => d.name).join(', ') + ')';
+                } else {
+                    step2DomainText.textContent = 'Not connected yet';
+                }
+            }
             const s2Badge = document.getElementById('step2DomainBadge');
             if (s2Badge) {
-                if (state.domainType === 'owndomain') {
+                if (state.domains.length > 1) {
+                    s2Badge.textContent = state.domains.length + ' Domains Connected';
+                    s2Badge.className = 'badge bg-primary text-white rounded-pill ms-1 fs-10';
+                } else if (state.domainType === 'owndomain') {
                     s2Badge.textContent = 'Existing Domain ($0.00)';
                     s2Badge.className = 'badge bg-success text-white rounded-pill ms-1 fs-10';
                 } else if (state.domainType === 'transfer') {
                     s2Badge.textContent = 'Domain Transfer';
                     s2Badge.className = 'badge bg-info text-dark rounded-pill ms-1 fs-10';
                 } else {
-                    s2Badge.textContent = 'Registered Domain (' + domainYears + ' ' + (domainYears > 1 ? 'Years' : 'Year') + ')';
+                    s2Badge.textContent = 'Registered Domain (' + state.domainYears + ' ' + (state.domainYears > 1 ? 'Years' : 'Year') + ')';
                     s2Badge.className = 'badge bg-primary text-white rounded-pill ms-1 fs-10';
                 }
             }
 
-            // Step 2 Domain 1-5 Years Registration Selector
+            // Step 2 Domain 1-5 Years Registration Selector (Only if 1 domain)
             const periodCard = document.getElementById('step2DomainPeriodCard');
             if (periodCard) {
-                if (state.domain && state.domainType === 'register') {
+                if (state.domains.length === 1 && state.domains[0].type === 'register') {
                     periodCard.style.display = 'block';
-                    const lastDot = state.domain.lastIndexOf('.');
-                    const ext = (lastDot !== -1 ? state.domain.substring(lastDot) : '.com').toUpperCase();
+                    const curD = state.domains[0];
+                    const lastDot = curD.name.lastIndexOf('.');
+                    const ext = (lastDot !== -1 ? curD.name.substring(lastDot) : '.com').toUpperCase();
                     const extBadge = document.getElementById('step2DomainExtBadge');
                     if (extBadge) extBadge.textContent = ext + ' Registration (Max 5 Yrs)';
 
                     for (let y = 1; y <= 5; y++) {
                         const yPriceEl = document.getElementById('yearPrice_' + y);
                         const yRateEl = document.getElementById('yearRate_' + y);
-                        const totalForY = (domainRate * y).toFixed(2);
+                        const totalForY = (curD.price * y).toFixed(2);
                         if (yPriceEl) yPriceEl.textContent = '$' + totalForY;
-                        if (yRateEl) yRateEl.textContent = '$' + domainRate.toFixed(2) + ' / yr';
+                        if (yRateEl) yRateEl.textContent = '$' + curD.price.toFixed(2) + ' / yr';
                     }
 
                     document.querySelectorAll('.cf-year-card').forEach(card => {
                         const yVal = parseInt(card.getAttribute('data-years'), 10);
-                        card.classList.toggle('active', yVal === domainYears);
+                        card.classList.toggle('active', yVal === (curD.years || 1));
                     });
                 } else {
                     periodCard.style.display = 'none';
@@ -1652,11 +1844,9 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                     document.getElementById('cyclePriceMonthlyText').textContent = '$' + plan.monthly.toFixed(2) + '/mo';
                     document.getElementById('cyclePriceAnnuallyText').textContent = '$' + plan.yearly.toFixed(2) + '/yr';
 
-                    // Active cycle card toggle
                     document.getElementById('cycleCardMonthly').classList.toggle('active', !isYearly);
                     document.getElementById('cycleCardAnnually').classList.toggle('active', isYearly);
 
-                    // Highlight active plan button
                     Object.keys(PRODUCTS).forEach(pKey => {
                         const btn = document.getElementById('switchPlanBtn_' + pKey);
                         if (btn) {
@@ -1692,20 +1882,34 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             }
 
             // 3. STEP 4 & SIDEBAR: Total Calculations
-            // Final breakdown in Step 4
             document.getElementById('finalPlanItemName').textContent = hasHosting ? (plan.name + ' (' + (isYearly ? 'Annual' : 'Monthly') + '):') : 'Hosting:';
             document.getElementById('finalPlanItemPrice').textContent = hasHosting ? ('$' + hostingFee.toFixed(2)) : 'None ($0.00)';
 
-            let domLabel = 'Domain:';
-            if (state.domainType === 'owndomain') {
-                domLabel = 'Domain (Existing DNS point):';
-            } else if (state.domainType === 'transfer') {
-                domLabel = 'Domain Transfer (1 Year):';
-            } else {
-                domLabel = 'Domain Registration (' + domainYears + ' ' + (domainYears > 1 ? 'Years' : 'Year') + '):';
+            // Render domains in Step 4 Breakdown
+            const finalDomainsWrap = document.getElementById('finalDomainsListWrap');
+            if (finalDomainsWrap) {
+                if (state.domains.length === 0) {
+                    finalDomainsWrap.innerHTML = `
+                        <div class="d-flex justify-content-between py-1.5 border-bottom">
+                            <span class="text-secondary fs-13">Domain:</span>
+                            <strong class="text-slate-900 fs-13">None ($0.00)</strong>
+                        </div>
+                    `;
+                } else {
+                    finalDomainsWrap.innerHTML = state.domains.map(d => {
+                        const yrs = d.type === 'register' ? (d.years || 1) : 1;
+                        const cost = (d.type === 'owndomain') ? 0.00 : (d.price * yrs);
+                        let label = 'Domain (' + d.name + (d.type === 'register' ? (' • ' + yrs + ' yr' + (yrs > 1 ? 's' : '')) : (d.type === 'transfer' ? ' • Transfer' : ' • Own DNS')) + '):';
+                        return `
+                            <div class="d-flex justify-content-between py-1.5 border-bottom">
+                                <span class="text-secondary fs-13">${escapeHtml(label)}</span>
+                                <strong class="text-slate-900 fs-13">${cost > 0 ? ('$' + cost.toFixed(2)) : 'FREE ($0.00)'}</strong>
+                            </div>
+                        `;
+                    }).join('');
+                }
             }
-            document.getElementById('finalDomainItemName').textContent = state.domain ? (domLabel + ' ' + state.domain) : 'Domain:';
-            document.getElementById('finalDomainItemPrice').textContent = state.domain ? (domainTotal > 0 ? ('$' + domainTotal.toFixed(2)) : 'FREE ($0.00)') : '$0.00';
+
             document.getElementById('finalTotalDue').textContent = '$' + total.toFixed(2) + ' USD';
             document.getElementById('btnPayAmount').textContent = '$' + total.toFixed(2) + ' USD';
 
@@ -1713,9 +1917,6 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             const sideHostingRow   = document.getElementById('sideHostingRow');
             const sideHostingLabel = document.getElementById('sideHostingLabel');
             const sideHostingFee   = document.getElementById('sideHostingFee');
-            const sideDomainRow    = document.getElementById('sideDomainRow');
-            const sideDomainLabel  = document.getElementById('sideDomainLabel');
-            const sideDomainFee    = document.getElementById('sideDomainFee');
             const sideTotalDue     = document.getElementById('sideTotalDue');
 
             if (sideHostingRow) {
@@ -1732,24 +1933,33 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                 }
             }
 
-            if (sideDomainRow) {
-                const hasDomain = Boolean(state.domain);
-                if (hasDomain) {
-                    sideDomainRow.style.setProperty('display', 'flex', 'important');
-                    sideDomainRow.classList.remove('d-none');
-                    let sLabel = 'Domain:';
-                    if (state.domainType === 'owndomain') {
-                        sLabel = 'Domain (Existing):';
-                    } else if (state.domainType === 'transfer') {
-                        sLabel = 'Domain (Transfer 1 Yr):';
-                    } else {
-                        sLabel = 'Domain (' + domainYears + ' ' + (domainYears > 1 ? 'Yrs' : 'Yr') + '):';
-                    }
-                    sideDomainLabel.textContent = sLabel;
-                    sideDomainFee.textContent = domainTotal > 0 ? ('$' + domainTotal.toFixed(2)) : 'FREE ($0.00)';
+            // Sidebar Domains List
+            const sideDomainsWrap = document.getElementById('sideDomainsListWrap');
+            if (sideDomainsWrap) {
+                if (state.domains.length === 0) {
+                    sideDomainsWrap.innerHTML = `
+                        <div class="cf-summary-line d-none" style="display: none;">
+                            <span class="text-secondary">Domain:</span>
+                            <strong class="text-slate-900">None</strong>
+                        </div>
+                    `;
                 } else {
-                    sideDomainRow.style.setProperty('display', 'none', 'important');
-                    sideDomainRow.classList.add('d-none');
+                    sideDomainsWrap.innerHTML = state.domains.map((d, idx) => {
+                        const yrs = d.type === 'register' ? (d.years || 1) : 1;
+                        const cost = (d.type === 'owndomain') ? 0.00 : (d.price * yrs);
+                        const sLabel = d.name + (d.type === 'register' ? (' (' + yrs + 'y)') : (d.type === 'transfer' ? ' (Trans)' : ' (Own)'));
+                        return `
+                            <div class="cf-summary-line" style="display: flex !important;">
+                                <div class="d-flex align-items-center gap-1.5 text-truncate" style="max-width: 170px;">
+                                    <span class="text-secondary text-truncate" title="${escapeHtml(d.name)}">${escapeHtml(sLabel)}:</span>
+                                    <button type="button" class="btn btn-link p-0 text-danger text-decoration-none fs-11" onclick="pageRemoveDomain(${idx})" title="Remove domain" style="line-height: 1;">
+                                        <i class="las la-times-circle"></i>
+                                    </button>
+                                </div>
+                                <strong class="text-slate-900">${cost > 0 ? ('$' + cost.toFixed(2)) : 'FREE'}</strong>
+                            </div>
+                        `;
+                    }).join('');
                 }
             }
 
@@ -1757,6 +1967,157 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                 sideTotalDue.textContent = '$' + total.toFixed(2) + ' USD';
             }
         }
+
+        // Save domains to localStorage
+        function syncCartStorage() {
+            try {
+                const storeItems = state.domains.map(d => ({
+                    domain: d.name,
+                    price: '$' + d.price.toFixed(2),
+                    raw_price: d.price,
+                    type: d.type,
+                    years: d.years || 1
+                }));
+                localStorage.setItem('cf_domain_cart', JSON.stringify(storeItems));
+            } catch (e) {}
+        }
+
+        // Update registration term (1 to 5 years) for a specific domain
+        window.pageUpdateDomainYears = function(index, years) {
+            years = parseInt(years, 10);
+            if (years < 1) years = 1;
+            if (years > 5) years = 5;
+            if (state.domains[index]) {
+                state.domains[index].years = years;
+                if (index === 0) {
+                    state.domainYears = years;
+                    const hidden = document.getElementById('pageDomainYears');
+                    if (hidden) hidden.value = years;
+                }
+                syncCartStorage();
+                renderState();
+            }
+        };
+
+        // Remove a domain from checkout
+        window.pageRemoveDomain = function(index) {
+            if (state.domains[index]) {
+                state.domains.splice(index, 1);
+                if (state.domains.length > 0) {
+                    state.domain = state.domains[0].name;
+                    state.domainType = state.domains[0].type;
+                    state.domainPrice = state.domains[0].price;
+                    state.domainYears = state.domains[0].years || 1;
+                } else {
+                    state.domain = '';
+                    state.domainType = 'register';
+                    state.domainPrice = 0.00;
+                    state.domainYears = 1;
+                }
+                syncCartStorage();
+                renderState();
+            }
+        };
+
+        // Clear all domains
+        window.pageClearAllDomains = function() {
+            state.domains = [];
+            state.domain = '';
+            state.domainType = 'register';
+            state.domainPrice = 0.00;
+            state.domainYears = 1;
+            syncCartStorage();
+            renderState();
+        };
+
+        // Quick Inline Add Domain from Step 1
+        window.pageInlineAddDomain = function() {
+            const input = document.getElementById('chkInlineAddDomainInput');
+            const btn = document.getElementById('btnChkInlineAddDomain');
+            const feedback = document.getElementById('chkInlineAddFeedback');
+            if (!input || !btn) return;
+
+            const val = input.value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
+            if (!val || !val.includes('.')) {
+                if (feedback) {
+                    feedback.textContent = 'Please enter a valid domain name with extension (e.g. brand.store)';
+                    feedback.className = 'fs-12 mt-1.5 text-danger';
+                    feedback.style.display = 'block';
+                }
+                input.focus();
+                return;
+            }
+
+            // Check if already in cart
+            if (state.domains.some(d => d.name === val)) {
+                if (feedback) {
+                    feedback.textContent = val + ' is already in your domain list.';
+                    feedback.className = 'fs-12 mt-1.5 text-warning';
+                    feedback.style.display = 'block';
+                }
+                return;
+            }
+
+            btn.disabled = true;
+            btn.querySelector('.btn-text').classList.add('d-none');
+            btn.querySelector('.spinner-border').classList.remove('d-none');
+            if (feedback) feedback.style.display = 'none';
+
+            fetch('check-domain.php?domain=' + encodeURIComponent(val))
+                .then(res => res.json())
+                .then(data => {
+                    btn.disabled = false;
+                    btn.querySelector('.btn-text').classList.remove('d-none');
+                    btn.querySelector('.spinner-border').classList.add('d-none');
+
+                    if (data.status === 'error') {
+                        if (feedback) {
+                            feedback.textContent = data.message || 'Unable to verify domain.';
+                            feedback.className = 'fs-12 mt-1.5 text-danger';
+                            feedback.style.display = 'block';
+                        }
+                        return;
+                    }
+
+                    const prim = data.primary;
+                    const price = prim.raw_price || getTldRegisterPrice(prim.domain);
+                    state.domains.push({
+                        name: prim.domain,
+                        type: prim.is_available ? 'register' : 'transfer',
+                        price: price,
+                        years: 1
+                    });
+
+                    // Sync primary domain
+                    if (state.domains.length === 1) {
+                        state.domain = state.domains[0].name;
+                        state.domainType = state.domains[0].type;
+                        state.domainPrice = state.domains[0].price;
+                        state.domainYears = state.domains[0].years;
+                    }
+
+                    syncCartStorage();
+                    renderState();
+
+                    input.value = '';
+                    if (feedback) {
+                        feedback.textContent = prim.domain + (prim.is_available ? ' added to your order!' : ' added as transfer!');
+                        feedback.className = 'fs-12 mt-1.5 text-success';
+                        feedback.style.display = 'block';
+                        setTimeout(() => { if (feedback) feedback.style.display = 'none'; }, 3000);
+                    }
+                })
+                .catch(() => {
+                    btn.disabled = false;
+                    btn.querySelector('.btn-text').classList.remove('d-none');
+                    btn.querySelector('.spinner-border').classList.add('d-none');
+                    if (feedback) {
+                        feedback.textContent = 'Connection error. Please try again.';
+                        feedback.className = 'fs-12 mt-1.5 text-danger';
+                        feedback.style.display = 'block';
+                    }
+                });
+        };
 
         // Quick TLD Shortcut Pill Selection
         window.pagePickTldPill = function(tld) {
@@ -1809,6 +2170,10 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             if (years < 1) years = 1;
             if (years > 5) years = 5;
             state.domainYears = years;
+            if (state.domains.length === 1) {
+                state.domains[0].years = years;
+                syncCartStorage();
+            }
             const hidden = document.getElementById('pageDomainYears');
             if (hidden) hidden.value = years;
             renderState();
@@ -1934,17 +2299,27 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             const priceStr = btn.getAttribute('data-price') || '$14.93';
             const price = parseFloat(priceStr.replace(/[^0-9\.]/g, '')) || 14.93;
 
-            state.domain = domain;
-            state.domainType = 'register';
-            state.domainPrice = price;
+            if (!state.domains.some(d => d.name === domain)) {
+                state.domains.push({
+                    name: domain,
+                    type: 'register',
+                    price: price,
+                    years: 1
+                });
+            }
 
-            // If user did not arrive with an explicit hosting plan PID in URL, ensure default is domain-only
+            state.domain = state.domains[0].name;
+            state.domainType = state.domains[0].type;
+            state.domainPrice = state.domains[0].price;
+            state.domainYears = state.domains[0].years || 1;
+
             const params = new URLSearchParams(window.location.search);
             const pidParam = params.get('pid');
             if (!pidParam || pidParam === 'none') {
                 state.pid = 'none';
             }
 
+            syncCartStorage();
             renderState();
 
             if (window.cfToast) {
@@ -1960,17 +2335,28 @@ if ($hasDomainPreselected && empty($initialPrice)) {
         // Select alternative suggested domain
         window.pageSelectAltDomain = function(domain, priceStr) {
             const price = parseFloat(priceStr.replace(/[^0-9\.]/g, '')) || 14.93;
-            state.domain = domain;
-            state.domainType = 'register';
-            state.domainPrice = price;
 
-            // If user did not arrive with an explicit hosting plan PID in URL, ensure default is domain-only
+            if (!state.domains.some(d => d.name === domain)) {
+                state.domains.push({
+                    name: domain,
+                    type: 'register',
+                    price: price,
+                    years: 1
+                });
+            }
+
+            state.domain = state.domains[0].name;
+            state.domainType = state.domains[0].type;
+            state.domainPrice = state.domains[0].price;
+            state.domainYears = state.domains[0].years || 1;
+
             const params = new URLSearchParams(window.location.search);
             const pidParam = params.get('pid');
             if (!pidParam || pidParam === 'none') {
                 state.pid = 'none';
             }
 
+            syncCartStorage();
             renderState();
 
             if (window.cfToast) {
@@ -2000,16 +2386,29 @@ if ($hasDomainPreselected && empty($initialPrice)) {
 
             const selectedOpt = tldSelect.options[tldSelect.selectedIndex];
             const transferFee = parseFloat(selectedOpt.getAttribute('data-transfer')) || 12.73;
+            const fullDomain = sld + tld;
 
-            state.domain = sld + tld;
-            state.domainType = 'transfer';
-            state.domainPrice = transferFee;
             state.eppCode = epp;
 
+            if (!state.domains.some(d => d.name === fullDomain)) {
+                state.domains.push({
+                    name: fullDomain,
+                    type: 'transfer',
+                    price: transferFee,
+                    years: 1
+                });
+            }
+
+            state.domain = state.domains[0].name;
+            state.domainType = 'transfer';
+            state.domainPrice = transferFee;
+            state.domainYears = 1;
+
+            syncCartStorage();
             renderState();
 
             if (window.cfToast) {
-                cfToast.success('Transfer for <strong>' + escapeHtml(state.domain) + '</strong> configured!');
+                cfToast.success('Transfer for <strong>' + escapeHtml(fullDomain) + '</strong> configured!');
             }
 
             pageGoToStep(2);
@@ -2028,10 +2427,21 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                 return;
             }
 
-            state.domain = domain;
+            if (!state.domains.some(d => d.name === domain)) {
+                state.domains.push({
+                    name: domain,
+                    type: 'owndomain',
+                    price: 0.00,
+                    years: 1
+                });
+            }
+
+            state.domain = state.domains[0].name;
             state.domainType = 'owndomain';
             state.domainPrice = 0.00;
+            state.domainYears = 1;
 
+            syncCartStorage();
             renderState();
 
             if (window.cfToast) {
@@ -2059,8 +2469,8 @@ if ($hasDomainPreselected && empty($initialPrice)) {
 
             if (targetStep >= 2) {
                 // Validate domain connection
-                if (!state.domain) {
-                    showAlert('Please choose or enter a domain name before proceeding.');
+                if (state.domains.length === 0 && !state.domain) {
+                    showAlert('Please choose or enter at least one domain name before proceeding.');
                     pageGoToStep(1);
                     return;
                 }
@@ -2545,6 +2955,7 @@ if ($hasDomainPreselected && empty($initialPrice)) {
             payload.domain = state.domain;
             payload.domain_type = state.domainType;
             payload.domain_years = state.domainYears || 1;
+            payload.domains = state.domains;
             payload.epp_code = state.eppCode;
             payload.account_action = state.accountAction;
             payload.paymentmethod = state.paymentMethod;
@@ -2562,6 +2973,9 @@ if ($hasDomainPreselected && empty($initialPrice)) {
                 btn.disabled = false;
 
                 if (data.status === 'success') {
+                    // Clear domain shopping cart on successful checkout
+                    try { localStorage.removeItem('cf_domain_cart'); } catch (e) {}
+
                     // Direct redirect to the invoice / payment page
                     if (data.invoice_url) {
                         btn.querySelector('.btn-text').innerHTML = '<i class="las la-check-circle me-1.5"></i> Order Placed! Opening Payment Page...';

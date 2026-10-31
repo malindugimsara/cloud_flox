@@ -149,7 +149,17 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
                         Search 500+ domain extensions with instant setup, free WHOIS privacy protection, and global Anycast DNS.
                     </p>
 
-                    <!-- Streamlined Domain Search Box -->
+                    <!-- Search Mode Selector Tabs (Instant vs Bulk) -->
+                    <div class="cf-search-mode-tabs" role="tablist" aria-label="Search Mode">
+                        <button type="button" class="cf-search-mode-btn active" id="cfTabBtnSingle" onclick="cfSwitchDomainSearchMode('single')">
+                            <i class="las la-search"></i> Instant Search
+                        </button>
+                        <button type="button" class="cf-search-mode-btn" id="cfTabBtnBulk" onclick="cfSwitchDomainSearchMode('bulk')">
+                            <i class="las la-layer-group"></i> Bulk Search <span class="badge bg-primary text-white ms-1 fs-10 rounded-pill">Up to 20</span>
+                        </button>
+                    </div>
+
+                    <!-- Streamlined Domain Search Box (Single Search) -->
                     <form action="<?php echo $url; ?>checkout" method="get"
                         id="domainForm" class="domain-mega-search-box mx-0 mb-3" style="max-width: 100%;" aria-label="Domain Name Search">
                         <input type="hidden" name="domainType" value="register">
@@ -164,11 +174,27 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
                         </button>
                     </form>
 
-
-
+                    <!-- Bulk Domain Search Box (Up to 20 Domains) -->
+                    <div id="cfBulkSearchWrap" style="display: none;" class="mb-3">
+                        <div class="cf-bulk-search-box">
+                            <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+                                <label class="fs-13 fw-bold text-slate-900 mb-0 d-flex align-items-center gap-1.5">
+                                    <i class="las la-layer-group text-primary fs-18"></i> Check Multiple Domains at Once:
+                                </label>
+                                <span class="text-muted fs-12">One domain per line or comma separated</span>
+                            </div>
+                            <textarea id="cfBulkSearchTextarea" class="form-control mb-3" rows="4" placeholder="mybrand.com&#10;cloudstartup.net&#10;innovatetech.io&#10;globalstore.online" style="font-family: monospace; font-size: 14px; border-radius: 12px; resize: vertical;"></textarea>
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <span class="fs-12 text-muted">Supports all 500+ global extensions (.com, .net, .org, .cloud, etc.)</span>
+                                <button type="button" class="btn btn-primary fw-bold px-4 py-2 rounded-pill fs-14 shadow-sm" id="cfBtnBulkSearch" onclick="cfPerformBulkSearch()">
+                                    <span><i class="las la-search me-1"></i> Check Availability</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Compact Popular TLD Pills (Live from WHMCS) -->
-                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3" id="cfPopularPillsWrap">
                         <span class="fs-13 text-muted fw-semibold me-1">Popular:</span>
                         <?php 
                         $highlightPills = ['com', 'net', 'org', 'store', 'io', 'online'];
@@ -765,6 +791,34 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
             </div>
         </div>
     </section>
+
+    <!-- =========================================================================
+         FLOATING STICKY MULTI-DOMAIN CART DRAWER
+         ========================================================================= -->
+    <div id="cfDomainCartBar" class="cf-floating-cart-bar" style="display: none;">
+        <div class="cf-cart-bar-inner">
+            <div class="cf-cart-bar-left">
+                <div class="cf-cart-bar-badge">
+                    <i class="las la-shopping-cart"></i>
+                    <span id="cfCartCount" class="cf-cart-count-pill">0</span>
+                </div>
+                <div class="cf-cart-chips-wrap" id="cfCartChipsWrap"></div>
+            </div>
+            <div class="cf-cart-bar-right">
+                <div class="cf-cart-total-box">
+                    <small class="text-muted d-block fs-11 text-uppercase fw-bold">Est. Total</small>
+                    <strong id="cfCartTotalText" class="cf-cart-total-amount">$0.00</strong>
+                </div>
+                <button type="button" class="btn cf-btn-checkout" onclick="cfDomainCart.checkout()">
+                    <span>Continue to Checkout</span>
+                    <i class="las la-arrow-right ms-1"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-link text-muted p-1" onclick="cfDomainCart.clear()" title="Clear cart" aria-label="Clear cart">
+                    <i class="las la-trash-alt fs-16"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- =========== Footer Area =========== -->
     <?php include 'include/footer.inc.php'; ?>

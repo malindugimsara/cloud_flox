@@ -310,8 +310,8 @@
                                 </li>
                             </ul>
 
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=1" class="cf-btn-vps-order">
-                                <span>Deploy Launch VPS</span>
+                            <a href="<?php echo $url; ?>request-quote?pid=401" class="cf-btn-vps-order" data-pid="401">
+                                <span>Request Quote &amp; Deploy</span>
                                 <i class="las la-arrow-right"></i>
                             </a>
                         </div>
@@ -378,8 +378,8 @@
                                 </li>
                             </ul>
 
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=2" class="cf-btn-vps-order">
-                                <span>Deploy Scale VPS</span>
+                            <a href="<?php echo $url; ?>request-quote?pid=402" class="cf-btn-vps-order" data-pid="402">
+                                <span>Request Quote &amp; Deploy</span>
                                 <i class="las la-arrow-right"></i>
                             </a>
                         </div>
@@ -452,8 +452,8 @@
                                 </li>
                             </ul>
 
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=3" class="cf-btn-vps-order">
-                                <span>Deploy Pro VPS</span>
+                            <a href="<?php echo $url; ?>request-quote?pid=403" class="cf-btn-vps-order" data-pid="403">
+                                <span>Request Quote &amp; Deploy</span>
                                 <i class="las la-arrow-right"></i>
                             </a>
                         </div>
@@ -520,8 +520,8 @@
                                 </li>
                             </ul>
 
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=4" class="cf-btn-vps-order">
-                                <span>Deploy Power VPS</span>
+                            <a href="<?php echo $url; ?>request-quote?pid=404" class="cf-btn-vps-order" data-pid="404">
+                                <span>Request Quote &amp; Deploy</span>
                                 <i class="las la-arrow-right"></i>
                             </a>
                         </div>
@@ -722,8 +722,8 @@
                                 Transparent billing with no hidden fees or setup charges. Scale or downsize anytime.
                             </p>
 
-                            <a href="https://my.cloudflox.com/cart.php?a=add&pid=1" class="cf-btn-vps-glow w-100 justify-content-center mb-3">
-                                <span>Deploy Custom Server</span>
+                            <a href="<?php echo $url; ?>request-quote?type=vps" class="cf-btn-vps-glow w-100 justify-content-center mb-3" data-pid="401">
+                                <span>Configure &amp; Request Quote</span>
                                 <i class="las la-arrow-right ms-2"></i>
                             </a>
 
@@ -966,26 +966,26 @@
                                     </div>
                                 </td>
                                 <td class="plan-val">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=1" class="cf-vps-action-btn btn-starter" aria-label="Deploy Launch VPS">
-                                        <span>Deploy Launch</span>
+                                    <a href="<?php echo $url; ?>request-quote?pid=401" class="cf-vps-action-btn btn-starter" data-pid="401" aria-label="Deploy Launch VPS">
+                                        <span>Request Quote</span>
                                         <i class="las la-arrow-right"></i>
                                     </a>
                                 </td>
                                 <td class="plan-val">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=2" class="cf-vps-action-btn btn-starter" aria-label="Deploy Scale VPS">
-                                        <span>Deploy Scale</span>
+                                    <a href="<?php echo $url; ?>request-quote?pid=402" class="cf-vps-action-btn btn-starter" data-pid="402" aria-label="Deploy Scale VPS">
+                                        <span>Request Quote</span>
                                         <i class="las la-arrow-right"></i>
                                     </a>
                                 </td>
                                 <td class="plan-val popular-vps-td">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=3" class="cf-vps-action-btn btn-popular" aria-label="Deploy Pro VPS">
-                                        <span>Deploy Pro</span>
+                                    <a href="<?php echo $url; ?>request-quote?pid=403" class="cf-vps-action-btn btn-popular" data-pid="403" aria-label="Deploy Pro VPS">
+                                        <span>Request Quote</span>
                                         <i class="las la-bolt"></i>
                                     </a>
                                 </td>
                                 <td class="plan-val">
-                                    <a href="https://my.cloudflox.com/cart.php?a=add&pid=4" class="cf-vps-action-btn btn-business" aria-label="Deploy Power VPS">
-                                        <span>Deploy Power</span>
+                                    <a href="<?php echo $url; ?>request-quote?pid=404" class="cf-vps-action-btn btn-business" data-pid="404" aria-label="Deploy Power VPS">
+                                        <span>Request Quote</span>
                                         <i class="las la-sliders-h"></i>
                                     </a>
                                 </td>
@@ -1436,6 +1436,10 @@
                 billingNotes.forEach(function (el) {
                     el.innerHTML = "Billed monthly &bull; ex VAT";
                 });
+                document.querySelectorAll('.cf-btn-vps-order, .cf-vps-action-btn, .cf-btn-vps-glow').forEach(function (btn) {
+                    const pid = btn.getAttribute('data-pid') || '401';
+                    btn.href = '<?php echo $url; ?>request-quote?pid=' + pid;
+                });
             });
 
             btnYearly.addEventListener("click", function () {
@@ -1451,6 +1455,10 @@
 
                 billingNotes.forEach(function (el) {
                     el.innerHTML = "Billed annually (Save 15%) &bull; ex VAT";
+                });
+                document.querySelectorAll('.cf-btn-vps-order, .cf-vps-action-btn, .cf-btn-vps-glow').forEach(function (btn) {
+                    const pid = btn.getAttribute('data-pid') || '401';
+                    btn.href = '<?php echo $url; ?>request-quote?pid=' + pid;
                 });
             });
         }
