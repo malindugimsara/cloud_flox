@@ -282,47 +282,48 @@ if ($isLoggedIn && $clientId > 0) {
         .cf-rfq-bottom-summary {
             background: #FFFFFF;
             border: 2px solid #2563EB;
-            border-radius: 22px !important;
-            padding: 38px 40px !important;
-            margin-top: 16px !important;
-            margin-bottom: 24px !important;
-            box-shadow: 0 16px 40px -10px rgba(37, 99, 235, 0.15), 0 4px 18px -4px rgba(15, 23, 42, 0.05);
+            border-radius: 24px !important;
+            padding: 42px 44px !important;
+            margin-top: 24px !important;
+            margin-bottom: 32px !important;
+            box-shadow: 0 20px 48px -12px rgba(37, 99, 235, 0.16), 0 4px 20px rgba(15, 23, 42, 0.04);
             position: relative;
         }
         .cf-rfq-base-banner {
             background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
             border: 1.5px solid #DBEAFE;
-            border-radius: 14px;
-            padding: 18px 24px !important;
-            margin-bottom: 24px !important;
+            border-radius: 16px;
+            padding: 22px 28px !important;
+            margin-bottom: 28px !important;
         }
         .cf-rfq-tier-pill {
             background: #2563EB !important;
             color: #FFFFFF !important;
             font-weight: 700;
-            padding: 7px 18px !important;
+            padding: 8px 20px !important;
             border-radius: 999px;
-            font-size: 12px;
+            font-size: 12.5px;
             display: inline-flex;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
             letter-spacing: 0.3px;
         }
         .cf-rfq-spec-pill {
             background: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            border-radius: 12px;
-            padding: 14px 16px !important;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 14px;
+            padding: 16px 18px !important;
             height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .cf-rfq-spec-pill:hover {
             background: #FFFFFF;
-            border-color: #CBD5E1;
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            border-color: #93C5FD;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.08);
         }
         .cf-rfq-spec-label {
             font-size: 11px;
@@ -330,13 +331,14 @@ if ($isLoggedIn && $clientId > 0) {
             color: #64748B;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
+            gap: 6px;
         }
         .cf-rfq-spec-val {
-            font-size: 13.5px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: 800;
             color: #0F172A;
             white-space: nowrap;
             overflow: hidden;
@@ -344,35 +346,62 @@ if ($isLoggedIn && $clientId > 0) {
         }
         .cf-rfq-reassurance-box {
             background: #F0FDF4;
-            border: 1.5px solid #BBF7D0;
-            border-radius: 14px;
-            padding: 18px 22px !important;
+            border: 1.5px solid #86EFAC;
+            border-radius: 16px;
+            padding: 22px 26px !important;
+            margin-top: 26px !important;
+            margin-bottom: 26px !important;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.06);
+        }
+        .cf-rfq-reassurance-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #DCFCE7;
+            color: #16A34A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
         }
         .cf-rfq-btn-submit {
             background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%);
             color: #FFFFFF;
             border: none;
-            border-radius: 14px;
-            padding: 18px 32px !important;
+            border-radius: 16px;
+            padding: 19px 34px !important;
             font-size: 16.5px !important;
             font-weight: 800;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             transition: all 0.2s ease;
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.32);
             cursor: pointer;
+            margin-bottom: 20px !important;
         }
         .cf-rfq-btn-submit:hover {
             background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.42);
             color: #FFFFFF;
         }
         .cf-rfq-btn-submit:active {
             transform: translateY(0);
+        }
+        .cf-rfq-trust-badges {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            color: #64748B;
+            font-size: 12.5px;
+            padding-top: 18px;
+            border-top: 1px dashed #E2E8F0;
+            flex-wrap: wrap;
         }
 
         /* Responsive Breakpoints */
@@ -842,14 +871,15 @@ if ($isLoggedIn && $clientId > 0) {
 
                         <!-- SECTION 6 (BOTTOM SUMMARY & SUBMISSION): REVIEW & DISPATCH RFQ -->
                         <div class="cf-rfq-bottom-summary" id="rfqSummarySection">
-                            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 mb-3.5 pb-3 border-bottom">
-                                <div class="d-flex align-items-center gap-2.5">
+                            <!-- Card Header -->
+                            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4 pb-3.5 border-bottom">
+                                <div class="d-flex align-items-center gap-3">
                                     <div class="cf-rfq-card-icon" style="background: #EFF6FF; color: #2563EB;">
                                         <i class="las la-file-invoice fs-22"></i>
                                     </div>
                                     <div>
-                                        <h4 class="fw-800 text-slate-900 fs-17 mb-0">6. Quotation Specification Summary</h4>
-                                        <p class="text-secondary fs-12 mb-0">Review your customized infrastructure specifications before submitting.</p>
+                                        <h4 class="fw-800 text-slate-900 fs-18 mb-1">6. Quotation Specification Summary</h4>
+                                        <p class="text-secondary fs-12.5 mb-0">Review your customized infrastructure specifications before submitting.</p>
                                     </div>
                                 </div>
                                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill fs-11 px-3 py-1.5 fw-bold align-self-start align-self-sm-auto">
@@ -858,10 +888,10 @@ if ($isLoggedIn && $clientId > 0) {
                             </div>
 
                             <!-- Selected Base Model Banner -->
-                            <div class="cf-rfq-base-banner d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+                            <div class="cf-rfq-base-banner d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
                                 <div>
                                     <div class="fs-11 fw-bold text-slate-500 text-uppercase letter-spacing-1">Selected Deployment Model</div>
-                                    <h5 class="fs-18 fw-800 text-slate-900 mb-0 mt-0.5" id="summaryModelText"><?php echo htmlspecialchars($prefillPlanName); ?></h5>
+                                    <h5 class="fs-20 fw-800 text-slate-900 mb-0 mt-1" id="summaryModelText"><?php echo htmlspecialchars($prefillPlanName); ?></h5>
                                 </div>
                                 <div>
                                     <span class="cf-rfq-tier-pill" id="summaryTierBadge"><?php echo htmlspecialchars($prefillType === 'dedicated' ? 'Dedicated Bare Metal Server' : 'KVM Cloud VPS'); ?></span>
@@ -869,64 +899,68 @@ if ($isLoggedIn && $clientId > 0) {
                             </div>
 
                             <!-- Spec Overview Grid (8 tiles) -->
-                            <div class="row g-2.5 mb-3.5">
+                            <div class="row g-3 mb-4">
                                 <div class="col-6 col-md-3">
                                     <div class="cf-rfq-spec-pill">
-                                        <span class="cf-rfq-spec-label"><i class="las la-microchip me-1 text-primary"></i>Processor</span>
+                                        <span class="cf-rfq-spec-label"><i class="las la-microchip text-primary fs-14"></i>Processor</span>
                                         <span class="cf-rfq-spec-val" id="summaryCpu"><?php echo $prefillCpu; ?></span>
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-3">
                                     <div class="cf-rfq-spec-pill">
-                                        <span class="cf-rfq-spec-label"><i class="las la-memory me-1 text-purple"></i>RAM Memory</span>
+                                        <span class="cf-rfq-spec-label"><i class="las la-memory text-purple fs-14"></i>RAM Memory</span>
                                         <span class="cf-rfq-spec-val" id="summaryRam"><?php echo $prefillRam; ?></span>
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-3">
                                     <div class="cf-rfq-spec-pill">
-                                        <span class="cf-rfq-spec-label"><i class="las la-hdd me-1 text-emerald"></i>Storage Array</span>
+                                        <span class="cf-rfq-spec-label"><i class="las la-hdd text-emerald fs-14"></i>Storage Array</span>
                                         <span class="cf-rfq-spec-val" id="summaryStorage">80 GB Gen4 NVMe</span>
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-3">
                                     <div class="cf-rfq-spec-pill">
-                                        <span class="cf-rfq-spec-label"><i class="las la-shield-alt me-1 text-warning"></i>RAID Array</span>
+                                        <span class="cf-rfq-spec-label"><i class="las la-shield-alt text-warning fs-14"></i>RAID Array</span>
                                         <span class="cf-rfq-spec-val" id="summaryRaid">Hardware RAID-1</span>
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-3">
                                     <div class="cf-rfq-spec-pill">
-                                        <span class="cf-rfq-spec-label"><i class="las la-desktop me-1 text-info"></i>Operating System</span>
+                                        <span class="cf-rfq-spec-label"><i class="las la-desktop text-info fs-14"></i>Operating System</span>
                                         <span class="cf-rfq-spec-val" id="summaryOs">Ubuntu 24.04 LTS</span>
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-3">
                                     <div class="cf-rfq-spec-pill">
-                                        <span class="cf-rfq-spec-label"><i class="las la-tools me-1 text-danger"></i>Control Panel</span>
+                                        <span class="cf-rfq-spec-label"><i class="las la-tools text-danger fs-14"></i>Control Panel</span>
                                         <span class="cf-rfq-spec-val" id="summaryPanel">Root SSH</span>
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-3">
                                     <div class="cf-rfq-spec-pill">
-                                        <span class="cf-rfq-spec-label"><i class="las la-globe me-1 text-primary"></i>Datacenter</span>
+                                        <span class="cf-rfq-spec-label"><i class="las la-globe text-primary fs-14"></i>Datacenter</span>
                                         <span class="cf-rfq-spec-val" id="summaryLocation">Frankfurt, DE</span>
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-3">
                                     <div class="cf-rfq-spec-pill">
-                                        <span class="cf-rfq-spec-label"><i class="las la-network-wired me-1 text-secondary"></i>Dedicated IPs</span>
+                                        <span class="cf-rfq-spec-label"><i class="las la-network-wired text-secondary fs-14"></i>Dedicated IPs</span>
                                         <span class="cf-rfq-spec-val" id="summaryIps">1 Dedicated IPv4</span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Zero Initial Payment Reassurance Box -->
-                            <div class="cf-rfq-reassurance-box mb-3.5">
-                                <div class="d-flex align-items-start gap-2.5">
-                                    <i class="las la-info-circle text-primary fs-20 mt-0.5 flex-shrink-0"></i>
-                                    <div>
-                                        <div class="fw-bold text-slate-900 fs-13 mb-0.5">Zero Upfront Payment Required &bull; Free Architecture Review</div>
-                                        <div class="text-secondary fs-12 lh-sm">
+                            <div class="cf-rfq-reassurance-box mb-4">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="cf-rfq-reassurance-icon">
+                                        <i class="las la-info-circle"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-bold text-slate-900 fs-13.5 mb-1">
+                                            Zero Upfront Payment Required <span class="text-secondary mx-1">&bull;</span> Free Architecture Review
+                                        </div>
+                                        <div class="text-secondary fs-12.5 lh-base">
                                             Our senior infrastructure architects will verify datacenter availability, apply eligible volume discounts, and issue your official quotation within 1-2 hours. You can review, approve, and pay only after receiving your custom proposal.
                                         </div>
                                     </div>
@@ -939,18 +973,18 @@ if ($isLoggedIn && $clientId > 0) {
                             <!-- Submit Button -->
                             <button type="submit" class="cf-rfq-btn-submit" id="btnSubmitRfq">
                                 <span class="btn-text">
-                                    <i class="las la-paper-plane me-1.5 fs-18"></i> Submit Server Quotation Request &rarr;
+                                    <i class="las la-paper-plane me-2 fs-18"></i> Submit Server Quotation Request &rarr;
                                 </span>
                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                             </button>
 
                             <!-- Trust Guarantee Badges -->
-                            <div class="d-flex align-items-center justify-content-center gap-3 text-secondary fs-12 mt-3 flex-wrap">
-                                <span><i class="las la-lock text-success me-1 fs-14"></i>256-Bit SSL Encrypted</span>
-                                <span>&bull;</span>
-                                <span><i class="las la-clock text-primary me-1 fs-14"></i>1-2 Hour Engineering Review</span>
-                                <span>&bull;</span>
-                                <span><i class="las la-shield-alt text-success me-1 fs-14"></i>99.95% Network SLA Guarantee</span>
+                            <div class="cf-rfq-trust-badges">
+                                <span><i class="las la-lock text-success me-1.5 fs-15"></i>256-Bit SSL Encrypted</span>
+                                <span class="text-slate-300">&bull;</span>
+                                <span><i class="las la-clock text-primary me-1.5 fs-15"></i>1-2 Hour Engineering Review</span>
+                                <span class="text-slate-300">&bull;</span>
+                                <span><i class="las la-shield-alt text-success me-1.5 fs-15"></i>99.95% Network SLA Guarantee</span>
                             </div>
                         </div>
 

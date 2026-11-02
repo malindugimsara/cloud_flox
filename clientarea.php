@@ -317,386 +317,8 @@ if (!function_exists('getQuoteStageBadge')) {
 
     <!-- =========== CSS Area =========== -->
     <?php include 'include/css.inc.php'; ?>
+    <link rel="stylesheet" href="assets/css/cf-clientarea.css?v=<?php echo file_exists(__DIR__ . '/assets/css/cf-clientarea.css') ? filemtime(__DIR__ . '/assets/css/cf-clientarea.css') : '1'; ?>">
     <!-- =========== CSS Area =========== -->
-
-    <style>
-    /* =========================================================================
-       CLOUDFLOX CLIENT PORTAL LEFT SIDEBAR NAVIGATION
-       ========================================================================= */
-    .cf-portal-sidebar {
-        background: #FFFFFF;
-        border: 1.5px solid #E2E8F0;
-        border-radius: 20px;
-        padding: 24px 20px;
-        box-shadow: 0 4px 24px -4px rgba(15, 23, 42, 0.04);
-        position: sticky;
-        top: 90px;
-        z-index: 10;
-    }
-
-    .cf-sidebar-profile {
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
-        border-bottom: 1.5px solid #F1F5F9;
-    }
-
-    .cf-sidebar-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
-        background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
-        color: #FFFFFF;
-        font-weight: 800;
-        font-size: 17px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-        flex-shrink: 0;
-        letter-spacing: -0.5px;
-    }
-
-    .cf-sidebar-user-name {
-        font-size: 15px;
-        font-weight: 700;
-        color: #0F172A;
-        line-height: 1.25;
-        margin-bottom: 2px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 175px;
-    }
-
-    .cf-sidebar-user-email {
-        font-size: 12px;
-        color: #64748B;
-        margin-bottom: 6px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 175px;
-    }
-
-    .cf-sidebar-nav-title {
-        font-size: 10.5px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #94A3B8;
-        margin-bottom: 10px;
-        padding-left: 8px;
-    }
-
-    .cf-portal-nav .nav-link {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 11px 14px;
-        border-radius: 12px;
-        font-size: 13.5px;
-        font-weight: 600;
-        color: #475569;
-        text-decoration: none;
-        border: none;
-        background: transparent;
-        width: 100%;
-        transition: all 0.2s ease;
-        margin-bottom: 5px;
-        text-align: left;
-    }
-
-    .cf-portal-nav .nav-link:hover {
-        background: #F8FAFC;
-        color: #2563EB;
-        transform: translateX(3px);
-    }
-
-    .cf-portal-nav .nav-link:hover .cf-nav-icon {
-        color: #2563EB;
-    }
-
-    .cf-portal-nav .nav-link.active {
-        background: linear-gradient(135deg, #EFF6FF 0%, #E0E7FF 100%);
-        color: #1D4ED8 !important;
-        font-weight: 700;
-        box-shadow: 0 2px 10px rgba(37, 99, 235, 0.08);
-    }
-
-    .cf-portal-nav .nav-link.active .cf-nav-icon {
-        color: #2563EB;
-    }
-
-    .cf-nav-icon {
-        font-size: 20px;
-        width: 22px;
-        text-align: center;
-        color: #64748B;
-        transition: color 0.2s ease;
-        flex-shrink: 0;
-    }
-
-    .cf-nav-badge {
-        font-size: 11px;
-        font-weight: 700;
-        background: #F1F5F9;
-        color: #475569;
-        padding: 3px 8px;
-        border-radius: 999px;
-    }
-
-    .cf-portal-nav .nav-link.active .cf-nav-badge {
-        background: #2563EB;
-        color: #FFFFFF;
-    }
-
-    .cf-sidebar-divider {
-        height: 1px;
-        background: #F1F5F9;
-        margin: 18px 0;
-    }
-
-    .cf-sidebar-help-box {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 14px;
-        padding: 14px;
-        margin-bottom: 16px;
-    }
-
-    .cf-sidebar-logout-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 11px 14px;
-        border-radius: 12px;
-        font-size: 13.5px;
-        font-weight: 600;
-        color: #DC2626;
-        background: #FEF2F2;
-        text-decoration: none;
-        transition: all 0.2s ease;
-        border: 1px solid #FEE2E2;
-        width: 100%;
-    }
-
-    .cf-sidebar-logout-btn:hover {
-        background: #DC2626;
-        color: #FFFFFF;
-        border-color: #DC2626;
-        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
-        transform: translateY(-1px);
-    }
-
-    @media (max-width: 991.98px) {
-        .cf-portal-sidebar {
-            position: static;
-            margin-bottom: 20px;
-            padding: 16px 14px;
-        }
-        .cf-sidebar-profile {
-            margin-bottom: 14px;
-            padding-bottom: 14px;
-        }
-        .cf-portal-nav {
-            flex-direction: row !important;
-            overflow-x: auto;
-            flex-wrap: nowrap !important;
-            gap: 6px;
-            padding-bottom: 6px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        .cf-portal-nav::-webkit-scrollbar {
-            display: none;
-        }
-        .cf-portal-nav .nav-link {
-            white-space: nowrap;
-            width: auto;
-            padding: 8px 14px;
-            margin-bottom: 0;
-            flex-shrink: 0;
-        }
-        .cf-portal-nav .nav-link:hover {
-            transform: none;
-        }
-        .cf-sidebar-help-box {
-            display: none;
-        }
-    }
-
-    @media (max-width: 575.98px) {
-        .cf-profile-hero-card {
-            padding: 16px 14px;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .cf-profile-avatar-lg {
-            width: 48px;
-            height: 48px;
-            font-size: 19px;
-            border-radius: 12px;
-        }
-    }
-
-    /* =========================================================================
-       CLOUDFLOX PROFILE & ACCOUNT SETTINGS STYLING
-       ========================================================================= */
-    .cf-profile-hero-card {
-        background: linear-gradient(135deg, #F8FAFD 0%, #EFF6FF 100%);
-        border: 1.5px solid #DBEAFE;
-        border-radius: 18px;
-        padding: 22px 24px;
-        margin-bottom: 26px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 16px;
-    }
-
-    .cf-profile-avatar-lg {
-        width: 58px;
-        height: 58px;
-        border-radius: 16px;
-        background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
-        color: #FFFFFF;
-        font-weight: 800;
-        font-size: 22px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
-        flex-shrink: 0;
-        letter-spacing: -0.5px;
-    }
-
-    .cf-profile-section-card {
-        background: #FFFFFF;
-        border: 1.5px solid #E2E8F0;
-        border-radius: 18px;
-        overflow: hidden;
-        margin-bottom: 24px;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .cf-profile-section-card:hover {
-        border-color: #CBD5E1;
-        box-shadow: 0 4px 18px -4px rgba(15, 23, 42, 0.04);
-    }
-
-    .cf-profile-section-header {
-        background: #F8FAFC;
-        border-bottom: 1.5px solid #E2E8F0;
-        padding: 16px 22px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .cf-profile-section-body {
-        padding: 24px 22px;
-    }
-
-    .cf-form-label-modern {
-        font-size: 13px;
-        font-weight: 700;
-        color: #1E293B;
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .cf-input-icon-wrap {
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
-
-    .cf-input-icon-wrap .cf-input-icon {
-        position: absolute;
-        left: 14px;
-        font-size: 18px;
-        color: #64748B;
-        pointer-events: none;
-        z-index: 2;
-        transition: color 0.2s ease;
-    }
-
-    .cf-input-icon-wrap .form-control,
-    .cf-input-icon-wrap .form-select {
-        padding-left: 42px !important;
-    }
-
-    .cf-input-modern {
-        height: 48px !important;
-        border-radius: 12px !important;
-        border: 1.5px solid #E2E8F0 !important;
-        font-size: 13.5px !important;
-        color: #0F172A !important;
-        background-color: #FFFFFF;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-    }
-
-    .cf-input-modern:focus {
-        border-color: #2563EB !important;
-        background-color: #FFFFFF !important;
-        box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.12) !important;
-        outline: none !important;
-    }
-
-    .cf-input-icon-wrap:focus-within .cf-input-icon {
-        color: #2563EB !important;
-    }
-
-    .cf-input-modern[readonly] {
-        background-color: #F8FAFC !important;
-        border-color: #E2E8F0 !important;
-        color: #475569 !important;
-        cursor: not-allowed;
-    }
-
-    .cf-pass-toggle-btn {
-        position: absolute;
-        right: 10px;
-        background: transparent;
-        border: none;
-        color: #64748B;
-        padding: 6px 8px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 18px;
-        z-index: 3;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: color 0.2s ease;
-    }
-
-    .cf-pass-toggle-btn:hover {
-        color: #2563EB;
-    }
-
-    .cf-profile-save-bar {
-        background: #F8FAFC;
-        border: 1.5px solid #E2E8F0;
-        border-radius: 16px;
-        padding: 18px 22px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 14px;
-    }
-    </style>
 </head>
 
 <body class="pure-white-theme">
@@ -2122,11 +1744,11 @@ if (!function_exists('getQuoteStageBadge')) {
          SERVER QUOTATION & ACCEPTANCE MODAL
          ===================================================================== -->
     <div class="modal fade" id="quoteDetailsModal" tabindex="-1" aria-labelledby="quoteModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 18px; overflow: hidden;">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" style="max-width: 920px;">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
                 <div class="modal-header border-bottom py-3 px-4 bg-white align-items-center">
                     <div class="d-flex align-items-center gap-2.5">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; background: rgba(37, 99, 235, 0.1); color: #2563EB;">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background: rgba(37, 99, 235, 0.1); color: #2563EB;">
                             <i class="las la-file-invoice fs-24"></i>
                         </div>
                         <div>
@@ -2154,49 +1776,113 @@ if (!function_exists('getQuoteStageBadge')) {
                         <!-- Alert Box for Accept Action -->
                         <div id="quoteAcceptAlert" class="alert d-none mb-3" role="alert"></div>
 
-                        <!-- Quote Subject & Proposal Overview -->
-                        <div class="card border border-light-subtle rounded-3 p-3 mb-3" style="background: #F8FAFC;">
-                            <h6 class="fw-bold text-slate-900 fs-14 mb-1" id="quoteModalSubject">Custom Server Architecture</h6>
-                            <p class="text-secondary fs-12.5 mb-2" id="quoteModalProposal">CloudFlox tailored server proposal.</p>
-                            <div id="quoteModalCustNotesWrap" class="fs-12 text-muted border-top pt-2 mt-2 d-none">
-                                <strong>Your Technical Requirements:</strong> <span id="quoteModalCustNotes"></span>
+                        <!-- Structured Proposal View -->
+                        <div id="quoteStructuredProposalWrap" class="mb-3.5">
+                            <!-- Selected Model Banner -->
+                            <div class="cf-quote-banner d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-3">
+                                <div>
+                                    <div class="cf-quote-banner-subtitle">
+                                        <i class="las la-server me-1"></i> Selected Deployment Architecture
+                                    </div>
+                                    <h5 class="cf-quote-banner-title mb-1" id="quoteSpecModelName">Launch VPS</h5>
+                                    <div class="cf-quote-hostname-tag" id="quoteSpecHostnameWrap">
+                                        <i class="las la-network-wired text-primary me-1"></i> Hostname: <span id="quoteSpecHostname" class="font-monospace fw-semibold text-slate-800">srv1.cloudflox.com</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column align-items-sm-end gap-2">
+                                    <span class="cf-quote-tier-pill" id="quoteSpecTierPill">KVM Cloud VPS</span>
+                                    <span class="cf-quote-budget-pill d-none" id="quoteSpecBudgetPill">
+                                        <i class="las la-wallet me-1 text-emerald"></i> Budget: <span id="quoteSpecBudgetText"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Spec Overview Grid (8 Tiles) -->
+                            <div class="row g-2.5 mb-3" id="quoteSpecsGrid">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+
+                            <!-- Workload / Project Purpose Note -->
+                            <div id="quoteSpecWorkloadWrap" class="cf-quote-info-box mb-3 d-none">
+                                <i class="las la-briefcase text-primary fs-18 flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="fw-bold text-slate-800 fs-12 d-block mb-0.5">Intended Workload &amp; Project Purpose:</span>
+                                    <span class="text-secondary fs-12.5" id="quoteSpecWorkloadText"></span>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Line Items Table -->
-                        <h6 class="fw-bold text-slate-900 fs-13 mb-2 text-uppercase letter-spacing-1">Allocated Hardware &amp; Services</h6>
-                        <div class="table-responsive mb-3 border rounded-3 overflow-hidden">
-                            <table class="table mb-0 fs-13">
-                                <thead class="table-light">
+                        <!-- Fallback Raw Proposal Box (for unstructured / manual proposals) -->
+                        <div id="quoteRawProposalWrap" class="card border border-light-subtle rounded-3 p-3 mb-3 d-none" style="background: #F8FAFC;">
+                            <h6 class="fw-bold text-slate-900 fs-14 mb-1" id="quoteModalSubject">Custom Server Architecture</h6>
+                            <div class="text-secondary fs-13 lh-base" id="quoteModalProposal" style="white-space: pre-line;"></div>
+                        </div>
+
+                        <!-- Customer Technical Requirements / Notes -->
+                        <div id="quoteModalCustNotesWrap" class="cf-quote-notes-box mb-3.5 d-none">
+                            <i class="las la-clipboard-list text-purple fs-18 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <span class="fw-bold text-slate-800 fs-12 d-block mb-0.5">Client Requirements &amp; Notes:</span>
+                                <span class="text-secondary fs-12.5" id="quoteModalCustNotes"></span>
+                            </div>
+                        </div>
+
+                        <!-- Line Items Table Header -->
+                        <div class="cf-quote-section-header">
+                            <h6 class="cf-quote-section-title">
+                                <i class="las la-list-alt"></i>
+                                <span>Allocated Hardware &amp; Services</span>
+                            </h6>
+                            <span class="cf-quote-badge-tag">
+                                <i class="las la-tags"></i> Itemized Pricing
+                            </span>
+                        </div>
+                        <div class="table-responsive mb-3.5 border rounded-3 overflow-hidden shadow-2xs">
+                            <table class="table mb-0 fs-13 align-middle cf-quote-items-table">
+                                <thead style="background: #F8FAFC; border-bottom: 1.5px solid #E2E8F0;">
                                     <tr>
-                                        <th class="ps-3 py-2">Item / Specification</th>
-                                        <th class="text-center py-2" style="width: 70px;">Qty</th>
-                                        <th class="text-end py-2" style="width: 110px;">Unit Price</th>
-                                        <th class="text-end pe-3 py-2" style="width: 120px;">Total</th>
+                                        <th class="ps-3 py-2.5 text-slate-700 fw-bold">Item / Specification</th>
+                                        <th class="text-center py-2.5 text-slate-700 fw-bold" style="width: 80px;">Qty</th>
+                                        <th class="text-end py-2.5 text-slate-700 fw-bold" style="width: 120px;">Unit Price</th>
+                                        <th class="text-end pe-3 py-2.5 text-slate-700 fw-bold" style="width: 130px;">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody id="quoteModalItemsBody">
                                     <!-- Populated via JS -->
                                 </tbody>
-                                <tfoot class="border-top" style="background: #F8FAFC;">
+                                <tfoot style="background: #F8FAFC; border-top: 1.5px solid #E2E8F0;">
                                     <tr>
-                                        <td colspan="3" class="text-end fw-bold py-2.5 ps-3">Total Quoted Amount:</td>
-                                        <td class="text-end fw-800 text-slate-900 pe-3 py-2.5 fs-15" id="quoteModalGrandTotal">$0.00 USD</td>
+                                        <td colspan="3" class="text-end fw-bold py-3 ps-3 text-slate-700 fs-13">Total Quoted Amount:</td>
+                                        <td class="text-end fw-800 text-primary pe-3 py-3 fs-16" id="quoteModalGrandTotal">$0.00 USD</td>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
 
                         <!-- Under Review Notice (If Draft) -->
-                        <div id="quoteDraftNotice" class="alert alert-info py-2.5 px-3 fs-12.5 mb-0 border-0 rounded-3 d-none">
-                            <i class="las la-clock me-1.5 fs-15"></i>
-                            <strong>Under Review:</strong> Our senior infrastructure team is confirming hardware availability and network routing. Once finalized, pricing will be posted and this quotation will be delivered for your acceptance.
+                        <div id="quoteDraftNotice" class="cf-quote-alert-review py-3 px-3.5 fs-12.5 mb-0 rounded-3 d-none">
+                            <div class="d-flex align-items-start gap-2.5">
+                                <div class="cf-quote-alert-icon warning">
+                                    <i class="las la-clock"></i>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 d-block mb-0.5">Engineering Verification Underway</strong>
+                                    <span class="text-slate-600">Our senior infrastructure team is confirming hardware availability and network routing. Once finalized, official pricing will be posted and this quotation will be delivered for your acceptance.</span>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Ready To Accept Notice (If Delivered) -->
-                        <div id="quoteDeliveredNotice" class="alert alert-success py-2.5 px-3 fs-12.5 mb-0 border-0 rounded-3 d-none">
-                            <i class="las la-check-circle me-1.5 fs-15"></i>
-                            <strong>Quotation Ready:</strong> You can accept this quotation below. Upon acceptance, an official payable invoice will be generated and you will be routed to complete payment.
+                        <div id="quoteDeliveredNotice" class="cf-quote-alert-delivered py-3 px-3.5 fs-12.5 mb-0 rounded-3 d-none">
+                            <div class="d-flex align-items-start gap-2.5">
+                                <div class="cf-quote-alert-icon success">
+                                    <i class="las la-check-circle"></i>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900 d-block mb-0.5">Quotation Ready for Acceptance</strong>
+                                    <span class="text-slate-600">Review your customized proposal above. You can accept this quotation below to automatically generate your official payable invoice and proceed to instant provisioning.</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2204,8 +1890,8 @@ if (!function_exists('getQuoteStageBadge')) {
                 <div class="modal-footer border-top py-2.5 px-4 bg-light d-flex align-items-center justify-content-between">
                     <span class="fs-11 text-muted"><i class="las la-shield-alt text-success me-1"></i>Backed by CloudFlox 99.95% Network SLA</span>
                     <div class="d-flex align-items-center gap-2">
-                        <button type="button" class="btn btn-secondary rounded-pill px-3 py-1.5 fw-bold fs-12" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success rounded-pill px-4 py-1.5 fw-bold fs-12 text-white shadow-sm d-none" id="btnAcceptQuote" onclick="submitQuoteAcceptance()">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4 py-2 fw-bold fs-12" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success rounded-pill px-4 py-2 fw-bold fs-12 text-white shadow-sm d-none" id="btnAcceptQuote" onclick="submitQuoteAcceptance()">
                             <span class="btn-text"><i class="las la-check-circle me-1"></i> Accept Quotation &amp; Pay Invoice</span>
                             <span class="spinner-border spinner-border-sm d-none" role="status"></span>
                         </button>
@@ -2768,6 +2454,156 @@ if (!function_exists('getQuoteStageBadge')) {
     // =========================================================================
     let currentActiveQuoteId = null;
 
+    function renderProposalDetails(rawProposal, subject) {
+        const structuredWrap = document.getElementById('quoteStructuredProposalWrap');
+        const rawWrap = document.getElementById('quoteRawProposalWrap');
+        const specsGrid = document.getElementById('quoteSpecsGrid');
+
+        if (!rawProposal || typeof rawProposal !== 'string') {
+            if (structuredWrap) structuredWrap.classList.add('d-none');
+            if (rawWrap) {
+                rawWrap.classList.remove('d-none');
+                document.getElementById('quoteModalProposal').innerText = 'No proposal specifications provided.';
+            }
+            return;
+        }
+
+        // Parse key-value lines
+        const lines = rawProposal.split('\n');
+        const kv = {};
+        lines.forEach(line => {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith('---') || trimmed.startsWith('===') || trimmed.toLowerCase().startsWith('proposal for')) {
+                return;
+            }
+            const colonIdx = trimmed.indexOf(':');
+            if (colonIdx > 0) {
+                const key = trimmed.slice(0, colonIdx).trim().toLowerCase();
+                const val = trimmed.slice(colonIdx + 1).trim();
+                if (val) {
+                    kv[key] = val;
+                }
+            }
+        });
+
+        // Check if we have key hardware spec indicators
+        const hasStructuredSpecs = kv['processor / cpu'] || kv['cpu'] || kv['memory (ram)'] || kv['ram'] || 
+                                   kv['storage array'] || kv['storage'] || kv['infrastructure category'] || kv['base model / tier'];
+
+        if (!hasStructuredSpecs) {
+            // Fall back to clean raw view
+            if (structuredWrap) structuredWrap.classList.add('d-none');
+            if (rawWrap) {
+                rawWrap.classList.remove('d-none');
+                document.getElementById('quoteModalSubject').innerText = subject || 'Custom Server Architecture';
+                document.getElementById('quoteModalProposal').innerText = rawProposal;
+            }
+            return;
+        }
+
+        // Show structured view
+        if (rawWrap) rawWrap.classList.add('d-none');
+        if (structuredWrap) structuredWrap.classList.remove('d-none');
+
+        // Model & Tier Banner
+        const modelName = kv['base model / tier'] || kv['base model'] || subject || 'Custom Enterprise Server';
+        const tierCategory = kv['infrastructure category'] || 'Custom Cloud Infrastructure';
+        const hostname = kv['requested hostname'] || kv['hostname'] || 'To be assigned';
+        const budget = kv['customer target budget'] || kv['target budget'] || kv['budget'] || '';
+        const workload = kv['intended workload'] || kv['workload'] || '';
+
+        const modelEl = document.getElementById('quoteSpecModelName');
+        if (modelEl) modelEl.innerText = modelName;
+
+        const tierEl = document.getElementById('quoteSpecTierPill');
+        if (tierEl) tierEl.innerText = tierCategory;
+
+        const hostEl = document.getElementById('quoteSpecHostname');
+        if (hostEl) hostEl.innerText = hostname;
+
+        const budgetPill = document.getElementById('quoteSpecBudgetPill');
+        const budgetText = document.getElementById('quoteSpecBudgetText');
+        if (budget && budgetPill && budgetText) {
+            budgetText.innerText = budget;
+            budgetPill.classList.remove('d-none');
+        } else if (budgetPill) {
+            budgetPill.classList.add('d-none');
+        }
+
+        // Workload info box
+        const workloadWrap = document.getElementById('quoteSpecWorkloadWrap');
+        const workloadText = document.getElementById('quoteSpecWorkloadText');
+        if (workload && workloadWrap && workloadText) {
+            workloadText.innerText = workload;
+            workloadWrap.classList.remove('d-none');
+        } else if (workloadWrap) {
+            workloadWrap.classList.add('d-none');
+        }
+
+        // Build the 8 spec tiles
+        const specItems = [
+            {
+                label: 'Processor / CPU',
+                val: kv['processor / cpu'] || kv['processor'] || kv['cpu'] || 'Custom Spec',
+                icon: 'las la-microchip',
+                color: 'text-primary'
+            },
+            {
+                label: 'Memory (RAM)',
+                val: kv['memory (ram)'] || kv['ram'] || kv['memory'] || 'Custom Spec',
+                icon: 'las la-memory',
+                color: 'text-purple'
+            },
+            {
+                label: 'Storage Array',
+                val: kv['storage array'] || kv['storage'] || 'Custom Spec',
+                icon: 'las la-hdd',
+                color: 'text-emerald'
+            },
+            {
+                label: 'Operating System',
+                val: kv['operating system'] || kv['os'] || 'Standard OS',
+                icon: 'las la-desktop',
+                color: 'text-info'
+            },
+            {
+                label: 'Control Panel',
+                val: kv['control panel stack'] || kv['control panel'] || 'No Control Panel',
+                icon: 'las la-tools',
+                color: 'text-warning'
+            },
+            {
+                label: 'Datacenter Region',
+                val: kv['datacenter region'] || kv['datacenter'] || kv['region'] || 'Global Route',
+                icon: 'las la-globe-americas',
+                color: 'text-danger'
+            },
+            {
+                label: 'Network & IPs',
+                val: kv['network & dedicated ips'] || kv['dedicated ips'] || kv['network'] || '1 Dedicated IPv4',
+                icon: 'las la-network-wired',
+                color: 'text-primary'
+            },
+            {
+                label: 'SLA & Management',
+                val: kv['sla / management level'] || kv['management'] || 'Self-Managed',
+                icon: 'las la-user-shield',
+                color: 'text-secondary'
+            }
+        ];
+
+        if (specsGrid) {
+            specsGrid.innerHTML = specItems.map(item => `
+                <div class="col-6 col-md-3">
+                    <div class="cf-quote-spec-tile">
+                        <span class="cf-quote-spec-lbl"><i class="${item.icon} ${item.color} fs-14"></i> ${escapeHtml(item.label)}</span>
+                        <span class="cf-quote-spec-val" title="${escapeHtml(item.val)}">${escapeHtml(item.val)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
     function openQuoteModal(quoteId) {
         currentActiveQuoteId = quoteId;
         const modalEl = document.getElementById('quoteDetailsModal');
@@ -2794,8 +2630,7 @@ if (!function_exists('getQuoteStageBadge')) {
             if (data.status === 'success' && data.quote) {
                 const q = data.quote;
                 document.getElementById('quoteLoadedContent').style.display = 'block';
-                document.getElementById('quoteModalSubject').innerText = q.subject || 'Custom Server Architecture';
-                document.getElementById('quoteModalProposal').innerText = q.proposal || 'Tailored enterprise server specification prepared by CloudFlox engineering.';
+                renderProposalDetails(q.proposal, q.subject);
                 document.getElementById('quoteModalDates').innerText = 'Created: ' + (q.datecreated || '--') + ' • Valid Until: ' + (q.validuntil || '30 Days');
                 
                 // Customer notes
@@ -2811,7 +2646,7 @@ if (!function_exists('getQuoteStageBadge')) {
                 const stage = (q.stage || 'Draft').toLowerCase();
                 const badgeEl = document.getElementById('quoteModalBadge');
                 if (stage === 'delivered') {
-                    badgeEl.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fs-11 fw-bold"><i class="las la-bell me-1"></i>Delivered</span>';
+                    badgeEl.innerHTML = '<span class="badge bg-emerald-subtle text-emerald border border-emerald-subtle rounded-pill px-2.5 py-1 fs-11 fw-bold"><i class="las la-bell me-1"></i>Delivered</span>';
                 } else if (stage === 'accepted') {
                     badgeEl.innerHTML = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2.5 py-1 fs-11 fw-bold"><i class="las la-check-circle me-1"></i>Accepted</span>';
                 } else {
@@ -2844,10 +2679,10 @@ if (!function_exists('getQuoteStageBadge')) {
                     q.items.forEach(it => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td class="ps-3 py-2 fw-semibold text-slate-800">${escapeHtml(it.description)}</td>
-                            <td class="text-center py-2 text-muted">${escapeHtml(it.quantity)}</td>
-                            <td class="text-end py-2 text-secondary">$${it.unitprice}</td>
-                            <td class="text-end pe-3 py-2 fw-bold text-slate-900">$${it.total}</td>
+                            <td class="ps-3 py-2.5 fw-semibold text-slate-800">${escapeHtml(it.description)}</td>
+                            <td class="text-center py-2.5 text-muted">${escapeHtml(it.quantity)}</td>
+                            <td class="text-end py-2.5 text-secondary">$${it.unitprice}</td>
+                            <td class="text-end pe-3 py-2.5 fw-bold text-slate-900">$${it.total}</td>
                         `;
                         tbody.appendChild(tr);
                     });

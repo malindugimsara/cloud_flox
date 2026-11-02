@@ -68,6 +68,7 @@ if (!empty($initialDomains) && empty($initialDomain)) {
 }
 
 $hasDomainPreselected = !empty($initialDomain) || !empty($initialDomains);
+$hasHostingPreselected = !empty($initialPid) && $initialPid !== 'none';
 
 if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
     $lastDot = strrpos($initialDomain, '.');
@@ -281,7 +282,7 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                                 </div>
 
                                 <!-- Domain Hosting Add-On Section (When coming with domain: "step 1 ekedi hosting gannwada kiyla aai ahanwa") -->
-                                <div class="cf-domain-upsell-hosting-section" id="pageDomainUpsellHostingWrap" style="<?php echo $hasDomainPreselected ? 'display: block;' : 'display: none;'; ?>">
+                                <div class="cf-domain-upsell-hosting-section" id="pageDomainUpsellHostingWrap" style="<?php echo ($hasDomainPreselected && !$hasHostingPreselected) ? 'display: block;' : 'display: none;'; ?>">
                                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                                         <div>
                                             <h5 class="fw-bold text-slate-900 mb-0.5">
@@ -573,7 +574,7 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                                 </div>
 
                                 <!-- Step 1 Next Step Action Button -->
-                                <div class="mt-4 pt-3 border-top" id="step1ContinueBar" style="<?php echo $hasDomainPreselected ? 'display: block;' : 'display: none;'; ?>">
+                                <div class="mt-4 pt-3 border-top" id="step1ContinueBar" style="<?php echo ($hasDomainPreselected && !$hasHostingPreselected) ? 'display: block;' : 'display: none;'; ?>">
                                     <button type="button" class="cf-btn-next-step w-100" onclick="pageGoToStep(2)">
                                         <span>Continue to Plan &amp; Configuration</span>
                                         <i class="las la-arrow-right ms-2"></i>
@@ -776,18 +777,86 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                                         </div>
                                     </div>
 
-                                    <!-- Switch Hosting Tier Pills -->
-                                    <div class="mt-4 pt-3 border-top">
-                                        <span class="fs-12 fw-bold text-slate-700 d-block mb-2">Need a different tier? Switch instantly:</span>
-                                        <div class="d-flex flex-wrap gap-2">
-                                            <?php foreach ($whmcsHosting as $hKey => $hItem): ?>
-                                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fs-12" id="switchPlanBtn_<?php echo $hItem['pid']; ?>" onclick="pageSelectHostingPlan('<?php echo $hItem['pid']; ?>')">
-                                                    <?php echo htmlspecialchars($hItem['name']); ?> (<?php echo $hItem['monthly_formatted']; ?>/mo)
-                                                </button>
-                                            <?php endforeach; ?>
-                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 fs-12" id="switchPlanBtn_none" onclick="pageSelectHostingPlan('none')">
+                                    <!-- Switch Hosting Tier Component (Redesigned & Categorized) -->
+                                    <?php
+                                    $uniqueHostingPlans = [];
+                                    $catCounts = ['all' => 0, 'shared' => 0, 'business' => 0, 'vps' => 0, 'cloud' => 0];
+
+                                    foreach ($whmcsHosting as $hKey => $hItem) {
+                                        $pidStr = (string)$hItem['pid'];
+                                        if (!isset($uniqueHostingPlans[$pidStr])) {
+                                            $cat = 'shared';
+                                            if (in_array((int)$pidStr, [401, 402, 403, 404], true)) {
+                                                $cat = 'vps';
+                                            } elseif (in_array((int)$pidStr, [16, 17, 18, 19], true)) {
+                                                $cat = 'business';
+                                            } elseif (in_array((int)$pidStr, [4, 5, 21, 22, 23, 24], true)) {
+                                                $cat = 'cloud';
+                                            }
+                                            $hItem['cat_group'] = $cat;
+                                            $uniqueHostingPlans[$pidStr] = $hItem;
+                                            $catCounts['all']++;
+                                            $catCounts[$cat]++;
+                                        }
+                                    }
+                                    ?>
+                                    <div class="cf-tier-switcher-box">
+                                        <!-- Header with Title & Domain Only Action -->
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                            <div>
+                                                <span class="cf-tier-box-label">
+                                                    <i class="las la-layer-group text-primary fs-18"></i> Need a different tier? Switch instantly:
+                                                </span>
+                                                <small class="text-secondary fs-12 d-block">Select any plan below to dynamically update your configuration and pricing.</small>
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1.5 fs-12 fw-bold" id="switchPlanBtn_none" onclick="pageSelectHostingPlan('none')">
                                                 <i class="las la-times-circle me-1"></i> No Hosting (Domain Only)
                                             </button>
+                                        </div>
+
+                                        <!-- Category Filter Tabs -->
+                                        <div class="cf-tier-filter-tabs mb-3" role="tablist">
+                                            <button type="button" class="cf-tier-tab-btn active" data-filter="all" onclick="filterTierCatalog('all', this)">
+                                                All Plans <span class="cf-tier-tab-count"><?php echo $catCounts['all']; ?></span>
+                                            </button>
+                                            <button type="button" class="cf-tier-tab-btn" data-filter="shared" onclick="filterTierCatalog('shared', this)">
+                                                <i class="las la-globe me-1 text-primary"></i> Web Hosting <span class="cf-tier-tab-count"><?php echo $catCounts['shared']; ?></span>
+                                            </button>
+                                            <button type="button" class="cf-tier-tab-btn" data-filter="business" onclick="filterTierCatalog('business', this)">
+                                                <i class="las la-bolt me-1 text-purple"></i> Business NVMe <span class="cf-tier-tab-count"><?php echo $catCounts['business']; ?></span>
+                                            </button>
+                                            <button type="button" class="cf-tier-tab-btn" data-filter="vps" onclick="filterTierCatalog('vps', this)">
+                                                <i class="las la-terminal me-1 text-emerald"></i> Cloud VPS <span class="cf-tier-tab-count"><?php echo $catCounts['vps']; ?></span>
+                                            </button>
+                                            <button type="button" class="cf-tier-tab-btn" data-filter="cloud" onclick="filterTierCatalog('cloud', this)">
+                                                <i class="las la-server me-1 text-info"></i> Cloud &amp; Dedicated <span class="cf-tier-tab-count"><?php echo $catCounts['cloud']; ?></span>
+                                            </button>
+                                        </div>
+
+                                        <!-- Plan Cards Grid -->
+                                        <div class="cf-tier-grid" id="cfTierCatalogGrid">
+                                            <?php foreach ($uniqueHostingPlans as $pid => $hItem): ?>
+                                                <div class="cf-tier-item-card" data-cat="<?php echo $hItem['cat_group']; ?>" id="switchPlanBtn_<?php echo $pid; ?>" onclick="pageSelectHostingPlan('<?php echo $pid; ?>')">
+                                                    <div class="cf-tier-card-top">
+                                                        <span class="cf-tier-card-title"><?php echo htmlspecialchars($hItem['name']); ?></span>
+                                                        <?php if (!empty($hItem['popular'])): ?>
+                                                            <span class="cf-tier-card-badge">Popular</span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <div class="cf-tier-card-pricing">
+                                                        <span class="cf-tier-card-amount"><?php echo $hItem['monthly_formatted']; ?></span>
+                                                        <span class="cf-tier-card-period">/mo</span>
+                                                    </div>
+                                                    <?php if (!empty($hItem['specs'])): ?>
+                                                        <div class="cf-tier-card-specs" title="<?php echo htmlspecialchars($hItem['specs']); ?>">
+                                                            <?php echo htmlspecialchars($hItem['specs']); ?>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                    <div class="cf-tier-card-check">
+                                                        <i class="las la-check-circle"></i>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -1627,8 +1696,13 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
 
             renderState();
 
-            // Set initial step
-            pageGoToStep(1);
+            // Set initial step: If both a hosting plan and domain are pre-selected, go directly to Step 2
+            const hasHosting = Boolean(state.pid && state.pid !== 'none' && PRODUCTS[state.pid]);
+            if (hasHosting && state.domains.length > 0) {
+                pageGoToStep(2);
+            } else {
+                pageGoToStep(1);
+            }
         }
 
         // Render UI based on state
@@ -1746,20 +1820,26 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                 // Hide single strip & default 3 options
                 if (domainStrip) domainStrip.style.display = 'none';
                 if (domainOptionsWrap) domainOptionsWrap.style.display = 'none';
-                if (domainUpsellWrap) domainUpsellWrap.style.display = 'block';
+                
+                // Show hosting upsell ONLY if user has NOT already selected a hosting plan
+                if (domainUpsellWrap) {
+                    domainUpsellWrap.style.display = hasHosting ? 'none' : 'block';
+                }
 
-                // Sync active card in Step 1 hosting upsell
-                ['none', '1', '2', '3'].forEach(k => {
-                    const card = document.getElementById('hostingAddon' + (k === 'none' ? 'None' : k));
-                    if (card) {
-                        const isMatch = (k === 'none' && (!state.pid || state.pid === 'none')) ||
-                                        (state.pid === k) ||
-                                        (k === '1' && (state.pid === '1' || state.pid === '13' || state.pid === '101')) ||
-                                        (k === '2' && (state.pid === '2' || state.pid === '14' || state.pid === '16' || state.pid === '201')) || 
-                                        (k === '3' && (state.pid === '3' || state.pid === '15' || state.pid === '17' || state.pid === '202'));
-                        card.classList.toggle('active', isMatch);
-                    }
-                });
+                // Sync active card in Step 1 hosting upsell (only relevant if domain-only)
+                if (!hasHosting) {
+                    ['none', '1', '2', '3'].forEach(k => {
+                        const card = document.getElementById('hostingAddon' + (k === 'none' ? 'None' : k));
+                        if (card) {
+                            const isMatch = (k === 'none' && (!state.pid || state.pid === 'none')) ||
+                                            (state.pid === k) ||
+                                            (k === '1' && (state.pid === '1' || state.pid === '13' || state.pid === '101')) ||
+                                            (k === '2' && (state.pid === '2' || state.pid === '14' || state.pid === '16' || state.pid === '201')) || 
+                                            (k === '3' && (state.pid === '3' || state.pid === '15' || state.pid === '17' || state.pid === '202'));
+                            card.classList.toggle('active', isMatch);
+                        }
+                    });
+                }
 
                 if (step1ContinueBar) step1ContinueBar.style.display = 'block';
             } else {
@@ -1850,6 +1930,7 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                     Object.keys(PRODUCTS).forEach(pKey => {
                         const btn = document.getElementById('switchPlanBtn_' + pKey);
                         if (btn) {
+                            btn.classList.toggle('active', pKey === state.pid);
                             btn.classList.toggle('btn-primary', pKey === state.pid);
                             btn.classList.toggle('btn-outline-secondary', pKey !== state.pid);
                         }
@@ -1869,6 +1950,7 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                     Object.keys(PRODUCTS).forEach(pKey => {
                         const btn = document.getElementById('switchPlanBtn_' + pKey);
                         if (btn) {
+                            btn.classList.remove('active');
                             btn.classList.remove('btn-primary');
                             btn.classList.add('btn-outline-secondary');
                         }
@@ -2161,7 +2243,11 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
         // Select Hosting Addon in Step 1
         window.pageSelectHostingAddon = function(pid) {
             state.pid = pid;
+            syncCartStorage();
             renderState();
+            if (pid && pid !== 'none') {
+                pageGoToStep(2);
+            }
         };
 
         // Select Domain Registration Years (1 to 5) in Step 2
@@ -2295,11 +2381,12 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
         // Select registered domain from check result
         window.pageConnectRegisteredDomain = function() {
             const btn = document.getElementById('btnSelectResultDomain');
+            if (!btn) return;
             const domain = btn.getAttribute('data-domain');
             const priceStr = btn.getAttribute('data-price') || '$14.93';
             const price = parseFloat(priceStr.replace(/[^0-9\.]/g, '')) || 14.93;
 
-            if (!state.domains.some(d => d.name === domain)) {
+            if (domain && !state.domains.some(d => d.name === domain)) {
                 state.domains.push({
                     name: domain,
                     type: 'register',
@@ -2308,16 +2395,14 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                 });
             }
 
-            state.domain = state.domains[0].name;
-            state.domainType = state.domains[0].type;
-            state.domainPrice = state.domains[0].price;
-            state.domainYears = state.domains[0].years || 1;
-
-            const params = new URLSearchParams(window.location.search);
-            const pidParam = params.get('pid');
-            if (!pidParam || pidParam === 'none') {
-                state.pid = 'none';
+            if (state.domains.length > 0) {
+                state.domain = state.domains[0].name;
+                state.domainType = state.domains[0].type;
+                state.domainPrice = state.domains[0].price;
+                state.domainYears = state.domains[0].years || 1;
             }
+
+            const hasHosting = Boolean(state.pid && state.pid !== 'none' && PRODUCTS[state.pid]);
 
             syncCartStorage();
             renderState();
@@ -2326,9 +2411,16 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                 cfToast.success('Domain <strong>' + escapeHtml(domain) + '</strong> connected!');
             }
 
-            const upsell = document.getElementById('pageDomainUpsellHostingWrap');
-            if (upsell) {
-                upsell.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            if (hasHosting) {
+                // Hosting already selected: go straight to Step 2 (Plan & Configuration)
+                pageGoToStep(2);
+            } else {
+                // Domain-only order: prompt to add hosting if desired
+                const upsell = document.getElementById('pageDomainUpsellHostingWrap');
+                if (upsell) {
+                    upsell.style.display = 'block';
+                    upsell.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
             }
         };
 
@@ -2345,16 +2437,14 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                 });
             }
 
-            state.domain = state.domains[0].name;
-            state.domainType = state.domains[0].type;
-            state.domainPrice = state.domains[0].price;
-            state.domainYears = state.domains[0].years || 1;
-
-            const params = new URLSearchParams(window.location.search);
-            const pidParam = params.get('pid');
-            if (!pidParam || pidParam === 'none') {
-                state.pid = 'none';
+            if (state.domains.length > 0) {
+                state.domain = state.domains[0].name;
+                state.domainType = state.domains[0].type;
+                state.domainPrice = state.domains[0].price;
+                state.domainYears = state.domains[0].years || 1;
             }
+
+            const hasHosting = Boolean(state.pid && state.pid !== 'none' && PRODUCTS[state.pid]);
 
             syncCartStorage();
             renderState();
@@ -2363,9 +2453,16 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                 cfToast.success('Domain <strong>' + escapeHtml(domain) + '</strong> connected!');
             }
 
-            const upsell = document.getElementById('pageDomainUpsellHostingWrap');
-            if (upsell) {
-                upsell.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            if (hasHosting) {
+                // Hosting already selected: go straight to Step 2 (Plan & Configuration)
+                pageGoToStep(2);
+            } else {
+                // Domain-only order: prompt to add hosting if desired
+                const upsell = document.getElementById('pageDomainUpsellHostingWrap');
+                if (upsell) {
+                    upsell.style.display = 'block';
+                    upsell.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
             }
         };
 
@@ -2457,10 +2554,43 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
             renderState();
         };
 
+        // Category filtering for the Tier Switcher
+        function filterTierCatalog(category, tabBtn) {
+            const tabs = document.querySelectorAll('.cf-tier-tab-btn');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (tabBtn) tabBtn.classList.add('active');
+
+            const cards = document.querySelectorAll('.cf-tier-item-card');
+            cards.forEach(card => {
+                const cat = card.getAttribute('data-cat');
+                if (category === 'all' || cat === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        window.filterTierCatalog = filterTierCatalog;
+
         // Switch Hosting Plan
         window.pageSelectHostingPlan = function(pid) {
             state.pid = pid;
             renderState();
+
+            // Auto-reveal selected tier if hidden by active category filter
+            if (pid && pid !== 'none') {
+                const activeCard = document.getElementById('switchPlanBtn_' + pid);
+                if (activeCard && activeCard.style.display === 'none') {
+                    const cat = activeCard.getAttribute('data-cat');
+                    const targetTab = document.querySelector('.cf-tier-tab-btn[data-filter="' + cat + '"]');
+                    if (targetTab) {
+                        filterTierCatalog(cat, targetTab);
+                    } else {
+                        const allTab = document.querySelector('.cf-tier-tab-btn[data-filter="all"]');
+                        filterTierCatalog('all', allTab);
+                    }
+                }
+            }
         };
 
         // Step Navigation Logic (1: Domain, 2: Plan & Config, 3: Account, 4: Payment)

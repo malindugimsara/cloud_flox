@@ -194,32 +194,41 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
                     </div>
 
                     <!-- Compact Popular TLD Pills (Live from WHMCS) -->
-                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3" id="cfPopularPillsWrap">
-                        <span class="fs-13 text-muted fw-semibold me-1">Popular:</span>
+                    <div class="cf-popular-tlds-wrap" id="cfPopularPillsWrap">
+                        <span class="cf-popular-label"><i class="las la-fire text-warning"></i> Popular:</span>
                         <?php 
-                        $highlightPills = ['com', 'net', 'org', 'store', 'io', 'online'];
-                        foreach ($highlightPills as $pKey):
+                        $highlightPills = [
+                            'com'    => ['color' => 'blue'],
+                            'net'    => ['color' => 'blue'],
+                            'org'    => ['color' => 'blue'],
+                            'io'     => ['color' => 'purple'],
+                            'store'  => ['color' => 'orange', 'tag' => 'Offer'],
+                            'online' => ['color' => 'orange', 'tag' => 'Sale']
+                        ];
+                        foreach ($highlightPills as $pKey => $pMeta):
                             if (!isset($whmcsDomains[$pKey])) continue;
                             $pItem = $whmcsDomains[$pKey];
-                            $colorClass = ($pKey === 'store' || $pKey === 'online') ? 'text-orange' : 'text-blue';
                         ?>
-                            <button type="button" class="btn btn-sm btn-light border py-1 px-3 rounded-pill fs-13 fw-bold text-slate-800 d-inline-flex align-items-center gap-1 hover-shadow transition" onclick="setDomainExt('<?php echo htmlspecialchars($pItem['extension']); ?>', this)">
-                                <span class="<?php echo $colorClass; ?>"><?php echo htmlspecialchars($pItem['extension']); ?></span> 
-                                <span class="text-muted fw-normal"><?php echo htmlspecialchars($pItem['price']); ?></span>
-                                <?php if (!empty($pItem['badge'])): ?>
-                                    <span class="badge bg-blue-subtle text-blue ms-1 fs-10"><?php echo htmlspecialchars($pItem['badge']); ?></span>
+                            <button type="button" class="cf-tld-chip" onclick="setDomainExt('<?php echo htmlspecialchars($pItem['extension']); ?>', this)">
+                                <span class="cf-tld-chip-ext <?php echo $pMeta['color']; ?>"><?php echo htmlspecialchars($pItem['extension']); ?></span> 
+                                <span class="cf-tld-chip-price"><?php echo htmlspecialchars($pItem['price']); ?></span>
+                                <?php if (!empty($pMeta['tag'])): ?>
+                                    <span class="cf-tld-deal-tag"><?php echo $pMeta['tag']; ?></span>
                                 <?php endif; ?>
                             </button>
                         <?php endforeach; ?>
                     </div>
 
                     <!-- Understated Trust Perks & Transfer Link -->
-                    <div class="d-flex flex-wrap gap-2 pt-1">
-                        <span class="cf-feature-chip"><i class="las la-shield-alt text-primary"></i> Free WHOIS Privacy</span>
-                        <span class="cf-feature-chip"><i class="las la-bolt text-warning"></i> Anycast DNS</span>
-                        <span class="cf-feature-chip"><i class="las la-lock text-success"></i> Theft Protection</span>
-                        <a href="#domainTransfer" class="cf-feature-chip text-decoration-none text-blue fw-semibold">
-                            <i class="las la-exchange-alt text-info"></i> Domain Transfers &rarr;
+                    <div class="cf-domain-trust-strip">
+                        <span class="cf-trust-item"><i class="las la-shield-alt text-primary"></i> Free WHOIS Privacy</span>
+                        <span class="cf-trust-dot">&bull;</span>
+                        <span class="cf-trust-item"><i class="las la-bolt text-warning"></i> Anycast DNS</span>
+                        <span class="cf-trust-dot">&bull;</span>
+                        <span class="cf-trust-item"><i class="las la-lock text-success"></i> Theft Protection</span>
+                        <span class="cf-trust-dot d-none d-sm-inline">&bull;</span>
+                        <a href="#domainTransfer" class="cf-trust-transfer-link">
+                            <i class="las la-exchange-alt"></i> Domain Transfers &rarr;
                         </a>
                     </div>
 

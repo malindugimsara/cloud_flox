@@ -957,7 +957,7 @@ $payhereObj = [
                                     <span class="cf-amount-display-note">Visa • MasterCard • American Express (via PayHere)</span>
                                 </div>
 
-                                <button type="button" class="cf-btn-payhere-cta mb-3" onclick="triggerPayHereModal()">
+                                <button type="button" class="cf-btn-payhere-cta mb-3" id="btnPayHereCta" onclick="triggerPayHereModal()">
                                     <i class="las la-credit-card fs-18"></i> Pay with Card ($<?php echo number_format($totalUsd, 2); ?> USD)
                                 </button>
 
@@ -1170,34 +1170,92 @@ $payhereObj = [
             observer.observe(document.body, { childList: true, subtree: true });
         }
 
-        // PayHere SDK Modal Trigger
-        window.triggerPayHereModal = function() {
-            if (typeof payhere === 'undefined') {
-                alert('PayHere payment gateway is initializing. Please refresh in a moment.');
+        // Helper to ensure PayHere SDK is loaded with dynamic polling & retry
+        function ensurePayHereSDK(onReady, onFailed) {
+            if (typeof payhere !== 'undefined') {
+                onReady();
                 return;
             }
 
-            payhere.onCompleted = function(orderId) {
-                // Payment completed via PayHere popup; reload invoice to view payment status
-                window.location.href = 'invoice?id=' + encodeURIComponent(orderId);
-            };
+            const ctaBtn = document.getElementById('btnPayHereCta') || document.querySelector('.cf-btn-payhere-cta');
+            const origHtml = ctaBtn ? ctaBtn.innerHTML : '';
+            if (ctaBtn) {
+                ctaBtn.disabled = true;
+                ctaBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Initializing Gateway...';
+            }
 
-            payhere.onDismissed = function() {
-                console.log('PayHere popup closed by customer.');
-                window.closePayHereModal();
-            };
+            // Ensure script tag is present in DOM
+            let scriptTag = document.querySelector('script[src*="payhere.lk"]');
+            if (!scriptTag) {
+                scriptTag = document.createElement('script');
+                scriptTag.type = 'text/javascript';
+                scriptTag.src = 'https://www.payhere.lk/lib/payhere.js';
+                document.head.appendChild(scriptTag);
+            }
 
-            payhere.onError = function(error) {
-                console.error('PayHere Error:', error);
-                alert('PayHere Notice: ' + error);
-            };
+            let elapsed = 0;
+            const intervalTime = 200;
+            const maxWaitTime = 6000; // Wait up to 6 seconds for network/SDK load
 
-            // Start checkout modal
-            payhere.startPayment(payherePayment);
+            const poller = setInterval(function() {
+                elapsed += intervalTime;
+                if (typeof payhere !== 'undefined') {
+                    clearInterval(poller);
+                    if (ctaBtn) {
+                        ctaBtn.disabled = false;
+                        ctaBtn.innerHTML = origHtml;
+                    }
+                    onReady();
+                } else if (elapsed >= maxWaitTime) {
+                    clearInterval(poller);
+                    if (ctaBtn) {
+                        ctaBtn.disabled = false;
+                        ctaBtn.innerHTML = origHtml;
+                    }
+                    if (typeof onFailed === 'function') {
+                        onFailed();
+                    }
+                }
+            }, intervalTime);
+        }
 
-            // Sync floating button
-            setTimeout(syncPayHereCloseButton, 100);
-            setTimeout(syncPayHereCloseButton, 500);
+        // PayHere SDK Modal Trigger
+        window.triggerPayHereModal = function() {
+            ensurePayHereSDK(function() {
+                payhere.onCompleted = function(orderId) {
+                    // Payment completed via PayHere popup; reload invoice to view payment status
+                    window.location.href = 'invoice?id=' + encodeURIComponent(orderId) + '&paid=1';
+                };
+
+                payhere.onDismissed = function() {
+                    console.log('PayHere popup closed by customer.');
+                    window.closePayHereModal();
+                };
+
+                payhere.onError = function(error) {
+                    console.error('PayHere Error:', error);
+                    if (window.cfToast) {
+                        cfToast.error('PayHere Notice: ' + error, 'Payment Gateway Notice');
+                    } else {
+                        alert('PayHere Notice: ' + error);
+                    }
+                };
+
+                // Start checkout modal
+                payhere.startPayment(payherePayment);
+
+                // Sync floating button
+                setTimeout(syncPayHereCloseButton, 100);
+                setTimeout(syncPayHereCloseButton, 500);
+            }, function() {
+                // If PayHere could not load after timeout
+                const msg = 'PayHere payment gateway could not be loaded. If you are using an Ad Blocker or Brave Shields, please disable it for cloudflox.com and click "Pay with Card" again.';
+                if (window.cfToast) {
+                    cfToast.warning(msg, 'Payment Gateway Delayed or Blocked', 8000);
+                } else {
+                    alert(msg);
+                }
+            });
         };
 
         // Auto trigger PayHere if redirected directly from checkout with paynow=1
@@ -1205,7 +1263,7 @@ $payhereObj = [
             window.addEventListener('load', function() {
                 setTimeout(function() {
                     triggerPayHereModal();
-                }, 500);
+                }, 300);
             });
         }
     })();

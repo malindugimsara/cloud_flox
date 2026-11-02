@@ -349,8 +349,26 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
     <!-- =========== Javascript Area =========== -->
 
     <script>
-        // Password Visibility Toggle
         document.addEventListener('DOMContentLoaded', function() {
+            // Trigger toast notification on server-side error or success
+            <?php if (!empty($error)): ?>
+                if (window.cfToast) {
+                    cfToast.error(<?php echo json_encode($error); ?>, 'Sign In Failed');
+                    const passInput = document.getElementById('loginPassword');
+                    if (passInput) {
+                        cfToast.highlightField(passInput);
+                        passInput.value = '';
+                    }
+                }
+            <?php endif; ?>
+
+            <?php if (!empty($success)): ?>
+                if (window.cfToast) {
+                    cfToast.success(<?php echo json_encode($success); ?>, 'Success');
+                }
+            <?php endif; ?>
+
+            // Password Visibility Toggle
             const toggleBtn = document.getElementById('togglePasswordBtn');
             const passInput = document.getElementById('loginPassword');
             const eyeIcon   = document.getElementById('togglePasswordIcon');
@@ -364,11 +382,45 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
                 });
             }
 
-            // Form Submit Loading Feedback
+            // Client-side Validation & Toast Feedback
             const loginForm = document.getElementById('cfLoginForm');
             const submitBtn = document.getElementById('btnSubmitLogin');
+            const emailInput = document.getElementById('loginEmail');
+
             if (loginForm && submitBtn) {
-                loginForm.addEventListener('submit', function() {
+                loginForm.addEventListener('submit', function(e) {
+                    const emailVal = emailInput ? emailInput.value.trim() : '';
+                    const passVal  = passInput ? passInput.value.trim() : '';
+
+                    // 1. Required Email Check
+                    if (!emailVal) {
+                        e.preventDefault();
+                        if (window.cfToast) {
+                            cfToast.highlightField(emailInput, 'Please enter your email address to sign in.', 'Email Required');
+                        }
+                        return false;
+                    }
+
+                    // 2. Valid Email Format Check
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(emailVal)) {
+                        e.preventDefault();
+                        if (window.cfToast) {
+                            cfToast.highlightField(emailInput, 'Please enter a valid email address (e.g. name@example.com).', 'Invalid Email Address');
+                        }
+                        return false;
+                    }
+
+                    // 3. Required Password Check
+                    if (!passVal) {
+                        e.preventDefault();
+                        if (window.cfToast) {
+                            cfToast.highlightField(passInput, 'Please enter your account password to sign in.', 'Password Required');
+                        }
+                        return false;
+                    }
+
+                    // Validation passed: show spinner feedback
                     const spinner = submitBtn.querySelector('.spinner-border');
                     if (spinner) spinner.classList.remove('d-none');
                     submitBtn.classList.add('disabled');

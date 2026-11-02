@@ -601,8 +601,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
     <!-- =========== Javascript Area =========== -->
 
     <script>
-        // Password Visibility Toggle
         document.addEventListener('DOMContentLoaded', function() {
+            // Trigger toast notification on server-side error or success
+            <?php if (!empty($error)): ?>
+                if (window.cfToast) {
+                    cfToast.error(<?php echo json_encode($error); ?>, 'Registration Error');
+                }
+            <?php endif; ?>
+
+            <?php if (!empty($success)): ?>
+                if (window.cfToast) {
+                    cfToast.success(<?php echo json_encode($success); ?>, 'Account Created');
+                }
+            <?php endif; ?>
+
+            // Password Visibility Toggle
             const toggleBtn = document.getElementById('toggleRegPasswordBtn');
             const passInput = document.getElementById('regPassword');
             const eyeIcon   = document.getElementById('toggleRegPasswordIcon');
@@ -616,11 +629,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                 });
             }
 
-            // Form Submit Loading Feedback
+            // Client-side Validation & Toast Feedback
             const regForm = document.getElementById('cfRegisterForm');
             const submitBtn = document.getElementById('btnSubmitRegister');
+
+            const firstNameInput = document.getElementById('regFirstName');
+            const lastNameInput  = document.getElementById('regLastName');
+            const emailInput     = document.getElementById('regEmail');
+            const phoneInput     = document.getElementById('regPhone');
+            const addressInput   = document.getElementById('regAddress1');
+            const cityInput      = document.getElementById('regCity');
+            const confirmInput   = document.getElementById('regConfirm');
+            const agreeCheck     = document.getElementById('agreeTermsCheck');
+
             if (regForm && submitBtn) {
-                regForm.addEventListener('submit', function() {
+                regForm.addEventListener('submit', function(e) {
+                    if (firstNameInput && !firstNameInput.value.trim()) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(firstNameInput, 'Please enter your first name.', 'First Name Required');
+                        return false;
+                    }
+
+                    if (lastNameInput && !lastNameInput.value.trim()) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(lastNameInput, 'Please enter your last name.', 'Last Name Required');
+                        return false;
+                    }
+
+                    const emailVal = emailInput ? emailInput.value.trim() : '';
+                    if (!emailVal) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(emailInput, 'Please enter your email address.', 'Email Required');
+                        return false;
+                    }
+
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(emailVal)) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(emailInput, 'Please enter a valid email address (e.g. name@example.com).', 'Invalid Email');
+                        return false;
+                    }
+
+                    if (phoneInput && !phoneInput.value.trim()) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(phoneInput, 'Please enter your phone number.', 'Phone Required');
+                        return false;
+                    }
+
+                    if (addressInput && !addressInput.value.trim()) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(addressInput, 'Please enter your street address.', 'Address Required');
+                        return false;
+                    }
+
+                    if (cityInput && !cityInput.value.trim()) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(cityInput, 'Please enter your city.', 'City Required');
+                        return false;
+                    }
+
+                    const passVal = passInput ? passInput.value.trim() : '';
+                    if (!passVal || passVal.length < 6) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(passInput, 'Password must be at least 6 characters long.', 'Password Required');
+                        return false;
+                    }
+
+                    const confirmVal = confirmInput ? confirmInput.value.trim() : '';
+                    if (passVal !== confirmVal) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(confirmInput, 'Passwords do not match. Please verify your password.', 'Password Mismatch');
+                        return false;
+                    }
+
+                    if (agreeCheck && !agreeCheck.checked) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.warning('Please accept the Terms of Service to continue.', 'Terms Required');
+                        return false;
+                    }
+
                     const spinner = submitBtn.querySelector('.spinner-border');
                     if (spinner) spinner.classList.remove('d-none');
                     submitBtn.classList.add('disabled');

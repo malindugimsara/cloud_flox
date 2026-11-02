@@ -15759,15 +15759,36 @@ body.cf-home-page .modern-cta-section {
    ========================================================================== */
 .cf-toast-container {
     position: fixed;
-    bottom: 24px;
+    top: 24px;
     right: 24px;
-    z-index: 999999;
+    z-index: 9999999;
     display: flex;
     flex-direction: column;
     gap: 12px;
     max-width: 440px;
     width: calc(100% - 32px);
     pointer-events: none;
+}
+
+.cf-toast-container.bottom-right {
+    top: auto;
+    bottom: 24px;
+}
+
+/* Invalid field glow and subtle shake */
+@keyframes cfFieldShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+.cf-field-error,
+input.cf-field-error,
+textarea.cf-field-error,
+select.cf-field-error {
+    border-color: #EF4444 !important;
+    background-color: #FEF2F2 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18) !important;
+    animation: cfFieldShake 0.35s ease-in-out !important;
 }
 
 .cf-toast {
@@ -15940,7 +15961,8 @@ body.cf-home-page .modern-cta-section {
 
 @media (max-width: 575.98px) {
     .cf-toast-container {
-        bottom: 16px;
+        top: 16px;
+        bottom: auto;
         right: 16px;
         left: 16px;
         width: auto;
@@ -18051,13 +18073,11 @@ body.pure-white-theme.cf-auth-page {
 }
 
 .cf-auth-heading-wrap {
-    padding-bottom: 20px;
-    margin-bottom: 28px;
     border-bottom: 1px solid #F1F5F9;
 }
 
 .cf-auth-title {
-    font-size: 24px;
+    font-size: 36px !important;
     font-weight: 800;
     color: #0F172A;
     letter-spacing: -0.02em;
@@ -21732,4 +21752,188 @@ html, body {
     color: #FFFFFF !important;
     transform: translateY(-1.5px) !important;
     box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35) !important;
+}
+
+
+/* =========================================================================
+   DOMAIN HERO SEARCH & POPULAR TLD BAR ENHANCEMENTS
+   ========================================================================= */
+.domain-mega-search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    background: #FFFFFF !important;
+    border: 2px solid #2563EB !important;
+    border-radius: 16px !important;
+    padding: 8px 10px 8px 16px !important;
+    box-shadow: 0 12px 32px -4px rgba(37, 99, 235, 0.18), 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 780px;
+}
+
+.domain-mega-search-box:hover {
+    border-color: #1D4ED8 !important;
+    box-shadow: 0 16px 36px -4px rgba(37, 99, 235, 0.24), 0 2px 10px rgba(15, 23, 42, 0.06) !important;
+    transform: translateY(-1px);
+}
+
+.domain-mega-search-box:focus-within {
+    border-color: #1D4ED8 !important;
+    box-shadow: 0 18px 40px -4px rgba(37, 99, 235, 0.28), 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+    transform: translateY(-1px);
+}
+
+/* Popular TLD Bar */
+.cf-popular-tlds-wrap {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+    margin-bottom: 16px;
+}
+
+.cf-popular-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #64748B;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: 4px;
+    user-select: none;
+}
+
+.cf-tld-chip {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 999px;
+    padding: 5px 13px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1E293B;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+    user-select: none;
+    line-height: 1.2;
+}
+
+.cf-tld-chip:hover {
+    background: #F8FAFC;
+    border-color: #93C5FD;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    transform: translateY(-1px);
+}
+
+.cf-tld-chip:active {
+    transform: translateY(0);
+}
+
+.cf-tld-chip-ext {
+    font-weight: 800;
+}
+
+.cf-tld-chip-ext.blue {
+    color: #2563EB;
+}
+
+.cf-tld-chip-ext.purple {
+    color: #7C3AED;
+}
+
+.cf-tld-chip-ext.orange {
+    color: #EA580C;
+}
+
+.cf-tld-chip-price {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #64748B;
+}
+
+.cf-tld-deal-tag {
+    background: #FEF2F2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    line-height: 1.2;
+}
+
+/* Trust Strip below search */
+.cf-domain-trust-strip {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 4px;
+    color: #475569;
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.cf-trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #334155;
+}
+
+.cf-trust-item i {
+    font-size: 15px;
+}
+
+.cf-trust-dot {
+    color: #CBD5E1;
+    font-size: 14px;
+    user-select: none;
+}
+
+.cf-trust-transfer-link {
+    color: #2563EB;
+    text-decoration: none;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.15s ease, transform 0.15s ease;
+    padding-left: 2px;
+}
+
+.cf-trust-transfer-link:hover {
+    color: #1D4ED8;
+    text-decoration: underline;
+    transform: translateX(2px);
+}
+
+@media (max-width: 575.98px) {
+    .cf-domain-trust-strip {
+        gap: 8px;
+        font-size: 11.5px;
+    }
+    .cf-trust-dot {
+        display: none;
+    }
+    .cf-trust-item {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 999px;
+        padding: 4px 10px;
+    }
+    .cf-popular-tlds-wrap {
+        gap: 6px;
+    }
+    .cf-tld-chip {
+        padding: 4px 10px;
+        font-size: 11.5px;
+    }
 }

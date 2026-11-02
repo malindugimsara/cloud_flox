@@ -24,33 +24,37 @@ if (!empty($_SESSION['cf_client_logged_in'])) {
 $token = trim($_GET['token'] ?? $_POST['token'] ?? '');
 $email = trim($_GET['email'] ?? $_POST['email'] ?? '');
 
-// Connect to local database for token validation
-$mysqli = null;
-try {
-    $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
-} catch (Exception $e) {}
+// Connect to database using central helper
+require_once __DIR__ . '/include/env.inc.php';
+$mysqli = cf_get_db();
 
 if (!empty($token) && !empty($email)) {
     if ($mysqli && !$mysqli->connect_error) {
-        $stmt = $mysqli->prepare("SELECT id, firstname, lastname, email, pwresetkey, pwresetexpiry FROM tblclients WHERE email = ? AND pwresetkey = ? LIMIT 1");
-        if ($stmt) {
-            $stmt->bind_param('ss', $email, $token);
-            $stmt->execute();
-            $res = $stmt->get_result();
-            if ($row = $res->fetch_assoc()) {
-                $expiry = strtotime($row['pwresetexpiry']);
-                if ($expiry && $expiry > time()) {
-                    $tokenValid = true;
-                    $tokenUser = $row;
+        try {
+            $stmt = $mysqli->prepare("SELECT id, firstname, lastname, email, pwresetkey, pwresetexpiry FROM tblclients WHERE email = ? AND pwresetkey = ? LIMIT 1");
+            if ($stmt) {
+                $stmt->bind_param('ss', $email, $token);
+                $stmt->execute();
+                $res = $stmt->get_result();
+                if ($row = $res->fetch_assoc()) {
+                    $expiry = strtotime($row['pwresetexpiry']);
+                    if ($expiry && $expiry > time()) {
+                        $tokenValid = true;
+                        $tokenUser = $row;
+                    } else {
+                        $error = 'This password reset link has expired. For your security, please request a new one below.';
+                        $token = ''; // Reset to show request form
+                    }
                 } else {
-                    $error = 'This password reset link has expired. For your security, please request a new one below.';
+                    $error = 'This password reset link is invalid or has already been used. Please request a new one.';
                     $token = ''; // Reset to show request form
                 }
-            } else {
-                $error = 'This password reset link is invalid or has already been used. Please request a new one.';
-                $token = ''; // Reset to show request form
+                $stmt->close();
             }
-            $stmt->close();
+        } catch (Throwable $e) {
+            error_log("Token verification error: " . $e->getMessage());
+            $error = 'Unable to verify reset link at this moment. Please try again.';
+            $token = '';
         }
     }
 }
@@ -70,18 +74,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($newPass !== $confirm) {
             $error = 'The passwords you entered do not match. Please try again.';
         } else {
-            // Update password in database and clear token
-            $hashed = password_hash($newPass, PASSWORD_DEFAULT);
-            $upd = $mysqli->prepare("UPDATE tblclients SET password = ?, pwresetkey = NULL, pwresetexpiry = NULL WHERE id = ?");
-            if ($upd) {
-                $upd->bind_param('si', $hashed, $tokenUser['id']);
-                $upd->execute();
-                $upd->close();
+            try {
+                // Update password in database and clear token (pwresetkey is NOT NULL, so use empty string '')
+                $hashed = password_hash($newPass, PASSWORD_DEFAULT);
+                $clientId = (int)$tokenUser['id'];
 
-                // Redirect to login with success flash
-                header("Location: " . $url . "login?reset=success");
-                exit;
-            } else {
+                $upd = $mysqli->prepare("UPDATE tblclients SET password = ?, pwresetkey = '', pwresetexpiry = CURRENT_TIMESTAMP WHERE id = ?");
+                if ($upd) {
+                    $upd->bind_param('si', $hashed, $clientId);
+                    $upd->execute();
+                    $upd->close();
+
+                    // Synchronize updated password with WHMCS API
+                    try {
+                        WHMCSClient::call('UpdateClient', [
+                            'clientid'  => $clientId,
+                            'password2' => $newPass
+                        ]);
+                    } catch (Throwable $we) {
+                        error_log("WHMCS API UpdateClient sync error: " . $we->getMessage());
+                    }
+
+                    // Redirect to login with success flash
+                    header("Location: " . $url . "login?reset=success");
+                    exit;
+                } else {
+                    $error = 'Failed to update password. Please try again or contact support.';
+                }
+            } catch (Throwable $e) {
+                error_log("Set new password database error: " . $e->getMessage());
                 $error = 'Failed to update password. Please try again or contact support.';
             }
         }
@@ -99,44 +120,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $clientName = '';
 
             if ($mysqli && !$mysqli->connect_error) {
-                $stmt = $mysqli->prepare("SELECT id, firstname, lastname, email FROM tblclients WHERE email = ? LIMIT 1");
-                if ($stmt) {
-                    $stmt->bind_param('s', $email);
-                    $stmt->execute();
-                    $res = $stmt->get_result();
-                    if ($client = $res->fetch_assoc()) {
-                        $foundUser = true;
-                        $clientId = $client['id'];
-                        $clientName = trim(($client['firstname'] ?? '') . ' ' . ($client['lastname'] ?? ''));
+                try {
+                    $stmt = $mysqli->prepare("SELECT id, firstname, lastname, email FROM tblclients WHERE email = ? LIMIT 1");
+                    if ($stmt) {
+                        $stmt->bind_param('s', $email);
+                        $stmt->execute();
+                        $res = $stmt->get_result();
+                        if ($client = $res->fetch_assoc()) {
+                            $foundUser = true;
+                            $clientId = $client['id'];
+                            $clientName = trim(($client['firstname'] ?? '') . ' ' . ($client['lastname'] ?? ''));
 
-                        // Generate secure 48-character hex token
-                        $generatedToken = bin2hex(random_bytes(24));
-                        $expiryTime = date('Y-m-d H:i:s', time() + 3600); // 1 hour
+                            // Generate secure 48-character hex token
+                            $generatedToken = bin2hex(random_bytes(24));
+                            $expiryTime = date('Y-m-d H:i:s', time() + 3600); // 1 hour
 
-                        $updStmt = $mysqli->prepare("UPDATE tblclients SET pwresetkey = ?, pwresetexpiry = ? WHERE id = ?");
-                        if ($updStmt) {
-                            $updStmt->bind_param('ssi', $generatedToken, $expiryTime, $clientId);
-                            $updStmt->execute();
-                            $updStmt->close();
+                            $updStmt = $mysqli->prepare("UPDATE tblclients SET pwresetkey = ?, pwresetexpiry = ? WHERE id = ?");
+                            if ($updStmt) {
+                                $updStmt->bind_param('ssi', $generatedToken, $expiryTime, $clientId);
+                                $updStmt->execute();
+                                $updStmt->close();
 
-                            // Construct full absolute reset URL (works seamlessly both on localhost:8080 and production)
-                            require_once __DIR__ . '/include/email-service.php';
-                            $resetUrl = CloudFloxEmailService::getAbsoluteUrl('forgot-password?token=' . $generatedToken . '&email=' . urlencode($email));
-                            
-                            // Security: Only show demo reset shortcut on localhost development environment
-                            $isLocalDevHost = (
-                                strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') !== false ||
-                                strpos($_SERVER['HTTP_HOST'] ?? '', '127.0.0.1') !== false
-                            );
-                            if ($isLocalDevHost) {
-                                $demoResetUrl = $resetUrl;
+                                // Construct full absolute reset URL (works seamlessly both on localhost:8080 and production)
+                                require_once __DIR__ . '/include/email-service.php';
+                                $resetUrl = CloudFloxEmailService::getAbsoluteUrl('forgot-password?token=' . $generatedToken . '&email=' . urlencode($email));
+                                
+                                // Security: Only show demo reset shortcut on localhost development environment
+                                $isLocalDevHost = (
+                                    strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') !== false ||
+                                    strpos($_SERVER['HTTP_HOST'] ?? '', '127.0.0.1') !== false
+                                );
+                                if ($isLocalDevHost) {
+                                    $demoResetUrl = $resetUrl;
+                                }
+
+                                // Dispatch branded password reset email via authenticated SMTP
+                                CloudFloxEmailService::sendPasswordResetEmail($email, $resetUrl, $clientName);
                             }
-
-                            // Dispatch branded password reset email via authenticated SMTP
-                            CloudFloxEmailService::sendPasswordResetEmail($email, $resetUrl, $clientName);
                         }
+                        $stmt->close();
                     }
-                    $stmt->close();
+                } catch (Throwable $e) {
+                    error_log("Request reset link error: " . $e->getMessage());
                 }
             }
 
@@ -403,8 +428,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- =========== Javascript Area =========== -->
 
     <script>
-        // Password Visibility Toggle
         document.addEventListener('DOMContentLoaded', function() {
+            // Trigger toast notification on server-side error or success
+            <?php if (!empty($error)): ?>
+                if (window.cfToast) {
+                    cfToast.error(<?php echo json_encode($error); ?>, 'Password Reset Error');
+                }
+            <?php endif; ?>
+
+            <?php if (!empty($success)): ?>
+                if (window.cfToast) {
+                    cfToast.success(<?php echo json_encode($success); ?>, 'Email Sent');
+                }
+            <?php endif; ?>
+
+            <?php if (!empty($info)): ?>
+                if (window.cfToast) {
+                    cfToast.info(<?php echo json_encode($info); ?>, 'Password Reset Link');
+                }
+            <?php endif; ?>
+
+            // Password Visibility Toggle
             const toggleBtn = document.getElementById('toggleNewPassBtn');
             const passInput = document.getElementById('newPassword');
             const eyeIcon   = document.getElementById('toggleNewPassIcon');
@@ -418,15 +462,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             }
 
-            // Form Submit Loading Feedback
-            const resetForm = document.getElementById('cfRequestResetForm') || document.getElementById('cfSetPassForm');
-            const submitBtn = document.getElementById('btnSubmitReset') || document.getElementById('btnSubmitNewPass');
-            if (resetForm && submitBtn) {
-                resetForm.addEventListener('submit', function() {
-                    const spinner = submitBtn.querySelector('.spinner-border');
+            // Client-side Validation for Request Reset Form
+            const requestForm = document.getElementById('cfRequestResetForm');
+            const btnSubmitReset = document.getElementById('btnSubmitReset');
+            const recoveryEmail = document.getElementById('recoveryEmail');
+
+            if (requestForm && btnSubmitReset) {
+                requestForm.addEventListener('submit', function(e) {
+                    const emailVal = recoveryEmail ? recoveryEmail.value.trim() : '';
+                    if (!emailVal) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(recoveryEmail, 'Please enter your registered account email.', 'Email Required');
+                        return false;
+                    }
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(emailVal)) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(recoveryEmail, 'Please enter a valid email address.', 'Invalid Email');
+                        return false;
+                    }
+                    const spinner = btnSubmitReset.querySelector('.spinner-border');
                     if (spinner) spinner.classList.remove('d-none');
-                    submitBtn.classList.add('disabled');
-                    submitBtn.style.opacity = '0.85';
+                    btnSubmitReset.classList.add('disabled');
+                    btnSubmitReset.style.opacity = '0.85';
+                });
+            }
+
+            // Client-side Validation for Set New Password Form
+            const setPassForm = document.getElementById('cfSetPassForm');
+            const btnSubmitNewPass = document.getElementById('btnSubmitNewPass');
+            const confirmInput = document.getElementById('confirmPassword');
+
+            if (setPassForm && btnSubmitNewPass) {
+                setPassForm.addEventListener('submit', function(e) {
+                    const passVal = passInput ? passInput.value.trim() : '';
+                    const confVal = confirmInput ? confirmInput.value.trim() : '';
+
+                    if (!passVal || passVal.length < 6) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(passInput, 'New password must be at least 6 characters long.', 'Password Required');
+                        return false;
+                    }
+
+                    if (passVal !== confVal) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(confirmInput, 'Passwords do not match. Please re-enter identical passwords.', 'Password Mismatch');
+                        return false;
+                    }
+
+                    const spinner = btnSubmitNewPass.querySelector('.spinner-border');
+                    if (spinner) spinner.classList.remove('d-none');
+                    btnSubmitNewPass.classList.add('disabled');
+                    btnSubmitNewPass.style.opacity = '0.85';
                 });
             }
         });

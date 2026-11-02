@@ -34,6 +34,27 @@ if ($mysqli->connect_error) {
     $mysqli = null;
 } else {
     $mysqli->set_charset('utf8mb4');
+    @$mysqli->query("SET SESSION sql_mode = 'NO_ENGINE_SUBSTITUTION'");
+}
+
+// Ensure accurate client name and email from tblclients if session is incomplete
+if ($mysqli && $clientId > 0 && (empty($clientName) || $clientName === 'Client' || empty($clientEmail))) {
+    try {
+        $cStmt = $mysqli->prepare("SELECT firstname, lastname, email FROM tblclients WHERE id = ? LIMIT 1");
+        if ($cStmt) {
+            $cStmt->bind_param('i', $clientId);
+            $cStmt->execute();
+            $cRes = $cStmt->get_result();
+            if ($cRow = $cRes->fetch_assoc()) {
+                if (empty($clientEmail)) $clientEmail = $cRow['email'] ?? '';
+                if (empty($clientName) || $clientName === 'Client') {
+                    $fullName = trim(($cRow['firstname'] ?? '') . ' ' . ($cRow['lastname'] ?? ''));
+                    if (!empty($fullName)) $clientName = $fullName;
+                }
+            }
+            $cStmt->close();
+        }
+    } catch (Throwable $e) {}
 }
 
 $action = strtolower(trim($_GET['action'] ?? ''));
@@ -116,9 +137,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
         $origName = basename($_FILES['attachment']['name']);
         $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
         $allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'txt', 'log', 'zip', 'tar', 'gz'];
-        if (in_array($ext, $allowedExts) && $_FILES['attachment']['size'] <= 15 * 1024 * 1024) {
+        if (in_array($ext, $allowedExts) && ($_FILES['attachment']['size'] ?? 0) <= 15 * 1024 * 1024) {
             $safeFileName = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $origName);
-            if (move_uploaded_file($_FILES['attachment']['tmp_name'], $uploadDir . $safeFileName)) {
+            if (@move_uploaded_file($_FILES['attachment']['tmp_name'], $uploadDir . $safeFileName)) {
                 $attachmentName = $safeFileName;
             }
         }
@@ -126,32 +147,64 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
 
     $newTicketId = 0;
     if ($mysqli) {
-        $stmt = $mysqli->prepare("INSERT INTO tbltickets (tid, did, userid, date, title, message, status, urgency, lastreply, service, c, ipaddress, attachment, editor) VALUES (?, ?, ?, NOW(), ?, ?, 'Open', ?, NOW(), ?, ?, ?, ?, 'markdown')");
-        if ($stmt) {
-            $stmt->bind_param('siisssssss', $generatedTid, $deptId, $clientId, $subject, $message, $urgency, $service, $accessKey, $clientIp, $attachmentName);
-            $stmt->execute();
-            $newTicketId = $stmt->insert_id;
-            $stmt->close();
+        try {
+            // Supply all required columns for tbltickets to strictly satisfy MySQL strict mode
+            $stmt = $mysqli->prepare("INSERT INTO tbltickets 
+                (tid, did, userid, contactid, name, email, cc, c, ipaddress, date, title, message, status, urgency, admin, attachment, lastreply, flag, clientunread, adminunread, replyingadmin, replyingtime, service, editor, updated_at) 
+                VALUES 
+                (?, ?, ?, 0, ?, ?, '', ?, ?, NOW(), ?, ?, 'Open', ?, '', ?, NOW(), 0, 0, '', 0, NOW(), ?, 'markdown', NOW())");
+            if ($stmt) {
+                $stmt->bind_param('siisssssssss', 
+                    $generatedTid, 
+                    $deptId, 
+                    $clientId, 
+                    $clientName, 
+                    $clientEmail, 
+                    $accessKey, 
+                    $clientIp, 
+                    $subject, 
+                    $message, 
+                    $urgency, 
+                    $attachmentName, 
+                    $service
+                );
+                $stmt->execute();
+                $newTicketId = (int)$stmt->insert_id;
+                $stmt->close();
+            }
+        } catch (Throwable $e) {
+            error_log("CloudFlox Ticket Creation DB Error: " . $e->getMessage());
         }
     }
 
-    // Also attempt WHMCS API OpenTicket sync
-    try {
-        WHMCSClient::call('OpenTicket', [
-            'clientid' => $clientId,
-            'deptid'   => $deptId,
-            'subject'  => $subject,
-            'message'  => $message,
-            'priority' => $urgency,
-            'serviceid'=> $service
-        ]);
-    } catch (Exception $e) {}
+    // Fallback to WHMCS API OpenTicket if direct DB insert did not complete
+    if ($newTicketId === 0) {
+        try {
+            $apiRes = WHMCSClient::call('OpenTicket', [
+                'clientid' => $clientId,
+                'deptid'   => $deptId,
+                'subject'  => $subject,
+                'message'  => $message,
+                'priority' => $urgency,
+                'serviceid'=> $service
+            ]);
+            if (!empty($apiRes['id'])) {
+                $newTicketId = (int)$apiRes['id'];
+                if (!empty($apiRes['tid'])) {
+                    $generatedTid = $apiRes['tid'];
+                }
+            }
+        } catch (Throwable $e) {
+            error_log("CloudFlox WHMCS OpenTicket API Error: " . $e->getMessage());
+        }
+    }
 
-    $_SESSION['ticket_flash_success'] = "Support ticket #{$generatedTid} has been opened successfully! Our technical engineers will review and respond shortly.";
     if ($newTicketId > 0) {
+        $_SESSION['ticket_flash_success'] = "Support ticket #{$generatedTid} has been opened successfully! Our technical engineers will review and respond shortly.";
         header("Location: " . $url . "ticket?id=" . $newTicketId);
     } else {
-        header("Location: " . $url . "ticket");
+        $_SESSION['ticket_flash_error'] = "Unable to submit support ticket at this time. Please try again or reach our team via live chat.";
+        header("Location: " . $url . "ticket?action=new");
     }
     exit;
 }
@@ -173,16 +226,20 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
     $validTicket = false;
     $currentStatus = '';
     if ($mysqli) {
-        $vStmt = $mysqli->prepare("SELECT id, status FROM tbltickets WHERE id = ? AND userid = ? LIMIT 1");
-        if ($vStmt) {
-            $vStmt->bind_param('ii', $tId, $clientId);
-            $vStmt->execute();
-            $vRes = $vStmt->get_result();
-            if ($row = $vRes->fetch_assoc()) {
-                $validTicket = true;
-                $currentStatus = $row['status'];
+        try {
+            $vStmt = $mysqli->prepare("SELECT id, status FROM tbltickets WHERE id = ? AND userid = ? LIMIT 1");
+            if ($vStmt) {
+                $vStmt->bind_param('ii', $tId, $clientId);
+                $vStmt->execute();
+                $vRes = $vStmt->get_result();
+                if ($row = $vRes->fetch_assoc()) {
+                    $validTicket = true;
+                    $currentStatus = $row['status'];
+                }
+                $vStmt->close();
             }
-            $vStmt->close();
+        } catch (Throwable $e) {
+            error_log("CloudFlox Ticket Ownership Verify Error: " . $e->getMessage());
         }
     }
 
@@ -202,42 +259,60 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
         $origName = basename($_FILES['attachment']['name']);
         $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
         $allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'txt', 'log', 'zip', 'tar', 'gz'];
-        if (in_array($ext, $allowedExts) && $_FILES['attachment']['size'] <= 15 * 1024 * 1024) {
+        if (in_array($ext, $allowedExts) && ($_FILES['attachment']['size'] ?? 0) <= 15 * 1024 * 1024) {
             $safeFileName = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $origName);
-            if (move_uploaded_file($_FILES['attachment']['tmp_name'], $uploadDir . $safeFileName)) {
+            if (@move_uploaded_file($_FILES['attachment']['tmp_name'], $uploadDir . $safeFileName)) {
                 $attachmentName = $safeFileName;
             }
         }
     }
 
-    // Insert reply
+    $replyInserted = false;
+    // Insert reply with all NOT NULL columns strictly supplied
     if ($mysqli) {
-        $rStmt = $mysqli->prepare("INSERT INTO tblticketreplies (tid, userid, name, email, date, message, attachment, editor) VALUES (?, ?, ?, ?, NOW(), ?, ?, 'markdown')");
-        if ($rStmt) {
-            $rStmt->bind_param('iissss', $tId, $clientId, $clientName, $clientEmail, $message, $attachmentName);
-            $rStmt->execute();
-            $rStmt->close();
-        }
+        try {
+            $rStmt = $mysqli->prepare("INSERT INTO tblticketreplies 
+                (tid, userid, contactid, name, email, date, message, admin, attachment, rating, editor) 
+                VALUES 
+                (?, ?, 0, ?, ?, NOW(), ?, '', ?, 0, 'markdown')");
+            if ($rStmt) {
+                $rStmt->bind_param('iissss', $tId, $clientId, $clientName, $clientEmail, $message, $attachmentName);
+                $rStmt->execute();
+                $replyInserted = ($rStmt->insert_id > 0);
+                $rStmt->close();
+            }
 
-        // Update ticket status to Customer-Reply and set lastreply timestamp
-        $upStmt = $mysqli->prepare("UPDATE tbltickets SET status = 'Customer-Reply', lastreply = NOW(), adminunread = '1', updated_at = NOW() WHERE id = ?");
-        if ($upStmt) {
-            $upStmt->bind_param('i', $tId);
-            $upStmt->execute();
-            $upStmt->close();
+            // Update ticket status to Customer-Reply and set lastreply timestamp
+            $upStmt = $mysqli->prepare("UPDATE tbltickets SET status = 'Customer-Reply', lastreply = NOW(), adminunread = '1', updated_at = NOW() WHERE id = ?");
+            if ($upStmt) {
+                $upStmt->bind_param('i', $tId);
+                $upStmt->execute();
+                $upStmt->close();
+            }
+        } catch (Throwable $e) {
+            error_log("CloudFlox Ticket Reply DB Error: " . $e->getMessage());
         }
     }
 
-    // Sync reply to WHMCS API
-    try {
-        WHMCSClient::call('AddTicketReply', [
-            'ticketid' => $tId,
-            'clientid' => $clientId,
-            'message'  => $message
-        ]);
-    } catch (Exception $e) {}
+    // Fallback to WHMCS API AddTicketReply if DB insert failed
+    if (!$replyInserted) {
+        try {
+            WHMCSClient::call('AddTicketReply', [
+                'ticketid' => $tId,
+                'clientid' => $clientId,
+                'message'  => $message
+            ]);
+            $replyInserted = true;
+        } catch (Throwable $e) {
+            error_log("CloudFlox WHMCS AddTicketReply API Error: " . $e->getMessage());
+        }
+    }
 
-    $_SESSION['ticket_flash_success'] = 'Your reply has been posted successfully.';
+    if ($replyInserted) {
+        $_SESSION['ticket_flash_success'] = 'Your reply has been posted successfully.';
+    } else {
+        $_SESSION['ticket_flash_error'] = 'Could not post your reply at this time. Please try again.';
+    }
     header("Location: " . $url . "ticket?id=" . $tId);
     exit;
 }
@@ -248,13 +323,18 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && $_POST['action'] === 'close_ticket') {
     $tId = intval($_POST['ticket_id'] ?? 0);
     if ($tId > 0 && $mysqli) {
-        $cStmt = $mysqli->prepare("UPDATE tbltickets SET status = 'Closed', updated_at = NOW() WHERE id = ? AND userid = ?");
-        if ($cStmt) {
-            $cStmt->bind_param('ii', $tId, $clientId);
-            $cStmt->execute();
-            $cStmt->close();
+        try {
+            $cStmt = $mysqli->prepare("UPDATE tbltickets SET status = 'Closed', updated_at = NOW() WHERE id = ? AND userid = ?");
+            if ($cStmt) {
+                $cStmt->bind_param('ii', $tId, $clientId);
+                $cStmt->execute();
+                $cStmt->close();
+            }
+            $_SESSION['ticket_flash_success'] = 'Ticket has been marked as closed.';
+        } catch (Throwable $e) {
+            error_log("CloudFlox Ticket Close Error: " . $e->getMessage());
+            $_SESSION['ticket_flash_error'] = 'Could not close ticket. Please try again.';
         }
-        $_SESSION['ticket_flash_success'] = 'Ticket has been marked as closed.';
     }
     header("Location: " . $url . "ticket?id=" . $tId);
     exit;
@@ -267,10 +347,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
 // 1. Fetch departments
 $departments = [];
 if ($mysqli) {
-    $depRes = $mysqli->query("SELECT id, name, description FROM tblticketdepartments WHERE hidden != 'on' OR hidden IS NULL ORDER BY `order` ASC, id ASC");
-    if ($depRes) {
-        $departments = $depRes->fetch_all(MYSQLI_ASSOC);
-    }
+    try {
+        $depRes = $mysqli->query("SELECT id, name, description FROM tblticketdepartments WHERE hidden != 'on' OR hidden IS NULL ORDER BY `order` ASC, id ASC");
+        if ($depRes) {
+            $departments = $depRes->fetch_all(MYSQLI_ASSOC);
+        }
+    } catch (Throwable $e) {}
 }
 if (empty($departments)) {
     $departments = [
@@ -283,27 +365,32 @@ if (empty($departments)) {
 // 2. Fetch Client Services (for linking when opening a ticket)
 $clientServices = [];
 if ($mysqli && $clientId > 0) {
-    $srvStmt = $mysqli->prepare("SELECT h.id, h.domain, p.name as product_name FROM tblhosting h LEFT JOIN tblproducts p ON p.id = h.packageid WHERE h.userid = ? ORDER BY h.id DESC");
-    if ($srvStmt) {
-        $srvStmt->bind_param('i', $clientId);
-        $srvStmt->execute();
-        $clientServices = $srvStmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        $srvStmt->close();
-    }
-    $domStmt = $mysqli->prepare("SELECT id, domain FROM tbldomains WHERE userid = ? ORDER BY id DESC");
-    if ($domStmt) {
-        $domStmt->bind_param('i', $clientId);
-        $domStmt->execute();
-        $domainsList = $domStmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        $domStmt->close();
-        foreach ($domainsList as $dl) {
-            $clientServices[] = [
-                'id'           => 'D' . $dl['id'],
-                'domain'       => $dl['domain'],
-                'product_name' => 'Domain Registration'
-            ];
+    try {
+        $srvStmt = $mysqli->prepare("SELECT h.id, h.domain, p.name as product_name FROM tblhosting h LEFT JOIN tblproducts p ON p.id = h.packageid WHERE h.userid = ? ORDER BY h.id DESC");
+        if ($srvStmt) {
+            $srvStmt->bind_param('i', $clientId);
+            $srvStmt->execute();
+            $clientServices = $srvStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+            $srvStmt->close();
         }
-    }
+    } catch (Throwable $e) {}
+
+    try {
+        $domStmt = $mysqli->prepare("SELECT id, domain FROM tbldomains WHERE userid = ? ORDER BY id DESC");
+        if ($domStmt) {
+            $domStmt->bind_param('i', $clientId);
+            $domStmt->execute();
+            $domainsList = $domStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+            $domStmt->close();
+            foreach ($domainsList as $dl) {
+                $clientServices[] = [
+                    'id'           => 'D' . $dl['id'],
+                    'domain'       => $dl['domain'],
+                    'product_name' => 'Domain Registration'
+                ];
+            }
+        }
+    } catch (Throwable $e) {}
 }
 
 // 3. Determine View Mode
@@ -313,34 +400,38 @@ $ticketReplies = [];
 if ($ticketId > 0 || !empty($ticketTid)) {
     // Single Ticket View
     if ($mysqli) {
-        if ($ticketId > 0) {
-            $tStmt = $mysqli->prepare("SELECT t.*, d.name as dept_name FROM tbltickets t LEFT JOIN tblticketdepartments d ON d.id = t.did WHERE t.id = ? AND t.userid = ? LIMIT 1");
-            if ($tStmt) {
-                $tStmt->bind_param('ii', $ticketId, $clientId);
-                $tStmt->execute();
-                $currentTicket = $tStmt->get_result()->fetch_assoc();
-                $tStmt->close();
+        try {
+            if ($ticketId > 0) {
+                $tStmt = $mysqli->prepare("SELECT t.*, d.name as dept_name FROM tbltickets t LEFT JOIN tblticketdepartments d ON d.id = t.did WHERE t.id = ? AND t.userid = ? LIMIT 1");
+                if ($tStmt) {
+                    $tStmt->bind_param('ii', $ticketId, $clientId);
+                    $tStmt->execute();
+                    $currentTicket = $tStmt->get_result()->fetch_assoc();
+                    $tStmt->close();
+                }
+            } elseif (!empty($ticketTid)) {
+                $tStmt = $mysqli->prepare("SELECT t.*, d.name as dept_name FROM tbltickets t LEFT JOIN tblticketdepartments d ON d.id = t.did WHERE t.tid = ? AND t.userid = ? LIMIT 1");
+                if ($tStmt) {
+                    $tStmt->bind_param('si', $ticketTid, $clientId);
+                    $tStmt->execute();
+                    $currentTicket = $tStmt->get_result()->fetch_assoc();
+                    if ($currentTicket) $ticketId = (int)$currentTicket['id'];
+                    $tStmt->close();
+                }
             }
-        } elseif (!empty($ticketTid)) {
-            $tStmt = $mysqli->prepare("SELECT t.*, d.name as dept_name FROM tbltickets t LEFT JOIN tblticketdepartments d ON d.id = t.did WHERE t.tid = ? AND t.userid = ? LIMIT 1");
-            if ($tStmt) {
-                $tStmt->bind_param('si', $ticketTid, $clientId);
-                $tStmt->execute();
-                $currentTicket = $tStmt->get_result()->fetch_assoc();
-                if ($currentTicket) $ticketId = (int)$currentTicket['id'];
-                $tStmt->close();
-            }
-        }
 
-        // Fetch ticket replies
-        if ($currentTicket && $ticketId > 0) {
-            $rStmt = $mysqli->prepare("SELECT * FROM tblticketreplies WHERE tid = ? ORDER BY date ASC, id ASC");
-            if ($rStmt) {
-                $rStmt->bind_param('i', $ticketId);
-                $rStmt->execute();
-                $ticketReplies = $rStmt->get_result()->fetch_all(MYSQLI_ASSOC);
-                $rStmt->close();
+            // Fetch ticket replies
+            if ($currentTicket && $ticketId > 0) {
+                $rStmt = $mysqli->prepare("SELECT * FROM tblticketreplies WHERE tid = ? ORDER BY date ASC, id ASC");
+                if ($rStmt) {
+                    $rStmt->bind_param('i', $ticketId);
+                    $rStmt->execute();
+                    $ticketReplies = $rStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                    $rStmt->close();
+                }
             }
+        } catch (Throwable $e) {
+            error_log("CloudFlox Fetch Single Ticket Error: " . $e->getMessage());
         }
     }
 }
@@ -353,12 +444,16 @@ $statClosed = 0;
 
 if (!$currentTicket && $action !== 'new') {
     if ($mysqli && $clientId > 0) {
-        $listStmt = $mysqli->prepare("SELECT t.*, d.name as dept_name FROM tbltickets t LEFT JOIN tblticketdepartments d ON d.id = t.did WHERE t.userid = ? ORDER BY t.lastreply DESC");
-        if ($listStmt) {
-            $listStmt->bind_param('i', $clientId);
-            $listStmt->execute();
-            $allTickets = $listStmt->get_result()->fetch_all(MYSQLI_ASSOC);
-            $listStmt->close();
+        try {
+            $listStmt = $mysqli->prepare("SELECT t.*, d.name as dept_name FROM tbltickets t LEFT JOIN tblticketdepartments d ON d.id = t.did WHERE t.userid = ? ORDER BY t.lastreply DESC");
+            if ($listStmt) {
+                $listStmt->bind_param('i', $clientId);
+                $listStmt->execute();
+                $allTickets = $listStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                $listStmt->close();
+            }
+        } catch (Throwable $e) {
+            error_log("CloudFlox Fetch Ticket List Error: " . $e->getMessage());
         }
     }
 
