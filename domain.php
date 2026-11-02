@@ -806,15 +806,15 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
             </div>
             <div class="cf-cart-bar-right">
                 <div class="cf-cart-total-box">
-                    <small class="text-muted d-block fs-11 text-uppercase fw-bold">Est. Total</small>
+                    <small class="cf-cart-total-label">Est. Total</small>
                     <strong id="cfCartTotalText" class="cf-cart-total-amount">$0.00</strong>
                 </div>
                 <button type="button" class="btn cf-btn-checkout" onclick="cfDomainCart.checkout()">
                     <span>Continue to Checkout</span>
                     <i class="las la-arrow-right ms-1"></i>
                 </button>
-                <button type="button" class="btn btn-sm btn-link text-muted p-1" onclick="cfDomainCart.clear()" title="Clear cart" aria-label="Clear cart">
-                    <i class="las la-trash-alt fs-16"></i>
+                <button type="button" class="cf-btn-cart-clear" onclick="cfDomainCart.clear()" title="Clear cart" aria-label="Clear cart">
+                    <i class="las la-trash-alt"></i>
                 </button>
             </div>
         </div>

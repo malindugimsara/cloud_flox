@@ -124,15 +124,15 @@ window.cfDomainCart = {
                     </div>
                     <div class="cf-cart-bar-right">
                         <div class="cf-cart-total-box">
-                            <small class="text-muted d-block fs-11 text-uppercase fw-bold">Est. Total</small>
+                            <small class="cf-cart-total-label">Est. Total</small>
                             <strong id="cfCartTotalText" class="cf-cart-total-amount">$0.00</strong>
                         </div>
                         <button type="button" class="btn cf-btn-checkout" onclick="cfDomainCart.checkout()">
                             <span>Continue to Checkout</span>
                             <i class="las la-arrow-right ms-1"></i>
                         </button>
-                        <button type="button" class="btn btn-sm btn-link text-muted p-1" onclick="cfDomainCart.clear()" title="Clear cart" aria-label="Clear cart">
-                            <i class="las la-trash-alt fs-16"></i>
+                        <button type="button" class="cf-btn-cart-clear" onclick="cfDomainCart.clear()" title="Clear cart" aria-label="Clear cart">
+                            <i class="las la-trash-alt"></i>
                         </button>
                     </div>
                 </div>
@@ -362,7 +362,7 @@ function cfEscapeHtml(str) {
                             <i class="las ${inCart ? 'la-check' : 'la-cart-plus'} me-1"></i>
                             <span class="btn-cart-text">${inCart ? 'In Cart' : 'Add to Cart'}</span>
                         </button>
-                        <a href="${cfEscapeHtml(primaryBuyUrl)}" class="btn btn-outline-primary rounded-pill px-3 py-2 fs-13 fw-bold">
+                        <a href="${cfEscapeHtml(primaryBuyUrl)}" class="btn cf-btn-domain-direct-buy">
                             <span>Checkout &rarr;</span>
                         </a>
                     </div>
