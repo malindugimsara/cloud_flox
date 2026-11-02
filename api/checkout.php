@@ -781,7 +781,7 @@ try {
             $serverId       = 1; // SV-CF1
             $cycle          = $isYearly ? 'Annually' : 'Monthly';
             $hostingNextDue = $isYearly ? date('Y-m-d', strtotime('+1 year')) : date('Y-m-d', strtotime('+1 month'));
-            $hostingNotes   = "Auto-provisioned via CloudFlox Checkout. InitialPass: " . $tempPass;
+            $hostingNotes   = "Auto-provisioned via CloudFlox Checkout. Credentials sent via welcome email.";
 
             $hostStmt = $mysqli->prepare("INSERT INTO tblhosting (
                 userid, orderid, packageid, server, regdate, domain, paymentmethod,

@@ -130,38 +130,93 @@ if (!empty($merchantId) && !empty($orderId) && !empty($statusCode) && !empty($md
 }
 
 // -------------------------------------------------------------------------
-// 3. PAYPAL IPN WEBHOOK HANDLER
+// 3. PAYPAL IPN WEBHOOK HANDLER (with PayPal IPN Verification)
 // -------------------------------------------------------------------------
 $paymentStatus = strtolower(trim($_POST['payment_status'] ?? ''));
 $customData    = $_POST['custom'] ?? '';
 $paypalTxnId   = $_POST['txn_id'] ?? '';
 $mcGross       = $_POST['mc_gross'] ?? '';
 
-if ($paymentStatus === 'completed' && !empty($customData)) {
-    $invoiceId = intval($customData);
-    if ($invoiceId > 0) {
-        $mysqli = getDbConnection($dbHost, $dbUser, $dbPass, $dbName);
-        if ($mysqli) {
-            require_once __DIR__ . '/../include/email-service.php';
-            CloudFloxEmailService::settleAndActivateInvoice($invoiceId, $mysqli);
+if (!empty($_POST) && isset($_POST['payment_status'])) {
+    // Step 1: Send IPN data back to PayPal for verification
+    $rawPostData = file_get_contents('php://input');
+    if (empty($rawPostData)) {
+        // Fall back to rebuilding from $_POST
+        $rawPostData = http_build_query($_POST);
+    }
 
-            // Log into tblaccounts if invoice exists
-            $invQuery = $mysqli->query("SELECT userid, total FROM tblinvoices WHERE id = " . intval($invoiceId));
-            if ($invQuery && $invRow = $invQuery->fetch_assoc()) {
-                $desc = "PayPal Payment for Invoice #" . $invoiceId . " (Ref: " . $paypalTxnId . ")";
-                $accStmt = $mysqli->prepare("INSERT INTO tblaccounts (date, description, amountin, fees, amountout, transid, invoiceid) VALUES (?, ?, ?, 0.00, 0.00, ?, ?)");
-                if ($accStmt) {
-                    $today = date('Y-m-d');
-                    $accStmt->bind_param('ssssi', $today, $desc, $invRow['total'], $paypalTxnId, $invoiceId);
-                    $accStmt->execute();
-                    $accStmt->close();
-                }
-            }
-        }
-        http_response_code(200);
-        echo json_encode(['status' => 'success', 'message' => 'PayPal payment verified and invoice settled']);
+    $verifyPayload = 'cmd=_notify-validate&' . $rawPostData;
+
+    // Use live or sandbox endpoint based on test_ipn flag
+    $isPayPalSandbox = !empty($_POST['test_ipn']);
+    $paypalIpnUrl = $isPayPalSandbox
+        ? 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr'
+        : 'https://ipnpb.paypal.com/cgi-bin/webscr';
+
+    $chIpn = curl_init();
+    curl_setopt_array($chIpn, [
+        CURLOPT_URL            => $paypalIpnUrl,
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => $verifyPayload,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
+        CURLOPT_TIMEOUT        => 30,
+        CURLOPT_CONNECTTIMEOUT => 10,
+        CURLOPT_HTTPHEADER     => [
+            'User-Agent: CloudFlox-PayPal-IPN/1.0',
+            'Connection: Close'
+        ]
+    ]);
+    $ipnResponse = curl_exec($chIpn);
+    curl_close($chIpn);
+
+    // Step 2: Only proceed if PayPal confirms VERIFIED
+    if ($ipnResponse !== 'VERIFIED') {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'PayPal IPN verification failed']);
         exit;
     }
+
+    // Step 3: Process only completed payments
+    if ($paymentStatus === 'completed' && !empty($customData)) {
+        $invoiceId = intval($customData);
+        if ($invoiceId > 0) {
+            $mysqli = getDbConnection($dbHost, $dbUser, $dbPass, $dbName);
+            if ($mysqli) {
+                require_once __DIR__ . '/../include/email-service.php';
+                CloudFloxEmailService::settleAndActivateInvoice($invoiceId, $mysqli);
+
+                // Log into tblaccounts if invoice exists
+                $invQuery = $mysqli->prepare("SELECT userid, total FROM tblinvoices WHERE id = ? LIMIT 1");
+                if ($invQuery) {
+                    $invQuery->bind_param('i', $invoiceId);
+                    $invQuery->execute();
+                    $invRes = $invQuery->get_result();
+                    $invRow = $invRes ? $invRes->fetch_assoc() : null;
+                    $invQuery->close();
+
+                    if ($invRow) {
+                        $desc = "PayPal Payment for Invoice #" . $invoiceId . " (Ref: " . $paypalTxnId . ")";
+                        $accStmt = $mysqli->prepare("INSERT INTO tblaccounts (date, description, amountin, fees, amountout, transid, invoiceid) VALUES (?, ?, ?, 0.00, 0.00, ?, ?)");
+                        if ($accStmt) {
+                            $today = date('Y-m-d');
+                            $accStmt->bind_param('ssssi', $today, $desc, $invRow['total'], $paypalTxnId, $invoiceId);
+                            $accStmt->execute();
+                            $accStmt->close();
+                        }
+                    }
+                }
+            }
+            http_response_code(200);
+            echo json_encode(['status' => 'success', 'message' => 'PayPal payment verified and invoice settled']);
+            exit;
+        }
+    }
+
+    http_response_code(200);
+    echo json_encode(['status' => 'notice', 'message' => 'IPN received with status: ' . $paymentStatus]);
+    exit;
 }
 
 // Default response

@@ -3,6 +3,7 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
     @session_start();
 }
 include 'include/url.inc.php';
+require_once __DIR__ . '/include/csrf.inc.php';
 require_once __DIR__ . '/api/whmcs.php';
 
 $error = '';
@@ -36,7 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
     $confirm     = trim($_POST['password_confirm'] ?? '');
     $agree       = !empty($_POST['agree_terms']);
 
-    if (empty($firstname) || empty($lastname)) {
+    if (!cf_csrf_verify($_POST['csrf_token'] ?? '')) {
+        $error = 'Security token mismatch. Please refresh the page and try again.';
+    } elseif (empty($firstname) || empty($lastname)) {
         $error = 'Please enter your first name and last name.';
     } elseif (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Please enter a valid email address.';
@@ -210,6 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                         <!-- Registration Form (Full WHMCS Lagom2 Schema) -->
                         <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="POST" id="cfRegisterForm" novalidate>
                             <input type="hidden" name="register_submit" value="1">
+                            <?php echo cf_csrf_field(); ?>
 
                             <!-- 1. PERSONAL INFORMATION -->
                             <div class="cf-form-section-block">

@@ -13,6 +13,8 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
 }
 
 include 'include/url.inc.php';
+require_once __DIR__ . '/include/csrf.inc.php';
+require_once __DIR__ . '/include/rate-limit.inc.php';
 
 // Handle Logout
 if (isset($_GET['logout'])) {
@@ -26,7 +28,13 @@ $authError = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_access_key'])) {
     $submittedKey = trim($_POST['admin_access_key'] ?? '');
     $validKey = defined('CF_ADMIN_ACCESS_KEY') ? CF_ADMIN_ACCESS_KEY : '';
-    if (!empty($validKey) && !empty($submittedKey) && hash_equals($validKey, $submittedKey)) {
+    // Rate limiting: max 5 attempts per 10 minutes
+    if (!cf_rate_check('admin_login', 5, 600)) {
+        $authError = 'Too many authentication attempts. Please wait 10 minutes.';
+    } elseif (!cf_csrf_verify($_POST['csrf_token'] ?? '')) {
+        $authError = 'Security token mismatch. Please refresh and try again.';
+    } elseif (!empty($validKey) && !empty($submittedKey) && hash_equals($validKey, $submittedKey)) {
+        cf_rate_clear('admin_login');
         session_regenerate_id(true);
         $_SESSION['cf_admin_authenticated'] = true;
         header("Location: " . $url . "admin-quotes");
@@ -79,6 +87,7 @@ if (!$isAdminAuthenticated) {
             <?php endif; ?>
 
             <form method="POST" action="">
+                <?php echo cf_csrf_field(); ?>
                 <div class="mb-3">
                     <label class="form-label fs-12 fw-semibold text-slate-300 text-uppercase tracking-wider">Admin Passkey</label>
                     <input type="password" name="admin_access_key" class="form-control form-control-passkey" placeholder="••••••••••••••••" autofocus required>

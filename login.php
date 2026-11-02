@@ -3,6 +3,8 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
     @session_start();
 }
 include 'include/url.inc.php';
+require_once __DIR__ . '/include/csrf.inc.php';
+require_once __DIR__ . '/include/rate-limit.inc.php';
 require_once __DIR__ . '/api/whmcs.php';
 
 $error = '';
@@ -41,7 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit'])) {
     $password = trim($_POST['password'] ?? '');
     $remember = !empty($_POST['rememberme']);
 
-    if (empty($email) || empty($password)) {
+    if (!cf_csrf_verify($_POST['csrf_token'] ?? '')) {
+        $error = 'Security token mismatch. Please refresh the page and try again.';
+    } elseif (!cf_rate_check('login')) {
+        $error = 'Too many sign-in attempts from your IP. Please wait 5 minutes and try again.';
+    } elseif (empty($email) || empty($password)) {
         $error = 'Please enter both your email address and password to sign in.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Please enter a valid email address.';
@@ -64,6 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit'])) {
 
             // Regenerate session ID to mitigate session fixation attacks
             session_regenerate_id(true);
+
+            cf_rate_clear('login');
 
             $_SESSION['cf_client_logged_in'] = true;
             $_SESSION['cf_client_id']        = $clientId;
@@ -100,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit'])) {
             exit;
         } else {
             $error = !empty($authRes['message']) ? $authRes['message'] : 'Invalid email or password. Please verify your credentials and try again.';
+            cf_rate_record_fail('login');
         }
     }
 }
@@ -203,6 +212,7 @@ $savedEmail = $_COOKIE['cf_remember_email'] ?? '';
                         <!-- Login Form -->
                         <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="POST" id="cfLoginForm" novalidate>
                             <input type="hidden" name="login_submit" value="1">
+                            <?php echo cf_csrf_field(); ?>
 
                             <!-- Email Field -->
                             <div class="cf-minimal-input-wrap">

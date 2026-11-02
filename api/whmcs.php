@@ -42,7 +42,8 @@ class WHMCSClient {
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT        => 20,
             CURLOPT_CONNECTTIMEOUT => 10,
-            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_USERAGENT      => 'CloudFlox-OnSite-Checkout/1.0'
         ]);
 
@@ -147,14 +148,14 @@ class WHMCSClient {
                         } else {
                             return [
                                 'result'  => 'error',
-                                'message' => 'Incorrect password for this account.'
+                                'message' => 'Invalid email or password. Please check your credentials.'
                             ];
                         }
                     } else {
                         if (CF_CHECKOUT_DEMO_MODE) {
                             return [
                                 'result'  => 'error',
-                                'message' => 'Client account not found with this email address.'
+                                'message' => 'Invalid email or password. Please check your credentials.'
                             ];
                         }
                     }
