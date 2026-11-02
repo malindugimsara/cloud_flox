@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
 
         // 1. Check if email already registered in local database
         try {
-            $mysqli = @new mysqli('localhost', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+            $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
             if (!$mysqli->connect_error) {
                 $checkStmt = $mysqli->prepare("SELECT id FROM tblclients WHERE email = ? LIMIT 1");
                 if ($checkStmt) {
@@ -112,6 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                         }
                     }
                 } catch (Exception $e) {}
+
+                // Regenerate session ID to mitigate session fixation attacks
+                session_regenerate_id(true);
 
                 // Automatically log the new user in
                 $_SESSION['cf_client_logged_in'] = true;

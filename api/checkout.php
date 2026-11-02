@@ -78,6 +78,7 @@ if ($action === 'login') {
     }
 
     // Set authenticated session
+    session_regenerate_id(true);
     $_SESSION['cf_client_logged_in'] = true;
     $_SESSION['cf_client_id']        = $clientId;
     $_SESSION['cf_client_email']     = $email;
@@ -164,7 +165,7 @@ if ($action === 'register') {
     // 1. Check if email already registered in local database
     $accountExists = false;
     try {
-        $mysqli = @new mysqli('localhost', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+        $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
         if (!$mysqli->connect_error) {
             $checkStmt = $mysqli->prepare("SELECT id FROM tblclients WHERE email = ? LIMIT 1");
             if ($checkStmt) {
@@ -234,6 +235,7 @@ if ($action === 'register') {
     $fullName = trim($firstName . ' ' . $lastName);
 
     // Set authenticated session
+    session_regenerate_id(true);
     $_SESSION['cf_client_logged_in'] = true;
     $_SESSION['cf_client_id']        = $clientId;
     $_SESSION['cf_client_email']     = $email;
@@ -268,14 +270,15 @@ if ($action === 'logout') {
 // ACTION: GET PROFILE DETAILS (For logged-in client editing)
 // =========================================================================
 if ($action === 'get_profile') {
-    $clientId = !empty($_SESSION['cf_client_id']) ? (int)$_SESSION['cf_client_id'] : (int)($data['client_id'] ?? 0);
-    if (!$clientId) {
+    $clientId = (int)($_SESSION['cf_client_id'] ?? 0);
+    if (!$clientId || empty($_SESSION['cf_client_logged_in'])) {
+        http_response_code(401);
         echo json_encode(['status' => 'error', 'message' => 'Not authenticated.']);
         exit;
     }
     $profile = [];
     try {
-        $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+        $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
         if (!$mysqli->connect_error) {
             $s = $mysqli->prepare("SELECT id, firstname, lastname, companyname, email, phonenumber, address1, address2, city, state, postcode, country FROM tblclients WHERE id = ? LIMIT 1");
             if ($s) {
@@ -301,8 +304,9 @@ if ($action === 'get_profile') {
 // ACTION: UPDATE PROFILE (Edit personal and billing data)
 // =========================================================================
 if ($action === 'update_profile') {
-    $clientId = !empty($_SESSION['cf_client_id']) ? (int)$_SESSION['cf_client_id'] : (int)($data['client_id'] ?? 0);
-    if (!$clientId) {
+    $clientId = (int)($_SESSION['cf_client_id'] ?? 0);
+    if (!$clientId || empty($_SESSION['cf_client_logged_in'])) {
+        http_response_code(401);
         echo json_encode([
             'status'  => 'error',
             'message' => 'Please sign in to update your profile details.'
@@ -352,7 +356,7 @@ if ($action === 'update_profile') {
 
     // Update in MySQL tblclients
     try {
-        $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+        $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
         if (!$mysqli->connect_error) {
             $up = $mysqli->prepare("UPDATE tblclients SET firstname = ?, lastname = ?, companyname = ?, phonenumber = ?, address1 = ?, address2 = ?, city = ?, state = ?, postcode = ?, country = ?, updated_at = NOW() WHERE id = ?");
             if ($up) {
@@ -532,7 +536,9 @@ if ($hasHosting) {
 $totalPrice = $planPrice + $domainFee;
 
 // 2. Customer Account Handling (Already Authenticated vs Log In vs Create Account)
-$clientId = !empty($_SESSION['cf_client_id']) ? $_SESSION['cf_client_id'] : (!empty($data['client_id']) ? intval($data['client_id']) : null);
+$clientId = (!empty($_SESSION['cf_client_logged_in']) && !empty($_SESSION['cf_client_id']))
+    ? (int)$_SESSION['cf_client_id']
+    : 0;
 
 if (!$clientId) {
     $accountAction = strtolower(trim($data['account_action'] ?? 'register'));
@@ -711,7 +717,7 @@ $invoiceId = 0;
 
 // If local database is connected, insert genuine order, hosting, domain, and invoice records
 try {
-    $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+    $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
     if (!$mysqli->connect_error) {
         $today    = date('Y-m-d');
         $dueDate  = date('Y-m-d', strtotime('+7 days'));
@@ -904,8 +910,8 @@ $fullInvoiceUrl = $fullSiteUrl . "invoice?id=" . urlencode($invoiceId) . "&gatew
 $payhereData = null;
 if ($paymentMethod === 'payhere' || $paymentMethod === 'card') {
     $amountUsd = number_format($totalPrice, 2, '.', '');
-    $merchantId = defined('CF_PAYHERE_MERCHANT_ID') ? CF_PAYHERE_MERCHANT_ID : '230744';
-    $merchantSecret = defined('CF_PAYHERE_MERCHANT_SECRET') ? CF_PAYHERE_MERCHANT_SECRET : 'Mjc4NjU2NTM4MDM5OTA5NTg3NDAyNzAyMzk2Mzc1MTM1ODYwMTUy';
+    $merchantId = defined('CF_PAYHERE_MERCHANT_ID') ? CF_PAYHERE_MERCHANT_ID : '';
+    $merchantSecret = defined('CF_PAYHERE_MERCHANT_SECRET') ? CF_PAYHERE_MERCHANT_SECRET : '';
     $payHash = strtoupper(md5($merchantId . $invoiceId . $amountUsd . 'USD' . strtoupper(md5($merchantSecret))));
 
     $cName = $_SESSION['cf_client_name'] ?? 'CloudFlox Customer';

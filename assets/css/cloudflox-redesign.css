@@ -8308,7 +8308,6 @@ footer .border-top {
    Eliminates excessive empty side margins on 24" (1920x1080) and larger screens
    ========================================================================== */
 @media (min-width: 1400px) {
-    .container,
     .cf-modern-footer .container,
     .cf-footer-status-ribbon .container,
     .cf-subpage-cta-banner .container,
@@ -8325,12 +8324,13 @@ footer .border-top {
     .modern-faq-section .container,
     .modern-hero-section .container,
     .modern-domain-section .container {
-        max-width: 1520px !important;
+        max-width: 1380px !important;
+        padding-left: 48px !important;
+        padding-right: 48px !important;
     }
 }
 
 @media (min-width: 1600px) {
-    .container,
     .cf-modern-footer .container,
     .cf-footer-status-ribbon .container,
     .cf-subpage-cta-banner .container,
@@ -8347,13 +8347,14 @@ footer .border-top {
     .modern-faq-section .container,
     .modern-hero-section .container,
     .modern-domain-section .container {
-        max-width: 1640px !important;
+        max-width: 1440px !important;
+        padding-left: 56px !important;
+        padding-right: 56px !important;
     }
 }
 
 @media (min-width: 1800px) {
     /* Standard 24-inch monitor (1920x1080) and 2K/4K Displays */
-    .container,
     .cf-modern-footer .container,
     .cf-footer-status-ribbon .container,
     .cf-subpage-cta-banner .container,
@@ -8370,9 +8371,9 @@ footer .border-top {
     .modern-faq-section .container,
     .modern-hero-section .container,
     .modern-domain-section .container {
-        max-width: 1740px !important;
-        padding-left: 28px !important;
-        padding-right: 28px !important;
+        max-width: 1480px !important;
+        padding-left: 64px !important;
+        padding-right: 64px !important;
     }
 
     /* 24-inch Screen Section Spacing & Card Balance */
@@ -9119,7 +9120,11 @@ html, body {
    BUDGET HOSTING PAGE RESPONSIVE SPACING & STYLING (budget-hosting.php)
    ========================================================================== */
 
-/* 0. Budget, Business, Premium, Dedicated, Domain, Contact, VPS & Home Unified Responsive Container System (Desktop & Mobile) */
+/* 0. Unified Responsive Container & Side Padding System (Applies Universally Across All Pages) */
+.container,
+.cf-container,
+body.pure-white-theme .container,
+body.cf-home-page .container,
 body.cf-budget-page .container,
 body.cf-business-page .container,
 body.cf-premium-page .container,
@@ -9127,16 +9132,29 @@ body.cf-dedicated-page .container,
 body.cf-domain-page .container,
 body.cf-contact-page .container,
 body.cf-vps-page .container,
-body.cf-home-page .container,
-body.cf-blog-page .container {
+body.cf-blog-page .container,
+body.cf-checkout-page .container,
+body.cf-invoice-page .container,
+body.cf-client-page .container,
+body.cf-auth-page .container,
+body.cf-legal-page .container,
+body.cf-status-page .container,
+body.cf-kb-page .container,
+.cf-kb-container {
+    width: 100% !important;
     max-width: 1320px !important;
     padding-left: 20px !important;
     padding-right: 20px !important;
     margin-left: auto !important;
     margin-right: auto !important;
+    box-sizing: border-box !important;
 }
 
 @media (min-width: 576px) {
+    .container,
+    .cf-container,
+    body.pure-white-theme .container,
+    body.cf-home-page .container,
     body.cf-budget-page .container,
     body.cf-business-page .container,
     body.cf-premium-page .container,
@@ -9144,14 +9162,25 @@ body.cf-blog-page .container {
     body.cf-domain-page .container,
     body.cf-contact-page .container,
     body.cf-vps-page .container,
-    body.cf-home-page .container,
-    body.cf-blog-page .container {
+    body.cf-blog-page .container,
+    body.cf-checkout-page .container,
+    body.cf-invoice-page .container,
+    body.cf-client-page .container,
+    body.cf-auth-page .container,
+    body.cf-legal-page .container,
+    body.cf-status-page .container,
+    body.cf-kb-page .container,
+    .cf-kb-container {
         padding-left: 28px !important;
         padding-right: 28px !important;
     }
 }
 
 @media (min-width: 768px) {
+    .container,
+    .cf-container,
+    body.pure-white-theme .container,
+    body.cf-home-page .container,
     body.cf-budget-page .container,
     body.cf-business-page .container,
     body.cf-premium-page .container,
@@ -9159,14 +9188,25 @@ body.cf-blog-page .container {
     body.cf-domain-page .container,
     body.cf-contact-page .container,
     body.cf-vps-page .container,
-    body.cf-home-page .container,
-    body.cf-blog-page .container {
+    body.cf-blog-page .container,
+    body.cf-checkout-page .container,
+    body.cf-invoice-page .container,
+    body.cf-client-page .container,
+    body.cf-auth-page .container,
+    body.cf-legal-page .container,
+    body.cf-status-page .container,
+    body.cf-kb-page .container,
+    .cf-kb-container {
         padding-left: 36px !important;
         padding-right: 36px !important;
     }
 }
 
 @media (min-width: 992px) {
+    .container,
+    .cf-container,
+    body.pure-white-theme .container,
+    body.cf-home-page .container,
     body.cf-budget-page .container,
     body.cf-business-page .container,
     body.cf-premium-page .container,
@@ -9174,8 +9214,15 @@ body.cf-blog-page .container {
     body.cf-domain-page .container,
     body.cf-contact-page .container,
     body.cf-vps-page .container,
-    body.cf-home-page .container,
-    body.cf-blog-page .container {
+    body.cf-blog-page .container,
+    body.cf-checkout-page .container,
+    body.cf-invoice-page .container,
+    body.cf-client-page .container,
+    body.cf-auth-page .container,
+    body.cf-legal-page .container,
+    body.cf-status-page .container,
+    body.cf-kb-page .container,
+    .cf-kb-container {
         padding-left: 44px !important;
         padding-right: 44px !important;
     }
@@ -9194,6 +9241,10 @@ body.cf-blog-page .container {
 }
 
 @media (min-width: 1400px) {
+    .container,
+    .cf-container,
+    body.pure-white-theme .container,
+    body.cf-home-page .container,
     body.cf-budget-page .container,
     body.cf-business-page .container,
     body.cf-premium-page .container,
@@ -9201,8 +9252,15 @@ body.cf-blog-page .container {
     body.cf-domain-page .container,
     body.cf-contact-page .container,
     body.cf-vps-page .container,
-    body.cf-home-page .container,
-    body.cf-blog-page .container {
+    body.cf-blog-page .container,
+    body.cf-checkout-page .container,
+    body.cf-invoice-page .container,
+    body.cf-client-page .container,
+    body.cf-auth-page .container,
+    body.cf-legal-page .container,
+    body.cf-status-page .container,
+    body.cf-kb-page .container,
+    .cf-kb-container {
         max-width: 1360px !important;
         padding-left: 54px !important;
         padding-right: 54px !important;
@@ -9221,6 +9279,10 @@ body.cf-blog-page .container {
 }
 
 @media (min-width: 1800px) {
+    .container,
+    .cf-container,
+    body.pure-white-theme .container,
+    body.cf-home-page .container,
     body.cf-budget-page .container,
     body.cf-business-page .container,
     body.cf-premium-page .container,
@@ -9228,8 +9290,15 @@ body.cf-blog-page .container {
     body.cf-domain-page .container,
     body.cf-contact-page .container,
     body.cf-vps-page .container,
-    body.cf-home-page .container,
-    body.cf-blog-page .container {
+    body.cf-blog-page .container,
+    body.cf-checkout-page .container,
+    body.cf-invoice-page .container,
+    body.cf-client-page .container,
+    body.cf-auth-page .container,
+    body.cf-legal-page .container,
+    body.cf-status-page .container,
+    body.cf-kb-page .container,
+    .cf-kb-container {
         max-width: 1440px !important;
         padding-left: 64px !important;
         padding-right: 64px !important;
@@ -17215,32 +17284,81 @@ body.cf-modal-open {
 }
 
 .cf-checkout-body-wrap {
-    padding: 32px 0 60px 0 !important;
-}
-
-.cf-checkout-container {
-    max-width: 1140px;
+    padding-top: 36px !important;
+    padding-bottom: 64px !important;
+    padding-left: clamp(16px, 3.5vw, 40px) !important;
+    padding-right: clamp(16px, 3.5vw, 40px) !important;
     width: 100% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
     box-sizing: border-box !important;
 }
 
-@media (min-width: 1200px) {
-    .cf-checkout-container {
-        max-width: 1240px;
+.cf-checkout-container,
+body.cf-checkout-page .cf-checkout-container,
+body.cf-checkout-page .container {
+    max-width: 1140px !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    box-sizing: border-box !important;
+}
+
+@media (min-width: 576px) {
+    .cf-checkout-container,
+    body.cf-checkout-page .cf-checkout-container,
+    body.cf-checkout-page .container {
+        padding-left: 22px !important;
+        padding-right: 22px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .cf-checkout-container,
+    body.cf-checkout-page .cf-checkout-container,
+    body.cf-checkout-page .container {
         padding-left: 28px !important;
         padding-right: 28px !important;
     }
 }
 
-@media (min-width: 1400px) {
-    .cf-checkout-container {
-        max-width: 1340px;
+@media (min-width: 992px) {
+    .cf-checkout-container,
+    body.cf-checkout-page .cf-checkout-container,
+    body.cf-checkout-page .container {
+        max-width: 1200px !important;
         padding-left: 32px !important;
         padding-right: 32px !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .cf-checkout-container,
+    body.cf-checkout-page .cf-checkout-container,
+    body.cf-checkout-page .container {
+        max-width: 1240px !important;
+        padding-left: 36px !important;
+        padding-right: 36px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .cf-checkout-container,
+    body.cf-checkout-page .cf-checkout-container,
+    body.cf-checkout-page .container {
+        max-width: 1280px !important;
+        padding-left: 40px !important;
+        padding-right: 40px !important;
+    }
+}
+
+@media (min-width: 1800px) {
+    .cf-checkout-container,
+    body.cf-checkout-page .cf-checkout-container,
+    body.cf-checkout-page .container {
+        max-width: 1320px !important;
+        padding-left: 44px !important;
+        padding-right: 44px !important;
     }
 }
 
@@ -20016,4 +20134,1602 @@ html, body {
     }
 }
 
+/* ==========================================================================
+   ENHANCED CONTACT US HERO REDESIGN (contact-us.php)
+   ========================================================================== */
 
+/* 1. Hero Canvas & Ambient Glow */
+.cf-contact-hero {
+    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%) !important;
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+.cf-contact-hero .hero-ambient-glow {
+    position: absolute !important;
+    top: -15% !important;
+    left: 45% !important;
+    transform: translateX(-50%) !important;
+    width: 100% !important;
+    max-width: 1200px !important;
+    height: 520px !important;
+    background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(37, 99, 235, 0.12) 0%, rgba(6, 182, 212, 0.06) 45%, rgba(255, 255, 255, 0) 80%) !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+}
+
+/* 2. Modern Hero Glass Badge */
+.cf-contact-hero-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 9px !important;
+    padding: 7px 18px !important;
+    background: rgba(37, 99, 235, 0.06) !important;
+    border: 1.5px solid rgba(37, 99, 235, 0.2) !important;
+    border-radius: 999px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.6px !important;
+    text-transform: uppercase !important;
+    color: #1D4ED8 !important;
+    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.06) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    transition: all 0.25s ease !important;
+}
+.cf-contact-hero-badge:hover {
+    background: rgba(37, 99, 235, 0.1) !important;
+    border-color: rgba(37, 99, 235, 0.35) !important;
+    transform: translateY(-1px) !important;
+}
+.cf-badge-pulse-indicator {
+    width: 8px !important;
+    height: 8px !important;
+    background: #10B981 !important;
+    border-radius: 50% !important;
+    display: inline-block !important;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25) !important;
+    animation: cfContactBadgePulse 2s infinite !important;
+}
+@keyframes cfContactBadgePulse {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+    70% { box-shadow: 0 0 0 7px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* 3. Hero Title & Premium Gradient */
+.cf-contact-hero-title {
+    font-size: clamp(32px, 4.2vw, 50px) !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.035em !important;
+    color: #0F172A !important;
+}
+
+.text-gradient-contact {
+    background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 45%, #06B6D4 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    display: inline-block !important;
+}
+
+.cf-contact-hero-lead {
+    font-size: clamp(15px, 1.6vw, 16.5px) !important;
+    line-height: 1.65 !important;
+    max-width: 600px !important;
+    color: #475569 !important;
+}
+
+/* 4. Trust / Feature Badges Grid */
+.cf-contact-chips-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+}
+.cf-contact-chip {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 9px !important;
+    background: #FFFFFF !important;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 12px !important;
+    padding: 8px 15px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #1E293B !important;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03) !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    cursor: default !important;
+}
+.cf-contact-chip:hover {
+    border-color: #93C5FD !important;
+    background: #F8FAFC !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 18px -3px rgba(37, 99, 235, 0.12) !important;
+}
+.cf-contact-chip .chip-icon-box {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 7px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 13.5px !important;
+    flex-shrink: 0 !important;
+}
+.cf-contact-chip .chip-icon-box.cyan {
+    background: #ECFEFF !important;
+    color: #0891B2 !important;
+}
+.cf-contact-chip .chip-icon-box.blue {
+    background: #EFF6FF !important;
+    color: #2563EB !important;
+}
+.cf-contact-chip .chip-icon-box.emerald {
+    background: #ECFDF5 !important;
+    color: #059669 !important;
+}
+.cf-contact-chip .chip-icon-box.indigo {
+    background: #EEF2FF !important;
+    color: #4F46E5 !important;
+}
+
+/* 5. Hero Action Buttons */
+.cf-contact-hero .cf-btn-contact-submit {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 13px 30px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #3B82F6 100%) !important;
+    border: none !important;
+    border-radius: 999px !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 8px 22px -3px rgba(37, 99, 235, 0.38), 0 3px 8px -2px rgba(37, 99, 235, 0.2) !important;
+    text-decoration: none !important;
+}
+.cf-contact-hero .cf-btn-contact-submit:hover {
+    background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 50%, #2563EB 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 28px -3px rgba(37, 99, 235, 0.48) !important;
+}
+.cf-contact-hero .cf-btn-contact-submit i {
+    transition: transform 0.2s ease !important;
+}
+.cf-contact-hero .cf-btn-contact-submit:hover i {
+    transform: translateY(3px) !important;
+}
+
+.cf-contact-hero .cf-btn-contact-outline {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 12px 28px !important;
+    font-size: 14.5px !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+    background: #FFFFFF !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 999px !important;
+    text-decoration: none !important;
+    transition: all 0.22s ease !important;
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.04) !important;
+}
+.cf-contact-hero .cf-btn-contact-outline:hover {
+    border-color: #2563EB !important;
+    color: #2563EB !important;
+    background: #F8FAFC !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.12) !important;
+}
+
+/* 6. Live Engineering Trust Bar & Avatar Stack */
+.cf-contact-trust-bar {
+    border-top: 1px dashed #E2E8F0 !important;
+}
+.cf-stack-avatar {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    border: 2px solid #FFFFFF !important;
+    color: #FFFFFF !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12.5px !important;
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.1) !important;
+}
+.cf-trust-divider {
+    width: 1px !important;
+    height: 24px !important;
+    background: #E2E8F0 !important;
+}
+
+/* 7. Mobile Adjustments */
+@media (max-width: 575.98px) {
+    .cf-contact-hero {
+        padding-top: 32px !important;
+        padding-bottom: 36px !important;
+    }
+    .cf-contact-hero-title {
+        font-size: 28px !important;
+    }
+    .cf-contact-hero-lead {
+        font-size: 14px !important;
+        margin-bottom: 20px !important;
+    }
+    .cf-contact-chips-grid {
+        gap: 8px !important;
+    }
+    .cf-contact-chip {
+        font-size: 12px !important;
+        padding: 6px 12px !important;
+    }
+    .cf-hero-btn-group a {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
+
+/* ==========================================================================
+   GLOBAL HEADER CART BUTTON & SLIDE-OVER QUICK CART DRAWER
+   ========================================================================== */
+
+/* 1. Header Cart Action Button & Counter Badge */
+.cf-header-cart-btn {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 12px !important;
+    background: #FFFFFF !important;
+    border: 1.5px solid #E2E8F0 !important;
+    color: #1E293B !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    padding: 0 !important;
+}
+.cf-header-cart-btn:hover {
+    background: #EFF6FF !important;
+    border-color: #BFDBFE !important;
+    color: #2563EB !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12) !important;
+}
+.cf-header-cart-btn:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+}
+.cf-header-cart-badge {
+    position: absolute !important;
+    top: -5px !important;
+    right: -5px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    padding: 0 6px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+    color: #FFFFFF !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 2px solid #FFFFFF !important;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35) !important;
+}
+.cf-badge-pulse {
+    animation: cfCartBadgePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+@keyframes cfCartBadgePop {
+    0% { transform: scale(0.6); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+/* 2. Slide-Over Backdrop */
+.cf-cart-drawer-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(15, 23, 42, 0.5) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    z-index: 99998 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s !important;
+}
+.cf-cart-drawer-backdrop.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* 3. Slide-Over Drawer Canvas */
+.cf-cart-drawer {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 440px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    background: #FFFFFF !important;
+    border-left: 1px solid #E2E8F0 !important;
+    box-shadow: -12px 0 40px -10px rgba(15, 23, 42, 0.22) !important;
+    z-index: 99999 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transform: translateX(100%) !important;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: transform !important;
+}
+.cf-cart-drawer.active {
+    transform: translateX(0) !important;
+}
+
+/* 4. Drawer Header */
+.cf-cart-drawer-header {
+    padding: 20px 24px !important;
+    background: #FFFFFF !important;
+    border-bottom: 1.5px solid #F1F5F9 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    flex-shrink: 0 !important;
+}
+.cf-cart-drawer-header-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+}
+.cf-cart-drawer-icon {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 12px !important;
+    background: rgba(37, 99, 235, 0.08) !important;
+    border: 1.5px solid rgba(37, 99, 235, 0.16) !important;
+    color: #2563EB !important;
+    font-size: 22px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+.cf-cart-drawer-title {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.25 !important;
+}
+.cf-cart-drawer-sub {
+    font-size: 12.5px !important;
+    color: #64748B !important;
+    font-weight: 600 !important;
+    display: block !important;
+    margin-top: 1px !important;
+}
+.cf-cart-drawer-close {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    color: #64748B !important;
+    font-size: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+}
+.cf-cart-drawer-close:hover {
+    background: #E2E8F0 !important;
+    color: #0F172A !important;
+    transform: rotate(90deg) !important;
+}
+.cf-cart-drawer-close:focus {
+    outline: none !important;
+    border-color: #94A3B8 !important;
+}
+
+/* 5. Drawer Body (Scrollable Area) */
+.cf-cart-drawer-body {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    padding: 22px 24px !important;
+    background: #FFFFFF !important;
+}
+.cf-cart-drawer-body::-webkit-scrollbar {
+    width: 6px !important;
+}
+.cf-cart-drawer-body::-webkit-scrollbar-track {
+    background: #F8FAFC !important;
+}
+.cf-cart-drawer-body::-webkit-scrollbar-thumb {
+    background: #CBD5E1 !important;
+    border-radius: 999px !important;
+}
+.cf-cart-drawer-body::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8 !important;
+}
+
+/* 6. Empty State */
+.cf-drawer-empty-state {
+    text-align: center !important;
+    padding: 48px 16px !important;
+}
+.cf-drawer-empty-icon {
+    width: 84px !important;
+    height: 84px !important;
+    border-radius: 24px !important;
+    background: rgba(37, 99, 235, 0.06) !important;
+    border: 1.5px solid rgba(37, 99, 235, 0.15) !important;
+    color: #2563EB !important;
+    font-size: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 20px !important;
+    box-shadow: 0 10px 24px -6px rgba(37, 99, 235, 0.15) !important;
+}
+.cf-drawer-empty-state h5 {
+    font-size: 19px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 6px !important;
+}
+.cf-drawer-empty-state p {
+    font-size: 13.5px !important;
+    color: #64748B !important;
+    max-width: 290px !important;
+    margin: 0 auto 24px !important;
+    line-height: 1.55 !important;
+}
+.cf-btn-drawer-search {
+    background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 11px 26px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 22px -3px rgba(37, 99, 235, 0.38) !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.25s ease !important;
+}
+.cf-btn-drawer-search:hover {
+    background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 28px -3px rgba(37, 99, 235, 0.48) !important;
+    color: #FFFFFF !important;
+}
+
+/* 7. Cart Items List */
+.cf-drawer-items-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+}
+.cf-drawer-item-card {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 14px 16px !important;
+    background: #F8FAFC !important;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 14px !important;
+    transition: all 0.2s ease !important;
+}
+.cf-drawer-item-card:hover {
+    border-color: #BFDBFE !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08) !important;
+}
+.cf-drawer-item-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+}
+.cf-drawer-item-icon {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
+    background: #EFF6FF !important;
+    border: 1px solid #DBEAFE !important;
+    color: #2563EB !important;
+    font-size: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+.cf-drawer-item-details {
+    min-width: 0 !important;
+}
+.cf-drawer-item-name {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.25 !important;
+}
+.cf-drawer-item-tag {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #64748B !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    padding: 1.5px 7px !important;
+    border-radius: 999px !important;
+    display: inline-block !important;
+    margin-top: 3px !important;
+}
+.cf-drawer-item-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-shrink: 0 !important;
+}
+.cf-drawer-item-price {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    letter-spacing: -0.01em !important;
+}
+.cf-drawer-item-del {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: #94A3B8 !important;
+    font-size: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    padding: 0 !important;
+}
+.cf-drawer-item-del:hover {
+    background: #FEE2E2 !important;
+    border-color: #FECACA !important;
+    color: #DC2626 !important;
+}
+
+/* 8. Drawer Footer */
+.cf-cart-drawer-footer {
+    padding: 20px 24px !important;
+    background: #FFFFFF !important;
+    border-top: 1.5px solid #F1F5F9 !important;
+    box-shadow: 0 -4px 18px rgba(15, 23, 42, 0.04) !important;
+    flex-shrink: 0 !important;
+}
+.cf-drawer-total-label {
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    color: #64748B !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+.cf-drawer-total-amount {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    letter-spacing: -0.02em !important;
+}
+.cf-btn-drawer-checkout {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #3B82F6 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 13px 24px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 22px -3px rgba(37, 99, 235, 0.4) !important;
+    transition: all 0.25s ease !important;
+    text-decoration: none !important;
+}
+.cf-btn-drawer-checkout:hover {
+    background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 28px -3px rgba(37, 99, 235, 0.5) !important;
+    color: #FFFFFF !important;
+}
+
+/* 9. Domain Toast Notification */
+.cf-cart-toast {
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    z-index: 100010 !important;
+    opacity: 0 !important;
+    transform: translateY(20px) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    pointer-events: none !important;
+}
+.cf-cart-toast.show {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+}
+.cf-cart-toast-inner {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    background: rgba(15, 23, 42, 0.94) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 14px !important;
+    padding: 12px 18px !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.35) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+.cf-cart-toast-icon {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+}
+.cf-cart-toast-content strong {
+    font-size: 13.5px !important;
+    color: #FFFFFF !important;
+}
+.cf-btn-toast-view {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #FFFFFF !important;
+    border-radius: 999px !important;
+    padding: 5px 14px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    transition: all 0.2s ease !important;
+}
+.cf-btn-toast-view:hover {
+    background: #2563EB !important;
+    border-color: #2563EB !important;
+    color: #FFFFFF !important;
+}
+
+/* Mobile Responsiveness for Drawer */
+@media (max-width: 575.98px) {
+    .cf-cart-drawer {
+        max-width: 100% !important;
+    }
+    .cf-cart-drawer-header,
+    .cf-cart-drawer-body,
+    .cf-cart-drawer-footer {
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+    }
+    .cf-cart-toast {
+        left: 14px !important;
+        right: 14px !important;
+        bottom: 16px !important;
+    }
+}
+
+
+/* ==========================================================================
+   GLOBAL HEADER CART BUTTON & SLIDE-OVER QUICK CART DRAWER
+   ========================================================================== */
+
+/* 1. Header Cart Action Button & Counter Badge */
+.cf-header-cart-btn {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 12px !important;
+    background: #FFFFFF !important;
+    border: 1.5px solid #E2E8F0 !important;
+    color: #1E293B !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    padding: 0 !important;
+}
+.cf-header-cart-btn:hover {
+    background: #EFF6FF !important;
+    border-color: #BFDBFE !important;
+    color: #2563EB !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12) !important;
+}
+.cf-header-cart-btn:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+}
+.cf-header-cart-badge {
+    position: absolute !important;
+    top: -5px !important;
+    right: -5px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    padding: 0 6px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+    color: #FFFFFF !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 2px solid #FFFFFF !important;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35) !important;
+}
+.cf-badge-pulse {
+    animation: cfCartBadgePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+@keyframes cfCartBadgePop {
+    0% { transform: scale(0.6); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+/* 2. Slide-Over Backdrop */
+.cf-cart-drawer-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(15, 23, 42, 0.5) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    z-index: 99998 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s !important;
+}
+.cf-cart-drawer-backdrop.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* 3. Slide-Over Drawer Canvas */
+.cf-cart-drawer {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 440px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    background: #FFFFFF !important;
+    border-left: 1px solid #E2E8F0 !important;
+    box-shadow: -12px 0 40px -10px rgba(15, 23, 42, 0.22) !important;
+    z-index: 99999 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transform: translateX(100%) !important;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: transform !important;
+}
+.cf-cart-drawer.active {
+    transform: translateX(0) !important;
+}
+
+/* 4. Drawer Header */
+.cf-cart-drawer-header {
+    padding: 20px 24px !important;
+    background: #FFFFFF !important;
+    border-bottom: 1.5px solid #F1F5F9 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    flex-shrink: 0 !important;
+}
+.cf-cart-drawer-header-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+}
+.cf-cart-drawer-icon {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 12px !important;
+    background: rgba(37, 99, 235, 0.08) !important;
+    border: 1.5px solid rgba(37, 99, 235, 0.16) !important;
+    color: #2563EB !important;
+    font-size: 22px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+.cf-cart-drawer-title {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.25 !important;
+}
+.cf-cart-drawer-sub {
+    font-size: 12.5px !important;
+    color: #64748B !important;
+    font-weight: 600 !important;
+    display: block !important;
+    margin-top: 1px !important;
+}
+.cf-cart-drawer-close {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    color: #64748B !important;
+    font-size: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+}
+.cf-cart-drawer-close:hover {
+    background: #E2E8F0 !important;
+    color: #0F172A !important;
+    transform: rotate(90deg) !important;
+}
+.cf-cart-drawer-close:focus {
+    outline: none !important;
+    border-color: #94A3B8 !important;
+}
+
+/* 5. Drawer Body (Scrollable Area) */
+.cf-cart-drawer-body {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    padding: 22px 24px !important;
+    background: #FFFFFF !important;
+}
+.cf-cart-drawer-body::-webkit-scrollbar {
+    width: 6px !important;
+}
+.cf-cart-drawer-body::-webkit-scrollbar-track {
+    background: #F8FAFC !important;
+}
+.cf-cart-drawer-body::-webkit-scrollbar-thumb {
+    background: #CBD5E1 !important;
+    border-radius: 999px !important;
+}
+.cf-cart-drawer-body::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8 !important;
+}
+
+/* 6. Empty State */
+.cf-drawer-empty-state {
+    text-align: center !important;
+    padding: 48px 16px !important;
+}
+.cf-drawer-empty-icon {
+    width: 84px !important;
+    height: 84px !important;
+    border-radius: 24px !important;
+    background: rgba(37, 99, 235, 0.06) !important;
+    border: 1.5px solid rgba(37, 99, 235, 0.15) !important;
+    color: #2563EB !important;
+    font-size: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 20px !important;
+    box-shadow: 0 10px 24px -6px rgba(37, 99, 235, 0.15) !important;
+}
+.cf-drawer-empty-state h5 {
+    font-size: 19px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 6px !important;
+}
+.cf-drawer-empty-state p {
+    font-size: 13.5px !important;
+    color: #64748B !important;
+    max-width: 290px !important;
+    margin: 0 auto 24px !important;
+    line-height: 1.55 !important;
+}
+.cf-btn-drawer-search {
+    background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 11px 26px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 22px -3px rgba(37, 99, 235, 0.38) !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.25s ease !important;
+}
+.cf-btn-drawer-search:hover {
+    background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 28px -3px rgba(37, 99, 235, 0.48) !important;
+    color: #FFFFFF !important;
+}
+
+/* 7. Cart Items List */
+.cf-drawer-items-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+}
+.cf-drawer-item-card {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 14px 16px !important;
+    background: #F8FAFC !important;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 14px !important;
+    transition: all 0.2s ease !important;
+}
+.cf-drawer-item-card:hover {
+    border-color: #BFDBFE !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08) !important;
+}
+.cf-drawer-item-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+}
+.cf-drawer-item-icon {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
+    background: #EFF6FF !important;
+    border: 1px solid #DBEAFE !important;
+    color: #2563EB !important;
+    font-size: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+.cf-drawer-item-details {
+    min-width: 0 !important;
+}
+.cf-drawer-item-name {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.25 !important;
+}
+.cf-drawer-item-tag {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #64748B !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    padding: 1.5px 7px !important;
+    border-radius: 999px !important;
+    display: inline-block !important;
+    margin-top: 3px !important;
+}
+.cf-drawer-item-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-shrink: 0 !important;
+}
+.cf-drawer-item-price {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    letter-spacing: -0.01em !important;
+}
+.cf-drawer-item-del {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: #94A3B8 !important;
+    font-size: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    padding: 0 !important;
+}
+.cf-drawer-item-del:hover {
+    background: #FEE2E2 !important;
+    border-color: #FECACA !important;
+    color: #DC2626 !important;
+}
+
+/* 8. Drawer Footer */
+.cf-cart-drawer-footer {
+    padding: 20px 24px !important;
+    background: #FFFFFF !important;
+    border-top: 1.5px solid #F1F5F9 !important;
+    box-shadow: 0 -4px 18px rgba(15, 23, 42, 0.04) !important;
+    flex-shrink: 0 !important;
+}
+.cf-drawer-total-label {
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    color: #64748B !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+.cf-drawer-total-amount {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    letter-spacing: -0.02em !important;
+}
+.cf-btn-drawer-checkout {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #3B82F6 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 13px 24px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 22px -3px rgba(37, 99, 235, 0.4) !important;
+    transition: all 0.25s ease !important;
+    text-decoration: none !important;
+}
+.cf-btn-drawer-checkout:hover {
+    background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 28px -3px rgba(37, 99, 235, 0.5) !important;
+    color: #FFFFFF !important;
+}
+
+/* 9. Domain Toast Notification */
+.cf-cart-toast {
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    z-index: 100010 !important;
+    opacity: 0 !important;
+    transform: translateY(20px) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    pointer-events: none !important;
+}
+.cf-cart-toast.show {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+}
+.cf-cart-toast-inner {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    background: rgba(15, 23, 42, 0.94) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 14px !important;
+    padding: 12px 18px !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.35) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+.cf-cart-toast-icon {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    background: #10B981 !important;
+    color: #FFFFFF !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+}
+.cf-cart-toast-content strong {
+    font-size: 13.5px !important;
+    color: #FFFFFF !important;
+}
+.cf-btn-toast-view {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #FFFFFF !important;
+    border-radius: 999px !important;
+    padding: 5px 14px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    transition: all 0.2s ease !important;
+}
+.cf-btn-toast-view:hover {
+    background: #2563EB !important;
+    border-color: #2563EB !important;
+    color: #FFFFFF !important;
+}
+
+
+
+
+/* ==========================================================================
+   FLOATING MULTI-DOMAIN CART BAR (VERTICAL EXPANDED DRAWER STYLING)
+   ========================================================================== */
+
+/* Cart Header */
+.cf-cart-bar-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding-bottom: 12px !important;
+    margin-bottom: 12px !important;
+    border-bottom: 1px solid #FFF1E5 !important;
+    width: 100% !important;
+}
+
+.cf-cart-bar-header-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.cf-cart-header-title {
+    font-size: 16.5px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.2 !important;
+}
+
+.cf-cart-header-subtitle {
+    font-size: 12px !important;
+    color: #64748B !important;
+    font-weight: 500 !important;
+    display: block !important;
+    margin-top: 1px !important;
+}
+
+.cf-cart-bar-header-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+/* Hide & Clear Buttons */
+.cf-btn-cart-toggle {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 5px 14px !important;
+    border-radius: 999px !important;
+    background: #FFF7ED !important;
+    border: 1px solid #FFEDD5 !important;
+    color: #EA580C !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.cf-btn-cart-toggle:hover {
+    background: #FFEDD5 !important;
+    border-color: #FDBA74 !important;
+    color: #C2410C !important;
+}
+
+.cf-btn-cart-clear-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 5px 12px !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: #64748B !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.cf-btn-cart-clear-link:hover {
+    background: #FEE2E2 !important;
+    border-color: #FECACA !important;
+    color: #DC2626 !important;
+}
+
+/* Vertical Items Body */
+.cf-cart-items-body {
+    max-height: 220px !important;
+    overflow-y: auto !important;
+    margin-bottom: 14px !important;
+    padding-right: 4px !important;
+    width: 100% !important;
+}
+
+.cf-cart-items-body::-webkit-scrollbar {
+    width: 5px !important;
+}
+
+.cf-cart-items-body::-webkit-scrollbar-thumb {
+    background: #FED7AA !important;
+    border-radius: 999px !important;
+}
+
+.cf-cart-items-wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+}
+
+/* Individual Domain Card Row */
+.cf-cart-item-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 11px 16px !important;
+    background: #FFFDFB !important;
+    border: 1.5px solid #FFEDD5 !important;
+    border-radius: 14px !important;
+    transition: all 0.2s ease !important;
+    width: 100% !important;
+}
+
+.cf-cart-item-row:hover {
+    background: #FFFFFF !important;
+    border-color: #FDBA74 !important;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.08) !important;
+}
+
+.cf-cart-item-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+}
+
+.cf-cart-item-icon {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 50% !important;
+    background: #FFF7ED !important;
+    border: 1px solid #FFEDD5 !important;
+    color: #EA580C !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 16px !important;
+    flex-shrink: 0 !important;
+}
+
+.cf-cart-item-details {
+    min-width: 0 !important;
+}
+
+.cf-cart-item-domain {
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.25 !important;
+}
+
+.cf-cart-item-term {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #9A3412 !important;
+    display: block !important;
+    margin-top: 2px !important;
+}
+
+.cf-cart-item-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-shrink: 0 !important;
+}
+
+.cf-cart-item-price {
+    font-size: 16px !important;
+    font-weight: 900 !important;
+    color: #EA580C !important;
+    letter-spacing: -0.01em !important;
+}
+
+.cf-cart-item-del-btn {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 50% !important;
+    background: #FFFFFF !important;
+    border: 1px solid #FED7AA !important;
+    color: #94A3B8 !important;
+    font-size: 13px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    padding: 0 !important;
+}
+
+.cf-cart-item-del-btn:hover {
+    background: #FEE2E2 !important;
+    border-color: #FECACA !important;
+    color: #DC2626 !important;
+    transform: scale(1.1) !important;
+}
+
+/* Cart Bar Footer */
+.cf-cart-bar-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid #FFF1E5 !important;
+    width: 100% !important;
+}
+
+.cf-cart-bar-footer .cf-cart-total-box {
+    text-align: left !important;
+    line-height: 1.15 !important;
+}
+
+.cf-cart-bar-footer .cf-cart-total-label {
+    font-size: 10.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    color: #7C2D12 !important;
+    display: block !important;
+}
+
+.cf-cart-bar-footer .cf-cart-total-amount {
+    font-size: 26px !important;
+    font-weight: 900 !important;
+    color: #EA580C !important;
+    letter-spacing: -0.02em !important;
+}
+
+.cf-cart-bar-footer .cf-btn-checkout {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 13px 30px !important;
+    background: linear-gradient(135deg, #FF6B00 0%, #EA580C 100%) !important;
+    color: #FFFFFF !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    border-radius: 999px !important;
+    border: none !important;
+    box-shadow: 0 6px 22px rgba(255, 107, 0, 0.45) !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+
+.cf-cart-bar-footer .cf-btn-checkout:hover {
+    background: linear-gradient(135deg, #EA580C 0%, #C2410C 100%) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 28px rgba(255, 107, 0, 0.6) !important;
+}
+
+/* =============================================================================
+   CLIENT AREA MODERN TABLE ACTION BUTTONS (SERVICES, DOMAINS, INVOICES, QUOTES)
+   ============================================================================= */
+.cf-table-actions {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    white-space: nowrap !important;
+}
+
+.cf-btn-table-action {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: 32px !important;
+    padding: 0 14px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.2px !important;
+    border-radius: 999px !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-sizing: border-box !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    user-select: none !important;
+    border: 1.5px solid transparent !important;
+}
+
+.cf-btn-table-action i {
+    font-size: 13px !important;
+    line-height: 1 !important;
+    transition: transform 0.2s ease !important;
+}
+
+/* 1. cPanel Direct Access Button (Iconic cPanel Orange Pill & Micro-Bounce) */
+.cf-btn-table-cpanel {
+    background: #FFF7ED !important;
+    color: #EA580C !important;
+    border-color: #FED7AA !important;
+    box-shadow: 0 1px 3px rgba(234, 88, 12, 0.08) !important;
+}
+
+.cf-btn-table-cpanel:hover {
+    background: linear-gradient(135deg, #FF6B00 0%, #EA580C 100%) !important;
+    color: #FFFFFF !important;
+    border-color: transparent !important;
+    transform: translateY(-1.5px) !important;
+    box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35) !important;
+}
+
+.cf-btn-table-cpanel:hover i {
+    transform: translate(1.5px, -1.5px) !important;
+}
+
+/* 2. Primary Hosting & Domain Manage Button (CloudFlox Royal Blue Gradient) */
+.cf-btn-table-manage {
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+    color: #FFFFFF !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.22) !important;
+}
+
+.cf-btn-table-manage:hover {
+    background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1.5px) !important;
+    box-shadow: 0 5px 16px rgba(37, 99, 235, 0.38) !important;
+}
+
+.cf-btn-table-manage:hover i {
+    transform: scale(1.15) !important;
+}
+
+.cf-btn-table-action:active {
+    transform: translateY(0.5px) scale(0.97) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 3. Invoice Pay Now Button */
+.cf-btn-table-pay {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+    color: #FFFFFF !important;
+    border-color: rgba(220, 38, 38, 0.2) !important;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.22) !important;
+}
+
+.cf-btn-table-pay:hover {
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1.5px) !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35) !important;
+}
+
+/* 4. Invoice / Quote View Button */
+.cf-btn-table-view {
+    background: #F8FAFC !important;
+    color: #475569 !important;
+    border-color: #E2E8F0 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+}
+
+.cf-btn-table-view:hover {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border-color: #CBD5E1 !important;
+    transform: translateY(-1.5px) !important;
+    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.07) !important;
+}
+
+/* 5. Ticket View & Reply Button */
+.cf-btn-table-ticket {
+    background: #EFF6FF !important;
+    color: #1D4ED8 !important;
+    border-color: #BFDBFE !important;
+    box-shadow: 0 1px 2px rgba(37, 99, 235, 0.05) !important;
+}
+
+.cf-btn-table-ticket:hover {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+    border-color: #2563EB !important;
+    transform: translateY(-1.5px) !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+}
+
+/* 6. Quote Review & Accept Button */
+.cf-btn-table-accept {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+    color: #FFFFFF !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.22) !important;
+}
+
+.cf-btn-table-accept:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1.5px) !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35) !important;
+}

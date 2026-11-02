@@ -120,12 +120,18 @@ $isHostingActive = (
                     <img src="<?php echo $url; ?>assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox Cloud Hosting" class="cf-logo-img" width="200" height="47">
                 </a>
 
-                <!-- Mobile Hamburger Toggler -->
-                <button class="navbar-toggler cf-nav-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primaryMenu" aria-controls="primaryMenu" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="cf-toggler-bar"></span>
-                    <span class="cf-toggler-bar"></span>
-                    <span class="cf-toggler-bar"></span>
-                </button>
+                <!-- Mobile Actions (Cart & Hamburger) -->
+                <div class="d-flex align-items-center gap-2 d-lg-none">
+                    <button type="button" class="cf-header-cart-btn" onclick="window.cfDomainCart && window.cfDomainCart.openDrawer ? window.cfDomainCart.openDrawer() : null" aria-label="Shopping Cart" title="View Shopping Cart">
+                        <i class="las la-shopping-cart"></i>
+                        <span class="cf-header-cart-badge cfHeaderCartBadge" style="display: none;">0</span>
+                    </button>
+                    <button class="navbar-toggler cf-nav-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primaryMenu" aria-controls="primaryMenu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="cf-toggler-bar"></span>
+                        <span class="cf-toggler-bar"></span>
+                        <span class="cf-toggler-bar"></span>
+                    </button>
+                </div>
 
                 <!-- Navigation Menu Links & Action Button -->
                 <div class="collapse navbar-collapse" id="primaryMenu">
@@ -233,6 +239,12 @@ $isHostingActive = (
 
                     <!-- Right Action Button -->
                     <div class="cf-nav-actions d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                        <!-- Desktop Header Cart Button -->
+                        <button type="button" class="cf-header-cart-btn d-none d-lg-inline-flex" onclick="window.cfDomainCart && window.cfDomainCart.openDrawer ? window.cfDomainCart.openDrawer() : null" aria-label="Shopping Cart" title="View Shopping Cart">
+                            <i class="las la-shopping-cart"></i>
+                            <span class="cf-header-cart-badge cfHeaderCartBadge" style="display: none;">0</span>
+                        </button>
+
                         <?php if ($cfIsLoggedIn): ?>
                             <a href="<?php echo $url; ?>clientarea" class="cf-btn-client-area logged-in" title="Client Dashboard (<?php echo htmlspecialchars($cfClientName); ?>)">
                                 <i class="las la-user-check text-emerald"></i>
@@ -251,6 +263,65 @@ $isHostingActive = (
             </div>
         </nav>
     </header>
+
+    <!-- =========================================================================
+         GLOBAL CART SLIDE-OVER DRAWER (CLOUD FLOX QUICK CART)
+         ========================================================================= -->
+    <div class="cf-cart-drawer-backdrop" id="cfCartDrawerBackdrop" onclick="cfDomainCart.closeDrawer()"></div>
+    <div class="cf-cart-drawer" id="cfCartDrawer" aria-hidden="true">
+        <!-- Drawer Header -->
+        <div class="cf-cart-drawer-header">
+            <div class="cf-cart-drawer-header-left">
+                <div class="cf-cart-drawer-icon">
+                    <i class="las la-shopping-cart"></i>
+                </div>
+                <div class="cf-cart-drawer-text">
+                    <h5 class="cf-cart-drawer-title mb-0">Shopping Cart</h5>
+                    <span class="cf-cart-drawer-sub" id="cfDrawerCountText">0 items selected</span>
+                </div>
+            </div>
+            <button type="button" class="cf-cart-drawer-close" onclick="cfDomainCart.closeDrawer()" aria-label="Close cart">
+                <i class="las la-times"></i>
+            </button>
+        </div>
+
+        <!-- Drawer Body (Rendered via JS) -->
+        <div class="cf-cart-drawer-body" id="cfCartDrawerBody"></div>
+
+        <!-- Drawer Footer -->
+        <div class="cf-cart-drawer-footer" id="cfCartDrawerFooter">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="cf-drawer-total-label">Estimated Total</span>
+                <strong class="cf-drawer-total-amount" id="cfDrawerTotalText">$0.00</strong>
+            </div>
+            <button type="button" class="btn cf-btn-drawer-checkout w-100 mb-2" onclick="cfDomainCart.checkout()">
+                <span>Proceed to Checkout</span>
+                <i class="las la-arrow-right ms-2"></i>
+            </button>
+            <div class="d-flex align-items-center justify-content-between pt-1">
+                <button type="button" class="btn btn-sm btn-link text-muted p-0 text-decoration-none fs-12" onclick="cfDomainCart.clear()">
+                    <i class="las la-trash-alt me-1"></i>Clear Cart
+                </button>
+                <a href="<?php echo $url; ?>domain" class="btn btn-sm btn-link text-orange p-0 text-decoration-none fs-12 fw-bold" onclick="cfDomainCart.closeDrawer()">
+                    + Add More Domains
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Toast Notification when domain is added -->
+    <div class="cf-cart-toast" id="cfCartToast" style="display: none;">
+        <div class="cf-cart-toast-inner">
+            <div class="cf-cart-toast-icon">
+                <i class="las la-check"></i>
+            </div>
+            <div class="cf-cart-toast-content">
+                <strong id="cfToastDomain" class="d-block text-truncate" style="max-width: 170px;">domain.com</strong>
+                <span class="text-muted fs-11">added to your cart</span>
+            </div>
+            <button type="button" class="btn cf-btn-toast-view" onclick="cfDomainCart.openDrawer()">View Cart</button>
+        </div>
+    </div>
 
     <script>
     (function() {

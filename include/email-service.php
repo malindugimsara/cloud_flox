@@ -11,6 +11,7 @@
 require_once __DIR__ . '/send-mail/SMTP.php';
 require_once __DIR__ . '/send-mail/PHPMailer.php';
 require_once __DIR__ . '/send-mail/Exception.php';
+require_once __DIR__ . '/env.inc.php';
 require_once __DIR__ . '/url.inc.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -24,12 +25,12 @@ class CloudFloxEmailService {
     public static function getMailer() {
         $mail = new PHPMailer(true);
         $mail->isSMTP();
-        $mail->Host       = 'mail.cloudflox.com';
+        $mail->Host       = defined('CF_SMTP_HOST') ? CF_SMTP_HOST : 'mail.cloudflox.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'info@cloudflox.com';
-        $mail->Password   = 'TC.jk1mnPoccDTf=';
-        $mail->SMTPSecure = 'ssl';
-        $mail->Port       = 465;
+        $mail->Username   = defined('CF_SMTP_USERNAME') ? CF_SMTP_USERNAME : 'info@cloudflox.com';
+        $mail->Password   = defined('CF_SMTP_PASSWORD') ? CF_SMTP_PASSWORD : '';
+        $mail->SMTPSecure = defined('CF_SMTP_SECURE') ? CF_SMTP_SECURE : 'ssl';
+        $mail->Port       = defined('CF_SMTP_PORT') ? (int)CF_SMTP_PORT : 465;
         $mail->Timeout    = 10;
         $mail->CharSet    = 'UTF-8';
         $mail->SMTPOptions = [
@@ -39,8 +40,11 @@ class CloudFloxEmailService {
                 'allow_self_signed' => true
             ]
         ];
-        $mail->setFrom('info@cloudflox.com', 'CloudFlox LLC Hosting');
-        $mail->addReplyTo('support@cloudflox.com', 'CloudFlox Support');
+        $fromAddress = defined('CF_MAIL_FROM_ADDRESS') ? CF_MAIL_FROM_ADDRESS : 'info@cloudflox.com';
+        $fromName    = defined('CF_MAIL_FROM_NAME') ? CF_MAIL_FROM_NAME : 'CloudFlox LLC Hosting';
+        $replyTo     = defined('CF_MAIL_REPLY_TO') ? CF_MAIL_REPLY_TO : 'support@cloudflox.com';
+        $mail->setFrom($fromAddress, $fromName);
+        $mail->addReplyTo($replyTo, 'CloudFlox Support');
         return $mail;
     }
 
@@ -55,7 +59,7 @@ class CloudFloxEmailService {
 
         $closeDb = false;
         if (!$mysqli) {
-            $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+            $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
             if ($mysqli->connect_error) {
                 return ['status' => 'error', 'message' => 'Database connection failed: ' . $mysqli->connect_error];
             }
@@ -123,7 +127,7 @@ class CloudFloxEmailService {
 
         $closeDb = false;
         if (!$mysqli) {
-            $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+            $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
             if ($mysqli->connect_error) {
                 return ['status' => 'error', 'message' => 'Database connection failed'];
             }

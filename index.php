@@ -3976,7 +3976,7 @@
 
                             <!-- Cloudflare Turnstile Verification -->
                             <div class="cq-form-group d-flex justify-content-center my-3">
-                                <div class="cf-turnstile" data-sitekey="<?php echo htmlspecialchars(defined('CF_TURNSTILE_SITE_KEY') ? CF_TURNSTILE_SITE_KEY : '0x4AAAAAAFsPGuQlAMYqY37j'); ?>" data-theme="dark"></div>
+                                <div class="cf-turnstile" data-sitekey="<?php echo htmlspecialchars(defined('CF_TURNSTILE_SITE_KEY') ? CF_TURNSTILE_SITE_KEY : ''); ?>" data-theme="dark"></div>
                             </div>
 
                             <!-- Submit Buttons -->

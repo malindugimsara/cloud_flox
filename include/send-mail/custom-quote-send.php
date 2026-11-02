@@ -41,7 +41,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 // Cloudflare Turnstile Security Verification
 require_once __DIR__ . '/../env.inc.php';
 
-$turnstileSecret = defined('CF_TURNSTILE_SECRET_KEY') ? CF_TURNSTILE_SECRET_KEY : (getenv('CLOUDFLARE_TURNSTILE_SECRET_KEY') ?: '0x4AAAAAAFsPGj4XQp1O1pc9PnrNzozwjKM');
+$turnstileSecret = defined('CF_TURNSTILE_SECRET_KEY') ? CF_TURNSTILE_SECRET_KEY : (getenv('CLOUDFLARE_TURNSTILE_SECRET_KEY') ?: '');
 $turnstileResponse = $_POST['cf-turnstile-response'] ?? '';
 
 if (empty($turnstileResponse)) {
@@ -126,12 +126,12 @@ try {
     // 1. Send Notification Email to CloudFlox Sales Team
     $mail = new PHPMailer(true);
     $mail->IsSMTP();
-    $mail->Host = 'mail.cloudflox.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'info@cloudflox.com';
-    $mail->Password = 'TC.jk1mnPoccDTf=';
-    $mail->SMTPSecure = 'ssl';
-    $mail->Port = 465;
+    $mail->Host       = defined('CF_SMTP_HOST') ? CF_SMTP_HOST : 'mail.cloudflox.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = defined('CF_SMTP_USERNAME') ? CF_SMTP_USERNAME : 'info@cloudflox.com';
+    $mail->Password   = defined('CF_SMTP_PASSWORD') ? CF_SMTP_PASSWORD : '';
+    $mail->SMTPSecure = defined('CF_SMTP_SECURE') ? CF_SMTP_SECURE : 'ssl';
+    $mail->Port       = defined('CF_SMTP_PORT') ? (int)CF_SMTP_PORT : 465;
     $mail->Timeout = 8;
     $mail->CharSet = 'UTF-8';
     $mail->SMTPOptions = [
@@ -216,12 +216,12 @@ if (!$salesMailSent) {
 try {
     $clientMail = new PHPMailer(true);
     $clientMail->IsSMTP();
-    $clientMail->Host = 'mail.cloudflox.com';
-    $clientMail->SMTPAuth = true;
-    $clientMail->Username = 'info@cloudflox.com';
-    $clientMail->Password = 'TC.jk1mnPoccDTf=';
-    $clientMail->SMTPSecure = 'ssl';
-    $clientMail->Port = 465;
+    $clientMail->Host       = defined('CF_SMTP_HOST') ? CF_SMTP_HOST : 'mail.cloudflox.com';
+    $clientMail->SMTPAuth   = true;
+    $clientMail->Username   = defined('CF_SMTP_USERNAME') ? CF_SMTP_USERNAME : 'info@cloudflox.com';
+    $clientMail->Password   = defined('CF_SMTP_PASSWORD') ? CF_SMTP_PASSWORD : '';
+    $clientMail->SMTPSecure = defined('CF_SMTP_SECURE') ? CF_SMTP_SECURE : 'ssl';
+    $clientMail->Port       = defined('CF_SMTP_PORT') ? (int)CF_SMTP_PORT : 465;
     $clientMail->Timeout = 8;
     $clientMail->CharSet = 'UTF-8';
     $clientMail->SMTPOptions = [

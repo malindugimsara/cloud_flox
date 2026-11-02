@@ -22,7 +22,7 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
 } else {
 
     require_once __DIR__ . '/../env.inc.php';
-    $turnstileSecret = defined('CF_TURNSTILE_SECRET_KEY') ? CF_TURNSTILE_SECRET_KEY : (getenv('CLOUDFLARE_TURNSTILE_SECRET_KEY') ?: '0x4AAAAAAFsPGj4XQp1O1pc9PnrNzozwjKM');
+    $turnstileSecret = defined('CF_TURNSTILE_SECRET_KEY') ? CF_TURNSTILE_SECRET_KEY : (getenv('CLOUDFLARE_TURNSTILE_SECRET_KEY') ?: '');
     $turnstileResponse = $_POST['cf-turnstile-response'] ?? $_POST['g-recaptcha-response'] ?? '';
 
     if (empty($turnstileResponse)) {
@@ -71,10 +71,10 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
 
     $mail = new PHPMailer;
     $mail->IsSMTP();
-    $mail->Host = 'mail.cloudflox.com';
+    $mail->Host = defined('CF_SMTP_HOST') ? CF_SMTP_HOST : 'mail.cloudflox.com';
     $mail->SMTPAuth = true;
-    $mail->Username = 'info@cloudflox.com';
-    $mail->Password = 'TC.jk1mnPoccDTf=';
+    $mail->Username = defined('CF_SMTP_USERNAME') ? CF_SMTP_USERNAME : 'info@cloudflox.com';
+    $mail->Password = defined('CF_SMTP_PASSWORD') ? CF_SMTP_PASSWORD : '';
     $mail->SMTPSecure = 'ssl';
     $mail->Port = 465;
     $mail->Timeout = 10;
@@ -124,10 +124,10 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
     // Auto-reply to customer
     $clientMail = new PHPMailer;
     $clientMail->IsSMTP();
-    $clientMail->Host = 'mail.cloudflox.com';
+    $clientMail->Host = defined('CF_SMTP_HOST') ? CF_SMTP_HOST : 'mail.cloudflox.com';
     $clientMail->SMTPAuth = true;
-    $clientMail->Username = 'info@cloudflox.com';
-    $clientMail->Password = 'TC.jk1mnPoccDTf=';
+    $clientMail->Username = defined('CF_SMTP_USERNAME') ? CF_SMTP_USERNAME : 'info@cloudflox.com';
+    $clientMail->Password = defined('CF_SMTP_PASSWORD') ? CF_SMTP_PASSWORD : '';
     $clientMail->SMTPSecure = 'ssl';
     $clientMail->Port = 465;
     $clientMail->Timeout = 10;

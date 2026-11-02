@@ -16,25 +16,18 @@ require_once __DIR__ . '/api/config.php';
 $invoiceId = intval($_GET['id'] ?? 0);
 $selectedGateway = strtolower(trim($_GET['gateway'] ?? 'payhere'));
 $autoPayNow = !empty($_GET['paynow']);
-$markPaid = !empty($_GET['paid']) || (isset($_GET['status']) && strtolower($_GET['status']) === 'paid');
 
 // Database credentials
-$dbHost = '127.0.0.1';
-$dbUser = 'cfwhmcs_whmcs';
-$dbPass = '+V)Rb%K3wFiK';
-$dbName = 'cfwhmcs_whmcs3';
+$dbHost = CF_DB_HOST;
+$dbUser = CF_DB_USER;
+$dbPass = CF_DB_PASS;
+$dbName = CF_DB_NAME;
 
-$mysqli = @new mysqli($dbHost, $dbUser, $dbPass, $dbName);
+$mysqli = @new mysqli($dbHost, $dbUser, $dbPass, $dbName, (int)CF_DB_PORT);
 if (!$mysqli->connect_error) {
     $mysqli->set_charset('utf8mb4');
 } else {
     $mysqli = null;
-}
-
-// Handle payment status auto-update if requested
-if ($markPaid && $mysqli && $invoiceId > 0) {
-    require_once __DIR__ . '/include/email-service.php';
-    CloudFloxEmailService::settleAndActivateInvoice($invoiceId, $mysqli);
 }
 
 // Invoice default placeholder values
@@ -159,8 +152,8 @@ $clientPhone = $client['phonenumber'] ?? '';
 $clientAddress = trim(($client['address1'] ?? '') . ' ' . ($client['city'] ?? '') . ' ' . ($client['country'] ?? ''));
 
 // PayHere Secure Gateway Payload (USD)
-$merchantId = defined('CF_PAYHERE_MERCHANT_ID') ? CF_PAYHERE_MERCHANT_ID : '230744';
-$merchantSecret = defined('CF_PAYHERE_MERCHANT_SECRET') ? CF_PAYHERE_MERCHANT_SECRET : 'Mjc4NjU2NTM4MDM5OTA5NTg3NDAyNzAyMzk2Mzc1MTM1ODYwMTUy';
+$merchantId = defined('CF_PAYHERE_MERCHANT_ID') ? CF_PAYHERE_MERCHANT_ID : '';
+$merchantSecret = defined('CF_PAYHERE_MERCHANT_SECRET') ? CF_PAYHERE_MERCHANT_SECRET : '';
 $payhereHash = strtoupper(md5(
     $merchantId .
     $invoice['id'] .
@@ -227,11 +220,16 @@ $payhereObj = [
             padding: 44px 0 90px;
             background: #F8FAFC;
             min-height: calc(100vh - 180px);
+            padding-left: clamp(16px, 3vw, 32px);
+            padding-right: clamp(16px, 3vw, 32px);
+            box-sizing: border-box;
         }
         .cf-invoice-container {
             max-width: 1180px;
             margin: 0 auto;
-            padding: 0 16px;
+            padding-left: clamp(16px, 2.5vw, 28px);
+            padding-right: clamp(16px, 2.5vw, 28px);
+            box-sizing: border-box;
         }
 
         /* Top Actions & Navigation Bar */
@@ -1180,11 +1178,8 @@ $payhereObj = [
             }
 
             payhere.onCompleted = function(orderId) {
-                // Instantly notify local server to mark invoice as paid
-                fetch('api/payment-notify.php?action=verify&invoice_id=' + encodeURIComponent(orderId))
-                    .finally(() => {
-                        window.location.href = 'invoice?id=' + encodeURIComponent(orderId) + '&status=paid';
-                    });
+                // Payment completed via PayHere popup; reload invoice to view payment status
+                window.location.href = 'invoice?id=' + encodeURIComponent(orderId);
             };
 
             payhere.onDismissed = function() {

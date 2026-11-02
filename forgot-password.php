@@ -27,7 +27,7 @@ $email = trim($_GET['email'] ?? $_POST['email'] ?? '');
 // Connect to local database for token validation
 $mysqli = null;
 try {
-    $mysqli = @new mysqli('localhost', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+    $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
 } catch (Exception $e) {}
 
 if (!empty($token) && !empty($email)) {

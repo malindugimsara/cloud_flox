@@ -53,7 +53,7 @@ if ($serviceId <= 0) {
 
 // 3. Connect to Database & Validate Service Ownership
 try {
-    $mysqli = @new mysqli('localhost', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+    $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
     if ($mysqli->connect_error) {
         throw new Exception('Database connection failed: ' . $mysqli->connect_error);
     }

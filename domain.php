@@ -793,30 +793,50 @@ $whmcsHosting = WHMCSPricing::getHostingProducts();
     </section>
 
     <!-- =========================================================================
-         FLOATING STICKY MULTI-DOMAIN CART DRAWER
+         FLOATING STICKY MULTI-DOMAIN CART DRAWER (VERTICAL ITEMS LIST)
          ========================================================================= -->
     <div id="cfDomainCartBar" class="cf-floating-cart-bar" style="display: none;">
-        <div class="cf-cart-bar-inner">
-            <div class="cf-cart-bar-left">
+        <!-- Cart Header -->
+        <div class="cf-cart-bar-header">
+            <div class="cf-cart-bar-header-left">
                 <div class="cf-cart-bar-badge">
                     <i class="las la-shopping-cart"></i>
                     <span id="cfCartCount" class="cf-cart-count-pill">0</span>
                 </div>
-                <div class="cf-cart-chips-wrap" id="cfCartChipsWrap"></div>
-            </div>
-            <div class="cf-cart-bar-right">
-                <div class="cf-cart-total-box">
-                    <small class="cf-cart-total-label">Est. Total</small>
-                    <strong id="cfCartTotalText" class="cf-cart-total-amount">$0.00</strong>
+                <div>
+                    <h6 class="cf-cart-header-title mb-0">
+                        Selected Domains (<span id="cfCartCountTitle">0</span>)
+                    </h6>
+                    <small class="cf-cart-header-subtitle">Review added domains below</small>
                 </div>
-                <button type="button" class="btn cf-btn-checkout" onclick="cfDomainCart.checkout()">
-                    <span>Continue to Checkout</span>
-                    <i class="las la-arrow-right ms-1"></i>
+            </div>
+            <div class="cf-cart-bar-header-right">
+                <button type="button" class="cf-btn-cart-toggle" id="cfCartToggleBtn" onclick="cfDomainCart.hideBar()" title="Hide cart drawer" aria-label="Hide cart">
+                    <i class="las la-times"></i>
+                    <span>Hide</span>
                 </button>
-                <button type="button" class="cf-btn-cart-clear" onclick="cfDomainCart.clear()" title="Clear cart" aria-label="Clear cart">
-                    <i class="las la-trash-alt"></i>
+                <button type="button" class="cf-btn-cart-clear-link" onclick="cfDomainCart.clear()" title="Clear all domains from cart">
+                    <i class="las la-trash-alt me-1"></i>
+                    <span>Clear</span>
                 </button>
             </div>
+        </div>
+
+        <!-- Vertical Items List (Pahalata) -->
+        <div class="cf-cart-items-body" id="cfCartItemsBody">
+            <div class="cf-cart-items-wrap" id="cfCartChipsWrap"></div>
+        </div>
+
+        <!-- Cart Footer -->
+        <div class="cf-cart-bar-footer">
+            <div class="cf-cart-total-box">
+                <small class="cf-cart-total-label">Estimated Total</small>
+                <strong id="cfCartTotalText" class="cf-cart-total-amount">$0.00</strong>
+            </div>
+            <button type="button" class="btn cf-btn-checkout" onclick="cfDomainCart.checkout()">
+                <span>Continue to Checkout</span>
+                <i class="las la-arrow-right ms-1"></i>
+            </button>
         </div>
     </div>
 

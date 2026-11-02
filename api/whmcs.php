@@ -131,7 +131,7 @@ class WHMCSClient {
     public static function validateLogin($email, $password) {
         // First check local MySQL database if available
         try {
-            $m = @new mysqli('localhost', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+            $m = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
             if (!$m->connect_error) {
                 $s = $m->prepare("SELECT id, firstname, lastname, email, password FROM tblclients WHERE email = ? LIMIT 1");
                 if ($s) {
@@ -204,7 +204,7 @@ class WHMCSClient {
                 $email = $params['email'] ?? '';
                 $pass  = $params['password'] ?? '';
                 try {
-                    $m = @new mysqli('localhost', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+                    $m = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
                     if (!$m->connect_error) {
                         $s = $m->prepare("SELECT id, firstname, lastname, email, password FROM tblclients WHERE email = ? LIMIT 1");
                         if ($s) {

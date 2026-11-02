@@ -28,7 +28,7 @@ $clientProfile = [
 
 if ($isLoggedIn && $loggedInClientId > 0) {
     try {
-        $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+        $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
         if (!$mysqli->connect_error) {
             $stmt = $mysqli->prepare("SELECT id, firstname, lastname, companyname, email, phonenumber, address1, address2, city, state, postcode, country FROM tblclients WHERE id = ? LIMIT 1");
             if ($stmt) {
@@ -1714,7 +1714,7 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                                             <div class="d-flex align-items-center gap-2 flex-wrap">
                                                 <strong class="fs-15 text-slate-900">${escapeHtml(d.name)}</strong>
                                                 <span class="badge ${typeBadgeClass} rounded-pill fs-11">${typeBadgeLabel}</span>
-                                                <span class="badge bg-light text-slate-700 border rounded-pill fs-11">${escapeHtml(ext)}</span>
+                                                <span class="badge bg-light border rounded-pill fs-11" style="color: blue !important;">${escapeHtml(ext)}</span>                                
                                             </div>
                                             <small class="text-secondary fs-12">Free WHOIS Privacy &amp; Anycast DNS included</small>
                                         </div>

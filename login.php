@@ -62,20 +62,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit'])) {
                 $userName = explode('@', $email)[0];
             }
 
+            // Regenerate session ID to mitigate session fixation attacks
+            session_regenerate_id(true);
+
             $_SESSION['cf_client_logged_in'] = true;
             $_SESSION['cf_client_id']        = $clientId;
             $_SESSION['cf_client_email']     = $email;
             $_SESSION['cf_client_name']      = $userName;
 
-            // Handle Remember Me Cookie
+            // Handle Remember Me Cookie with secure flags
+            $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
             if ($remember) {
-                setcookie('cf_remember_email', $email, time() + (86400 * 30), "/");
+                setcookie('cf_remember_email', $email, [
+                    'expires'  => time() + (86400 * 30),
+                    'path'     => '/',
+                    'secure'   => $isHttps,
+                    'httponly' => true,
+                    'samesite' => 'Lax'
+                ]);
             } else {
-                setcookie('cf_remember_email', '', time() - 3600, "/");
+                setcookie('cf_remember_email', '', [
+                    'expires'  => time() - 3600,
+                    'path'     => '/',
+                    'secure'   => $isHttps,
+                    'httponly' => true,
+                    'samesite' => 'Lax'
+                ]);
             }
 
-            $redirect = !empty($_GET['redirect']) ? $_GET['redirect'] : 'clientarea';
-            header("Location: " . $url . $redirect);
+            // Sanitize redirect parameter to prevent open redirection attacks
+            $redirect = !empty($_GET['redirect']) ? trim($_GET['redirect']) : 'clientarea';
+            if (preg_match('#^https?://#i', $redirect) || strpos($redirect, '//') === 0 || strpos($redirect, '\\') !== false) {
+                $redirect = 'clientarea';
+            }
+            $targetUrl = $url . ltrim($redirect, '/');
+            header("Location: " . $targetUrl);
             exit;
         } else {
             $error = !empty($authRes['message']) ? $authRes['message'] : 'Invalid email or password. Please verify your credentials and try again.';

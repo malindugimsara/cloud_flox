@@ -86,16 +86,17 @@
             <div class="row align-items-center g-4 g-xl-5 pb-lg-3">
                 <!-- Left Column: Value Proposition & Contact Actions -->
                 <div class="col-12 col-lg-7">
-                    <!-- Hero Badge -->
-                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-blue-subtle text-blue fw-bold fs-13 mb-3 border border-blue-subtle">
-                        <span class="cf-pulse-dot-blue"></span>
-                        <span>24/7 SUPPORT &amp; SALES ASSISTANCE</span>
+                    <!-- Modern Hero Glass Badge -->
+                    <div class="cf-contact-hero-badge mb-3">
+                        <span class="cf-badge-pulse-indicator"></span>
+                        <i class="las la-headset text-primary fs-14"></i>
+                        <span>24/7 Global Support &amp; Sales Desk</span>
                     </div>
 
                     <!-- Title -->
                     <h1 class="cf-contact-hero-title fw-extrabold text-slate-900 tracking-tight mb-3">
                         We're Here to <br class="d-none d-sm-inline">
-                        <span class="text-gradient-contact">Help You</span>
+                        <span class="text-gradient-contact">Help You Succeed.</span>
                     </h1>
 
                     <!-- Lead -->
@@ -103,32 +104,59 @@
                         Need help with hosting, domains, billing, or technical setup? Our expert team is ready to assist. Send us a message and we'll get back to you promptly.
                     </p>
 
-                    <!-- Trust Chips -->
-                    <div class="d-flex flex-wrap gap-2 mb-4 pb-2">
-                        <span class="cf-feature-chip">
-                            <i class="las la-clock text-blue"></i> Response within 1 hour
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-headset text-blue"></i> 24/7 Expert Support
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-shield-alt text-blue"></i> 100% Secure &amp; Private
-                        </span>
-                        <span class="cf-feature-chip">
-                            <i class="las la-check-circle text-blue"></i> Free Technical Help
-                        </span>
+                    <!-- Trust / Feature Badges Grid -->
+                    <div class="cf-contact-chips-grid mb-4 pb-1">
+                        <div class="cf-contact-chip">
+                            <span class="chip-icon-box cyan"><i class="las la-bolt"></i></span>
+                            <span>Response in <strong>&lt; 15 mins</strong></span>
+                        </div>
+                        <div class="cf-contact-chip">
+                            <span class="chip-icon-box blue"><i class="las la-user-astronaut"></i></span>
+                            <span><strong>24/7/365</strong> Human Engineers</span>
+                        </div>
+                        <div class="cf-contact-chip">
+                            <span class="chip-icon-box emerald"><i class="las la-shield-alt"></i></span>
+                            <span><strong>100%</strong> Secure &amp; SLA Backed</span>
+                        </div>
+                        <div class="cf-contact-chip">
+                            <span class="chip-icon-box indigo"><i class="las la-rocket"></i></span>
+                            <span><strong>Free</strong> Zero-Downtime Migration</span>
+                        </div>
                     </div>
 
                     <!-- Hero Action Buttons -->
                     <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-3 cf-hero-btn-group">
                         <a href="#contactForm" class="cf-btn-contact-submit text-center">
                             <span>Send Us a Message</span>
-                            <i class="las la-arrow-down ms-2"></i>
+                            <i class="las la-arrow-down ms-1"></i>
                         </a>
                         <a href="<?php echo $url; ?>ticket?action=new" class="cf-btn-contact-outline text-center">
-                            <i class="las la-ticket-alt me-2"></i>
+                            <i class="las la-ticket-alt text-primary me-1.5"></i>
                             <span>Open Support Ticket</span>
                         </a>
+                    </div>
+
+                    <!-- Live Engineering Status Bar -->
+                    <div class="d-flex align-items-center gap-3 mt-4 pt-2 flex-wrap cf-contact-trust-bar">
+                        <div class="d-flex align-items-center">
+                            <div class="cf-avatar-stack d-flex align-items-center">
+                                <span class="cf-stack-avatar" style="background: linear-gradient(135deg, #2563EB, #1D4ED8);"><i class="las la-user-tie"></i></span>
+                                <span class="cf-stack-avatar" style="background: linear-gradient(135deg, #0284C7, #0369A1); margin-left: -9px;"><i class="las la-headset"></i></span>
+                                <span class="cf-stack-avatar" style="background: linear-gradient(135deg, #059669, #047857); margin-left: -9px;"><i class="las la-shield-alt"></i></span>
+                            </div>
+                            <div class="ms-2.5">
+                                <div class="d-flex align-items-center gap-1.5 fs-12 fw-bold text-slate-900">
+                                    <span class="cf-badge-pulse-indicator"></span>
+                                    <span>Support Specialists Online</span>
+                                </div>
+                                <span class="fs-11 text-muted">Direct assistance • No chatbots</span>
+                            </div>
+                        </div>
+                        <div class="cf-trust-divider d-none d-sm-block"></div>
+                        <div class="d-flex align-items-center gap-1.5 fs-12 text-slate-700 fw-semibold">
+                            <i class="las la-star text-warning fs-15"></i>
+                            <span><strong class="text-slate-900">4.9/5</strong> Client Satisfaction (99.9% SLA)</span>
+                        </div>
                     </div>
                 </div>
 
@@ -288,7 +316,7 @@
 
                                 <div class="col-12">
                                     <div class="cf-turnstile-wrapper p-2 bg-slate-50 rounded-3 border d-flex justify-content-center">
-                                        <div class="cf-turnstile" data-sitekey="<?php echo htmlspecialchars(defined('CF_TURNSTILE_SITE_KEY') ? CF_TURNSTILE_SITE_KEY : '0x4AAAAAAFsPGuQlAMYqY37j'); ?>" data-theme="light"></div>
+                                        <div class="cf-turnstile" data-sitekey="<?php echo htmlspecialchars(defined('CF_TURNSTILE_SITE_KEY') ? CF_TURNSTILE_SITE_KEY : ''); ?>" data-theme="light"></div>
                                     </div>
                                 </div>
 

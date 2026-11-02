@@ -81,7 +81,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
         $profileError = 'New passwords do not match. Please re-enter.';
     } else {
         try {
-            $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+            $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
             if (!$mysqli->connect_error && $clientId > 0) {
                 if (!empty($pNewPassword)) {
                     $passHash = password_hash($pNewPassword, PASSWORD_DEFAULT);
@@ -158,7 +158,7 @@ $statTicketsOpen = 0;
 
 // Fetch data from local WHMCS database or API fallback
 try {
-    $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+    $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
     if (!$mysqli->connect_error && $clientId > 0) {
         // 1. Fetch Services
         $stmt = $mysqli->prepare("SELECT h.id, h.domain, h.domainstatus, h.amount, h.billingcycle, h.nextduedate, p.name as product_name FROM tblhosting h LEFT JOIN tblproducts p ON p.id = h.packageid WHERE h.userid = ? ORDER BY h.id DESC");
@@ -994,14 +994,16 @@ if (!function_exists('getQuoteStageBadge')) {
                                                     <?php echo getStatusBadge($srv['domainstatus']); ?>
                                                 </td>
                                                 <td class="text-end">
-                                                    <div class="d-inline-flex align-items-center gap-1.5 justify-content-end">
+                                                    <div class="cf-table-actions">
                                                         <?php if (strtolower($srv['domainstatus']) === 'active'): ?>
-                                                            <a href="https://sv.cloudflox.com:2083" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1 fs-11 fw-bold" title="Open cPanel Direct Access">
-                                                                <i class="las la-external-link-alt me-0.5"></i> cPanel
+                                                            <a href="https://sv.cloudflox.com:2083" target="_blank" rel="noopener" class="cf-btn-table-action cf-btn-table-cpanel" title="Open cPanel Direct Access">
+                                                                <i class="las la-external-link-alt"></i>
+                                                                <span>cPanel</span>
                                                             </a>
                                                         <?php endif; ?>
-                                                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold d-inline-flex align-items-center gap-1 shadow-xs" onclick="openHostingManageModal(<?php echo (int)$srv['id']; ?>, '<?php echo htmlspecialchars($srv['domain'] ?? '', ENT_QUOTES); ?>')">
-                                                            <i class="las la-server fs-14"></i> Manage
+                                                        <button type="button" class="cf-btn-table-action cf-btn-table-manage" onclick="openHostingManageModal(<?php echo (int)$srv['id']; ?>, '<?php echo htmlspecialchars($srv['domain'] ?? '', ENT_QUOTES); ?>')">
+                                                            <i class="las la-server"></i>
+                                                            <span>Manage</span>
                                                         </button>
                                                     </div>
                                                 </td>
@@ -1087,10 +1089,13 @@ if (!function_exists('getQuoteStageBadge')) {
                                                     <?php echo getStatusBadge($dom['status']); ?>
                                                 </td>
                                                 <td class="text-end">
-                                                    <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold d-inline-flex align-items-center gap-1 shadow-xs" 
-                                                            onclick="openDomainManageModal(<?php echo (int)$dom['id']; ?>, '<?php echo htmlspecialchars($dom['domain'], ENT_QUOTES); ?>')">
-                                                        <i class="las la-sliders-h fs-14"></i> Manage
-                                                    </button>
+                                                    <div class="cf-table-actions">
+                                                        <button type="button" class="cf-btn-table-action cf-btn-table-manage" 
+                                                                onclick="openDomainManageModal(<?php echo (int)$dom['id']; ?>, '<?php echo htmlspecialchars($dom['domain'], ENT_QUOTES); ?>')">
+                                                            <i class="las la-sliders-h"></i>
+                                                            <span>Manage</span>
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -1118,7 +1123,7 @@ if (!function_exists('getQuoteStageBadge')) {
                                             <th>Due Date</th>
                                             <th>Total</th>
                                             <th>Status</th>
-                                            <th>Action</th>
+                                            <th class="text-end">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1139,16 +1144,20 @@ if (!function_exists('getQuoteStageBadge')) {
                                                 <td>
                                                     <?php echo getStatusBadge($inv['status']); ?>
                                                 </td>
-                                                <td>
-                                                    <?php if (strtolower($inv['status']) === 'unpaid'): ?>
-                                                        <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>&paynow=1" class="btn btn-danger btn-sm rounded-pill px-3 py-1 fs-12 fw-bold">
-                                                            <i class="las la-credit-card me-1"></i> Pay Now
-                                                        </a>
-                                                    <?php else: ?>
-                                                        <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>" class="btn btn-light btn-sm rounded-pill px-3 py-1 fs-12 fw-semibold text-secondary border">
-                                                            <i class="las la-file-invoice me-1"></i> View
-                                                        </a>
-                                                    <?php endif; ?>
+                                                <td class="text-end">
+                                                    <div class="cf-table-actions">
+                                                        <?php if (strtolower($inv['status']) === 'unpaid'): ?>
+                                                            <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>&paynow=1" class="cf-btn-table-action cf-btn-table-pay">
+                                                                <i class="las la-credit-card"></i>
+                                                                <span>Pay Now</span>
+                                                            </a>
+                                                        <?php else: ?>
+                                                            <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>" class="cf-btn-table-action cf-btn-table-view">
+                                                                <i class="las la-file-invoice"></i>
+                                                                <span>View</span>
+                                                            </a>
+                                                        <?php endif; ?>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -1234,19 +1243,24 @@ if (!function_exists('getQuoteStageBadge')) {
                                                     <?php echo getQuoteStageBadge($q['stage']); ?>
                                                 </td>
                                                 <td class="text-end">
-                                                    <?php if ($isDelivered): ?>
-                                                        <button type="button" class="btn btn-success btn-sm rounded-pill px-3 py-1 fs-12 fw-bold shadow-xs text-white" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
-                                                            <i class="las la-check-circle me-1"></i> Review &amp; Accept
-                                                        </button>
-                                                    <?php elseif ($isAccepted): ?>
-                                                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1 fs-12 fw-semibold" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
-                                                            <i class="las la-eye me-1"></i> View Specs
-                                                        </button>
-                                                    <?php else: ?>
-                                                        <button type="button" class="btn btn-light btn-sm rounded-pill px-3 py-1 fs-12 fw-semibold text-secondary border" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
-                                                            <i class="las la-info-circle me-1"></i> Details
-                                                        </button>
-                                                    <?php endif; ?>
+                                                    <div class="cf-table-actions">
+                                                        <?php if ($isDelivered): ?>
+                                                            <button type="button" class="cf-btn-table-action cf-btn-table-accept" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
+                                                                <i class="las la-check-circle"></i>
+                                                                <span>Review &amp; Accept</span>
+                                                            </button>
+                                                        <?php elseif ($isAccepted): ?>
+                                                            <button type="button" class="cf-btn-table-action cf-btn-table-manage" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
+                                                                <i class="las la-eye"></i>
+                                                                <span>View Specs</span>
+                                                            </button>
+                                                        <?php else: ?>
+                                                            <button type="button" class="cf-btn-table-action cf-btn-table-view" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
+                                                                <i class="las la-info-circle"></i>
+                                                                <span>Details</span>
+                                                            </button>
+                                                        <?php endif; ?>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -1314,9 +1328,12 @@ if (!function_exists('getQuoteStageBadge')) {
                                                     <?php echo getStatusBadge($tkt['status']); ?>
                                                 </td>
                                                 <td class="text-end">
-                                                    <a href="<?php echo $url; ?>ticket?id=<?php echo $tkt['id']; ?>" class="btn btn-light btn-sm rounded-pill px-3 py-1 fs-12 fw-semibold text-primary border">
-                                                        <i class="las la-comments me-1"></i> View &amp; Reply
-                                                    </a>
+                                                    <div class="cf-table-actions">
+                                                        <a href="<?php echo $url; ?>ticket?id=<?php echo $tkt['id']; ?>" class="cf-btn-table-action cf-btn-table-ticket">
+                                                            <i class="las la-comments"></i>
+                                                            <span>View &amp; Reply</span>
+                                                        </a>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

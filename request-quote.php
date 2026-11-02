@@ -47,7 +47,7 @@ $clientProfile = [
 
 if ($isLoggedIn && $clientId > 0) {
     try {
-        $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+        $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
         if (!$mysqli->connect_error) {
             $stmt = $mysqli->prepare("SELECT firstname, lastname, companyname, email, phonenumber, country FROM tblclients WHERE id = ? LIMIT 1");
             if ($stmt) {

@@ -14,10 +14,96 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
 
 include 'include/url.inc.php';
 
+// Handle Logout
+if (isset($_GET['logout'])) {
+    unset($_SESSION['cf_admin_authenticated']);
+    header("Location: " . $url . "admin-quotes");
+    exit;
+}
+
+// Handle Admin Authentication Form Submission
+$authError = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_access_key'])) {
+    $submittedKey = trim($_POST['admin_access_key'] ?? '');
+    $validKey = defined('CF_ADMIN_ACCESS_KEY') ? CF_ADMIN_ACCESS_KEY : '';
+    if (!empty($validKey) && !empty($submittedKey) && hash_equals($validKey, $submittedKey)) {
+        session_regenerate_id(true);
+        $_SESSION['cf_admin_authenticated'] = true;
+        header("Location: " . $url . "admin-quotes");
+        exit;
+    } else {
+        $authError = 'Invalid Admin Access Key. Access restricted to authorized CloudFlox engineering.';
+    }
+}
+
+// Check Authentication State
+$isAdminAuthenticated = !empty($_SESSION['cf_admin_authenticated']);
+
+// If not authenticated, display Admin Gatekeeper / Lockscreen
+if (!$isAdminAuthenticated) {
+?>
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Authentication Required — CloudFlox</title>
+    <meta name="robots" content="noindex, nofollow">
+    <?php include 'include/css.inc.php'; ?>
+    <style>
+        body { background: #0b0f19; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #f1f5f9; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .cf-admin-lock-card { background: #131b2e; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4); width: 100%; max-width: 440px; padding: 40px; }
+        .cf-admin-shield { width: 64px; height: 64px; border-radius: 16px; background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 28px; color: #3b82f6; }
+        .form-control-passkey { background: #0f172a !important; border: 1.5px solid #334155 !important; color: #ffffff !important; border-radius: 12px; padding: 12px 16px; font-size: 15px; letter-spacing: 2px; }
+        .form-control-passkey:focus { border-color: #3b82f6 !important; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important; }
+        .btn-unlock { background: linear-gradient(135deg, #1d4ed8, #2563eb); border: none; border-radius: 12px; padding: 12px; font-weight: 700; font-size: 15px; color: #ffffff; width: 100%; transition: all 0.2s; }
+        .btn-unlock:hover { background: linear-gradient(135deg, #1e40af, #1d4ed8); transform: translateY(-1px); }
+    </style>
+</head>
+<body>
+    <div class="container px-3">
+        <div class="cf-admin-lock-card mx-auto">
+            <div class="text-center">
+                <div class="cf-admin-shield">
+                    <i class="las la-shield-alt"></i>
+                </div>
+                <h4 class="fw-bold mb-1 text-white">CloudFlox RFQ Admin</h4>
+                <p class="text-muted fs-13 mb-4">Restricted internal console. Enter your administrator passkey to continue.</p>
+            </div>
+
+            <?php if (!empty($authError)): ?>
+                <div class="alert alert-danger py-2 px-3 fs-13 rounded-3 mb-3 border-0 bg-danger bg-opacity-25 text-danger-emphasis">
+                    <i class="las la-exclamation-circle me-1"></i> <?php echo htmlspecialchars($authError); ?>
+                </div>
+            <?php endif; ?>
+
+            <form method="POST" action="">
+                <div class="mb-3">
+                    <label class="form-label fs-12 fw-semibold text-slate-300 text-uppercase tracking-wider">Admin Passkey</label>
+                    <input type="password" name="admin_access_key" class="form-control form-control-passkey" placeholder="••••••••••••••••" autofocus required>
+                </div>
+                <button type="submit" class="btn btn-unlock mb-3">
+                    <i class="las la-lock-open me-1"></i> Unlock Console
+                </button>
+            </form>
+            <div class="text-center">
+                <a href="<?php echo $url; ?>" class="text-decoration-none text-muted fs-12 hover-text-white">
+                    <i class="las la-arrow-left me-1"></i> Return to CloudFlox Home
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<?php
+    exit;
+}
+
 // Database connection
 $mysqli = null;
 try {
-    $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+    $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
     if ($mysqli->connect_error) {
         throw new Exception($mysqli->connect_error);
     }
@@ -412,6 +498,10 @@ if ($res) {
                     <a href="<?php echo $url; ?>request-quote" class="cf-btn-admin-primary">
                         <i class="las la-plus"></i>
                         <span>New RFQ Form</span>
+                    </a>
+                    <a href="?logout=1" class="cf-btn-admin-outline text-danger border-danger-subtle" title="Lock admin console and terminate admin session">
+                        <i class="las la-lock"></i>
+                        <span>Lock Console</span>
                     </a>
                 </div>
             </div>

@@ -7,12 +7,7 @@
  * external page redirection.
  */
 
-// WHMCS API Endpoint
-define('WHMCS_API_URL', 'https://my.cloudflox.com/includes/api.php');
-
-define('WHMCS_API_IDENTIFIER', 'aYxzdsEu6e4hfsBS0y3SD7QQvSICdyD3'); 
-define('WHMCS_API_SECRET', 'L6ZMtif9sRQc4Owd4Rzm65xrvOI8jPIA');     
-define('WHMCS_API_ACCESS_KEY', ''); 
+require_once dirname(__DIR__) . '/include/env.inc.php';
 
 // Auto-detect Local Development environment
 $host = $_SERVER['HTTP_HOST'] ?? '';
@@ -25,16 +20,10 @@ $isLocalDev = (
 );
 
 // Enable local simulation on localhost so WHMCS API IP restrictions don't block development
-define('CF_FORCE_LOCAL_DEMO', true);
-define('CF_CHECKOUT_DEMO_MODE', empty(WHMCS_API_IDENTIFIER) || empty(WHMCS_API_SECRET) || (CF_FORCE_LOCAL_DEMO && $isLocalDev));
-
-// Active Payment Gateways Configuration (Synced with cfwhmcs)
-define('CF_PAYHERE_MERCHANT_ID', '230744');
-define('CF_PAYHERE_MERCHANT_SECRET', 'Mjc4NjU2NTM4MDM5OTA5NTg3NDAyNzAyMzk2Mzc1MTM1ODYwMTUy');
-define('CF_PAYHERE_CURRENCY', 'USD');
-define('CF_PAYHERE_EXCHANGE_RATE', 1.00); // USD
-define('CF_PAYHERE_SANDBOX', false);
-define('CF_PAYPAL_EMAIL', 'info@cloudflox.com');
+if (!defined('CF_FORCE_LOCAL_DEMO')) define('CF_FORCE_LOCAL_DEMO', true);
+if (!defined('CF_CHECKOUT_DEMO_MODE')) {
+    define('CF_CHECKOUT_DEMO_MODE', empty(WHMCS_API_IDENTIFIER) || empty(WHMCS_API_SECRET) || (CF_FORCE_LOCAL_DEMO && $isLocalDev));
+}
 
 
 // CloudFlox Products Catalog & Specifications Matrix

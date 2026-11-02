@@ -7,6 +7,8 @@
  * high-performance file caching.
  */
 
+require_once dirname(__DIR__) . '/include/env.inc.php';
+
 class WHMCSPricing {
 
     private static $cacheDir = __DIR__ . '/cache';
@@ -21,11 +23,12 @@ class WHMCSPricing {
             return $db;
         }
 
-        // Credentials matching cfwhmcs configuration
-        $host = '127.0.0.1';
-        $user = 'cfwhmcs_whmcs';
-        $pass = '+V)Rb%K3wFiK';
-        $name = 'cfwhmcs_whmcs3';
+        // Credentials loaded securely from .env
+        $host = defined('CF_DB_HOST') ? CF_DB_HOST : '127.0.0.1';
+        $user = defined('CF_DB_USER') ? CF_DB_USER : 'cfwhmcs_whmcs';
+        $pass = defined('CF_DB_PASS') ? CF_DB_PASS : '';
+        $name = defined('CF_DB_NAME') ? CF_DB_NAME : 'cfwhmcs_whmcs3';
+        $port = defined('CF_DB_PORT') ? (int)CF_DB_PORT : 3306;
 
         // Check if cfwhmcs/configuration.php has custom settings
         $configFile = __DIR__ . '/../cfwhmcs/configuration.php';
@@ -38,7 +41,7 @@ class WHMCSPricing {
         }
 
         try {
-            $mysqli = @new mysqli($host, $user, $pass, $name);
+            $mysqli = @new mysqli($host, $user, $pass, $name, $port);
             if (!$mysqli->connect_error) {
                 $mysqli->set_charset('utf8mb4');
                 $db = $mysqli;

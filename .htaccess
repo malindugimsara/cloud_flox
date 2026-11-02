@@ -1,7 +1,12 @@
 # ---------------------------------
-# Security: Block Direct Access to Sensitive Files (.env, etc.)
+# Security: Disable Directory Browsing
 # ---------------------------------
-<FilesMatch "^\.env">
+Options -Indexes
+
+# ---------------------------------
+# Security: Block Direct Access to Sensitive & Hidden Files (.env, .git, etc.)
+# ---------------------------------
+<FilesMatch "^\.">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
@@ -11,11 +16,24 @@
     </IfModule>
 </FilesMatch>
 
+# ---------------------------------
+# Security: HTTP Response Headers Hardening
+# ---------------------------------
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
 RewriteEngine On
 
 # ---------------------------------
-# 0. Redirect WWW to Non-WWW (URL Canonicalization)
+# 0. Force HTTPS & Canonicalize WWW to Non-WWW
 # ---------------------------------
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} ^(www\.)?cloudflox\.com [NC]
+RewriteRule ^(.*)$ https://cloudflox.com/$1 [L,R=301]
+
 RewriteCond %{HTTP_HOST} ^www\.cloudflox\.com [NC]
 RewriteRule ^(.*)$ https://cloudflox.com/$1 [L,R=301]
 

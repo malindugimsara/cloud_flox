@@ -33,7 +33,7 @@ if ($quoteId <= 0) {
 // Connect to Database
 $mysqli = null;
 try {
-    $mysqli = @new mysqli('127.0.0.1', 'cfwhmcs_whmcs', '+V)Rb%K3wFiK', 'cfwhmcs_whmcs3');
+    $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
     if ($mysqli->connect_error) {
         throw new Exception($mysqli->connect_error);
     }
@@ -46,6 +46,14 @@ try {
 // -----------------------------------------------------------------------------
 // ADMIN ACTIONS
 // -----------------------------------------------------------------------------
+if ($action === 'admin_get_quote' || $action === 'admin_deliver_quote') {
+    if (empty($_SESSION['cf_admin_authenticated'])) {
+        http_response_code(403);
+        echo json_encode(['status' => 'error', 'message' => 'Unauthorized: Admin authentication required to access this endpoint.']);
+        exit;
+    }
+}
+
 if ($action === 'admin_get_quote') {
     $stmt = $mysqli->prepare("SELECT * FROM tblquotes WHERE id = ? LIMIT 1");
     if (!$stmt) {

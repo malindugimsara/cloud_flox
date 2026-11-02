@@ -11,11 +11,21 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
 }
 include 'include/url.inc.php';
 
+// Security: Restrict package inspector to local development environment or authenticated admin
+$isLocalDev = (
+    strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') !== false ||
+    strpos($_SERVER['HTTP_HOST'] ?? '', '127.0.0.1') !== false
+);
+if (!$isLocalDev && empty($_SESSION['cf_admin_authenticated'])) {
+    http_response_code(403);
+    die("Access Denied: WHMCS Package inspector is disabled in production environments.");
+}
+
 // Database Connection
-$dbHost = '127.0.0.1';
-$dbUser = 'cfwhmcs_whmcs';
-$dbPass = '+V)Rb%K3wFiK';
-$dbName = 'cfwhmcs_whmcs3';
+$dbHost = CF_DB_HOST;
+$dbUser = CF_DB_USER;
+$dbPass = CF_DB_PASS;
+$dbName = CF_DB_NAME;
 
 $configFile = __DIR__ . '/cfwhmcs/configuration.php';
 if (file_exists($configFile)) {

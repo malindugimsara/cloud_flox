@@ -15,13 +15,13 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
     @session_start();
 }
 
-$dbHost = '127.0.0.1';
-$dbUser = 'cfwhmcs_whmcs';
-$dbPass = '+V)Rb%K3wFiK';
-$dbName = 'cfwhmcs_whmcs3';
+$dbHost = CF_DB_HOST;
+$dbUser = CF_DB_USER;
+$dbPass = CF_DB_PASS;
+$dbName = CF_DB_NAME;
 
 function getDbConnection($dbHost, $dbUser, $dbPass, $dbName) {
-    $mysqli = @new mysqli($dbHost, $dbUser, $dbPass, $dbName);
+    $mysqli = @new mysqli($dbHost, $dbUser, $dbPass, $dbName, (int)CF_DB_PORT);
     if ($mysqli->connect_error) {
         return null;
     }
@@ -30,10 +30,10 @@ function getDbConnection($dbHost, $dbUser, $dbPass, $dbName) {
 }
 
 // -------------------------------------------------------------------------
-// 1. FRONTEND VERIFICATION / INSTANT SYNC ENDPOINT
+// 1. FRONTEND PAYMENT STATUS ENDPOINT (Read-Only)
 // -------------------------------------------------------------------------
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
-if ($action === 'verify' || $action === 'status') {
+if ($action === 'status') {
     $invoiceId = intval($_GET['invoice_id'] ?? $_POST['invoice_id'] ?? 0);
     if ($invoiceId <= 0) {
         echo json_encode(['status' => 'error', 'message' => 'Missing invoice ID']);
@@ -42,18 +42,11 @@ if ($action === 'verify' || $action === 'status') {
 
     $mysqli = getDbConnection($dbHost, $dbUser, $dbPass, $dbName);
     if (!$mysqli) {
-        // Fallback for simulation
-        echo json_encode(['status' => 'success', 'paid' => true, 'invoice_id' => $invoiceId]);
+        echo json_encode(['status' => 'error', 'message' => 'Database connection failed']);
         exit;
     }
 
-    if ($action === 'verify') {
-        // Settle invoice, activate hosting/domains, and dispatch welcome credentials email
-        require_once __DIR__ . '/../include/email-service.php';
-        CloudFloxEmailService::settleAndActivateInvoice($invoiceId, $mysqli);
-    }
-
-    // Check status
+    // Check status (Read-only query)
     $stmt = $mysqli->prepare("SELECT id, status, total, datepaid FROM tblinvoices WHERE id = ? LIMIT 1");
     $inv = null;
     if ($stmt) {
