@@ -454,12 +454,12 @@ if (!function_exists('getQuoteStageBadge')) {
             <!-- =========================================================================
                  3. TWO-COLUMN DASHBOARD LAYOUT (Left Nav Bar + Right Content Area)
                  ========================================================================= -->
-            <div class="row g-4 align-items-start">
+            <div class="row g-4 align-items-start cf-dashboard-layout-row">
 
                 <!-- =========================================================
                      LEFT SIDEBAR NAVIGATION BAR
                      ========================================================= -->
-                <div class="col-lg-3 col-xl-3">
+                <div class="col-lg-3 col-xl-3 cf-dashboard-sidebar-col">
                     <aside class="cf-portal-sidebar">
                         <!-- User Mini Profile Header -->
                         <div class="cf-sidebar-profile">
@@ -560,7 +560,7 @@ if (!function_exists('getQuoteStageBadge')) {
                 <!-- =========================================================
                      RIGHT MAIN CONTENT (9 Cols)
                      ========================================================= -->
-                <div class="col-lg-9 col-xl-9">
+                <div class="col-lg-9 col-xl-9 cf-dashboard-content-col">
                     <div class="cf-dashboard-card p-4 p-md-4 mb-0">
                         <div class="tab-content" id="clientDashboardContent">
 
@@ -585,7 +585,7 @@ if (!function_exists('getQuoteStageBadge')) {
                                             <th>Pricing / Cycle</th>
                                             <th>Next Due Date</th>
                                             <th>Status</th>
-                                            <th class="text-end">Actions</th>
+                                            <th class="text-end" style="width: 100px;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -618,14 +618,12 @@ if (!function_exists('getQuoteStageBadge')) {
                                                 <td class="text-end">
                                                     <div class="cf-table-actions">
                                                         <?php if (strtolower($srv['domainstatus']) === 'active'): ?>
-                                                            <a href="https://sv.cloudflox.com:2083" target="_blank" rel="noopener" class="cf-btn-table-action cf-btn-table-cpanel" title="Open cPanel Direct Access">
-                                                                <i class="las la-external-link-alt"></i>
-                                                                <span>cPanel</span>
+                                                            <a href="https://sv.cloudflox.com:2083" target="_blank" rel="noopener" class="cf-btn-table-action cf-btn-table-cpanel" title="Login to cPanel" aria-label="cPanel">
+                                                                <i class="lab la-cpanel"></i>
                                                             </a>
                                                         <?php endif; ?>
-                                                        <button type="button" class="cf-btn-table-action cf-btn-table-manage" onclick="openHostingManageModal(<?php echo (int)$srv['id']; ?>, '<?php echo htmlspecialchars($srv['domain'] ?? '', ENT_QUOTES); ?>')">
-                                                            <i class="las la-server"></i>
-                                                            <span>Manage</span>
+                                                        <button type="button" class="cf-btn-table-action cf-btn-table-manage" onclick="openHostingManageModal(<?php echo (int)$srv['id']; ?>, '<?php echo htmlspecialchars($srv['domain'] ?? '', ENT_QUOTES); ?>')" title="Manage Hosting Service" aria-label="Manage">
+                                                            <i class="las la-cog"></i>
                                                         </button>
                                                     </div>
                                                 </td>
@@ -675,7 +673,7 @@ if (!function_exists('getQuoteStageBadge')) {
                                             <th>Auto-Renew</th>
                                             <th>Renewal Amount</th>
                                             <th>Status</th>
-                                            <th class="text-end">Actions</th>
+                                            <th class="text-end" style="width: 100px;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -712,10 +710,12 @@ if (!function_exists('getQuoteStageBadge')) {
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="cf-table-actions">
+                                                        <a href="http://<?php echo htmlspecialchars($dom['domain']); ?>" target="_blank" rel="noopener" class="cf-btn-table-action cf-btn-table-view" title="Visit Website (<?php echo htmlspecialchars($dom['domain']); ?>)" aria-label="Visit Website">
+                                                            <i class="las la-external-link-alt"></i>
+                                                        </a>
                                                         <button type="button" class="cf-btn-table-action cf-btn-table-manage" 
-                                                                onclick="openDomainManageModal(<?php echo (int)$dom['id']; ?>, '<?php echo htmlspecialchars($dom['domain'], ENT_QUOTES); ?>')">
-                                                            <i class="las la-sliders-h"></i>
-                                                            <span>Manage</span>
+                                                                onclick="openDomainManageModal(<?php echo (int)$dom['id']; ?>, '<?php echo htmlspecialchars($dom['domain'], ENT_QUOTES); ?>')" title="Manage DNS, Nameservers &amp; Security" aria-label="Manage Domain">
+                                                            <i class="las la-cog"></i>
                                                         </button>
                                                     </div>
                                                 </td>
@@ -745,7 +745,7 @@ if (!function_exists('getQuoteStageBadge')) {
                                             <th>Due Date</th>
                                             <th>Total</th>
                                             <th>Status</th>
-                                            <th class="text-end">Action</th>
+                                            <th class="text-end" style="width: 100px;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -769,14 +769,15 @@ if (!function_exists('getQuoteStageBadge')) {
                                                 <td class="text-end">
                                                     <div class="cf-table-actions">
                                                         <?php if (strtolower($inv['status']) === 'unpaid'): ?>
-                                                            <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>&paynow=1" class="cf-btn-table-action cf-btn-table-pay">
+                                                            <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>" class="cf-btn-table-action cf-btn-table-view" title="View Invoice #<?php echo htmlspecialchars($inv['invoicenum'] ?: $inv['id']); ?>" aria-label="View Invoice">
+                                                                <i class="las la-eye"></i>
+                                                            </a>
+                                                            <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>&paynow=1" class="cf-btn-table-action cf-btn-table-pay" title="Pay Invoice #<?php echo htmlspecialchars($inv['invoicenum'] ?: $inv['id']); ?>" aria-label="Pay Now">
                                                                 <i class="las la-credit-card"></i>
-                                                                <span>Pay Now</span>
                                                             </a>
                                                         <?php else: ?>
-                                                            <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>" class="cf-btn-table-action cf-btn-table-view">
-                                                                <i class="las la-file-invoice"></i>
-                                                                <span>View</span>
+                                                            <a href="<?php echo $url; ?>invoice?id=<?php echo $inv['id']; ?>" class="cf-btn-table-action cf-btn-table-view" title="View &amp; Download Invoice #<?php echo htmlspecialchars($inv['invoicenum'] ?: $inv['id']); ?>" aria-label="View Invoice">
+                                                                <i class="las la-file-invoice-dollar"></i>
                                                             </a>
                                                         <?php endif; ?>
                                                     </div>
@@ -829,7 +830,7 @@ if (!function_exists('getQuoteStageBadge')) {
                                             <th>Valid Until</th>
                                             <th>Total Price</th>
                                             <th>Status</th>
-                                            <th class="text-end">Action</th>
+                                            <th class="text-end" style="width: 80px;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -867,19 +868,16 @@ if (!function_exists('getQuoteStageBadge')) {
                                                 <td class="text-end">
                                                     <div class="cf-table-actions">
                                                         <?php if ($isDelivered): ?>
-                                                            <button type="button" class="cf-btn-table-action cf-btn-table-accept" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
-                                                                <i class="las la-check-circle"></i>
-                                                                <span>Review &amp; Accept</span>
+                                                            <button type="button" class="cf-btn-table-action cf-btn-table-accept" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)" title="Review &amp; Accept Official Quotation" aria-label="Review &amp; Accept">
+                                                                <i class="las la-file-signature"></i>
                                                             </button>
                                                         <?php elseif ($isAccepted): ?>
-                                                            <button type="button" class="cf-btn-table-action cf-btn-table-manage" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
-                                                                <i class="las la-eye"></i>
-                                                                <span>View Specs</span>
+                                                            <button type="button" class="cf-btn-table-action cf-btn-table-manage" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)" title="View Server Specifications" aria-label="View Specs">
+                                                                <i class="las la-server"></i>
                                                             </button>
                                                         <?php else: ?>
-                                                            <button type="button" class="cf-btn-table-action cf-btn-table-view" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)">
-                                                                <i class="las la-info-circle"></i>
-                                                                <span>Details</span>
+                                                            <button type="button" class="cf-btn-table-action cf-btn-table-view" onclick="openQuoteModal(<?php echo (int)$q['id']; ?>)" title="View Quotation Details" aria-label="View Details">
+                                                                <i class="las la-eye"></i>
                                                             </button>
                                                         <?php endif; ?>
                                                     </div>
@@ -924,7 +922,7 @@ if (!function_exists('getQuoteStageBadge')) {
                                             <th>Last Updated</th>
                                             <th>Urgency</th>
                                             <th>Status</th>
-                                            <th class="text-end">Action</th>
+                                            <th class="text-end" style="width: 80px;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -951,9 +949,8 @@ if (!function_exists('getQuoteStageBadge')) {
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="cf-table-actions">
-                                                        <a href="<?php echo $url; ?>ticket?id=<?php echo $tkt['id']; ?>" class="cf-btn-table-action cf-btn-table-ticket">
-                                                            <i class="las la-comments"></i>
-                                                            <span>View &amp; Reply</span>
+                                                        <a href="<?php echo $url; ?>ticket?id=<?php echo $tkt['id']; ?>" class="cf-btn-table-action cf-btn-table-ticket" title="View Conversation &amp; Reply" aria-label="View &amp; Reply">
+                                                            <i class="las la-comment-dots"></i>
                                                         </a>
                                                     </div>
                                                 </td>
@@ -1195,24 +1192,25 @@ if (!function_exists('getQuoteStageBadge')) {
                 </div>
             </div>
 
-            <!-- Direct Support Help Banner (Executive Glassmorphic Design) -->
+            <!-- Direct Support Help Banner (Premium Executive Design) -->
             <div class="cf-dashboard-support-card mt-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3.5">
                 <div class="d-flex align-items-start align-items-sm-center gap-3">
                     <div class="cf-support-icon-badge">
                         <i class="las la-headset"></i>
-                        <span class="cf-pulse-dot"></span>
                     </div>
                     <div>
-                        <div class="d-inline-flex align-items-center gap-1.5 px-2.5 py-0.5 rounded-pill bg-blue-subtle text-primary fw-bold fs-11 mb-1 border border-blue-subtle" style="padding-left: 8px; padding-right: 8px;">
-                            <i class="las la-shield-alt"></i> <span>24/7/365 NOC Engineering Assistance</span> 
+                        <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                            <h5 class="cf-support-card-title mb-0">Need help managing your cloud infrastructure?</h5>
+                            <span class="cf-support-live-badge">
+                                <span class="cf-pulse-dot-green"></span> 24/7 NOC Active
+                            </span>
                         </div>
-                        <h5 class="fw-extrabold text-slate-900 mb-1 fs-16">Need help managing your cloud infrastructure?</h5>
-                        <p class="fs-13 text-secondary mb-0 max-w-700">Our senior cloud engineers are on standby to assist you with DNS routing, SSL deployments, server configurations, and migrations.</p>
+                        <p class="cf-support-card-desc mb-0">Our senior cloud engineers are on standby 24/7/365 to assist you with DNS routing, SSL deployments, server configurations, and migrations.</p>
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap flex-shrink-0">
                     <a href="<?php echo $url; ?>ticket" class="cf-btn-support-card-secondary" title="View all your active & past support tickets">
-                        <i class="las la-ticket-alt text-primary fs-15"></i>
+                        <i class="las la-ticket-alt fs-15"></i>
                         <span>All Tickets</span>
                     </a>
                     <a href="<?php echo $url; ?>ticket?action=new" class="cf-btn-support-card-primary" title="Open a new priority support ticket">
@@ -1242,7 +1240,7 @@ if (!function_exists('getQuoteStageBadge')) {
                                 <h5 class="modal-title fw-bold text-slate-900 mb-0" id="dmModalTitle">Domain Management</h5>
                                 <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill fs-11" id="dmModalStatusBadge">Active</span>
                             </div>
-                            <span class="fs-12 text-primary font-monospace fw-semibold" id="dmModalDomainName">example.com</span>
+                            <span class="fs-12 font-monospace fw-semibold" style="color: #ea580c;" id="dmModalDomainName">example.com</span>
                         </div>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -1264,22 +1262,22 @@ if (!function_exists('getQuoteStageBadge')) {
                         <ul class="nav cf-dm-nav-pills mb-4" id="dmTabs" role="tablist">
                             <li class="nav-item flex-fill text-center" role="presentation">
                                 <button class="nav-link active w-100" id="dm-tab-ns" data-bs-toggle="pill" data-bs-target="#dm-pane-ns" type="button" role="tab">
-                                    <i class="las la-server me-1"></i> Nameservers
+                                    <i class="las la-server me-2"></i> <span>Nameservers</span>
                                 </button>
                             </li>
                             <li class="nav-item flex-fill text-center" role="presentation">
                                 <button class="nav-link w-100" id="dm-tab-security" data-bs-toggle="pill" data-bs-target="#dm-pane-security" type="button" role="tab">
-                                    <i class="las la-lock me-1"></i> Security &amp; Transfer
+                                    <i class="las la-lock me-2"></i> <span>Security &amp; Transfer</span>
                                 </button>
                             </li>
                             <li class="nav-item flex-fill text-center" role="presentation">
                                 <button class="nav-link w-100" id="dm-tab-settings" data-bs-toggle="pill" data-bs-target="#dm-pane-settings" type="button" role="tab">
-                                    <i class="las la-shield-alt me-1"></i> Privacy &amp; Renew
+                                    <i class="las la-shield-alt me-2"></i> <span>Privacy &amp; Renew</span>
                                 </button>
                             </li>
                             <li class="nav-item flex-fill text-center" role="presentation">
                                 <button class="nav-link w-100" id="dm-tab-guide" data-bs-toggle="pill" data-bs-target="#dm-pane-guide" type="button" role="tab">
-                                    <i class="las la-compass me-1"></i> DNS Setup Guide
+                                    <i class="las la-compass me-2"></i> <span>DNS Setup Guide</span>
                                 </button>
                             </li>
                         </ul>
@@ -1288,8 +1286,9 @@ if (!function_exists('getQuoteStageBadge')) {
                             
                             <!-- TAB 1: NAMESERVERS -->
                             <div class="tab-pane fade show active" id="dm-pane-ns" role="tabpanel">
-                                <div class="alert alert-info py-2.5 px-3 fs-12 mb-3 border-0 bg-blue-subtle text-primary rounded-3">
-                                    <i class="las la-info-circle me-1"></i> Point your domain to CloudFlox hosting or external platforms (Cloudflare, Shopify, AWS, etc.).
+                                <div class="cf-dm-alert-notice mb-3">
+                                    <i class="las la-info-circle me-2 fs-16"></i>
+                                    <span>Point your domain to CloudFlox hosting or external platforms (Cloudflare, Shopify, AWS, etc.).</span>
                                 </div>
 
                                 <!-- NS Feedback Alert -->
@@ -1297,13 +1296,16 @@ if (!function_exists('getQuoteStageBadge')) {
 
                                 <form id="dmNameserversForm" onsubmit="saveDomainNameservers(event)">
                                     <!-- Option 1: Default Nameservers -->
-                                    <div class="cf-dm-card mb-3 cursor-pointer" onclick="document.getElementById('dmNsRadioDefault').checked = true; toggleNsMode();">
-                                        <div class="form-check d-flex align-items-start gap-2 mb-0">
-                                            <input class="form-check-input mt-1" type="radio" name="dmNsType" id="dmNsRadioDefault" value="default" onchange="toggleNsMode()">
+                                    <div class="cf-dm-card mb-3 cursor-pointer active-selection" id="dmCardDefault" onclick="document.getElementById('dmNsRadioDefault').checked = true; toggleNsMode();">
+                                        <div class="cf-dm-radio-wrap d-flex align-items-start mb-0">
+                                            <input class="form-check-input" type="radio" name="dmNsType" id="dmNsRadioDefault" value="default" onchange="toggleNsMode()" checked>
                                             <label class="form-check-label flex-grow-1 cursor-pointer" for="dmNsRadioDefault">
-                                                <div class="fw-bold text-slate-900 fs-14">Use CloudFlox Anycast DNS <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill fs-10 ms-1">Recommended</span></div>
-                                                <div class="text-secondary fs-12">Global distributed Anycast network with built-in DDoS mitigation, zero routing hops, and 100% uptime SLA.</div>
-                                                <div class="mt-2 font-monospace fs-12 text-slate-700 bg-light p-2.5 rounded-2 border">
+                                                <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                                                    <span class="cf-dm-card-title">Use CloudFlox Anycast DNS</span>
+                                                    <span class="badge cf-dm-badge-recommended">Recommended</span>
+                                                </div>
+                                                <div class="cf-dm-card-desc">Global distributed Anycast network with built-in DDoS mitigation, zero routing hops, and 100% uptime SLA.</div>
+                                                <div class="cf-dm-ns-box">
                                                     <div><strong>NS1:</strong> ns1.cloudflox.com</div>
                                                     <div><strong>NS2:</strong> ns2.cloudflox.com</div>
                                                 </div>
@@ -1312,12 +1314,12 @@ if (!function_exists('getQuoteStageBadge')) {
                                     </div>
 
                                     <!-- Option 2: Custom Nameservers -->
-                                    <div class="cf-dm-card mb-3">
-                                        <div class="form-check d-flex align-items-start gap-2 mb-2 cursor-pointer" onclick="document.getElementById('dmNsRadioCustom').checked = true; toggleNsMode();">
-                                            <input class="form-check-input mt-1" type="radio" name="dmNsType" id="dmNsRadioCustom" value="custom" onchange="toggleNsMode()">
+                                    <div class="cf-dm-card mb-3 cursor-pointer" id="dmCardCustom" onclick="if(event.target.tagName !== 'INPUT' && !event.target.closest('#dmCustomNsContainer') && !event.target.closest('button')) { document.getElementById('dmNsRadioCustom').checked = true; toggleNsMode(); }">
+                                        <div class="cf-dm-radio-wrap d-flex align-items-start mb-2 cursor-pointer">
+                                            <input class="form-check-input" type="radio" name="dmNsType" id="dmNsRadioCustom" value="custom" onchange="toggleNsMode()">
                                             <label class="form-check-label flex-grow-1 cursor-pointer" for="dmNsRadioCustom">
-                                                <div class="fw-bold text-slate-900 fs-14">Use Custom Nameservers</div>
-                                                <div class="text-secondary fs-12">Point your domain to external providers such as Cloudflare, Shopify, Google Cloud, or custom private nameservers.</div>
+                                                <div class="cf-dm-card-title mb-1">Use Custom Nameservers</div>
+                                                <div class="cf-dm-card-desc">Point your domain to external providers such as Cloudflare, Shopify, Google Cloud, or custom private nameservers.</div>
                                             </label>
                                         </div>
 
@@ -1325,38 +1327,38 @@ if (!function_exists('getQuoteStageBadge')) {
                                         <div id="dmCustomNsContainer" style="display: none;" class="pt-2">
                                             <div class="row g-2.5 mb-2.5">
                                                 <div class="col-md-6">
-                                                    <label class="form-label fs-12 fw-bold text-slate-700 mb-1">Nameserver 1 <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control form-control-sm font-monospace" id="dmNs1" placeholder="e.g. ns1.example.com">
+                                                    <label class="cf-dm-input-label">Nameserver 1 <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm cf-dm-input font-monospace" id="dmNs1" placeholder="e.g. ns1.example.com">
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label fs-12 fw-bold text-slate-700 mb-1">Nameserver 2 <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control form-control-sm font-monospace" id="dmNs2" placeholder="e.g. ns2.example.com">
+                                                    <label class="cf-dm-input-label">Nameserver 2 <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-sm cf-dm-input font-monospace" id="dmNs2" placeholder="e.g. ns2.example.com">
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label fs-12 fw-bold text-slate-700 mb-1">Nameserver 3 <span class="text-muted fw-normal">(Optional)</span></label>
-                                                    <input type="text" class="form-control form-control-sm font-monospace" id="dmNs3" placeholder="e.g. ns3.example.com">
+                                                    <label class="cf-dm-input-label">Nameserver 3 <span class="text-muted fw-normal">(Optional)</span></label>
+                                                    <input type="text" class="form-control form-control-sm cf-dm-input font-monospace" id="dmNs3" placeholder="e.g. ns3.example.com">
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="form-label fs-12 fw-bold text-slate-700 mb-1">Nameserver 4 <span class="text-muted fw-normal">(Optional)</span></label>
-                                                    <input type="text" class="form-control form-control-sm font-monospace" id="dmNs4" placeholder="e.g. ns4.example.com">
+                                                    <label class="cf-dm-input-label">Nameserver 4 <span class="text-muted fw-normal">(Optional)</span></label>
+                                                    <input type="text" class="form-control form-control-sm cf-dm-input font-monospace" id="dmNs4" placeholder="e.g. ns4.example.com">
                                                 </div>
                                             </div>
 
                                             <!-- Presets -->
                                             <div class="d-flex align-items-center gap-1.5 flex-wrap pt-1">
                                                 <span class="fs-11 text-muted me-1">Quick Presets:</span>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill fs-11 py-0.5 px-2" onclick="setNsPreset('cloudflare')">Cloudflare</button>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill fs-11 py-0.5 px-2" onclick="setNsPreset('shopify')">Shopify</button>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill fs-11 py-0.5 px-2" onclick="setNsPreset('google')">Google Cloud</button>
+                                                <button type="button" class="btn cf-dm-preset-btn" onclick="setNsPreset('cloudflare')">Cloudflare</button>
+                                                <button type="button" class="btn cf-dm-preset-btn" onclick="setNsPreset('shopify')">Shopify</button>
+                                                <button type="button" class="btn cf-dm-preset-btn" onclick="setNsPreset('google')">Google Cloud</button>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="d-flex align-items-center justify-content-between pt-2">
-                                        <span class="fs-11 text-muted"><i class="las la-clock me-1"></i>Changes propagate globally within 2 to 24 hours</span>
-                                        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold fs-13" id="dmBtnSaveNs">
-                                            <span id="dmSaveNsSpinner" class="spinner-border spinner-border-sm me-1 d-none" role="status"></span>
-                                            <i class="las la-save me-1" id="dmSaveNsIcon"></i> Save Nameservers
+                                        <span class="cf-dm-propagate-note"><i class="las la-clock me-1.5"></i> <span>Changes propagate globally within 2 to 24 hours</span></span>
+                                        <button type="submit" class="btn cf-dm-btn-save" id="dmBtnSaveNs">
+                                            <span id="dmSaveNsSpinner" class="spinner-border spinner-border-sm me-1.5 d-none" role="status"></span>
+                                            <i class="las la-save me-1.5" id="dmSaveNsIcon"></i> <span>Save Nameservers</span>
                                         </button>
                                     </div>
                                 </form>
@@ -1369,10 +1371,10 @@ if (!function_exists('getQuoteStageBadge')) {
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
                                             <div class="d-flex align-items-center gap-2 mb-1">
-                                                <h6 class="fw-bold text-slate-900 mb-0">Registrar Transfer Lock</h6>
+                                                <h6 class="cf-dm-card-title mb-0">Registrar Transfer Lock</h6>
                                                 <span class="badge" id="dmLockBadge">LOCKED</span>
                                             </div>
-                                            <p class="text-secondary fs-12 mb-0">Locks the domain at the registry level to prevent unauthorized transfer attempts. Keep enabled unless moving to another registrar.</p>
+                                            <p class="cf-dm-card-desc mb-0">Locks the domain at the registry level to prevent unauthorized transfer attempts. Keep enabled unless moving to another registrar.</p>
                                         </div>
                                         <div class="form-check form-switch fs-22 ms-3">
                                             <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="dmLockSwitch" onchange="toggleDomainLock(this.checked)">
@@ -1384,12 +1386,12 @@ if (!function_exists('getQuoteStageBadge')) {
                                 <div class="cf-dm-card">
                                     <div class="d-flex align-items-start justify-content-between gap-3 mb-2">
                                         <div>
-                                            <h6 class="fw-bold text-slate-900 mb-1">EPP / Authorization Code</h6>
-                                            <p class="text-secondary fs-12 mb-0">The secret verification code required if you choose to transfer this domain to an external registrar.</p>
+                                            <h6 class="cf-dm-card-title mb-1">EPP / Authorization Code</h6>
+                                            <p class="cf-dm-card-desc mb-0">The secret verification code required if you choose to transfer this domain to an external registrar.</p>
                                         </div>
                                         <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold flex-shrink-0" id="dmBtnGetEpp" onclick="fetchEppCode()">
-                                            <span id="dmEppSpinner" class="spinner-border spinner-border-sm me-1 d-none" role="status"></span>
-                                            <i class="las la-key me-1" id="dmEppIcon"></i> Request EPP Code
+                                            <span id="dmEppSpinner" class="spinner-border spinner-border-sm me-1.5 d-none" role="status"></span>
+                                            <i class="las la-key me-1.5" id="dmEppIcon"></i> <span>Request EPP Code</span>
                                         </button>
                                     </div>
                                     
@@ -1400,7 +1402,7 @@ if (!function_exists('getQuoteStageBadge')) {
                                                 <code class="fs-15 fw-bold text-primary font-monospace" id="dmEppCodeDisplay">--</code>
                                             </div>
                                             <button type="button" class="btn btn-sm btn-white border rounded-pill px-3 py-1 fs-12 fw-bold" onclick="copyEppCode()">
-                                                <i class="las la-copy me-1"></i> <span id="dmCopyText">Copy Code</span>
+                                                <i class="las la-copy me-1.5"></i> <span id="dmCopyText">Copy Code</span>
                                             </button>
                                         </div>
                                     </div>
@@ -1413,12 +1415,12 @@ if (!function_exists('getQuoteStageBadge')) {
                                 <div class="cf-dm-card mb-3">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: rgba(16, 185, 129, 0.12); color: #10b981;">
-                                                <i class="las la-user-shield fs-22"></i>
+                                            <div class="cf-dm-icon-circle cf-dm-icon-green flex-shrink-0 me-1">
+                                                <i class="las la-user-shield"></i>
                                             </div>
                                             <div>
-                                                <h6 class="fw-bold text-slate-900 mb-0.5">WHOIS ID Privacy Protection</h6>
-                                                <p class="text-secondary fs-12 mb-0">Shields your contact details (name, address, email, phone) from public WHOIS directory queries to prevent spam and identity theft.</p>
+                                                <h6 class="cf-dm-card-title mb-0.5">WHOIS ID Privacy Protection</h6>
+                                                <p class="cf-dm-card-desc mb-0">Shields your contact details (name, address, email, phone) from public WHOIS directory queries to prevent spam and identity theft.</p>
                                             </div>
                                         </div>
                                         <div class="form-check form-switch fs-22 ms-3">
@@ -1431,12 +1433,12 @@ if (!function_exists('getQuoteStageBadge')) {
                                 <div class="cf-dm-card mb-3">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background: rgba(13, 110, 253, 0.1); color: #0d6efd;">
-                                                <i class="las la-sync-alt fs-22"></i>
+                                            <div class="cf-dm-icon-circle cf-dm-icon-blue flex-shrink-0 me-1">
+                                                <i class="las la-sync-alt"></i>
                                             </div>
                                             <div>
-                                                <h6 class="fw-bold text-slate-900 mb-0.5">Domain Auto-Renewal</h6>
-                                                <p class="text-secondary fs-12 mb-0">Automatically issues renewal invoices 30 days before expiration so your domain name and cloud services never experience downtime.</p>
+                                                <h6 class="cf-dm-card-title mb-0.5">Domain Auto-Renewal</h6>
+                                                <p class="cf-dm-card-desc mb-0">Automatically issues renewal invoices 30 days before expiration so your domain name and cloud services never experience downtime.</p>
                                             </div>
                                         </div>
                                         <div class="form-check form-switch fs-22 ms-3">
@@ -1446,19 +1448,19 @@ if (!function_exists('getQuoteStageBadge')) {
                                 </div>
 
                                 <!-- Lifecycle Meta Box -->
-                                <div class="p-3 bg-light rounded-3 border">
+                                <div class="cf-dm-meta-box">
                                     <div class="row g-2 text-center">
                                         <div class="col-4 border-end">
-                                            <span class="fs-11 text-muted d-block">Registered Date</span>
-                                            <strong class="fs-12 text-slate-800" id="dmMetaRegDate">--</strong>
+                                            <span class="cf-dm-meta-label">Registered Date</span>
+                                            <strong class="cf-dm-meta-val text-slate-800" id="dmMetaRegDate">--</strong>
                                         </div>
                                         <div class="col-4 border-end">
-                                            <span class="fs-11 text-muted d-block">Next Due / Expiry</span>
-                                            <strong class="fs-12 text-slate-800" id="dmMetaDueDate">--</strong>
+                                            <span class="cf-dm-meta-label">Next Due / Expiry</span>
+                                            <strong class="cf-dm-meta-val text-slate-800" id="dmMetaDueDate">--</strong>
                                         </div>
                                         <div class="col-4">
-                                            <span class="fs-11 text-muted d-block">Annual Renewal Rate</span>
-                                            <strong class="fs-12 text-primary" id="dmMetaPrice">--</strong>
+                                            <span class="cf-dm-meta-label">Annual Renewal Rate</span>
+                                            <strong class="cf-dm-meta-val text-primary" id="dmMetaPrice">--</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -1467,13 +1469,13 @@ if (!function_exists('getQuoteStageBadge')) {
                             <!-- TAB 4: QUICK DNS SETUP GUIDE -->
                             <div class="tab-pane fade" id="dm-pane-guide" role="tabpanel">
                                 <div class="cf-dm-card mb-3">
-                                    <div class="fw-bold text-slate-900 fs-13 mb-2 d-flex align-items-center gap-1.5">
-                                        <i class="las la-server text-primary fs-16"></i> Point Domain to Cloud VPS / Dedicated Server
+                                    <div class="cf-dm-card-title mb-2 d-flex align-items-center gap-2">
+                                        <i class="las la-server text-primary fs-16 me-1"></i> <span>Point Domain to Cloud VPS / Dedicated Server</span>
                                     </div>
-                                    <p class="text-secondary fs-12 mb-2">If you have a VPS or server, configure an <strong>A Record</strong> pointing to your server's public IPv4 address:</p>
+                                    <p class="cf-dm-card-desc mb-2">If you have a VPS or server, configure an <strong>A Record</strong> pointing to your server's public IPv4 address:</p>
                                     <div class="table-responsive">
-                                        <table class="table table-sm table-bordered fs-12 font-monospace mb-0">
-                                            <thead class="table-light"><tr><th>Type</th><th>Host / Name</th><th>Value / Target</th><th>TTL</th></tr></thead>
+                                        <table class="table table-sm table-bordered cf-dm-guide-table mb-0">
+                                            <thead><tr><th>Type</th><th>Host / Name</th><th>Value / Target</th><th>TTL</th></tr></thead>
                                             <tbody>
                                                 <tr><td>A</td><td>@</td><td>YOUR.SERVER.IP.ADDRESS</td><td>Automatic (3600)</td></tr>
                                                 <tr><td>CNAME</td><td>www</td><td><span class="dmGuideDomainName">yourdomain.com</span></td><td>Automatic (3600)</td></tr>
@@ -1483,13 +1485,13 @@ if (!function_exists('getQuoteStageBadge')) {
                                 </div>
 
                                 <div class="cf-dm-card mb-3">
-                                    <div class="fw-bold text-slate-900 fs-13 mb-2 d-flex align-items-center gap-1.5">
-                                        <i class="las la-shopping-bag text-success fs-16"></i> Point Domain to Shopify Store
+                                    <div class="cf-dm-card-title mb-2 d-flex align-items-center gap-2">
+                                        <i class="las la-shopping-bag text-success fs-16 me-1"></i> <span>Point Domain to Shopify Store</span>
                                     </div>
-                                    <p class="text-secondary fs-12 mb-2">Inside your DNS Zone or DNS manager, configure these standard Shopify records:</p>
+                                    <p class="cf-dm-card-desc mb-2">Inside your DNS Zone or DNS manager, configure these standard Shopify records:</p>
                                     <div class="table-responsive">
-                                        <table class="table table-sm table-bordered fs-12 font-monospace mb-0">
-                                            <thead class="table-light"><tr><th>Type</th><th>Host / Name</th><th>Points To</th><th>TTL</th></tr></thead>
+                                        <table class="table table-sm table-bordered cf-dm-guide-table mb-0">
+                                            <thead><tr><th>Type</th><th>Host / Name</th><th>Points To</th><th>TTL</th></tr></thead>
                                             <tbody>
                                                 <tr><td>A</td><td>@</td><td>23.227.38.65</td><td>Automatic</td></tr>
                                                 <tr><td>CNAME</td><td>www</td><td>shops.myshopify.com</td><td>Automatic</td></tr>
@@ -1499,10 +1501,10 @@ if (!function_exists('getQuoteStageBadge')) {
                                 </div>
 
                                 <div class="cf-dm-card">
-                                    <div class="fw-bold text-slate-900 fs-13 mb-2 d-flex align-items-center gap-1.5">
-                                        <i class="las la-envelope text-info fs-16"></i> Google Workspace &amp; Custom Mail
+                                    <div class="cf-dm-card-title mb-2 d-flex align-items-center gap-2">
+                                        <i class="las la-envelope text-info fs-16 me-1"></i> <span>Google Workspace &amp; Custom Mail</span>
                                     </div>
-                                    <p class="text-secondary fs-12 mb-0">To connect Google Workspace or custom mailboxes, add Google's MX records (`ASPMX.L.GOOGLE.COM`, priority 1). If you require custom DNS assistance, our NOC team is available 24/7 via ticket support to configure it for you.</p>
+                                    <p class="cf-dm-card-desc mb-0">To connect Google Workspace or custom mailboxes, add Google's MX records (`ASPMX.L.GOOGLE.COM`, priority 1). If you require custom DNS assistance, our NOC team is available 24/7 via ticket support to configure it for you.</p>
                                 </div>
                             </div>
 
@@ -1511,8 +1513,8 @@ if (!function_exists('getQuoteStageBadge')) {
                 </div>
 
                 <div class="modal-footer border-top py-2.5 px-4 bg-light d-flex align-items-center justify-content-between">
-                    <span class="fs-11 text-muted"><i class="las la-shield-alt text-success me-1"></i>Protected by CloudFlox Anycast DNS Engine</span>
-                    <button type="button" class="btn btn-secondary rounded-pill px-4 fw-bold fs-13" data-bs-dismiss="modal">Close</button>
+                    <span class="fs-11 text-muted"><i class="las la-shield-alt text-success me-2"></i> <span>Protected by CloudFlox Anycast DNS Engine</span></span>
+                    <button type="button" class="btn btn-secondary rounded-pill px-4 fw-bold fs-13 cf-dm-btn-close" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -1556,17 +1558,17 @@ if (!function_exists('getQuoteStageBadge')) {
                         <ul class="nav cf-dm-nav-pills mb-4" id="hmTabs" role="tablist">
                             <li class="nav-item flex-fill text-center" role="presentation">
                                 <button class="nav-link active w-100" id="hm-tab-overview" data-bs-toggle="pill" data-bs-target="#hm-pane-overview" type="button" role="tab">
-                                    <i class="las la-tachometer-alt me-1"></i> Overview &amp; cPanel
+                                    <i class="las la-tachometer-alt me-2"></i> <span>Overview &amp; cPanel</span>
                                 </button>
                             </li>
                             <li class="nav-item flex-fill text-center" role="presentation">
                                 <button class="nav-link w-100" id="hm-tab-password" data-bs-toggle="pill" data-bs-target="#hm-pane-password" type="button" role="tab">
-                                    <i class="las la-key me-1"></i> Change Password
+                                    <i class="las la-key me-2"></i> <span>Change Password</span>
                                 </button>
                             </li>
                             <li class="nav-item flex-fill text-center" role="presentation">
                                 <button class="nav-link w-100" id="hm-tab-ftp" data-bs-toggle="pill" data-bs-target="#hm-pane-ftp" type="button" role="tab">
-                                    <i class="las la-cog me-1"></i> FTP &amp; Mail Settings
+                                    <i class="las la-cog me-2"></i> <span>FTP &amp; Mail Settings</span>
                                 </button>
                             </li>
                         </ul>
@@ -1994,11 +1996,10 @@ if (!function_exists('getQuoteStageBadge')) {
             const isDefault = data.nameservers.is_default;
             if (isDefault) {
                 document.getElementById('dmNsRadioDefault').checked = true;
-                document.getElementById('dmCustomNsContainer').style.display = 'none';
             } else {
                 document.getElementById('dmNsRadioCustom').checked = true;
-                document.getElementById('dmCustomNsContainer').style.display = 'block';
             }
+            toggleNsMode();
             document.getElementById('dmNs1').value = data.nameservers.ns1 || '';
             document.getElementById('dmNs2').value = data.nameservers.ns2 || '';
             document.getElementById('dmNs3').value = data.nameservers.ns3 || '';
@@ -2039,18 +2040,28 @@ if (!function_exists('getQuoteStageBadge')) {
     }
 
     function toggleNsMode() {
-        const isCustom = document.getElementById('dmNsRadioCustom').checked;
+        const customRadio = document.getElementById('dmNsRadioCustom');
+        const defaultRadio = document.getElementById('dmNsRadioDefault');
         const container = document.getElementById('dmCustomNsContainer');
+        const cardDefault = document.getElementById('dmCardDefault');
+        const cardCustom = document.getElementById('dmCardCustom');
+
+        const isCustom = customRadio ? customRadio.checked : false;
+
         if (isCustom) {
-            container.style.display = 'block';
+            if (container) container.style.display = 'block';
+            if (cardCustom) cardCustom.classList.add('active-selection');
+            if (cardDefault) cardDefault.classList.remove('active-selection');
         } else {
-            container.style.display = 'none';
+            if (container) container.style.display = 'none';
+            if (cardDefault) cardDefault.classList.add('active-selection');
+            if (cardCustom) cardCustom.classList.remove('active-selection');
         }
     }
 
     function setNsPreset(preset) {
         document.getElementById('dmNsRadioCustom').checked = true;
-        document.getElementById('dmCustomNsContainer').style.display = 'block';
+        toggleNsMode();
 
         if (preset === 'cloudflare') {
             document.getElementById('dmNs1').value = 'elena.ns.cloudflare.com';

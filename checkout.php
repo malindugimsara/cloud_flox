@@ -249,7 +249,7 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                                             <i class="las la-plus-circle text-primary"></i> Add Another Domain to This Order:
                                         </label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="chkInlineAddDomainInput" placeholder="Enter domain name (e.g. brand.store, startup.io)" autocomplete="off">
+                                            <input type="text" class="form-control" id="chkInlineAddDomainInput" placeholder="Enter domain name (e.g. brand.store, startup.io)" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();pageInlineAddDomain();}">
                                             <button class="btn btn-primary fw-bold px-3 fs-13" type="button" id="btnChkInlineAddDomain" onclick="pageInlineAddDomain()">
                                                 <span class="btn-text"><i class="las la-plus me-1"></i> Add to Order</span>
                                                 <span class="spinner-border spinner-border-sm d-none" role="status"></span>
@@ -1594,11 +1594,21 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
             state.domainYears = (yearsParam >= 1 && yearsParam <= 5) ? yearsParam : 1;
 
             // 2. Hosting Plan
-            if (pidParam && pidParam !== 'none' && PRODUCTS[pidParam]) {
-                state.pid = pidParam;
-            } else if (pidParam === 'none' || domainParam || domainsParam) {
+            let effectivePid = pidParam;
+            if (!effectivePid && !domainParam && !domainsParam) {
+                try {
+                    const storedPid = localStorage.getItem('cf_hosting_pid');
+                    if (storedPid && PRODUCTS[storedPid]) {
+                        effectivePid = storedPid;
+                    }
+                } catch (e) {}
+            }
+
+            if (effectivePid && effectivePid !== 'none' && PRODUCTS[effectivePid]) {
+                state.pid = effectivePid;
+            } else if (effectivePid === 'none' || domainParam || domainsParam) {
                 // If coming with domain search or explicitly 'none': default to domain-only
-                state.pid = (pidParam && pidParam !== 'none' && PRODUCTS[pidParam]) ? pidParam : 'none';
+                state.pid = (effectivePid && effectivePid !== 'none' && PRODUCTS[effectivePid]) ? effectivePid : 'none';
             } else {
                 state.pid = 'none';
             }
@@ -1607,40 +1617,24 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
             state.billingcycle = (cycleParam === 'annually' || cycleParam === 'yearly') ? 'annually' : 'monthly';
 
             // 4. Multi-Domain Cart Population
+            // 4. Initialize domains from LocalStorage cart AND URL parameters
             state.domains = [];
 
-            // 4A. If ?domains=d1.com,d2.net in URL
-            if (domainsParam) {
-                const parts = domainsParam.split(',');
-                parts.forEach(dStr => {
-                    const clean = dStr.toLowerCase().trim().replace(/[^a-z0-9\.\-]/g, '');
-                    if (clean && clean.includes('.')) {
-                        const price = getTldRegisterPrice(clean);
-                        state.domains.push({
-                            name: clean,
-                            type: 'register',
-                            price: price,
-                            years: 1
-                        });
-                    }
-                });
-            }
-
-            // 4B. Check localStorage if no URL domains or if localStorage has items
-            if (state.domains.length === 0) {
-                try {
-                    const storedCart = localStorage.getItem('cf_domain_cart');
-                    if (storedCart) {
-                        const parsed = JSON.parse(storedCart);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            parsed.forEach(it => {
-                                if (it && it.domain) {
-                                    const clean = it.domain.toLowerCase().trim().replace(/[^a-z0-9\.\-]/g, '');
-                                    if (clean && clean.includes('.')) {
-                                        let numPrice = parseFloat(it.raw_price);
-                                        if (isNaN(numPrice) || numPrice <= 0) {
-                                            numPrice = it.type === 'transfer' ? getTldTransferPrice(clean) : getTldRegisterPrice(clean);
-                                        }
+            // 4A. Load persistent cart items from localStorage first
+            try {
+                const storedCart = localStorage.getItem('cf_domain_cart');
+                if (storedCart) {
+                    const parsed = JSON.parse(storedCart);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        parsed.forEach(it => {
+                            if (it && it.domain) {
+                                const clean = it.domain.toLowerCase().trim().replace(/[^a-z0-9\.\-]/g, '');
+                                if (clean && clean.includes('.')) {
+                                    let numPrice = parseFloat(it.raw_price);
+                                    if (isNaN(numPrice) || numPrice <= 0) {
+                                        numPrice = it.type === 'transfer' ? getTldTransferPrice(clean) : getTldRegisterPrice(clean);
+                                    }
+                                    if (!state.domains.some(d => d.name === clean)) {
                                         state.domains.push({
                                             name: clean,
                                             type: it.type || 'register',
@@ -1649,14 +1643,33 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                                         });
                                     }
                                 }
+                            }
+                        });
+                    }
+                }
+            } catch (e) {}
+
+            // 4B. If ?domains=d1.com,d2.net in URL, merge them in
+            if (domainsParam) {
+                const parts = domainsParam.split(',');
+                parts.forEach(dStr => {
+                    const clean = dStr.toLowerCase().trim().replace(/[^a-z0-9\.\-]/g, '');
+                    if (clean && clean.includes('.')) {
+                        const price = getTldRegisterPrice(clean);
+                        if (!state.domains.some(d => d.name === clean)) {
+                            state.domains.push({
+                                name: clean,
+                                type: 'register',
+                                price: price,
+                                years: 1
                             });
                         }
                     }
-                } catch (e) {}
+                });
             }
 
-            // 4C. Fallback to single ?domain= parameter
-            if (state.domains.length === 0 && domainParam) {
+            // 4C. If single ?domain= parameter in URL, merge it in
+            if (domainParam) {
                 const clean = domainParam.toLowerCase().trim().replace(/[^a-z0-9\.\-]/g, '');
                 if (clean && clean.includes('.')) {
                     const dType = (domainTypeParam === 'owndomain' || domainTypeParam === 'existing') ? 'owndomain' : (domainTypeParam === 'transfer' ? 'transfer' : 'register');
@@ -1672,16 +1685,24 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                         }
                         dPrice = parsedPrice;
                     }
-                    state.domains.push({
-                        name: clean,
-                        type: dType,
-                        price: dPrice,
-                        years: state.domainYears
-                    });
+
+                    const existingIndex = state.domains.findIndex(d => d.name === clean);
+                    if (existingIndex !== -1) {
+                        state.domains[existingIndex].type = dType;
+                        state.domains[existingIndex].price = dPrice;
+                        state.domains[existingIndex].years = state.domainYears || 1;
+                    } else {
+                        state.domains.push({
+                            name: clean,
+                            type: dType,
+                            price: dPrice,
+                            years: state.domainYears || 1
+                        });
+                    }
                 }
             }
 
-            // Sync primary domain for compatibility
+            // 4D. Sync primary domain for single-domain compatibility
             if (state.domains.length > 0) {
                 state.domain = state.domains[0].name;
                 state.domainType = state.domains[0].type;
@@ -1693,6 +1714,9 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                 state.domainPrice = 0.00;
                 state.domainYears = 1;
             }
+
+            // 4E. Persist cart immediately so all searched & URL domains are in the active cart
+            syncCartStorage();
 
             renderState();
 
@@ -2050,17 +2074,32 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
             }
         }
 
-        // Save domains to localStorage
+        // Save domains and selected hosting plan to localStorage
         function syncCartStorage() {
             try {
-                const storeItems = state.domains.map(d => ({
-                    domain: d.name,
-                    price: '$' + d.price.toFixed(2),
-                    raw_price: d.price,
-                    type: d.type,
-                    years: d.years || 1
-                }));
+                // Filter out existing connected domains (owndomain) so they don't pollute the domain purchase cart
+                const storeItems = state.domains
+                    .filter(d => d.type !== 'owndomain')
+                    .map(d => ({
+                        domain: d.name,
+                        price: '$' + d.price.toFixed(2),
+                        raw_price: d.price,
+                        type: d.type,
+                        years: d.years || 1
+                    }));
                 localStorage.setItem('cf_domain_cart', JSON.stringify(storeItems));
+
+                if (state.pid && state.pid !== 'none') {
+                    localStorage.setItem('cf_hosting_pid', state.pid);
+                    localStorage.setItem('cf_hosting_cycle', state.billingcycle || 'monthly');
+                } else if (state.pid === 'none') {
+                    localStorage.removeItem('cf_hosting_pid');
+                }
+
+                // Keep global CloudFlox domain cart in sync across headers & drawer
+                if (window.cfDomainCart && typeof window.cfDomainCart.init === 'function') {
+                    window.cfDomainCart.init();
+                }
             } catch (e) {}
         }
 
@@ -3103,9 +3142,7 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                 btn.disabled = false;
 
                 if (data.status === 'success') {
-                    // Clear domain shopping cart on successful checkout
-                    try { localStorage.removeItem('cf_domain_cart'); } catch (e) {}
-
+                    // Note: Cart items are retained until invoice payment is settled as requested ("payment karana the cart eke show wena widihata")
                     // Direct redirect to the invoice / payment page
                     if (data.invoice_url) {
                         btn.querySelector('.btn-text').innerHTML = '<i class="las la-check-circle me-1.5"></i> Order Placed! Opening Payment Page...';

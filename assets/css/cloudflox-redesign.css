@@ -19101,17 +19101,34 @@ body.pure-white-theme.cf-auth-page {
    ========================================================================== */
 
 .cf-dashboard-container {
-    max-width: 1240px !important;
+    width: 100% !important;
+    max-width: 1400px !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    padding-left: 24px !important;
-    padding-right: 24px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
     box-sizing: border-box !important;
+}
+
+@media (min-width: 1200px) {
+    .cf-dashboard-container {
+        max-width: 1440px !important;
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+    }
 }
 
 @media (min-width: 1400px) {
     .cf-dashboard-container {
-        max-width: 1280px !important;
+        max-width: 1580px !important;
+        padding-left: 28px !important;
+        padding-right: 28px !important;
+    }
+}
+
+@media (min-width: 1600px) {
+    .cf-dashboard-container {
+        max-width: 1720px !important;
         padding-left: 32px !important;
         padding-right: 32px !important;
     }
@@ -19468,79 +19485,121 @@ body.pure-white-theme.cf-auth-page {
 }
 
 .cf-dashboard-support-card {
-    background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 60%, #EFF6FF 100%) !important;
-    border: 1.5px solid #DBEAFE !important;
-    border-radius: 20px !important;
-    padding: 26px 32px !important;
-    box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.08), 0 2px 8px -2px rgba(15, 23, 42, 0.04) !important;
+    background: linear-gradient(135deg, #091224 0%, #0F1D38 60%, #162B4E 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 18px !important;
+    padding: 24px 30px !important;
+    box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.16) !important;
     position: relative !important;
     overflow: hidden !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+    transition: all 0.25s ease !important;
 }
 
 .cf-dashboard-support-card:hover {
-    border-color: #BFDBFE !important;
-    box-shadow: 0 14px 34px -5px rgba(37, 99, 235, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.05) !important;
+    border-color: rgba(96, 165, 250, 0.35) !important;
+    box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.24) !important;
 }
 
 .cf-dashboard-support-card::after {
     content: "";
     position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+    top: -50%;
+    right: 5%;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
 }
 
 .cf-support-icon-badge {
-    width: 52px !important;
-    height: 52px !important;
-    border-radius: 16px !important;
-    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
-    color: #FFFFFF !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 14px !important;
+    background: rgba(56, 189, 248, 0.12) !important;
+    border: 1px solid rgba(56, 189, 248, 0.28) !important;
+    color: #38BDF8 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 26px !important;
+    font-size: 24px !important;
     flex-shrink: 0 !important;
-    box-shadow: 0 8px 18px -4px rgba(37, 99, 235, 0.35) !important;
-    position: relative !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
 }
 
-.cf-support-icon-badge .cf-pulse-dot {
-    position: absolute !important;
-    top: -3px !important;
-    right: -3px !important;
-    width: 10px !important;
-    height: 10px !important;
-    border: 2px solid #FFFFFF !important;
-    border-radius: 50% !important;
+.cf-support-card-title {
+    color: #FFFFFF !important;
+    font-size: 15.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.2px;
+}
+
+.cf-support-live-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(16, 185, 129, 0.15) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    color: #34D399 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 3px 10px !important;
+    border-radius: 999px !important;
+    letter-spacing: 0.2px;
+}
+
+.cf-support-card-desc {
+    color: #94A3B8 !important;
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+    max-width: 700px;
+}
+
+.cf-btn-support-card-secondary {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    color: #FFFFFF !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    padding: 9px 18px !important;
+    border-radius: 999px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    white-space: nowrap !important;
+}
+
+.cf-btn-support-card-secondary:hover {
+    background: rgba(255, 255, 255, 0.16) !important;
+    color: #FFFFFF !important;
+    border-color: rgba(255, 255, 255, 0.32) !important;
+    transform: translateY(-1px);
 }
 
 .cf-btn-support-card-primary {
     background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
     color: #FFFFFF !important;
+    font-size: 13px !important;
     font-weight: 700 !important;
-    font-size: 13.5px !important;
-    padding: 11px 22px !important;
-    border-radius: 9999px !important;
+    padding: 9px 22px !important;
+    border-radius: 999px !important;
     display: inline-flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 7px !important;
     text-decoration: none !important;
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.32) !important;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.38) !important;
+    transition: all 0.2s ease !important;
     white-space: nowrap !important;
-    border: none !important;
 }
 
 .cf-btn-support-card-primary:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45) !important;
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
     color: #FFFFFF !important;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.52) !important;
+    transform: translateY(-1px);
 }
 
 .cf-btn-support-card-primary .cf-hover-arrow {
@@ -19647,56 +19706,132 @@ html, body {
    DOMAIN MANAGEMENT MODAL & CONTROLS
    ========================================================================== */
 .cf-dm-modal .modal-content {
-    border-radius: 20px !important;
+    border-radius: 18px !important;
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
+    box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.18) !important;
 }
 
 .cf-dm-nav-pills {
     background-color: #f1f5f9;
-    padding: 4px;
-    border-radius: 14px;
+    padding: 5px;
+    border-radius: 12px;
     display: flex;
-    gap: 4px;
+    gap: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+.cf-dm-nav-pills .nav-item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
 }
 
 .cf-dm-nav-pills .nav-link {
-    color: #475569;
-    border-radius: 10px !important;
-    padding: 8px 14px;
+    color: #64748b;
+    border-radius: 8px !important;
+    padding: 9px 12px;
     font-size: 12.5px;
-    font-weight: 700;
-    transition: all 0.2s ease;
-    border: none;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid transparent;
     text-align: center;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+    min-height: 40px;
 }
 
-.cf-dm-nav-pills .nav-link:hover {
-    color: #0d6efd;
-    background-color: rgba(255, 255, 255, 0.6);
+.cf-dm-nav-pills .nav-link i {
+    font-size: 16px;
+    line-height: 1;
+    color: #64748b;
+    margin-right: 4px !important;
+    flex-shrink: 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.cf-dm-nav-pills .nav-link:hover:not(.active) {
+    color: #0f172a;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-color: rgba(226, 232, 240, 0.9);
+}
+
+.cf-dm-nav-pills .nav-link:hover:not(.active) i {
+    color: #2563eb;
 }
 
 .cf-dm-nav-pills .nav-link.active {
     background-color: #ffffff !important;
-    color: #0d6efd !important;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+    color: #1d4ed8 !important;
+    font-weight: 700;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.08), 0 1px 3px -1px rgba(15, 23, 42, 0.04) !important;
+}
+
+.cf-dm-nav-pills .nav-link.active i {
+    color: #1d4ed8 !important;
+    transform: scale(1.06);
 }
 
 .cf-dm-card {
     background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
     padding: 16px 18px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 12px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cf-dm-card:hover {
     border-color: #cbd5e1;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
 }
 
-.cf-dm-card.active-selection {
-    border-color: #3b82f6;
-    background-color: #f8faff;
+.cf-dm-card.active-selection,
+.cf-dm-card:has(.form-check-input:checked) {
+    border-color: #2563eb;
+    background-color: #f8fafd;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
+}
+
+/* Radio Wrap inside Option Cards - clean separation */
+.cf-dm-radio-wrap {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+.cf-dm-card .form-check-input[type="radio"],
+.cf-dm-radio-wrap .form-check-input {
+    float: none !important;
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    margin: 3px 12px 0 0 !important;
+    border: 2px solid #cbd5e1 !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+    transition: all 0.2s ease !important;
+}
+
+.cf-dm-card .form-check-input[type="radio"]:checked,
+.cf-dm-radio-wrap .form-check-input:checked {
+    border-color: #2563eb !important;
+    background-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+.cf-dm-radio-wrap label,
+.cf-dm-radio-wrap .form-check-label {
+    padding: 0 !important;
+    margin: 0 !important;
+    flex: 1 1 auto !important;
 }
 
 .cursor-pointer {
@@ -19898,23 +20033,13 @@ html, body {
     color: #FFFFFF !important;
 }
 
-/* Floating Sticky Multi-Domain Cart Drawer (Orange Theme) */
-.cf-floating-cart-bar {
-    position: fixed !important;
-    bottom: 24px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    z-index: 1060 !important;
-    width: calc(100% - 32px) !important;
-    max-width: 980px !important;
-    background: #FFFFFF !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border: 2px solid #FF6B00 !important;
-    border-radius: 24px !important;
-    box-shadow: 0 20px 50px -10px rgba(255, 107, 0, 0.28), 0 6px 20px rgba(15, 23, 42, 0.08) !important;
-    padding: 12px 22px !important;
-    animation: cfCartBarSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+/* Floating Sticky Multi-Domain Cart Drawer (Permanently Removed) */
+.cf-floating-cart-bar,
+#cfDomainCartBar {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 @keyframes cfCartBarSlideUp {
     from {

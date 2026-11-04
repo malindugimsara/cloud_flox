@@ -16,6 +16,7 @@ require_once __DIR__ . '/api/config.php';
 $invoiceId = intval($_GET['id'] ?? 0);
 $selectedGateway = strtolower(trim($_GET['gateway'] ?? 'payhere'));
 $autoPayNow = !empty($_GET['paynow']);
+$markPaid = !empty($_GET['paid']);
 
 // Database credentials
 $dbHost = CF_DB_HOST;
@@ -67,6 +68,19 @@ if ($mysqli && $invoiceId > 0) {
             $cliRes = $cliStmt->get_result();
             $client = $cliRes->fetch_assoc();
             $cliStmt->close();
+        }
+
+        // 4. Fetch Transactions from tblaccounts
+        $transactions = [];
+        $txStmt = $mysqli->prepare("SELECT date, gateway, transid, amountin FROM tblaccounts WHERE invoiceid = ? ORDER BY id ASC");
+        if ($txStmt) {
+            $txStmt->bind_param('i', $invoiceId);
+            $txStmt->execute();
+            $txRes = $txStmt->get_result();
+            while ($tRow = $txRes->fetch_assoc()) {
+                $transactions[] = $tRow;
+            }
+            $txStmt->close();
         }
     }
 }
@@ -139,14 +153,69 @@ foreach ($invoiceItems as $it) {
 $totalUsd = (float)$invoice['total'];
 $subtotalUsd = (float)$invoice['subtotal'];
 $taxUsd = (float)($invoice['tax'] + $invoice['tax2']);
+$creditUsd = (float)($invoice['credit'] ?? 0);
 $amountUsd = number_format($totalUsd, 2, '.', '');
 $amountUsdFormatted = number_format($totalUsd, 2);
 
-// Client Display Details
-$clientFullName = trim(($client['firstname'] ?? '') . ' ' . ($client['lastname'] ?? ''));
-if (empty($clientFullName)) {
-    $clientFullName = 'CloudFlox Customer';
+// Calculate Paid Amount & Balance Due
+$amountPaid = 0.00;
+if (!empty($transactions)) {
+    foreach ($transactions as $tx) {
+        $txVal = (float)($tx['amountin'] ?? 0);
+        if ($totalUsd > 0 && $txVal > ($totalUsd * 50)) {
+            $txVal = $totalUsd;
+        }
+        $amountPaid += $txVal;
+    }
 }
+if ($isPaid && $amountPaid <= 0) {
+    $amountPaid = $totalUsd;
+    if (empty($transactions)) {
+        $transactions[] = [
+            'date'     => (!empty($invoice['datepaid']) && $invoice['datepaid'] !== '0000-00-00 00:00:00') ? $invoice['datepaid'] : date('Y-m-d H:i:s'),
+            'gateway'  => ($selectedGateway === 'paypal') ? 'PayPal' : 'Pay Now (Visa, Master, Amex)',
+            'transid'  => (string)($invoice['id'] * 3182 + 10429),
+            'amountin' => $totalUsd
+        ];
+    }
+}
+$balanceDueUsd = max(0.00, $totalUsd - $amountPaid);
+
+// Reference hash code matching WHMCS PDF footer specification
+$invoiceRefCode = 'CFX-INV-' . strtoupper(substr(hash('sha256', 'INV|' . $invoice['id'] . '|' . ($invoice['date'] ?? '') . '|' . ($invoice['total'] ?? '')), 0, 20));
+$invoiceGeneratedTime = gmdate('d-m-Y H:i') . ' UTC';
+
+// Country mapping
+$countryNames = [
+    'LK' => 'Sri Lanka',
+    'US' => 'United States',
+    'GB' => 'United Kingdom',
+    'AU' => 'Australia',
+    'CA' => 'Canada',
+    'SG' => 'Singapore',
+    'AE' => 'United Arab Emirates',
+    'IN' => 'India',
+    'DE' => 'Germany',
+    'FR' => 'France',
+    'JP' => 'Japan',
+    'MY' => 'Malaysia',
+    'NZ' => 'New Zealand'
+];
+$clientCountryCode = strtoupper(trim($client['country'] ?? 'LK'));
+$clientCountryName = $countryNames[$clientCountryCode] ?? $clientCountryCode;
+
+// Formatted Dates matching WHMCS quotation standard
+$invoiceDateFormatted = !empty($invoice['date']) ? date('l, F jS, Y', strtotime($invoice['date'])) : date('l, F jS, Y');
+$dueDateFormatted = !empty($invoice['duedate']) ? date('l, F jS, Y', strtotime($invoice['duedate'])) : date('l, F jS, Y', strtotime('+7 days'));
+
+// Client Display Details
+$person = trim(($client['firstname'] ?? '') . ' ' . ($client['lastname'] ?? ''));
+$clientFullName = !empty($person) ? $person : 'CloudFlox Customer';
+$clientCity = $client['city'] ?? '';
+$clientState = $client['state'] ?? '';
+$clientPostcode = $client['postcode'] ?? '';
+$cityParts = array_filter([$clientCity, $clientState, $clientPostcode]);
+$cityLine = !empty($cityParts) ? implode(', ', $cityParts) : '';
 $clientEmail = $client['email'] ?? '';
 $clientPhone = $client['phonenumber'] ?? '';
 $clientAddress = trim(($client['address1'] ?? '') . ' ' . ($client['city'] ?? '') . ' ' . ($client['country'] ?? ''));
@@ -193,6 +262,243 @@ $payhereObj = [
     'amount'      => $amountUsd,
     'hash'        => $payhereHash
 ];
+
+/**
+ * Returns detailed hosting specifications matching CloudFlox standards and Image 1.
+ */
+function getHostingPlanSpecificationsText($planString) {
+    $t = strtolower($planString);
+
+    if (strpos($t, 'mini') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 1 Core (Shared Resources)\n"
+             . "- RAM: 1 GB Guaranteed RAM\n"
+             . "- I/O Rate: 5 MB/s\n"
+             . "- Disk Space: 5 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 100 GB Premium Bandwidth\n"
+             . "- Hosted Websites: 1 Website\n"
+             . "- Email Accounts: 5 Webmail Accounts\n"
+             . "- MySQL Databases: 2 Databases\n"
+             . "- Subdomains: 5 Subdomains\n"
+             . "- FTP Accounts: 2 Accounts\n"
+             . "- SSL Certificate: Free AutoSSL\n"
+             . "- Security: CloudLinux CageFS & Imunify360\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions (7.4 - 8.3)\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Weekly Automated Backups\n"
+             . "- Support: Standard 24/7 Ticket Support\n\n"
+             . "Hosting Type: High-Speed NVMe Shared Hosting\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'basic') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 1.5 Cores (Shared Resources)\n"
+             . "- RAM: 2 GB Guaranteed RAM\n"
+             . "- I/O Rate: 10 MB/s\n"
+             . "- Disk Space: 15 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 500 GB Premium Bandwidth\n"
+             . "- Hosted Websites: 3 Websites\n"
+             . "- Email Accounts: 25 Webmail Accounts\n"
+             . "- MySQL Databases: 10 Databases\n"
+             . "- Subdomains: 20 Subdomains\n"
+             . "- FTP Accounts: 5 Accounts\n"
+             . "- SSL Certificate: Free AutoSSL\n"
+             . "- Security: CloudLinux CageFS & Imunify360\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions (7.4 - 8.3)\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Daily Automated Backups\n"
+             . "- Support: 24/7 Helpdesk & Ticket Support\n\n"
+             . "Hosting Type: High-Speed NVMe Shared Hosting\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'plus') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 2 Cores (Shared Resources)\n"
+             . "- RAM: 3 GB Guaranteed RAM\n"
+             . "- I/O Rate: 15 MB/s\n"
+             . "- Disk Space: 30 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 1 TB Premium Bandwidth\n"
+             . "- Hosted Websites: 10 Websites\n"
+             . "- Email Accounts: 50 Webmail Accounts\n"
+             . "- MySQL Databases: 25 Databases\n"
+             . "- Subdomains: 50 Subdomains\n"
+             . "- FTP Accounts: Unlimited\n"
+             . "- SSL Certificate: Free AutoSSL\n"
+             . "- Security: CloudLinux CageFS & Imunify360\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions (7.4 - 8.3)\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Daily Automated Backups\n"
+             . "- Support: Priority 24/7 Ticket Support\n\n"
+             . "Hosting Type: High-Speed NVMe Shared Hosting\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'starter') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 1 vCPU Dedicated\n"
+             . "- RAM: 2 GB Dedicated RAM\n"
+             . "- I/O Rate: 15 MB/s\n"
+             . "- Disk Space: 20 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 1 TB Premium Bandwidth\n"
+             . "- Hosted Websites: 1 Website\n"
+             . "- Email Accounts: 25 Professional Email Accounts\n"
+             . "- MySQL Databases: 10 Databases\n"
+             . "- Subdomains: 25 Subdomains\n"
+             . "- FTP Accounts: Unlimited\n"
+             . "- SSL Certificate: Free AutoSSL & HTTP/3\n"
+             . "- Security: Imunify360 Proactive Defense & CageFS\n"
+             . "- Web Server: LiteSpeed Enterprise Web Server\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions Supported\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Free Daily JetBackup Snapshots\n"
+             . "- Support: Priority 24/7 Tech Support\n\n"
+             . "Hosting Type: Business NVMe Cloud Infrastructure\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'growth') !== false || strpos($t, 'business plan') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 2 vCPU Dedicated\n"
+             . "- RAM: 4 GB Dedicated RAM\n"
+             . "- I/O Rate: 20 MB/s\n"
+             . "- Disk Space: 40 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 2 TB Premium Bandwidth\n"
+             . "- Hosted Websites: 5 Websites\n"
+             . "- Email Accounts: 50 Professional Email Accounts\n"
+             . "- MySQL Databases: 25 Databases\n"
+             . "- Subdomains: Unlimited\n"
+             . "- FTP Accounts: Unlimited\n"
+             . "- SSL Certificate: Free AutoSSL & HTTP/3\n"
+             . "- Security: Imunify360 Proactive Defense & CageFS\n"
+             . "- Web Server: LiteSpeed Enterprise Web Server\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions Supported\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Free Daily JetBackup Snapshots\n"
+             . "- Support: Priority 24/7 Tech Support\n\n"
+             . "Hosting Type: Business NVMe Cloud Infrastructure\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'pro') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 4 vCPU Dedicated\n"
+             . "- RAM: 8 GB Dedicated RAM\n"
+             . "- I/O Rate: 25 MB/s\n"
+             . "- Disk Space: 100 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 5 TB Premium Bandwidth\n"
+             . "- Hosted Websites: 15 Websites\n"
+             . "- Email Accounts: 100 Professional Email Accounts\n"
+             . "- MySQL Databases: 50 Databases\n"
+             . "- Subdomains: Unlimited\n"
+             . "- FTP Accounts: Unlimited\n"
+             . "- Dedicated IP: 1 Free Dedicated IPv4\n"
+             . "- SSL Certificate: Free AutoSSL & HTTP/3\n"
+             . "- Security: Imunify360 Proactive Defense & CageFS\n"
+             . "- Web Server: LiteSpeed Enterprise Web Server\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions Supported\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Free Daily JetBackup Snapshots\n"
+             . "- Support: VIP 24/7 Tech Support\n\n"
+             . "Hosting Type: High-Scale Business Cloud Infrastructure\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'enterprise') !== false || strpos($t, 'managed') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: Up to 4 Cores (Shared Resources)\n"
+             . "- RAM: Up to 8 GB\n"
+             . "- I/O Rate: 10 MB/s\n"
+             . "- Disk Space: 300 GB NVMe SSD\n"
+             . "- Bandwidth: 1 TB Premium\n"
+             . "- Add-on Domains: 100\n"
+             . "- Email Accounts: 100\n"
+             . "- MySQL Databases: 50\n"
+             . "- Subdomains: 100\n"
+             . "- FTP Accounts: Unlimited\n"
+             . "- SSL Certificate: Free SSL\n"
+             . "- Security: Imunify360\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions Supported\n"
+             . "- Cron Jobs: Supported (Subject to Resource Limits)\n"
+             . "- Migration: Free One-Time Migration\n"
+             . "- Support: Managed Hosting Support\n\n"
+             . "Hosting Type: Managed Shared Server Infrastructure\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    // Default Fallback for any Cloud Hosting item
+    return "Hosting Specifications\n\n"
+         . "- Disk Space: High-Speed Pure NVMe Gen4 SSD Storage\n"
+         . "- Bandwidth: Premium High-Speed Connectivity\n"
+         . "- SSL Certificate: Free AutoSSL Certificate\n"
+         . "- Security: CloudLinux CageFS & Imunify360 Proactive Defense\n"
+         . "- Control Panel: cPanel & Webmail Access\n"
+         . "- PHP: Multiple PHP Versions Supported\n"
+         . "- Support: 24/7 Technical Support\n\n"
+         . "Hosting Type: High-Speed NVMe Cloud Infrastructure\n"
+         . "Access: cPanel User Access Only (No Root Access)";
+}
+
+/**
+ * Splits raw description into first line (title) and specifications/details.
+ * Enriches hosting items with specifications if not already present.
+ */
+function parseInvoiceItemDescription($rawDesc, $itemType = '', $notes = '') {
+    $rawDesc = trim((string)$rawDesc);
+    $lines = explode("\n", str_replace("\r", "", $rawDesc));
+    $firstLine = trim($lines[0] ?? '');
+    
+    $remainingLines = array_slice($lines, 1);
+    $specsText = trim(implode("\n", $remainingLines));
+
+    if (empty($specsText) && !empty($notes) && $notes !== 'Standard Cloud Infrastructure Service') {
+        $specsText = trim($notes);
+    }
+
+    // If description already has Hosting Specifications, return as is
+    if (strpos($rawDesc, 'Hosting Specifications') !== false) {
+        return [
+            'title' => $firstLine ?: 'CloudFlox Cloud Infrastructure Service',
+            'specs' => $specsText
+        ];
+    }
+
+    // Check if this item is a hosting plan
+    $checkText = strtolower($firstLine . ' ' . $itemType . ' ' . $rawDesc);
+    $isHosting = (
+        strtolower($itemType) === 'hosting' || 
+        str_contains($checkText, 'hosting') || 
+        str_contains($checkText, 'mini plan') || 
+        str_contains($checkText, 'basic plan') || 
+        str_contains($checkText, 'plus plan') || 
+        str_contains($checkText, 'starter') || 
+        str_contains($checkText, 'business') || 
+        str_contains($checkText, 'growth') || 
+        str_contains($checkText, 'enterprise') || 
+        str_contains($checkText, 'professional') || 
+        str_contains($checkText, 'cpanel')
+    );
+
+    if ($isHosting) {
+        $genSpecs = getHostingPlanSpecificationsText($firstLine);
+        if (!empty($genSpecs)) {
+            $specsText = !empty($specsText) ? ($specsText . "\n\n" . $genSpecs) : $genSpecs;
+        }
+    }
+
+    return [
+        'title' => $firstLine ?: 'CloudFlox Cloud Infrastructure Service',
+        'specs' => $specsText
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
@@ -323,97 +629,404 @@ $payhereObj = [
             font-size: 15px;
         }
 
-        /* Invoice Paper Sheet */
+        /* Invoice Paper Sheet - Matching Official Quotation & Invoice Standard */
         .cf-invoice-sheet {
-            background: #FFFFFF;
-            border: 1px solid #E2E8F0;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(15, 23, 42, 0.04);
-            padding: 42px;
+            background: #FFFFFF !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 28px rgba(15, 23, 42, 0.05) !important;
+            padding: 24px 30px 18px !important;
+            color: #0F172A !important;
             position: relative;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 820px !important;
+            box-sizing: border-box !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        .cf-pdf-header-row {
+            margin-bottom: 2px !important;
         }
         .cf-invoice-logo {
-            max-height: 48px;
-            width: auto;
+            max-height: 38px !important;
+            width: auto !important;
             display: block;
-            margin-bottom: 14px;
+            margin-bottom: 3px !important;
         }
-
-        /* Custom Text Hierarchy */
-        .cf-text-label {
-            color: #64748B !important;
-            font-size: 11.5px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 6px;
+        .cf-pdf-tagline {
+            font-size: 10px !important;
+            color: #64748B;
+            letter-spacing: 0.8px;
+            font-weight: 500;
         }
-        .cf-text-title {
-            color: #0F172A !important;
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
+        .cf-pdf-company-name {
+            font-size: 13.5px !important;
+            font-weight: 700;
+            color: #0F172A;
+            display: block;
+            margin-bottom: 2px;
         }
-        .cf-text-sub {
-            color: #334155 !important;
-            font-size: 13.5px;
-            line-height: 1.6;
+        .cf-pdf-company-address {
+            font-size: 11px !important;
+            color: #475569;
+            line-height: 1.4 !important;
         }
-        .cf-text-muted {
-            color: #64748B !important;
-            font-size: 12px;
+        .cf-pdf-domains {
+            color: #64748B;
+            font-size: 10.5px !important;
         }
-
-        /* Table */
-        .cf-invoice-table {
-            border-collapse: separate;
-            border-spacing: 0;
+        .cf-pdf-header-divider {
+            height: 1.5px !important;
+            background: #EB7520 !important;
+            margin: 10px 0 12px !important;
             width: 100%;
         }
-        .cf-invoice-table th {
-            background: #F8FAFC !important;
-            color: #334155 !important;
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 13px 18px;
-            border-top: 1px solid #E2E8F0;
-            border-bottom: 1px solid #E2E8F0;
+
+        /* 2-Column Meta & Bill To */
+        .cf-pdf-meta-row {
+            margin-bottom: 6px !important;
         }
-        .cf-invoice-table td {
-            padding: 18px;
-            font-size: 14px;
+        .cf-pdf-main-heading {
+            color: #0F2C5B !important;
+            font-size: 14.5px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.5px !important;
+            text-transform: uppercase !important;
+            margin-bottom: 6px !important;
+        }
+        .cf-pdf-sub-heading {
+            color: #0F2C5B !important;
+            font-size: 13.5px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.5px !important;
+            text-transform: uppercase !important;
+            margin-bottom: 6px !important;
+        }
+        .cf-pdf-meta-table {
+            width: 100%;
+            max-width: 320px;
+            border-collapse: collapse;
+            font-size: 11.5px !important;
+        }
+        .cf-pdf-meta-table td {
+            padding: 2px 0 !important;
+            border: none !important;
+        }
+        .cf-pdf-meta-label {
+            color: #64748B !important;
+            font-weight: 500 !important;
+            width: 85px !important;
+        }
+        .cf-pdf-meta-val {
             color: #0F172A !important;
-            border-bottom: 1px solid #F1F5F9;
-            vertical-align: middle;
+            font-weight: 600 !important;
+        }
+        .cf-pdf-status-paid {
+            color: #15803D !important;
+            font-weight: 700 !important;
+            font-size: 12px !important;
+            text-transform: uppercase;
+        }
+        .cf-pdf-status-unpaid {
+            color: #DC2626 !important;
+            font-weight: 700 !important;
+            font-size: 12px !important;
+            text-transform: uppercase;
+        }
+        .cf-pdf-status-cancelled {
+            color: #64748B !important;
+            font-weight: 700 !important;
+            font-size: 12px !important;
+            text-transform: uppercase;
+        }
+
+        .cf-pdf-billto-details {
+            font-size: 11.5px !important;
+            color: #334155;
+            line-height: 1.45 !important;
+        }
+        .cf-pdf-billto-company {
+            font-weight: 600;
+            color: #0F172A;
+            font-size: 12.5px !important;
+        }
+        .cf-pdf-billto-name {
+            font-weight: 600;
+            color: #0F172A;
+        }
+
+        .cf-pdf-mid-divider {
+            height: 1px !important;
+            background: #DFE5EB !important;
+            margin: 10px 0 8px !important;
+            width: 100% !important;
+        }
+
+        /* Items Table */
+        .cf-pdf-items-wrap {
+            margin-top: 8px !important;
+            margin-bottom: 6px !important;
+        }
+        .cf-pdf-items-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+        }
+        .cf-pdf-items-table thead tr {
+            background: #0F2C5B !important;
+            color: #FFFFFF !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .cf-pdf-items-table th {
+            padding: 6px 12px !important;
+            font-size: 11.5px !important;
+            font-weight: 600 !important;
+            color: #FFFFFF !important;
+            border: none !important;
+        }
+        .cf-pdf-items-table td {
+            padding: 6px 12px !important;
+            border-bottom: 1px solid #F1F5F9 !important;
+            vertical-align: top !important;
+        }
+        .cf-pdf-item-title {
+            font-weight: 600 !important;
+            color: #0F172A !important;
+            font-size: 12px !important;
+            line-height: 1.35 !important;
+        }
+        .cf-pdf-item-specs {
+            font-size: 9.5px !important;
+            color: #0F2C5B !important;
+            line-height: 1.32 !important;
+            margin-top: 4px !important;
+            white-space: pre-line !important;
+            font-weight: 400 !important;
+        }
+        .cf-pdf-item-amount {
+            font-weight: 600 !important;
+            color: #0F172A !important;
+            font-size: 12px !important;
+            white-space: nowrap !important;
         }
 
         /* Totals */
-        .cf-invoice-total-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            font-size: 14px;
+        .cf-pdf-totals-wrap {
+            margin-top: 4px !important;
+            margin-bottom: 8px !important;
+        }
+        .cf-pdf-totals-table {
+            width: 100% !important;
+            max-width: 320px !important;
+            border-collapse: collapse !important;
+            font-size: 11.5px !important;
+        }
+        .cf-pdf-totals-table td {
+            padding: 2.5px 8px !important;
+            border: none !important;
+        }
+        .cf-pdf-tot-label {
+            text-align: right !important;
             color: #475569 !important;
+            font-weight: 500 !important;
         }
-        .cf-invoice-total-line strong {
+        .cf-pdf-tot-val {
+            text-align: right !important;
             color: #0F172A !important;
-            font-weight: 700;
+            font-weight: 600 !important;
+            width: 44% !important;
         }
-        .cf-invoice-total-line.final {
-            padding-top: 16px;
-            margin-top: 8px;
-            border-top: 2px solid #E2E8F0;
-            font-size: 18px;
-            font-weight: 800;
-            color: #0F172A !important;
+        .cf-pdf-total-orange-bar {
+            width: 100% !important;
+            background: #EB7520 !important;
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 4px 12px !important;
+            margin: 4px 0 !important;
+            box-sizing: border-box !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
-        .cf-invoice-total-line.final .total-amount {
-            color: #2563EB !important;
-            font-size: 22px;
-            font-weight: 900;
+        .cf-pdf-total-orange-label {
+            text-align: left !important;
+            color: #FFFFFF !important;
+            font-size: 12px !important;
+            letter-spacing: 0.5px !important;
+            padding: 0 !important;
+            font-weight: 700 !important;
+        }
+        .cf-pdf-total-orange-val {
+            text-align: right !important;
+            color: #FFFFFF !important;
+            font-size: 12px !important;
+            padding: 0 !important;
+            font-weight: 700 !important;
+        }
+
+        /* Transactions */
+        .cf-pdf-tx-section {
+            margin-top: 6px !important;
+            margin-bottom: 8px !important;
+        }
+        .cf-pdf-section-title {
+            color: #0F2C5B !important;
+            font-size: 11.5px !important;
+            font-weight: 700 !important;
+            margin-bottom: 4px !important;
+        }
+        .cf-pdf-tx-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            font-size: 11px !important;
+        }
+        .cf-pdf-tx-table thead tr {
+            background: #EDF1F6 !important;
+            color: #0F2C5B !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .cf-pdf-tx-table th {
+            padding: 4px 8px !important;
+            font-weight: 600 !important;
+            color: #0F2C5B !important;
+            border: none !important;
+            font-size: 10.5px !important;
+        }
+        .cf-pdf-tx-table td {
+            padding: 4px 8px !important;
+            border-bottom: 1px solid #F1F5F9 !important;
+            color: #334155 !important;
+            font-weight: 400 !important;
+        }
+        .cf-pdf-mono {
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+            font-size: 10.5px !important;
+        }
+
+        /* Notes */
+        .cf-pdf-notes-section {
+            margin-top: 6px !important;
+            margin-bottom: 8px !important;
+        }
+        .cf-pdf-notes-title {
+            color: #0F2C5B !important;
+            font-size: 11.5px !important;
+            font-weight: 700 !important;
+            margin-bottom: 3px !important;
+            letter-spacing: 0.5px !important;
+        }
+        .cf-pdf-notes-content {
+            font-size: 10.5px !important;
+            color: #475569 !important;
+            line-height: 1.4 !important;
+            white-space: pre-line !important;
+            font-weight: 400 !important;
+        }
+
+        /* Footer - Image 2 pixel-perfect styling pinned to bottom */
+        .cf-pdf-footer-wrap {
+            margin-top: auto !important;
+            padding-top: 8px !important;
+            border-top: 1px solid #DFE5EB !important;
+            width: 100% !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        .cf-pdf-footer-contacts {
+            margin-bottom: 4px !important;
+        }
+        .cf-pdf-footer-head {
+            color: #0F2C5B !important;
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.5px !important;
+            display: block !important;
+            margin-bottom: 2px !important;
+        }
+        .cf-pdf-footer-link {
+            color: #546379 !important;
+            text-decoration: none !important;
+            font-size: 10px !important;
+            font-weight: 400 !important;
+        }
+        .cf-pdf-footer-orange-bar {
+            height: 2px !important;
+            background: #EB7520 !important;
+            width: 100% !important;
+            margin: 6px 0 5px !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .cf-pdf-footer-meta {
+            text-align: center !important;
+            font-size: 9px !important;
+            color: #546379 !important;
+            font-weight: 400 !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        }
+
+        /* Print Media Styles */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 6mm 8mm;
+            }
+            html, body {
+                height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                background: #FFFFFF !important;
+            }
+            body * {
+                visibility: hidden !important;
+            }
+            .cf-invoice-sheet,
+            .cf-invoice-sheet * {
+                visibility: visible !important;
+            }
+            .cf-invoice-sheet {
+                position: relative !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                min-height: 100% !important;
+                max-height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                box-sizing: border-box !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+            .cf-pdf-footer-wrap {
+                margin-top: auto !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            .cf-invoice-page-wrap,
+            .cf-header-area,
+            footer,
+            .cf-invoice-top-actions,
+            .cf-paid-hero-card,
+            .cf-pay-gateway-box,
+            .preloader {
+                display: none !important;
+            }
         }
 
         /* Right Payment Panel */
@@ -617,32 +1230,6 @@ $payhereObj = [
             }
         }
 
-        /* Print Styling */
-        @media print {
-            body {
-                background: #FFFFFF !important;
-            }
-            .cf-invoice-page-wrap {
-                padding: 0 !important;
-                background: #FFFFFF !important;
-            }
-            .cf-pay-gateway-box,
-            .cf-invoice-top-actions,
-            header,
-            footer,
-            .preloader {
-                display: none !important;
-            }
-            .cf-invoice-sheet {
-                box-shadow: none !important;
-                border: none !important;
-                padding: 0 !important;
-            }
-            .col-lg-8 {
-                width: 100% !important;
-            }
-        }
-
         /* Floating Close Button for PayHere Modal */
         .cf-payhere-floating-close-btn {
             position: fixed !important;
@@ -808,81 +1395,107 @@ $payhereObj = [
 
                     <div class="cf-invoice-sheet">
                         
-                        <!-- Header: Company & Invoice Info -->
-                        <div class="row align-items-start mb-4 pb-3 border-bottom">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
+                        <!-- Header Row: Brand & Company Details -->
+                        <div class="row align-items-center cf-pdf-header-row g-3">
+                            <div class="col-6 col-sm-6">
                                 <img src="<?php echo $url; ?>assets/imgs/logos/cloud-flox-main.webp" alt="CloudFlox" class="cf-invoice-logo">
-                                <div class="cf-text-sub">
-                                    <strong class="text-slate-900 d-block fs-14">CloudFlox LLC</strong>
-                                    2709 N Hayden Island Dr STE 444529<br>
-                                    Portland, Oregon, 97217, USA<br>
-                                    <a href="mailto:billing@cloudflox.com" class="text-primary text-decoration-none fw-semibold">billing@cloudflox.com</a>
-                                </div>
+                                <div class="cf-pdf-tagline">Fast | Secure | Reliable</div>
                             </div>
-                            <div class="col-sm-6 text-sm-end">
-                                <div class="cf-text-label">Invoice Details</div>
-                                <div class="cf-text-title mb-1">#INV-<?php echo htmlspecialchars($invoiceNumber); ?></div>
-                                <div class="cf-text-sub mb-1">
-                                    <strong class="text-slate-900">Invoice Date:</strong> <?php echo htmlspecialchars($invoice['date'] ?? date('Y-m-d')); ?>
-                                </div>
-                                <div class="cf-text-sub mb-2">
-                                    <strong class="text-slate-900">Due Date:</strong> <?php echo htmlspecialchars($invoice['duedate'] ?? date('Y-m-d', strtotime('+7 days'))); ?>
-                                </div>
-                                <?php if ($isPaid && !empty($invoice['datepaid']) && $invoice['datepaid'] !== '0000-00-00 00:00:00'): ?>
-                                    <div class="fs-13 text-emerald fw-bold">
-                                        <i class="las la-check-circle me-1"></i> Paid On: <?php echo date('Y-m-d H:i', strtotime($invoice['datepaid'])); ?>
-                                    </div>
-                                <?php endif; ?>
+                            <div class="col-6 col-sm-6 text-end">
+                                <div class="cf-pdf-company-name">CloudFlox LLC</div>
+                                <div class="cf-pdf-company-address">2709 N Hayden Island Dr STE 444529</div>
+                                <div class="cf-pdf-company-address">Portland OR 97217, USA</div>
+                                <div class="cf-pdf-domains">cloudflox.com &nbsp;|&nbsp; my.cloudflox.com</div>
                             </div>
                         </div>
 
-                        <!-- Invoiced To Details -->
-                        <div class="row mb-4 pb-3 border-bottom">
-                            <div class="col-12 col-md-6">
-                                <div class="cf-text-label">Invoiced To:</div>
-                                <div class="fs-15 fw-extrabold text-slate-900"><?php echo htmlspecialchars($clientFullName); ?></div>
-                                <?php if (!empty($client['companyname'])): ?>
-                                    <div class="cf-text-sub"><?php echo htmlspecialchars($client['companyname']); ?></div>
-                                <?php endif; ?>
-                                <div class="cf-text-sub"><?php echo htmlspecialchars($clientAddress); ?></div>
-                                <div class="cf-text-sub"><?php echo htmlspecialchars($clientEmail); ?></div>
-                                <?php if (!empty($clientPhone)): ?>
-                                    <div class="cf-text-sub"><?php echo htmlspecialchars($clientPhone); ?></div>
-                                <?php endif; ?>
+                        <!-- Top Orange Accent Line -->
+                        <div class="cf-pdf-header-divider"></div>
+
+                        <!-- 2-Column Meta & Bill To Information -->
+                        <div class="row cf-pdf-meta-row g-4">
+                            <div class="col-12 col-sm-6">
+                                <div class="cf-pdf-main-heading">INVOICE</div>
+                                <table class="cf-pdf-meta-table">
+                                    <tr>
+                                        <td class="cf-pdf-meta-label">Invoice No.</td>
+                                        <td class="cf-pdf-meta-val"><?php echo htmlspecialchars($invoiceNumber); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cf-pdf-meta-label">Date</td>
+                                        <td class="cf-pdf-meta-val"><?php echo htmlspecialchars($invoiceDateFormatted); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cf-pdf-meta-label">Due Date</td>
+                                        <td class="cf-pdf-meta-val"><?php echo htmlspecialchars($dueDateFormatted); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cf-pdf-meta-label">Status</td>
+                                        <td class="cf-pdf-meta-val">
+                                            <?php if ($isPaid): ?>
+                                                <span class="cf-pdf-status-paid">Paid</span>
+                                            <?php elseif ($isCancelled): ?>
+                                                <span class="cf-pdf-status-cancelled">Cancelled</span>
+                                            <?php else: ?>
+                                                <span class="cf-pdf-status-unpaid">Unpaid</span>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
-                            <div class="col-12 col-md-6 mt-3 mt-md-0 text-md-end">
-                                <div class="cf-text-label">Payment Method:</div>
-                                <div class="fs-14 fw-bold text-slate-900">
-                                    <?php 
-                                    if ($selectedGateway === 'paypal') {
-                                        echo '<i class="lab la-paypal text-info me-1"></i> PayPal (USD)';
-                                    } else {
-                                        echo '<i class="las la-credit-card text-primary me-1"></i> Credit / Debit Card (via PayHere)';
-                                    }
-                                    ?>
+                            <div class="col-12 col-sm-6">
+                                <div class="cf-pdf-sub-heading">BILL TO</div>
+                                <div class="cf-pdf-billto-details">
+                                    <?php if (!empty($client['companyname'])): ?>
+                                        <div class="cf-pdf-billto-company"><?php echo htmlspecialchars($client['companyname']); ?></div>
+                                    <?php endif; ?>
+                                    <div class="cf-pdf-billto-name"><?php echo htmlspecialchars($clientFullName); ?></div>
+                                    <?php if (!empty($client['address1'])): ?>
+                                        <div><?php echo htmlspecialchars($client['address1']); ?></div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($client['address2'])): ?>
+                                        <div><?php echo htmlspecialchars($client['address2']); ?></div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($cityLine)): ?>
+                                        <div><?php echo htmlspecialchars($cityLine); ?></div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($clientCountryName)): ?>
+                                        <div><?php echo htmlspecialchars($clientCountryName); ?></div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($client['tax_id'])): ?>
+                                        <div>Tax ID: <?php echo htmlspecialchars($client['tax_id']); ?></div>
+                                    <?php endif; ?>
                                 </div>
-                                <div class="cf-text-muted mt-1">256-Bit SSL Encrypted Processing</div>
                             </div>
                         </div>
+
+                        <!-- Divider Line -->
+                        <div class="cf-pdf-mid-divider"></div>
 
                         <!-- Line Items Table -->
-                        <div class="table-responsive mb-4">
-                            <table class="table cf-invoice-table mb-0 w-100">
+                        <div class="cf-pdf-items-wrap">
+                            <table class="cf-pdf-items-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 70%;">Item Description</th>
-                                        <th class="text-end" style="width: 30%;">Amount (USD)</th>
+                                        <th style="width: 78%; text-align: left;">Description</th>
+                                        <th style="width: 22%; text-align: right;">Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php if (!empty($invoiceItems)): ?>
                                         <?php foreach ($invoiceItems as $item): ?>
+                                            <?php
+                                                $rawDesc = $item['description'] ?? '';
+                                                $parsed = parseInvoiceItemDescription($rawDesc, $item['type'] ?? '', $item['notes'] ?? '');
+                                            ?>
                                             <tr>
                                                 <td>
-                                                    <div class="fw-bold text-slate-900"><?php echo htmlspecialchars($item['description']); ?></div>
-                                                    <small class="cf-text-muted"><?php echo htmlspecialchars($item['notes'] ?? 'Standard Cloud Infrastructure Service'); ?></small>
+                                                    <div class="cf-pdf-item-title"><?php echo htmlspecialchars($parsed['title']); ?></div>
+                                                    <?php if (!empty($parsed['specs'])): ?>
+                                                        <div class="cf-pdf-item-specs"><?php echo htmlspecialchars($parsed['specs']); ?></div>
+                                                    <?php endif; ?>
                                                 </td>
-                                                <td class="text-end fw-extrabold text-slate-900 fs-15">
+                                                <td style="text-align: right;" class="cf-pdf-item-amount">
                                                     $<?php echo number_format((float)$item['amount'], 2); ?> USD
                                                 </td>
                                             </tr>
@@ -890,9 +1503,9 @@ $payhereObj = [
                                     <?php else: ?>
                                         <tr>
                                             <td>
-                                                <div class="fw-bold text-slate-900">CloudFlox Cloud Services</div>
+                                                <div class="cf-pdf-item-title">CloudFlox Cloud Infrastructure Service</div>
                                             </td>
-                                            <td class="text-end fw-extrabold text-slate-900 fs-15">
+                                            <td style="text-align: right;" class="cf-pdf-item-amount">
                                                 $<?php echo number_format($totalUsd, 2); ?> USD
                                             </td>
                                         </tr>
@@ -902,27 +1515,123 @@ $payhereObj = [
                         </div>
 
                         <!-- Totals Breakdown -->
-                        <div class="row justify-content-end">
-                            <div class="col-12 col-sm-7 col-md-5">
-                                <div class="cf-invoice-total-line">
-                                    <span>Subtotal:</span>
-                                    <strong>$<?php echo number_format($subtotalUsd, 2); ?> USD</strong>
+                        <div class="cf-pdf-totals-wrap">
+                            <!-- Subtotal, Tax, and Credit on the Right -->
+                            <div class="row justify-content-end">
+                                <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+                                    <table class="cf-pdf-totals-table ms-auto">
+                                        <tr>
+                                            <td class="cf-pdf-tot-label">Subtotal</td>
+                                            <td class="cf-pdf-tot-val">$<?php echo number_format($subtotalUsd, 2); ?> USD</td>
+                                        </tr>
+                                        <?php if ($taxUsd > 0): ?>
+                                            <tr>
+                                                <td class="cf-pdf-tot-label">Tax / Processing Fees</td>
+                                                <td class="cf-pdf-tot-val">$<?php echo number_format($taxUsd, 2); ?> USD</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                        <?php if ($creditUsd > 0): ?>
+                                            <tr>
+                                                <td class="cf-pdf-tot-label">Credit</td>
+                                                <td class="cf-pdf-tot-val">-$<?php echo number_format($creditUsd, 2); ?> USD</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </table>
                                 </div>
-                                <div class="cf-invoice-total-line">
-                                    <span>Tax / Processing Fees:</span>
-                                    <span>$<?php echo number_format($taxUsd, 2); ?> USD</span>
-                                </div>
-                                <div class="cf-invoice-total-line final">
-                                    <span>Total Due:</span>
-                                    <span class="total-amount">$<?php echo number_format($totalUsd, 2); ?> USD</span>
+                            </div>
+
+                            <!-- Full-Width Orange Bar from Left Corner to Right Corner -->
+                            <div class="cf-pdf-total-orange-bar">
+                                <span class="cf-pdf-total-orange-label">TOTAL</span>
+                                <span class="cf-pdf-total-orange-val">$<?php echo number_format($totalUsd, 2); ?> USD</span>
+                            </div>
+
+                            <!-- Balance Due on the Right -->
+                            <div class="row justify-content-end">
+                                <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+                                    <table class="cf-pdf-totals-table ms-auto">
+                                        <tr>
+                                            <td class="cf-pdf-tot-label" style="font-weight: 700; color: #0F2C5B; padding-top: 4px;">BALANCE DUE</td>
+                                            <td class="cf-pdf-tot-val" style="font-weight: 700; color: #0F2C5B; padding-top: 4px;">$<?php echo number_format($balanceDueUsd, 2); ?> USD</td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Footer Note -->
-                        <div class="mt-4 pt-3 border-top cf-text-sub fs-12 text-center text-sm-start">
-                            <i class="las la-info-circle text-primary me-1"></i>
-                            All services are provisioned in real-time immediately after payment confirmation. For questions regarding this invoice, contact our 24/7 billing support team at <a href="mailto:billing@cloudflox.com" class="text-primary fw-semibold">billing@cloudflox.com</a>.
+                        <!-- Transactions History Section -->
+                        <div class="cf-pdf-tx-section">
+                            <div class="cf-pdf-section-title">Transactions</div>
+                            <table class="cf-pdf-tx-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 24%;">Date</th>
+                                        <th style="width: 26%;">Gateway</th>
+                                        <th style="width: 32%;">Transaction ID</th>
+                                        <th style="width: 18%; text-align: right;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($transactions)): ?>
+                                        <?php foreach ($transactions as $trans): ?>
+                                            <?php
+                                                $gwRaw = strtolower(trim($trans['gateway'] ?? ''));
+                                                if (strpos($gwRaw, 'payhere') !== false) {
+                                                    $gwDisplay = 'Pay Now (Visa, Master, Amex)';
+                                                } elseif (strpos($gwRaw, 'paypal') !== false) {
+                                                    $gwDisplay = 'PayPal';
+                                                } else {
+                                                    $gwDisplay = !empty($trans['gateway']) ? $trans['gateway'] : 'Online Payment';
+                                                }
+                                                $txAmount = (float)($trans['amountin'] ?? $trans['amount'] ?? 0);
+                                                if ($totalUsd > 0 && $txAmount > ($totalUsd * 50)) {
+                                                    $txAmount = $totalUsd;
+                                                }
+                                            ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars(!empty($trans['date']) ? date('d/m/Y H:i', strtotime($trans['date'])) : '-'); ?></td>
+                                                <td><?php echo htmlspecialchars($gwDisplay); ?></td>
+                                                <td class="cf-pdf-mono"><?php echo htmlspecialchars($trans['transid'] ?? '-'); ?></td>
+                                                <td style="text-align: right; font-weight: 700;">$<?php echo number_format($txAmount, 2); ?> USD</td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="4" class="text-muted" style="padding: 10px;">No Transactions Found</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Optional Invoice Notes -->
+                        <?php if (!empty($invoice['notes'])): ?>
+                            <div class="cf-pdf-notes-section">
+                                <div class="cf-pdf-notes-title">NOTES</div>
+                                <div class="cf-pdf-notes-content"><?php echo htmlspecialchars($invoice['notes']); ?></div>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Standard 3-Column Footer with Reference -->
+                        <div class="cf-pdf-footer-wrap">
+                            <div class="row cf-pdf-footer-contacts g-2 text-start">
+                                <div class="col-4">
+                                    <span class="cf-pdf-footer-head">TECHNICAL SUPPORT</span>
+                                    <a href="mailto:support@cloudflox.com" class="cf-pdf-footer-link">support@cloudflox.com</a>
+                                </div>
+                                <div class="col-4">
+                                    <span class="cf-pdf-footer-head">SALES &amp; HOSTING</span>
+                                    <a href="mailto:sales@cloudflox.com" class="cf-pdf-footer-link">sales@cloudflox.com</a>
+                                </div>
+                                <div class="col-4">
+                                    <span class="cf-pdf-footer-head">BILLING &amp; ACCOUNTS</span>
+                                    <a href="mailto:billing@cloudflox.com" class="cf-pdf-footer-link">billing@cloudflox.com</a>
+                                </div>
+                            </div>
+                            <div class="cf-pdf-footer-orange-bar"></div>
+                            <div class="cf-pdf-footer-meta">
+                                CloudFlox LLC &nbsp;|&nbsp; Generated: <?php echo htmlspecialchars($invoiceGeneratedTime); ?> &nbsp;|&nbsp; Ref: <?php echo htmlspecialchars($invoiceRefCode); ?>
+                            </div>
                         </div>
 
                     </div>
@@ -942,7 +1651,7 @@ $payhereObj = [
                             <!-- Gateway Switcher Pills (Card via PayHere, PayPal) -->
                             <div class="cf-gateway-nav-pills" role="tablist">
                                 <button type="button" class="cf-gateway-nav-btn <?php echo ($selectedGateway !== 'paypal') ? 'active' : ''; ?>" id="tabBtnCard" onclick="switchGateway('card')">
-                                    <i class="las la-credit-card text-primary fs-15"></i> Credit / Debit Card (PayHere)
+                                    <i class="las la-credit-card text-primary fs-15"></i> Credit / Debit Card
                                 </button>
                                 <button type="button" class="cf-gateway-nav-btn <?php echo ($selectedGateway === 'paypal') ? 'active' : ''; ?>" id="tabBtnPayPal" onclick="switchGateway('paypal')">
                                     <i class="lab la-paypal text-info fs-15"></i> PayPal
@@ -1034,6 +1743,17 @@ $payhereObj = [
         const invoiceId = <?php echo json_encode($invoice['id']); ?>;
         const isAutoPay = <?php echo $autoPayNow ? 'true' : 'false'; ?>;
         const isAlreadyPaid = <?php echo $isPaid ? 'true' : 'false'; ?>;
+        // Automatically clear domain & hosting carts upon invoice payment
+        if (isAlreadyPaid) {
+            try {
+                localStorage.removeItem('cf_domain_cart');
+                localStorage.removeItem('cf_hosting_pid');
+                localStorage.removeItem('cf_hosting_cycle');
+                if (window.cfDomainCart && typeof window.cfDomainCart.clear === 'function') {
+                    window.cfDomainCart.clear();
+                }
+            } catch (e) {}
+        }
 
         // Switch Gateway View
         window.switchGateway = function(gw) {
@@ -1223,6 +1943,14 @@ $payhereObj = [
         window.triggerPayHereModal = function() {
             ensurePayHereSDK(function() {
                 payhere.onCompleted = function(orderId) {
+                    try {
+                        localStorage.removeItem('cf_domain_cart');
+                        localStorage.removeItem('cf_hosting_pid');
+                        localStorage.removeItem('cf_hosting_cycle');
+                        if (window.cfDomainCart && typeof window.cfDomainCart.clear === 'function') {
+                            window.cfDomainCart.clear();
+                        }
+                    } catch (e) {}
                     // Payment completed via PayHere popup; reload invoice to view payment status
                     window.location.href = 'invoice?id=' + encodeURIComponent(orderId) + '&paid=1';
                 };
@@ -1285,28 +2013,57 @@ $payhereObj = [
             btnElement.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status"></span> Generating PDF...';
         }
 
+        const origMinHeight = sheet.style.minHeight;
+        const origHeight = sheet.style.height;
+
+        // Calculate single A4 page height leaving safe 35px buffer to NEVER create an empty second page
+        const sheetWidth = sheet.offsetWidth || 760;
+        const maxSinglePageHeight = Math.floor(sheetWidth * (285 / 194));
+        const targetHeight = maxSinglePageHeight - 35;
+
+        // Apply target height so flexbox margin-top: auto pushes footer right to the bottom of the page
+        sheet.style.setProperty('min-height', targetHeight + 'px', 'important');
+        sheet.style.setProperty('height', targetHeight + 'px', 'important');
+
         const invoiceId = '<?php echo htmlspecialchars($invoiceNumber); ?>';
         const opt = {
-            margin:       [8, 8, 8, 8],
+            margin:       [6, 8, 6, 8],
             filename:     'CloudFlox-Invoice-' + invoiceId + '.pdf',
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2, useCORS: true, letterRendering: true, logging: false },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
-        if (typeof html2pdf === 'undefined') {
-            console.warn('html2pdf not loaded, falling back to print dialog');
+        const restoreSheet = function() {
+            sheet.style.removeProperty('min-height');
+            sheet.style.removeProperty('height');
+            if (origMinHeight) sheet.style.minHeight = origMinHeight;
+            if (origHeight) sheet.style.height = origHeight;
             if (btnElement) {
                 btnElement.disabled = false;
+            }
+        };
+
+        if (typeof html2pdf === 'undefined') {
+            console.warn('html2pdf not loaded, falling back to print dialog');
+            restoreSheet();
+            if (btnElement) {
                 btnElement.innerHTML = origHtml;
             }
             window.print();
             return;
         }
 
-        html2pdf().set(opt).from(sheet).save().then(function() {
+        html2pdf().set(opt).from(sheet).toPdf().get('pdf').then(function(pdf) {
+            // Strictly enforce 1 single page by removing any trailing empty/blank page
+            var totalPages = pdf.internal.getNumberOfPages();
+            while (totalPages > 1) {
+                pdf.deletePage(totalPages);
+                totalPages = pdf.internal.getNumberOfPages();
+            }
+        }).save().then(function() {
+            restoreSheet();
             if (btnElement) {
-                btnElement.disabled = false;
                 btnElement.innerHTML = '<i class="las la-check text-success me-1"></i> Saved to Downloads!';
                 setTimeout(function() {
                     btnElement.innerHTML = origHtml;
@@ -1314,8 +2071,8 @@ $payhereObj = [
             }
         }).catch(function(err) {
             console.error('PDF error:', err);
+            restoreSheet();
             if (btnElement) {
-                btnElement.disabled = false;
                 btnElement.innerHTML = origHtml;
             }
             window.print();

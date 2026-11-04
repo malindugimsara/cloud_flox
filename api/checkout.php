@@ -27,6 +27,190 @@ if (!$data || !is_array($data)) {
     $data = $_POST;
 }
 
+/**
+ * Returns detailed hosting specifications matching CloudFlox standards and Image 1.
+ */
+function getHostingPlanSpecificationsText($planString) {
+    $t = strtolower($planString);
+
+    if (strpos($t, 'mini') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 1 Core (Shared Resources)\n"
+             . "- RAM: 1 GB Guaranteed RAM\n"
+             . "- I/O Rate: 5 MB/s\n"
+             . "- Disk Space: 5 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 100 GB Premium Bandwidth\n"
+             . "- Hosted Websites: 1 Website\n"
+             . "- Email Accounts: 5 Webmail Accounts\n"
+             . "- MySQL Databases: 2 Databases\n"
+             . "- Subdomains: 5 Subdomains\n"
+             . "- FTP Accounts: 2 Accounts\n"
+             . "- SSL Certificate: Free AutoSSL\n"
+             . "- Security: CloudLinux CageFS & Imunify360\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions (7.4 - 8.3)\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Weekly Automated Backups\n"
+             . "- Support: Standard 24/7 Ticket Support\n\n"
+             . "Hosting Type: High-Speed NVMe Shared Hosting\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'basic') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 1.5 Cores (Shared Resources)\n"
+             . "- RAM: 2 GB Guaranteed RAM\n"
+             . "- I/O Rate: 10 MB/s\n"
+             . "- Disk Space: 15 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 500 GB Premium Bandwidth\n"
+             . "- Hosted Websites: 3 Websites\n"
+             . "- Email Accounts: 25 Webmail Accounts\n"
+             . "- MySQL Databases: 10 Databases\n"
+             . "- Subdomains: 20 Subdomains\n"
+             . "- FTP Accounts: 5 Accounts\n"
+             . "- SSL Certificate: Free AutoSSL\n"
+             . "- Security: CloudLinux CageFS & Imunify360\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions (7.4 - 8.3)\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Daily Automated Backups\n"
+             . "- Support: 24/7 Helpdesk & Ticket Support\n\n"
+             . "Hosting Type: High-Speed NVMe Shared Hosting\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'plus') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 2 Cores (Shared Resources)\n"
+             . "- RAM: 3 GB Guaranteed RAM\n"
+             . "- I/O Rate: 15 MB/s\n"
+             . "- Disk Space: 30 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 1 TB Premium Bandwidth\n"
+             . "- Hosted Websites: 10 Websites\n"
+             . "- Email Accounts: 50 Webmail Accounts\n"
+             . "- MySQL Databases: 25 Databases\n"
+             . "- Subdomains: 50 Subdomains\n"
+             . "- FTP Accounts: Unlimited\n"
+             . "- SSL Certificate: Free AutoSSL\n"
+             . "- Security: CloudLinux CageFS & Imunify360\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions (7.4 - 8.3)\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Daily Automated Backups\n"
+             . "- Support: Priority 24/7 Ticket Support\n\n"
+             . "Hosting Type: High-Speed NVMe Shared Hosting\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'starter') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 1 vCPU Dedicated\n"
+             . "- RAM: 2 GB Dedicated RAM\n"
+             . "- I/O Rate: 15 MB/s\n"
+             . "- Disk Space: 20 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 1 TB Premium Bandwidth\n"
+             . "- Hosted Websites: 1 Website\n"
+             . "- Email Accounts: 25 Professional Email Accounts\n"
+             . "- MySQL Databases: 10 Databases\n"
+             . "- Subdomains: 25 Subdomains\n"
+             . "- FTP Accounts: Unlimited\n"
+             . "- SSL Certificate: Free AutoSSL & HTTP/3\n"
+             . "- Security: Imunify360 Proactive Defense & CageFS\n"
+             . "- Web Server: LiteSpeed Enterprise Web Server\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions Supported\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Free Daily JetBackup Snapshots\n"
+             . "- Support: Priority 24/7 Tech Support\n\n"
+             . "Hosting Type: Business NVMe Cloud Infrastructure\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'growth') !== false || strpos($t, 'business plan') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 2 vCPU Dedicated\n"
+             . "- RAM: 4 GB Dedicated RAM\n"
+             . "- I/O Rate: 20 MB/s\n"
+             . "- Disk Space: 40 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 2 TB Premium Bandwidth\n"
+             . "- Hosted Websites: 5 Websites\n"
+             . "- Email Accounts: 50 Professional Email Accounts\n"
+             . "- MySQL Databases: 25 Databases\n"
+             . "- Subdomains: Unlimited\n"
+             . "- FTP Accounts: Unlimited\n"
+             . "- SSL Certificate: Free AutoSSL & HTTP/3\n"
+             . "- Security: Imunify360 Proactive Defense & CageFS\n"
+             . "- Web Server: LiteSpeed Enterprise Web Server\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions Supported\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Free Daily JetBackup Snapshots\n"
+             . "- Support: Priority 24/7 Tech Support\n\n"
+             . "Hosting Type: Business NVMe Cloud Infrastructure\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'pro') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: 4 vCPU Dedicated\n"
+             . "- RAM: 8 GB Dedicated RAM\n"
+             . "- I/O Rate: 25 MB/s\n"
+             . "- Disk Space: 100 GB Pure NVMe Gen4 SSD\n"
+             . "- Bandwidth: 5 TB Premium Bandwidth\n"
+             . "- Hosted Websites: 15 Websites\n"
+             . "- Email Accounts: 100 Professional Email Accounts\n"
+             . "- MySQL Databases: 50 Databases\n"
+             . "- Subdomains: Unlimited\n"
+             . "- FTP Accounts: Unlimited\n"
+             . "- Dedicated IP: 1 Free Dedicated IPv4\n"
+             . "- SSL Certificate: Free AutoSSL & HTTP/3\n"
+             . "- Security: Imunify360 Proactive Defense & CageFS\n"
+             . "- Web Server: LiteSpeed Enterprise Web Server\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions Supported\n"
+             . "- Cron Jobs: Supported\n"
+             . "- Backups: Free Daily JetBackup Snapshots\n"
+             . "- Support: VIP 24/7 Tech Support\n\n"
+             . "Hosting Type: High-Scale Business Cloud Infrastructure\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    if (strpos($t, 'enterprise') !== false || strpos($t, 'managed') !== false) {
+        return "Hosting Specifications\n\n"
+             . "- CPU: Up to 4 Cores (Shared Resources)\n"
+             . "- RAM: Up to 8 GB\n"
+             . "- I/O Rate: 10 MB/s\n"
+             . "- Disk Space: 300 GB NVMe SSD\n"
+             . "- Bandwidth: 1 TB Premium\n"
+             . "- Add-on Domains: 100\n"
+             . "- Email Accounts: 100\n"
+             . "- MySQL Databases: 50\n"
+             . "- Subdomains: 100\n"
+             . "- FTP Accounts: Unlimited\n"
+             . "- SSL Certificate: Free SSL\n"
+             . "- Security: Imunify360\n"
+             . "- Control Panel: cPanel\n"
+             . "- PHP: Multiple PHP Versions Supported\n"
+             . "- Cron Jobs: Supported (Subject to Resource Limits)\n"
+             . "- Migration: Free One-Time Migration\n"
+             . "- Support: Managed Hosting Support\n\n"
+             . "Hosting Type: Managed Shared Server Infrastructure\n"
+             . "Access: cPanel User Access Only (No Root Access)";
+    }
+
+    // Default Fallback for any Cloud Hosting item
+    return "Hosting Specifications\n\n"
+         . "- Disk Space: High-Speed Pure NVMe Gen4 SSD Storage\n"
+         . "- Bandwidth: Premium High-Speed Connectivity\n"
+         . "- SSL Certificate: Free AutoSSL Certificate\n"
+         . "- Security: CloudLinux CageFS & Imunify360 Proactive Defense\n"
+         . "- Control Panel: cPanel & Webmail Access\n"
+         . "- PHP: Multiple PHP Versions Supported\n"
+         . "- Support: 24/7 Technical Support\n\n"
+         . "Hosting Type: High-Speed NVMe Cloud Infrastructure\n"
+         . "Access: cPanel User Access Only (No Root Access)";
+}
+
 $action = strtolower(trim($data['action'] ?? ''));
 
 // =========================================================================
@@ -875,9 +1059,11 @@ try {
         if ($invoiceId > 0) {
             if ($hasHosting) {
                 $itemDesc = $planName . ($fullDomain ? ' - ' . $fullDomain : '');
+                $itemSpecs = getHostingPlanSpecificationsText($planName);
+                $fullItemDesc = $itemDesc . "\n\n" . $itemSpecs;
                 $itemStmt = $mysqli->prepare("INSERT INTO tblinvoiceitems (invoiceid, userid, type, relid, description, amount, taxed, duedate, paymentmethod) VALUES (?, ?, 'Hosting', ?, ?, ?, 0, ?, ?)");
                 if ($itemStmt) {
-                    $itemStmt->bind_param('iiisdss', $invoiceId, $clientId, $hostingServiceId, $itemDesc, $planPrice, $dueDate, $whmcsGateway);
+                    $itemStmt->bind_param('iiisdss', $invoiceId, $clientId, $hostingServiceId, $fullItemDesc, $planPrice, $dueDate, $whmcsGateway);
                     $itemStmt->execute();
                     $itemStmt->close();
                 }

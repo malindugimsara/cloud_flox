@@ -137,51 +137,23 @@ window.cfDomainCart = {
     },
 
     getTotal: function() {
-        return this.items.reduce((sum, it) => sum + (parseFloat(it.raw_price) || 0), 0);
+        return this.items.reduce((sum, it) => {
+            const raw = parseFloat(it.raw_price) || 0;
+            const yrs = parseInt(it.years, 10) || 1;
+            return sum + (raw * yrs);
+        }, 0);
     },
 
     hideBar: function() {
-        this.isBarHidden = true;
-        try {
-            localStorage.setItem(this.hiddenKey, '1');
-        } catch (e) {}
         const bar = document.getElementById('cfDomainCartBar');
-        if (bar) {
-            bar.classList.add('cf-cart-bar-hiding');
-            setTimeout(() => {
-                bar.style.display = 'none';
-                bar.classList.add('cf-cart-bar-hidden');
-                bar.classList.remove('cf-cart-bar-hiding');
-            }, 250);
-        }
+        if (bar) bar.remove();
     },
 
-    showBar: function() {
-        this.isBarHidden = false;
-        try {
-            localStorage.removeItem(this.hiddenKey);
-        } catch (e) {}
-        const bar = document.getElementById('cfDomainCartBar');
-        if (bar) {
-            bar.classList.remove('cf-cart-bar-hidden', 'cf-cart-bar-hiding');
-        }
-        this.renderCartBar();
-    },
+    showBar: function() {},
 
-    toggleCollapse: function() {
-        this.hideBar();
-    },
+    toggleCollapse: function() {},
 
-    applyCollapseState: function() {
-        const body = document.getElementById('cfCartItemsBody');
-        const bar = document.getElementById('cfDomainCartBar');
-        if (body) {
-            body.style.display = this.isCollapsed ? 'none' : 'block';
-        }
-        if (bar) {
-            bar.classList.toggle('cf-cart-collapsed', this.isCollapsed);
-        }
-    },
+    applyCollapseState: function() {},
 
     showToast: function(domainName) {
         const toast = document.getElementById('cfCartToast');
@@ -273,11 +245,11 @@ window.cfDomainCart = {
                             </div>
                             <div class="cf-drawer-item-details">
                                 <strong class="cf-drawer-item-name" title="${cfEscapeHtml(it.domain)}">${cfEscapeHtml(it.domain)}</strong>
-                                <span class="cf-drawer-item-tag">1 Year Registration</span>
+                                <span class="cf-drawer-item-tag">${(parseInt(it.years, 10) || 1) > 1 ? (it.years + ' Years Registration') : ((it.type === 'transfer') ? 'Transfer' : '1 Year Registration')}</span>
                             </div>
                         </div>
                         <div class="cf-drawer-item-right">
-                            <span class="cf-drawer-item-price">${cfEscapeHtml(it.price)}</span>
+                            <span class="cf-drawer-item-price">$${((parseFloat(it.raw_price) || 0) * (parseInt(it.years, 10) || 1)).toFixed(2)}</span>
                             <button type="button" class="cf-drawer-item-del" onclick="cfDomainCart.remove('${cfEscapeHtml(it.domain)}')" title="Remove domain" aria-label="Remove">
                                 <i class="las la-times"></i>
                             </button>
@@ -289,110 +261,10 @@ window.cfDomainCart = {
     },
 
     renderCartBar: function() {
-        const path = (window.location && window.location.pathname) ? window.location.pathname.toLowerCase() : '';
-        const isCheckoutPage = !!(
-            (document.body && document.body.classList.contains('cf-checkout-page')) ||
-            path.indexOf('/checkout') !== -1 ||
-            path.indexOf('checkout.php') !== -1
-        );
-
-        let bar = document.getElementById('cfDomainCartBar');
-        if (isCheckoutPage) {
-            if (bar) {
-                bar.style.display = 'none';
-                bar.classList.add('cf-cart-bar-hidden');
-            }
-            return;
-        }
-
-        if (!bar) {
-            bar = document.createElement('div');
-            bar.id = 'cfDomainCartBar';
-            bar.className = 'cf-floating-cart-bar';
-            bar.style.display = 'none';
-            bar.innerHTML = `
-                <div class="cf-cart-bar-header">
-                    <div class="cf-cart-bar-header-left">
-                        <div class="cf-cart-bar-badge">
-                            <i class="las la-shopping-cart"></i>
-                            <span id="cfCartCount" class="cf-cart-count-pill">0</span>
-                        </div>
-                        <div>
-                            <h6 class="cf-cart-header-title mb-0">
-                                Selected Domains (<span id="cfCartCountTitle">0</span>)
-                            </h6>
-                            <small class="cf-cart-header-subtitle">Review added domains below</small>
-                        </div>
-                    </div>
-                    <div class="cf-cart-bar-header-right">
-                        <button type="button" class="cf-btn-cart-toggle" id="cfCartToggleBtn" onclick="cfDomainCart.hideBar()" title="Hide cart drawer" aria-label="Hide cart">
-                            <i class="las la-times"></i>
-                            <span>Hide</span>
-                        </button>
-                        <button type="button" class="cf-btn-cart-clear-link" onclick="cfDomainCart.clear()" title="Clear all domains from cart">
-                            <i class="las la-trash-alt me-1"></i>
-                            <span>Clear</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="cf-cart-items-body" id="cfCartItemsBody">
-                    <div class="cf-cart-items-wrap" id="cfCartChipsWrap"></div>
-                </div>
-                <div class="cf-cart-bar-footer">
-                    <div class="cf-cart-total-box">
-                        <small class="cf-cart-total-label">Estimated Total</small>
-                        <strong id="cfCartTotalText" class="cf-cart-total-amount">$0.00</strong>
-                    </div>
-                    <button type="button" class="btn cf-btn-checkout" onclick="cfDomainCart.checkout()">
-                        <span>Continue to Checkout</span>
-                        <i class="las la-arrow-right ms-1"></i>
-                    </button>
-                </div>
-            `;
-            document.body.appendChild(bar);
-        }
-
-        const count = this.items.length;
-        if (count === 0 || this.isBarHidden) {
-            bar.style.display = 'none';
-            bar.classList.add('cf-cart-bar-hidden');
-            return;
-        }
-
-        bar.classList.remove('cf-cart-bar-hidden', 'cf-cart-bar-hiding');
-        bar.style.display = 'block';
-        this.applyCollapseState();
-
-        const countEl = document.getElementById('cfCartCount');
-        if (countEl) countEl.textContent = count;
-
-        const countTitleEl = document.getElementById('cfCartCountTitle');
-        if (countTitleEl) countTitleEl.textContent = count;
-
-        const totalEl = document.getElementById('cfCartTotalText');
-        if (totalEl) totalEl.textContent = '$' + this.getTotal().toFixed(2);
-
-        const listWrap = document.getElementById('cfCartChipsWrap');
-        if (listWrap) {
-            listWrap.innerHTML = this.items.map(it => `
-                <div class="cf-cart-item-row">
-                    <div class="cf-cart-item-info">
-                        <div class="cf-cart-item-icon">
-                            <i class="las la-globe"></i>
-                        </div>
-                        <div class="cf-cart-item-details">
-                            <strong class="cf-cart-item-domain">${cfEscapeHtml(it.domain)}</strong>
-                            <span class="cf-cart-item-term">1 Year Registration</span>
-                        </div>
-                    </div>
-                    <div class="cf-cart-item-actions">
-                        <span class="cf-cart-item-price">${cfEscapeHtml(it.price)}</span>
-                        <button type="button" class="cf-cart-item-del-btn" onclick="cfDomainCart.remove('${cfEscapeHtml(it.domain)}')" title="Remove ${cfEscapeHtml(it.domain)}" aria-label="Remove domain">
-                            <i class="las la-times"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+        // Floating bottom cart bar permanently removed
+        const bar = document.getElementById('cfDomainCartBar');
+        if (bar) {
+            bar.remove();
         }
     },
 
@@ -599,7 +471,7 @@ function cfEscapeHtml(str) {
                             <i class="las ${inCart ? 'la-check' : 'la-cart-plus'} me-1"></i>
                             <span class="btn-cart-text">${inCart ? 'In Cart' : 'Add to Cart'}</span>
                         </button>
-                        <a href="${cfEscapeHtml(primaryBuyUrl)}" class="btn cf-btn-domain-direct-buy">
+                        <a href="${cfEscapeHtml(primaryBuyUrl)}" class="btn cf-btn-domain-direct-buy" onclick="window.cfDomainCart.add('${cfEscapeHtml(primary.domain)}', '${cfEscapeHtml(primary.price)}', ${primary.raw_price}, 'register');">
                             <span>Checkout &rarr;</span>
                         </a>
                     </div>
@@ -622,7 +494,7 @@ function cfEscapeHtml(str) {
                         <p class="text-slate-500 fs-13 mb-0">Already own this domain? Transfer management to CloudFlox for cheaper renewals.</p>
                     </div>
                     <div class="cf-domain-card-right">
-                        <a href="${cfEscapeHtml(primaryTransferUrl)}" class="btn cf-btn-domain-transfer">
+                        <a href="${cfEscapeHtml(primaryTransferUrl)}" class="btn cf-btn-domain-transfer" onclick="window.cfDomainCart.add('${cfEscapeHtml(primary.domain)}', '', 0, 'transfer');">
                             <i class="las la-exchange-alt me-1"></i>
                             <span>Transfer to CloudFlox</span>
                             <i class="las la-arrow-right ms-1"></i>
@@ -652,7 +524,7 @@ function cfEscapeHtml(str) {
                            <i class="las ${sInCart ? 'la-check' : 'la-cart-plus'} me-1"></i>
                            <span class="btn-cart-text">${sInCart ? 'In Cart' : 'Add to Cart'}</span>
                        </button>`
-                    : `<a href="${cfEscapeHtml(altTransferUrl)}" class="btn btn-sm btn-outline-secondary py-1 px-3 fs-12 rounded-pill">Transfer</a>`;
+                    : `<a href="${cfEscapeHtml(altTransferUrl)}" class="btn btn-sm btn-outline-secondary py-1 px-3 fs-12 rounded-pill" onclick="window.cfDomainCart.add('${cfEscapeHtml(s.domain)}', '', 0, 'transfer');">Transfer</a>`;
 
                 return `
                     <div class="cf-domain-alt-row">
