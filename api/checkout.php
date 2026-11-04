@@ -696,12 +696,30 @@ if ($domainType === 'register') {
     if (!empty($eppCode)) {
         $orderPayload['eppcode'] = [$eppCode];
     }
-} elseif ($domainType === 'owndomain') {
-    $orderPayload['domaintype'] = ['owndomain'];
 }
+// Note: For 'owndomain', domaintype is deliberately omitted. In WHMCS AddOrder API,
+// domaintype is strictly for domain purchases ('register' / 'transfer').
+// Supplying 'owndomain' causes WHMCS to treat it as a domain registration and fail with:
+// "Invalid TLD/Registration Period Supplied for Domain Registration".
 
 // 4. Create Order in WHMCS
 $orderResult = WHMCSClient::createOrder($orderPayload);
+
+// Graceful Gateway Fallback: If WHMCS rejects 'paypal' because only 'payheresdk' is enabled in WHMCS
+if (empty($orderResult['orderid']) && !empty($orderResult['message']) && stripos($orderResult['message'], 'Invalid Payment Method') !== false) {
+    $fallbackGateway = 'payheresdk';
+    if (preg_match('/include\s+([a-zA-Z0-9_, -]+)/i', $orderResult['message'], $mOpt)) {
+        $firstOpt = trim(explode(',', $mOpt[1])[0]);
+        if (!empty($firstOpt)) {
+            $fallbackGateway = $firstOpt;
+        }
+    }
+    $orderPayload['paymentmethod'] = $fallbackGateway;
+    $orderResult = WHMCSClient::createOrder($orderPayload);
+    if (!empty($orderResult['orderid'])) {
+        $whmcsGateway = $fallbackGateway;
+    }
+}
 
 if (empty($orderResult['orderid'])) {
     $errMsg = $orderResult['message'] ?? 'Failed to place order in billing engine.';

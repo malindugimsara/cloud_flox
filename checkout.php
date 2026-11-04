@@ -3126,13 +3126,19 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
             });
         };
 
-        window.showAlert = function(msg) {
-            const box = document.getElementById('pageAlertBox');
-            const text = document.getElementById('pageAlertText');
-            if (box && text) {
-                text.textContent = msg;
-                box.classList.remove('d-none');
-                box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        window.showAlert = function(msg, title) {
+            if (window.cfToast && typeof window.cfToast.error === 'function') {
+                window.cfToast.error(msg, title || 'Checkout Alert');
+                const box = document.getElementById('pageAlertBox');
+                if (box) box.classList.add('d-none');
+            } else {
+                const box = document.getElementById('pageAlertBox');
+                const text = document.getElementById('pageAlertText');
+                if (box && text) {
+                    text.textContent = msg;
+                    box.classList.remove('d-none');
+                    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
             }
         };
 
