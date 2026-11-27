@@ -1,9 +1,9 @@
 <?php 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 include 'include/url.inc.php';
 require_once __DIR__ . '/include/csrf.inc.php';
+require_once __DIR__ . '/include/rate-limit.inc.php';
 require_once __DIR__ . '/api/whmcs.php';
 
 $error = '';
@@ -39,6 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
 
     if (!cf_csrf_verify($_POST['csrf_token'] ?? '')) {
         $error = 'Security token mismatch. Please refresh the page and try again.';
+    } elseif (!cf_rate_check('register', 5, 600)) {
+        $error = 'Too many registration attempts from your IP. Please wait 10 minutes and try again.';
     } elseif (empty($firstname) || empty($lastname)) {
         $error = 'Please enter your first name and last name.';
     } elseif (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -49,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
         $error = 'Please enter your street address.';
     } elseif (empty($city)) {
         $error = 'Please enter your city.';
-    } elseif (empty($password) || strlen($password) < 6) {
-        $error = 'Password must be at least 6 characters in length.';
+    } elseif (empty($password) || strlen($password) < 8) {
+        $error = 'Password must be at least 8 characters in length.';
     } elseif ($password !== $confirm) {
         $error = 'Passwords do not match. Please re-enter your password.';
     } elseif (!$agree) {
@@ -77,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
         } catch (Exception $e) {}
 
         if ($accountExists) {
+            cf_rate_record_fail('register');
             $error = 'An account with this email address already exists. Please <a href="' . $url . 'login" class="alert-link text-decoration-underline fw-bold">Sign In here</a>.';
         } else {
             // 2. Register via WHMCS Client Bridge
@@ -482,7 +485,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                                                     class="form-control pe-5" 
                                                     id="regPassword" 
                                                     name="password" 
-                                                    placeholder="Min. 6 chars" 
+                                                    placeholder="Min. 8 chars" 
                                                     required
                                                 >
                                                 <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-secondary text-decoration-none pe-2.5" id="toggleRegPasswordBtn" aria-label="Toggle password visibility">
@@ -689,9 +692,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                     }
 
                     const passVal = passInput ? passInput.value.trim() : '';
-                    if (!passVal || passVal.length < 6) {
+                    if (!passVal || passVal.length < 8) {
                         e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(passInput, 'Password must be at least 6 characters long.', 'Password Required');
+                        if (window.cfToast) cfToast.highlightField(passInput, 'Password must be at least 8 characters long.', 'Password Required');
                         return false;
                     }
 

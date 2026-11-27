@@ -1,11 +1,8 @@
 <?php
 require_once __DIR__ . '/env.inc.php';
-
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+cf_secure_session_start();
 $host = $_SERVER['HTTP_HOST'] ?? '';
-$isLocal = (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false || preg_match('/^192\.168\./', $host) || preg_match('/^10\./', $host));
+$isLocal = function_exists('cf_is_local_dev') ? cf_is_local_dev() : false;
 if ($isLocal) {
     $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
     $parts = explode('/', trim($scriptName, '/'));
@@ -15,10 +12,11 @@ if ($isLocal) {
         $url = '/';
     }
 } else {
-    if (strpos($host, 'cloudflox.com') !== false) {
+    $safeHost = preg_replace('/[^a-zA-Z0-9\.\-\:]/', '', $host);
+    if (empty($safeHost) || strpos($safeHost, 'cloudflox.com') !== false) {
         $url = 'https://cloudflox.com/';
     } else {
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || ($_SERVER['SERVER_PORT'] ?? 80) == 443) ? 'https://' : 'http://';
-        $url = $protocol . $host . '/';
+        $url = $protocol . $safeHost . '/';
     }
 }

@@ -15,9 +15,15 @@ ini_set('display_errors', '0');
 
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/whmcs.php';
+require_once __DIR__ . '/../include/csrf.inc.php';
+require_once __DIR__ . '/../include/rate-limit.inc.php';
 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
+cf_secure_session_start();
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['status' => 'error', 'message' => 'Method not allowed.']);
+    exit;
 }
 
 // Accept both JSON payload and $_POST
@@ -25,6 +31,12 @@ $rawInput = file_get_contents('php://input');
 $data = json_decode($rawInput, true);
 if (!$data || !is_array($data)) {
     $data = $_POST;
+}
+
+if (!cf_csrf_verify_request($data)) {
+    http_response_code(403);
+    echo json_encode(['status' => 'error', 'message' => 'Security token mismatch. Please refresh the page and try again.']);
+    exit;
 }
 
 /**
@@ -217,6 +229,15 @@ $action = strtolower(trim($data['action'] ?? ''));
 // ACTION: SIGN IN / VALIDATE LOGIN
 // =========================================================================
 if ($action === 'login') {
+    if (!cf_rate_check('login')) {
+        http_response_code(429);
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Too many sign-in attempts from your IP. Please wait 5 minutes and try again.'
+        ]);
+        exit;
+    }
+
     $email    = trim($data['email'] ?? $data['login_email'] ?? '');
     $password = trim($data['password'] ?? $data['login_password'] ?? '');
 
@@ -237,6 +258,7 @@ if ($action === 'login') {
 
     $authResult = WHMCSClient::validateLogin($email, $password);
     if (empty($authResult['clientid'])) {
+        cf_rate_record_fail('login');
         $errMsg = $authResult['message'] ?? 'Invalid email address or password. Please check your credentials.';
         echo json_encode([
             'status'  => 'error',
@@ -244,6 +266,7 @@ if ($action === 'login') {
         ]);
         exit;
     }
+    cf_rate_clear('login');
 
     $clientId = $authResult['clientid'];
     $clientName = '';
@@ -331,10 +354,10 @@ if ($action === 'register') {
         ]);
         exit;
     }
-    if (empty($password) || strlen($password) < 6) {
+    if (empty($password) || strlen($password) < 8) {
         echo json_encode([
             'status'  => 'error',
-            'message' => 'Password must be at least 6 characters long.'
+            'message' => 'Password must be at least 8 characters long.'
         ]);
         exit;
     }
@@ -552,7 +575,7 @@ if ($action === 'update_profile') {
             // Optional password update
             if (!empty($data['password'])) {
                 $newPass = $data['password'];
-                if (strlen($newPass) >= 6) {
+                if (strlen($newPass) >= 8) {
                     $hp = password_hash($newPass, PASSWORD_DEFAULT);
                     $upPass = $mysqli->prepare("UPDATE tblclients SET password = ? WHERE id = ?");
                     if ($upPass) {
@@ -728,6 +751,14 @@ if (!$clientId) {
     $accountAction = strtolower(trim($data['account_action'] ?? 'register'));
 
     if ($accountAction === 'login') {
+        if (!cf_rate_check('login')) {
+            http_response_code(429);
+            echo json_encode([
+                'status'  => 'error',
+                'message' => 'Too many sign-in attempts from your IP. Please wait 5 minutes and try again.'
+            ]);
+            exit;
+        }
         $loginEmail = trim($data['login_email'] ?? $data['email'] ?? '');
         $loginPass  = trim($data['login_password'] ?? $data['password'] ?? '');
 
@@ -748,6 +779,7 @@ if (!$clientId) {
 
         $authResult = WHMCSClient::validateLogin($loginEmail, $loginPass);
         if (empty($authResult['clientid'])) {
+            cf_rate_record_fail('login');
             $errMsg = $authResult['message'] ?? 'Invalid login credentials. Please check your email and password.';
             echo json_encode([
                 'status'  => 'error',
@@ -755,7 +787,12 @@ if (!$clientId) {
             ]);
             exit;
         }
-        $clientId = $authResult['clientid'];
+        cf_rate_clear('login');
+        $clientId = (int)$authResult['clientid'];
+        session_regenerate_id(true);
+        $_SESSION['cf_client_logged_in'] = true;
+        $_SESSION['cf_client_id']        = $clientId;
+        $_SESSION['cf_client_email']     = $loginEmail;
     } else {
         // New Account Registration
         $firstName   = trim($data['firstname'] ?? '');
@@ -793,10 +830,35 @@ if (!$clientId) {
             ]);
             exit;
         }
-        if (empty($password) || strlen($password) < 6) {
+        if (empty($password) || strlen($password) < 8) {
             echo json_encode([
                 'status'  => 'error',
-                'message' => 'Password must be at least 6 characters long.'
+                'message' => 'Password must be at least 8 characters long.'
+            ]);
+            exit;
+        }
+
+        // Prevent hijacking existing accounts without authenticating first
+        $accountExists = false;
+        try {
+            $chkDb = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
+            if (!$chkDb->connect_error) {
+                $chkStmt = $chkDb->prepare("SELECT id FROM tblclients WHERE email = ? LIMIT 1");
+                if ($chkStmt) {
+                    $chkStmt->bind_param('s', $email);
+                    $chkStmt->execute();
+                    $chkStmt->store_result();
+                    $accountExists = ($chkStmt->num_rows > 0);
+                    $chkStmt->close();
+                }
+                $chkDb->close();
+            }
+        } catch (Exception $e) {}
+
+        if ($accountExists) {
+            echo json_encode([
+                'status'  => 'error',
+                'message' => 'An account with this email address already exists. Please switch to Sign In.'
             ]);
             exit;
         }
@@ -816,15 +878,22 @@ if (!$clientId) {
             'postcode'    => $postcode
         ]);
 
-        if (empty($clientResult['clientid'])) {
-            $errMsg = $clientResult['message'] ?? 'Failed to register client profile in billing system.';
+        if (empty($clientResult['clientid']) || !empty($clientResult['existing'])) {
+            $errMsg = !empty($clientResult['existing'])
+                ? 'An account with this email address already exists. Please switch to Sign In.'
+                : ($clientResult['message'] ?? 'Failed to register client profile in billing system.');
             echo json_encode([
                 'status'  => 'error',
                 'message' => $errMsg
             ]);
             exit;
         }
-        $clientId = $clientResult['clientid'];
+        $clientId = (int)$clientResult['clientid'];
+        session_regenerate_id(true);
+        $_SESSION['cf_client_logged_in'] = true;
+        $_SESSION['cf_client_id']        = $clientId;
+        $_SESSION['cf_client_email']     = $email;
+        $_SESSION['cf_client_name']      = trim($firstName . ' ' . $lastName);
     }
 }
 
@@ -1097,7 +1166,8 @@ if (empty($invoiceId)) {
 
 // Generate Invoice URL in CloudFlox main site
 require_once __DIR__ . '/../include/url.inc.php';
-$invoiceUrl = $url . "invoice?id=" . urlencode($invoiceId) . "&gateway=" . urlencode($paymentMethod) . "&paynow=1";
+$invTokenQs = function_exists('cf_invoice_token') ? ('&token=' . urlencode(cf_invoice_token((int)$invoiceId, (int)$clientId))) : '';
+$invoiceUrl = $url . "invoice?id=" . urlencode($invoiceId) . "&gateway=" . urlencode($paymentMethod) . "&paynow=1" . $invTokenQs;
 $clientAreaUrl = $url . "clientarea";
 
 $proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || ($_SERVER['SERVER_PORT'] ?? 80) == 443) ? 'https' : 'http';
@@ -1108,7 +1178,7 @@ if (substr($url, 0, 4) === 'http') {
     $fullSiteUrl = $proto . '://' . $hostHeader . '/' . ltrim($url, '/');
     $fullSiteUrl = rtrim($fullSiteUrl, '/') . '/';
 }
-$fullInvoiceUrl = $fullSiteUrl . "invoice?id=" . urlencode($invoiceId) . "&gateway=" . urlencode($paymentMethod) . "&paynow=1";
+$fullInvoiceUrl = $fullSiteUrl . "invoice?id=" . urlencode($invoiceId) . "&gateway=" . urlencode($paymentMethod) . "&paynow=1" . $invTokenQs;
 
 // PayHere SDK Data (synced with active gateway configuration)
 $payhereData = null;

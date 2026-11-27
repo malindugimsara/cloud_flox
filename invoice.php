@@ -6,9 +6,8 @@
  * Connects PayHere (Visa/Master/Amex/USD), Card, and PayPal directly.
  */
 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 
 require_once __DIR__ . '/include/url.inc.php';
 require_once __DIR__ . '/api/config.php';
@@ -18,18 +17,8 @@ $selectedGateway = strtolower(trim($_GET['gateway'] ?? 'payhere'));
 $autoPayNow = !empty($_GET['paynow']);
 $markPaid = !empty($_GET['paid']);
 
-// Database credentials
-$dbHost = CF_DB_HOST;
-$dbUser = CF_DB_USER;
-$dbPass = CF_DB_PASS;
-$dbName = CF_DB_NAME;
-
-$mysqli = @new mysqli($dbHost, $dbUser, $dbPass, $dbName, (int)CF_DB_PORT);
-if (!$mysqli->connect_error) {
-    $mysqli->set_charset('utf8mb4');
-} else {
-    $mysqli = null;
-}
+// Database connection
+$mysqli = cf_get_db() ?: null;
 
 // Invoice default placeholder values
 $invoice = null;
@@ -85,10 +74,43 @@ if ($mysqli && $invoiceId > 0) {
     }
 }
 
-// Fallback values if not found in database (e.g. simulation or test IDs)
-if (!$invoice) {
+// Security: Enforce invoice ownership (logged-in client) OR valid HMAC invoice token
+$providedToken = trim((string)($_GET['token'] ?? ''));
+$sessionClientId = (int)($_SESSION['cf_client_id'] ?? 0);
+$isLoggedIn = !empty($_SESSION['cf_client_logged_in']) && $sessionClientId > 0;
+$isLocalDemoAllowed = (function_exists('cf_is_local_dev') && cf_is_local_dev() && defined('CF_CHECKOUT_DEMO_MODE') && CF_CHECKOUT_DEMO_MODE);
+
+if ($invoice) {
+    $invOwnerId = (int)($invoice['userid'] ?? 0);
+    $isOwner = $isLoggedIn && $invOwnerId === $sessionClientId;
+    $hasValidToken = !empty($providedToken) && function_exists('cf_invoice_token') && hash_equals(cf_invoice_token((int)$invoice['id'], $invOwnerId), $providedToken);
+
+    if (!$isOwner && !$hasValidToken) {
+        if (!$isLoggedIn) {
+            $redirectUrl = urlencode($_SERVER['REQUEST_URI'] ?? ('invoice?id=' . $invoiceId));
+            header("Location: " . $url . "login?redirect=" . $redirectUrl);
+            exit;
+        }
+        http_response_code(403);
+        header("Location: " . $url . "clientarea?tab=invoices");
+        exit;
+    }
+    $invoiceToken = function_exists('cf_invoice_token') ? cf_invoice_token((int)$invoice['id'], $invOwnerId) : '';
+} else {
+    // Only allow placeholder invoice simulation in local dev demo mode for logged-in/dev session
+    if (!$isLocalDemoAllowed) {
+        if (!$isLoggedIn) {
+            header("Location: " . $url . "login?redirect=clientarea");
+            exit;
+        }
+        http_response_code(404);
+        header("Location: " . $url . "clientarea?tab=invoices");
+        exit;
+    }
+    $invoiceToken = '';
     $invoice = [
         'id'            => $invoiceId ?: 100075,
+        'userid'        => $sessionClientId,
         'invoicenum'    => (string)($invoiceId ?: 100075),
         'date'          => date('Y-m-d'),
         'duedate'       => date('Y-m-d', strtotime('+7 days')),
@@ -243,11 +265,12 @@ if (substr($url, 0, 4) === 'http') {
 
 $firstItemDesc = !empty($invoiceItems[0]['description']) ? $invoiceItems[0]['description'] : 'CloudFlox Cloud Services';
 
+$invTokenQs = !empty($invoiceToken) ? ('&token=' . urlencode($invoiceToken)) : '';
 $payhereObj = [
     'sandbox'     => defined('CF_PAYHERE_SANDBOX') ? CF_PAYHERE_SANDBOX : false,
     'merchant_id' => $merchantId,
-    'return_url'  => $fullSiteUrl . 'invoice?id=' . $invoice['id'] . '&paid=1',
-    'cancel_url'  => $fullSiteUrl . 'invoice?id=' . $invoice['id'] . '&cancelled=1',
+    'return_url'  => $fullSiteUrl . 'invoice?id=' . $invoice['id'] . '&paid=1' . $invTokenQs,
+    'cancel_url'  => $fullSiteUrl . 'invoice?id=' . $invoice['id'] . '&cancelled=1' . $invTokenQs,
     'notify_url'  => $fullSiteUrl . 'api/payment-notify.php',
     'first_name'  => $client['firstname'] ?? 'CloudFlox',
     'last_name'   => $client['lastname'] ?? 'Customer',
@@ -1684,16 +1707,17 @@ function parseInvoiceItemDescription($rawDesc, $itemType = '', $notes = '') {
                                     <span class="cf-amount-display-note">Global PayPal Balance &amp; Credit Cards</span>
                                 </div>
 
-                                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                                <?php $paypalFormUrl = (defined('CF_PAYPAL_SANDBOX') && CF_PAYPAL_SANDBOX === true) ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr'; ?>
+                                <form action="<?php echo $paypalFormUrl; ?>" method="post" target="_top">
                                     <input type="hidden" name="cmd" value="_xclick">
                                     <input type="hidden" name="business" value="<?php echo htmlspecialchars(defined('CF_PAYPAL_EMAIL') ? CF_PAYPAL_EMAIL : 'info@cloudflox.com'); ?>">
                                     <input type="hidden" name="item_name" value="CloudFlox Invoice #<?php echo htmlspecialchars($invoiceNumber); ?>">
                                     <input type="hidden" name="amount" value="<?php echo number_format($totalUsd, 2, '.', ''); ?>">
                                     <input type="hidden" name="currency_code" value="USD">
                                     <input type="hidden" name="custom" value="<?php echo htmlspecialchars($invoice['id']); ?>">
-                                    <input type="hidden" name="return" value="<?php echo $url; ?>invoice?id=<?php echo $invoice['id']; ?>&paid=1">
-                                    <input type="hidden" name="cancel_return" value="<?php echo $url; ?>invoice?id=<?php echo $invoice['id']; ?>&cancelled=1">
-                                    <input type="hidden" name="notify_url" value="<?php echo $url; ?>api/payment-notify.php">
+                                    <input type="hidden" name="return" value="<?php echo htmlspecialchars($fullSiteUrl . 'invoice?id=' . $invoice['id'] . '&paid=1' . $invTokenQs); ?>">
+                                    <input type="hidden" name="cancel_return" value="<?php echo htmlspecialchars($fullSiteUrl . 'invoice?id=' . $invoice['id'] . '&cancelled=1' . $invTokenQs); ?>">
+                                    <input type="hidden" name="notify_url" value="<?php echo htmlspecialchars($fullSiteUrl . 'api/payment-notify.php'); ?>">
                                     <button type="submit" class="cf-btn-paypal-cta mb-3">
                                         <i class="lab la-paypal fs-18"></i> Pay with PayPal ($<?php echo number_format($totalUsd, 2); ?> USD)
                                     </button>
@@ -1952,7 +1976,7 @@ function parseInvoiceItemDescription($rawDesc, $itemType = '', $notes = '') {
                         }
                     } catch (e) {}
                     // Payment completed via PayHere popup; reload invoice to view payment status
-                    window.location.href = 'invoice?id=' + encodeURIComponent(orderId) + '&paid=1';
+                    window.location.href = 'invoice?id=' + encodeURIComponent(orderId) + '&paid=1' + <?php echo json_encode($invTokenQs); ?>;
                 };
 
                 payhere.onDismissed = function() {

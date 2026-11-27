@@ -81,7 +81,9 @@ if (!function_exists('cf_get_db')) {
                 if (@$db->ping()) {
                     return $db;
                 }
-            } catch (Exception $e) {}
+            } catch (Throwable $e) {
+                $db = null;
+            }
         }
 
         $host = CF_DB_HOST;
@@ -90,19 +92,24 @@ if (!function_exists('cf_get_db')) {
         $name = CF_DB_NAME;
         $port = (int)CF_DB_PORT;
 
-        $mysqli = @new mysqli($host, $user, $pass, $name, $port);
-        if ($mysqli->connect_error) {
-            if ($host === '127.0.0.1') {
-                $mysqli = @new mysqli('localhost', $user, $pass, $name, $port);
-            } elseif ($host === 'localhost') {
-                $mysqli = @new mysqli('127.0.0.1', $user, $pass, $name, $port);
-            }
+        $hostsToTry = [$host];
+        if ($host === '127.0.0.1') {
+            $hostsToTry[] = 'localhost';
+        } elseif ($host === 'localhost') {
+            $hostsToTry[] = '127.0.0.1';
         }
 
-        if ($mysqli && !$mysqli->connect_error) {
-            $mysqli->set_charset('utf8mb4');
-            $db = $mysqli;
-            return $db;
+        foreach ($hostsToTry as $tryHost) {
+            try {
+                $mysqli = @new mysqli($tryHost, $user, $pass, $name, $port);
+                if ($mysqli && !$mysqli->connect_error) {
+                    $mysqli->set_charset('utf8mb4');
+                    $db = $mysqli;
+                    return $db;
+                }
+            } catch (Throwable $e) {
+                error_log('CloudFlox DB connection failed (' . $tryHost . '): ' . $e->getMessage());
+            }
         }
 
         return false;
@@ -156,6 +163,9 @@ if (!defined('CF_PAYHERE_SANDBOX')) {
 if (!defined('CF_PAYPAL_EMAIL')) {
     define('CF_PAYPAL_EMAIL', cf_env('CF_PAYPAL_EMAIL', 'info@cloudflox.com'));
 }
+if (!defined('CF_PAYPAL_SANDBOX')) {
+    define('CF_PAYPAL_SANDBOX', filter_var(cf_env('CF_PAYPAL_SANDBOX', 'false'), FILTER_VALIDATE_BOOLEAN));
+}
 
 // -------------------------------------------------------------------------
 // 5. SMTP & Email Notification Settings
@@ -180,5 +190,80 @@ if (!defined('CF_WHM_API_TOKEN')) {
 // 7. Security & Admin Console Access Keys
 // -------------------------------------------------------------------------
 if (!defined('CF_ADMIN_ACCESS_KEY')) {
-    define('CF_ADMIN_ACCESS_KEY', cf_env('CF_ADMIN_ACCESS_KEY', 'CloudFlox_Admin_2026_SecureKey'));
+    define('CF_ADMIN_ACCESS_KEY', cf_env('CF_ADMIN_ACCESS_KEY', ''));
+}
+if (!defined('CF_APP_ENV')) {
+    define('CF_APP_ENV', cf_env('APP_ENV', ''));
+}
+
+/**
+ * Start a PHP session with hardened cookie security flags (HttpOnly, SameSite=Lax, Strict Mode, Secure on HTTPS).
+ */
+if (!function_exists('cf_secure_session_start')) {
+    function cf_secure_session_start(): void {
+        if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+            @ini_set('session.use_strict_mode', '1');
+            @ini_set('session.use_only_cookies', '1');
+            $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? 80) == 443);
+            @session_set_cookie_params([
+                'lifetime' => 0,
+                'path'     => '/',
+                'secure'   => $isHttps,
+                'httponly' => true,
+                'samesite' => 'Lax'
+            ]);
+            @session_start();
+        }
+    }
+}
+
+/**
+ * Determine whether the current request is genuinely running in local dev.
+ * Requires loopback client/server addresses so public HTTP Host spoofing cannot bypass security.
+ */
+if (!function_exists('cf_is_local_dev')) {
+    function cf_is_local_dev(): bool {
+        if (defined('CF_APP_ENV') && strtolower((string)CF_APP_ENV) === 'production') {
+            return false;
+        }
+        if (php_sapi_name() === 'cli') {
+            return true;
+        }
+        $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? '';
+        $serverAddr = $_SERVER['SERVER_ADDR'] ?? '';
+        $isPrivateOrLoopback = function ($ip) {
+            if ($ip === '') return false;
+            if (in_array($ip, ['127.0.0.1', '::1'], true)) return true;
+            return (bool)preg_match('/^(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/', $ip);
+        };
+        if (!$isPrivateOrLoopback($remoteAddr)) {
+            return false;
+        }
+        if ($serverAddr !== '' && !$isPrivateOrLoopback($serverAddr)) {
+            return false;
+        }
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        return (
+            strpos($host, 'localhost') !== false ||
+            strpos($host, '127.0.0.1') !== false ||
+            strpos($host, '::1') !== false ||
+            preg_match('/^(192\.168\.|10\.)/', $host)
+        );
+    }
+}
+
+/**
+ * Generate a per-invoice HMAC access token bound to invoice ID and owning client ID.
+ */
+if (!function_exists('cf_invoice_token')) {
+    function cf_invoice_token(int $invoiceId, int $userId): string {
+        $keyMaterial = implode('|', [
+            defined('CF_ADMIN_ACCESS_KEY') ? CF_ADMIN_ACCESS_KEY : '',
+            defined('CF_PAYHERE_MERCHANT_SECRET') ? CF_PAYHERE_MERCHANT_SECRET : '',
+            defined('WHMCS_API_SECRET') ? WHMCS_API_SECRET : '',
+            defined('CF_DB_PASS') ? CF_DB_PASS : '',
+            'cf_inv_hmac_v1'
+        ]);
+        return substr(hash_hmac('sha256', "inv|{$invoiceId}|{$userId}", $keyMaterial), 0, 32);
+    }
 }

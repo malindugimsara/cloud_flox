@@ -9,15 +9,8 @@
 
 require_once dirname(__DIR__) . '/include/env.inc.php';
 
-// Auto-detect Local Development environment
-$host = $_SERVER['HTTP_HOST'] ?? '';
-$isLocalDev = (
-    strpos($host, 'localhost') !== false ||
-    strpos($host, '127.0.0.1') !== false ||
-    strpos($host, '::1') !== false ||
-    preg_match('/^192\.168\./', $host) ||
-    preg_match('/^10\./', $host)
-);
+// Auto-detect Local Development environment safely (requires private/loopback network)
+$isLocalDev = function_exists('cf_is_local_dev') ? cf_is_local_dev() : false;
 
 // Enable local simulation on localhost so WHMCS API IP restrictions don't block development
 if (!defined('CF_FORCE_LOCAL_DEMO')) define('CF_FORCE_LOCAL_DEMO', true);

@@ -37,8 +37,16 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-// Cloudflare Turnstile Security Verification
+// Cloudflare Turnstile Security Verification & Rate Limiting
 require_once __DIR__ . '/include/env.inc.php';
+require_once __DIR__ . '/include/rate-limit.inc.php';
+
+if (!cf_rate_check('custom_quote_mail', 5, 600)) {
+    http_response_code(429);
+    echo json_encode(['status' => 'error', 'message' => 'Too many quote requests from your IP. Please wait 10 minutes and try again.']);
+    exit;
+}
+cf_rate_record_fail('custom_quote_mail');
 
 $turnstileSecret = defined('CF_TURNSTILE_SECRET_KEY') ? CF_TURNSTILE_SECRET_KEY : (getenv('CLOUDFLARE_TURNSTILE_SECRET_KEY') ?: '');
 $turnstileResponse = $_POST['cf-turnstile-response'] ?? '';
@@ -133,20 +141,34 @@ try {
     $mail->Port       = defined('CF_SMTP_PORT') ? (int)CF_SMTP_PORT : 465;
     $mail->Timeout = 8;
     $mail->CharSet = 'UTF-8';
-    $mail->SMTPOptions = [
-        'ssl' => [
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true
-        ]
-    ];
+    if (function_exists('cf_is_local_dev') && cf_is_local_dev()) {
+        $mail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            ]
+        ];
+    }
+
+    $safeHeaderName  = str_replace(["\r", "\n"], '', $name);
+    $safeHeaderEmail = str_replace(["\r", "\n"], '', $email);
+    $safeHeaderSvc   = str_replace(["\r", "\n"], '', $service);
+    $safeHeaderBud   = str_replace(["\r", "\n"], '', $budget);
+
+    $eName    = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+    $eEmail   = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+    $eService = htmlspecialchars($service, ENT_QUOTES, 'UTF-8');
+    $eBudget  = htmlspecialchars($budget, ENT_QUOTES, 'UTF-8');
+    $eReq     = htmlspecialchars($requirements, ENT_QUOTES, 'UTF-8');
+    $eIp      = htmlspecialchars($client_ip, ENT_QUOTES, 'UTF-8');
 
     $mail->setFrom('info@cloudflox.com', 'CloudFlox Enterprise Portal');
-    $mail->addReplyTo($email, $name);
+    $mail->addReplyTo($safeHeaderEmail, $safeHeaderName);
     $mail->addAddress('info@cloudflox.com', 'CloudFlox Sales & Solutions Team');
     
     $mail->isHTML(true);
-    $mail->Subject = "[Custom Infrastructure Quote] {$service} - {$name} ({$budget}) [{$ref_id}]";
+    $mail->Subject = "[Custom Infrastructure Quote] {$safeHeaderSvc} - {$safeHeaderName} ({$safeHeaderBud}) [{$ref_id}]";
 
     $salesHtml = "
     <div style='font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:#0f172a; padding: 35px 20px;'>
@@ -161,29 +183,29 @@ try {
                 <table style='width: 100%; border-collapse: collapse; margin-bottom: 22px;'>
                     <tr style='border-bottom: 1px solid #f1f5f9;'>
                         <td style='padding: 10px 0; color: #64748b; font-weight: 600; width: 140px;'>Client Name:</td>
-                        <td style='padding: 10px 0; color: #0f172a; font-weight: 800;'>{$name}</td>
+                        <td style='padding: 10px 0; color: #0f172a; font-weight: 800;'>{$eName}</td>
                     </tr>
                     <tr style='border-bottom: 1px solid #f1f5f9;'>
                         <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Business Email:</td>
-                        <td style='padding: 10px 0;'><a href='mailto:{$email}' style='color: #2563eb; text-decoration: none; font-weight: 700;'>{$email}</a></td>
+                        <td style='padding: 10px 0;'><a href='mailto:{$eEmail}' style='color: #2563eb; text-decoration: none; font-weight: 700;'>{$eEmail}</a></td>
                     </tr>
                     <tr style='border-bottom: 1px solid #f1f5f9;'>
                         <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Requested Service:</td>
-                        <td style='padding: 10px 0; color: #0f172a; font-weight: 700;'>{$service}</td>
+                        <td style='padding: 10px 0; color: #0f172a; font-weight: 700;'>{$eService}</td>
                     </tr>
                     <tr style='border-bottom: 1px solid #f1f5f9;'>
                         <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Estimated Budget:</td>
-                        <td style='padding: 10px 0; color: #059669; font-weight: 800; font-size: 15px;'>{$budget}</td>
+                        <td style='padding: 10px 0; color: #059669; font-weight: 800; font-size: 15px;'>{$eBudget}</td>
                     </tr>
                     <tr>
                         <td style='padding: 10px 0; color: #64748b; font-weight: 600;'>Client IP:</td>
-                        <td style='padding: 10px 0; color: #64748b; font-size: 12px;'>{$client_ip}</td>
+                        <td style='padding: 10px 0; color: #64748b; font-size: 12px;'>{$eIp}</td>
                     </tr>
                 </table>
 
                 <div style='background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; margin-top: 15px;'>
                     <h4 style='margin: 0 0 10px; color: #0f172a; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em;'>Workload &amp; Architecture Requirements:</h4>
-                    <p style='margin: 0; color: #1e293b; white-space: pre-wrap; font-size: 13.5px; line-height: 1.6; font-family: Consolas, Monaco, monospace;'>{$requirements}</p>
+                    <p style='margin: 0; color: #1e293b; white-space: pre-wrap; font-size: 13.5px; line-height: 1.6; font-family: Consolas, Monaco, monospace;'>{$eReq}</p>
                 </div>
             </div>
 
@@ -223,17 +245,19 @@ try {
     $clientMail->Port       = defined('CF_SMTP_PORT') ? (int)CF_SMTP_PORT : 465;
     $clientMail->Timeout = 8;
     $clientMail->CharSet = 'UTF-8';
-    $clientMail->SMTPOptions = [
-        'ssl' => [
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true
-        ]
-    ];
+    if (function_exists('cf_is_local_dev') && cf_is_local_dev()) {
+        $clientMail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            ]
+        ];
+    }
 
     $clientMail->setFrom('info@cloudflox.com', 'CloudFlox Enterprise Solutions');
     $clientMail->addReplyTo('info@cloudflox.com', 'CloudFlox Solutions Team');
-    $clientMail->addAddress($email, $name);
+    $clientMail->addAddress($safeHeaderEmail, $safeHeaderName);
     
     $clientMail->isHTML(true);
     $clientMail->Subject = "We Received Your Custom Infrastructure Request [{$ref_id}]";
@@ -247,7 +271,7 @@ try {
             </div>
             
             <div style='padding: 30px; color: #334155; font-size: 14.5px; line-height: 1.65;'>
-                <p style='margin-top: 0;'>Dear <strong>{$name}</strong>,</p>
+                <p style='margin-top: 0;'>Dear <strong>{$eName}</strong>,</p>
                 <p>Thank you for submitting your custom infrastructure requirements to CloudFlox. We have successfully received your inquiry under reference ID: <strong><span style='color: #2563eb;'>{$ref_id}</span></strong>.</p>
                 
                 <div style='background: #eff6ff; border-left: 4px solid #2563eb; padding: 14px 16px; border-radius: 0 6px 6px 0; margin: 20px 0;'>
@@ -256,8 +280,8 @@ try {
                 </div>
 
                 <p style='font-size: 13px; color: #64748b;'><strong>Your Request Summary:</strong><br>
-                &bull; Service: {$service}<br>
-                &bull; Budget Scope: {$budget}</p>
+                &bull; Service: {$eService}<br>
+                &bull; Budget Scope: {$eBudget}</p>
 
                 <p style='margin-bottom: 0;'>If you have urgent questions or additional architecture diagrams to share, simply reply directly to this email.</p>
             </div>

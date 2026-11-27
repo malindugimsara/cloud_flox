@@ -7,7 +7,7 @@
         "renew": 13.81,
         "price": "$14.93",
         "badge": "Popular",
-        "category": "Commercial / Global"
+        "category": "Standard Domain"
     },
     "net": {
         "tld": "net",
@@ -17,7 +17,7 @@
         "renew": 16.81,
         "price": "$18.47",
         "badge": "Popular",
-        "category": "Network & Tech"
+        "category": "Standard Domain"
     },
     "org": {
         "tld": "org",
@@ -27,7 +27,7 @@
         "renew": 16.81,
         "price": "$9.89",
         "badge": "Popular",
-        "category": "Organizations"
+        "category": "Standard Domain"
     },
     "biz": {
         "tld": "biz",
@@ -36,8 +36,8 @@
         "transfer": 26.41,
         "renew": 26.41,
         "price": "$29.05",
-        "badge": "Business",
-        "category": "Business & Innovation"
+        "badge": "",
+        "category": "Standard Domain"
     },
     "info": {
         "tld": "info",
@@ -46,8 +46,8 @@
         "transfer": 28.81,
         "renew": 28.81,
         "price": "$5.27",
-        "badge": "Business",
-        "category": "Business & Innovation"
+        "badge": "",
+        "category": "Standard Domain"
     },
     "blog": {
         "tld": "blog",
@@ -57,7 +57,7 @@
         "renew": 31.22,
         "price": "$6.59",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "ca": {
         "tld": "ca",
@@ -67,7 +67,7 @@
         "renew": 17.88,
         "price": "$19.67",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "club": {
         "tld": "club",
@@ -77,7 +77,7 @@
         "renew": 18.02,
         "price": "$19.82",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "cn": {
         "tld": "cn",
@@ -87,7 +87,7 @@
         "renew": 27.59,
         "price": "$30.35",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "co.uk": {
         "tld": "co.uk",
@@ -97,7 +97,7 @@
         "renew": 13.3,
         "price": "$14.63",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "de": {
         "tld": "de",
@@ -107,7 +107,7 @@
         "renew": 10.79,
         "price": "$11.87",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "eu": {
         "tld": "eu",
@@ -117,7 +117,7 @@
         "renew": 16.79,
         "price": "$11.87",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "icu": {
         "tld": "icu",
@@ -127,7 +127,7 @@
         "renew": 18.01,
         "price": "$5.27",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "io": {
         "tld": "io",
@@ -136,8 +136,8 @@
         "transfer": 69.59,
         "renew": 69.59,
         "price": "$59.39",
-        "badge": "Tech Favorite",
-        "category": "Technology & APIs"
+        "badge": "Hot Deal",
+        "category": "Standard Domain"
     },
     "me": {
         "tld": "me",
@@ -147,7 +147,7 @@
         "renew": 27.59,
         "price": "$7.30",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "mobi": {
         "tld": "mobi",
@@ -157,7 +157,7 @@
         "renew": 47.9,
         "price": "$7.27",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "nl": {
         "tld": "nl",
@@ -167,7 +167,7 @@
         "renew": 14.39,
         "price": "$15.83",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "online": {
         "tld": "online",
@@ -176,8 +176,8 @@
         "transfer": 41.24,
         "renew": 41.24,
         "price": "$2.63",
-        "badge": "Sale",
-        "category": "E-Commerce & Portfolios"
+        "badge": "",
+        "category": "Standard Domain"
     },
     "ru": {
         "tld": "ru",
@@ -187,7 +187,7 @@
         "renew": 59.88,
         "price": "$52.67",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "site": {
         "tld": "site",
@@ -196,8 +196,8 @@
         "transfer": 41.24,
         "renew": 41.24,
         "price": "$1.31",
-        "badge": "Special Offer",
-        "category": "E-Commerce & Portfolios"
+        "badge": "",
+        "category": "Standard Domain"
     },
     "tk": {
         "tld": "tk",
@@ -207,7 +207,7 @@
         "renew": 8.47,
         "price": "$9.32",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "top": {
         "tld": "top",
@@ -217,7 +217,7 @@
         "renew": 8.41,
         "price": "$2.63",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "tw": {
         "tld": "tw",
@@ -227,7 +227,7 @@
         "renew": 36.72,
         "price": "$40.39",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "uk": {
         "tld": "uk",
@@ -237,7 +237,7 @@
         "renew": 11.48,
         "price": "$12.63",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "us": {
         "tld": "us",
@@ -247,7 +247,7 @@
         "renew": 14.39,
         "price": "$15.83",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "vip": {
         "tld": "vip",
@@ -257,7 +257,7 @@
         "renew": 39.62,
         "price": "$43.56",
         "badge": "",
-        "category": "Global Domain"
+        "category": "Standard Domain"
     },
     "xyz": {
         "tld": "xyz",
@@ -266,8 +266,8 @@
         "transfer": 17.99,
         "renew": 17.99,
         "price": "$2.63",
-        "badge": "Sale",
-        "category": "E-Commerce & Portfolios"
+        "badge": "",
+        "category": "Standard Domain"
     },
     "store": {
         "tld": "store",
@@ -276,7 +276,7 @@
         "transfer": 62.99,
         "renew": 62.99,
         "price": "$2.63",
-        "badge": "Special Offer",
-        "category": "E-Commerce & Portfolios"
+        "badge": "",
+        "category": "Standard Domain"
     }
 }

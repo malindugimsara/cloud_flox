@@ -4,22 +4,9 @@
 Options -Indexes
 
 # ---------------------------------
-# Security: Block Direct Access to Sensitive & Hidden Files (.env, .git, etc.)
+# Security: Block Direct Access to Sensitive & Hidden Files (.env, .git, logs, backups, internal includes)
 # ---------------------------------
-<FilesMatch "^\.">
-    <IfModule mod_authz_core.c>
-        Require all denied
-    </IfModule>
-    <IfModule !mod_authz_core.c>
-        Order deny,allow
-        Deny from all
-    </IfModule>
-</FilesMatch>
-
-# ---------------------------------
-# Security: Block test and debug files
-# ---------------------------------
-<FilesMatch "^(test-package)\.php$">
+<FilesMatch "(^\.|\.(log|sql|bak|backup|ini|env)$|^(email-service|test-package)\.php$|\.inc\.php$)">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
@@ -44,9 +31,11 @@ Options -Indexes
 RewriteEngine On
 
 # ---------------------------------
-# Security: Block Public Access to Scratch / Development Directory
+# Security: Block Public Access to Scratch, API Cache & Custom Quote Archive Directories
 # ---------------------------------
 RewriteRule ^scratch(/.*)?$ - [F,L]
+RewriteRule ^api/cache(/.*)?$ - [F,L]
+RewriteRule ^include/send-mail/custom_quotes_archive\.log$ - [F,L]
 
 # ---------------------------------
 # 0. Force HTTPS & Canonicalize WWW to Non-WWW

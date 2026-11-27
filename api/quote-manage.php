@@ -10,17 +10,29 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/../include/env.inc.php';
+cf_secure_session_start();
 
 require_once __DIR__ . '/../include/url.inc.php';
+require_once __DIR__ . '/../include/csrf.inc.php';
 require_once __DIR__ . '/../include/email-service.php';
 require_once __DIR__ . '/whmcs.php';
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['status' => 'error', 'message' => 'Method not allowed.']);
+    exit;
+}
 
 // Parse request
 $raw = file_get_contents('php://input');
 $data = json_decode($raw, true) ?: $_POST;
+
+if (!cf_csrf_verify_request(is_array($data) ? $data : [])) {
+    http_response_code(403);
+    echo json_encode(['status' => 'error', 'message' => 'Security token mismatch. Please refresh the page.']);
+    exit;
+}
 
 $action  = strtolower(trim($data['action'] ?? ''));
 $quoteId = (int)($data['quote_id'] ?? 0);
@@ -332,11 +344,12 @@ switch ($action) {
             }
         }
 
+        $invTokQs = function_exists('cf_invoice_token') ? ('&token=' . urlencode(cf_invoice_token((int)$invoiceId, (int)$clientId))) : '';
         echo json_encode([
             'status'      => 'success',
             'message'     => 'Quotation #RFQ-' . $quoteId . ' accepted successfully! Invoice #' . $invoiceId . ' has been generated.',
             'invoice_id'  => $invoiceId,
-            'invoice_url' => $url . 'invoice?id=' . $invoiceId . '&paynow=1'
+            'invoice_url' => $url . 'invoice?id=' . $invoiceId . '&paynow=1' . $invTokQs
         ]);
         exit;
 

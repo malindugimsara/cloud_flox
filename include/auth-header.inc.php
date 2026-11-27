@@ -1,11 +1,11 @@
 <?php
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
-// Ensure $url is loaded
+require_once __DIR__ . '/env.inc.php';
+cf_secure_session_start();
+// Ensure $url and CSRF helpers are loaded
 if (!isset($url)) {
     include_once __DIR__ . '/url.inc.php';
 }
+require_once __DIR__ . '/csrf.inc.php';
 
 $cfIsLoggedIn = !empty($_SESSION['cf_client_logged_in']);
 $cfClientName = $_SESSION['cf_client_name'] ?? 'Client Area';
@@ -40,7 +40,29 @@ $cfClientName = $_SESSION['cf_client_name'] ?? 'Client Area';
 </script>
 <!--preloader end-->
 
-<script>window.CF_BASE_URL = <?php echo json_encode($url); ?>;</script>
+<script>
+    window.CF_BASE_URL = <?php echo json_encode($url); ?>;
+    window.CF_CSRF_TOKEN = <?php echo json_encode(cf_csrf_token()); ?>;
+    (function() {
+        if (window._cfFetchCsrfPatched || !window.fetch) return;
+        window._cfFetchCsrfPatched = true;
+        var origFetch = window.fetch.bind(window);
+        window.fetch = function(input, init) {
+            init = init || {};
+            var urlStr = (typeof input === 'string') ? input : (input && input.url ? input.url : '');
+            var isSameOrigin = !/^https?:\/\//i.test(urlStr) || urlStr.indexOf(window.location.origin) === 0;
+            var method = (init.method || (input && input.method) || 'GET').toUpperCase();
+            if (isSameOrigin && method !== 'GET' && method !== 'HEAD' && window.CF_CSRF_TOKEN) {
+                var headers = new Headers(init.headers || (input && input.headers) || {});
+                if (!headers.has('X-CSRF-Token')) {
+                    headers.set('X-CSRF-Token', window.CF_CSRF_TOKEN);
+                }
+                init = Object.assign({}, init, { headers: headers });
+            }
+            return origFetch(input, init);
+        };
+    })();
+</script>
 
 <!-- =========================================================================
      DEDICATED MINIMALIST AUTH HEADER (Stripe / Vercel Style)

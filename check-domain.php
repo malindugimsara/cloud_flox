@@ -81,7 +81,7 @@ if ($isBulkParam) {
             CURLOPT_MAXREDIRS      => 4,
             CURLOPT_TIMEOUT        => 3,
             CURLOPT_CONNECTTIMEOUT => 2,
-            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYPEER => !(function_exists('cf_is_local_dev') && cf_is_local_dev()),
             CURLOPT_USERAGENT      => 'CloudFlox/1.0'
         ]);
         curl_multi_add_handle($mh, $ch);
@@ -179,7 +179,7 @@ foreach ($domainsToQuery as $d) {
         CURLOPT_MAXREDIRS      => 4,
         CURLOPT_TIMEOUT        => 3,
         CURLOPT_CONNECTTIMEOUT => 2,
-        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYPEER => !(function_exists('cf_is_local_dev') && cf_is_local_dev()),
         CURLOPT_USERAGENT      => 'CloudFlox/1.0'
     ]);
     curl_multi_add_handle($mh, $ch);

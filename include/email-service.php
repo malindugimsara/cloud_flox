@@ -229,7 +229,8 @@ class CloudFloxEmailService {
             $fullSiteUrl = rtrim($fullSiteUrl, '/') . '/';
         }
 
-        $invoiceUrl    = $fullSiteUrl . 'invoice?id=' . $invoiceId;
+        $invTokenParam = function_exists('cf_invoice_token') ? ('&token=' . urlencode(cf_invoice_token((int)$invoiceId, (int)$userId))) : '';
+        $invoiceUrl    = $fullSiteUrl . 'invoice?id=' . $invoiceId . $invTokenParam;
         $clientAreaUrl = $fullSiteUrl . 'clientarea';
         $hasHosting    = !empty($hostingAccounts);
         $hasDomain     = !empty($domains);

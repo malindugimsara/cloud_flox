@@ -1,8 +1,8 @@
 <?php
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 include 'include/url.inc.php';
+require_once __DIR__ . '/include/csrf.inc.php';
 require_once __DIR__ . '/api/whmcs.php';
 
 // Auth Guard: Require login
@@ -67,7 +67,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
     $pNewPassword = $_POST['new_password'] ?? '';
     $pConfirmPass = $_POST['confirm_password'] ?? '';
 
-    if (empty($pFirstName) || empty($pLastName)) {
+    if (!cf_csrf_verify($_POST['csrf_token'] ?? '')) {
+        $profileError = 'Security token mismatch. Please refresh the page and try again.';
+    } elseif (empty($pFirstName) || empty($pLastName)) {
         $profileError = 'Please provide both your First Name and Last Name.';
     } elseif (empty($pPhoneNumber)) {
         $profileError = 'Please provide a valid contact phone number.';
@@ -75,8 +77,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
         $profileError = 'Please enter your street address.';
     } elseif (empty($pCity)) {
         $profileError = 'Please enter your city.';
-    } elseif (!empty($pNewPassword) && strlen($pNewPassword) < 6) {
-        $profileError = 'New password must be at least 6 characters long.';
+    } elseif (!empty($pNewPassword) && strlen($pNewPassword) < 8) {
+        $profileError = 'New password must be at least 8 characters long.';
     } elseif (!empty($pNewPassword) && $pNewPassword !== $pConfirmPass) {
         $profileError = 'New passwords do not match. Please re-enter.';
     } else {
@@ -126,7 +128,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
                 $profileSuccess = 'Your personal and billing information has been updated successfully!';
             }
         } catch (Exception $e) {
-            $profileError = 'An error occurred while saving your profile: ' . $e->getMessage();
+            error_log("Client profile update error: " . $e->getMessage());
+            $profileError = 'An error occurred while saving your profile. Please try again.';
         }
     }
 }
@@ -136,6 +139,7 @@ $services = [];
 $domains  = [];
 $invoices = [];
 $tickets  = [];
+$quotes   = [];
 
 $clientProfile = [
     'firstname'   => '',
@@ -155,76 +159,55 @@ $statServices = 0;
 $statDomains  = 0;
 $statInvoicesUnpaid = 0;
 $statTicketsOpen = 0;
+$statQuotesPending = 0;
+$statQuotesDelivered = 0;
 
 // Fetch data from local WHMCS database or API fallback
 try {
     $mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
     if (!$mysqli->connect_error && $clientId > 0) {
+        $fetchRows = static function (mysqli $db, string $sql, int $uid): array {
+            try {
+                $stmt = $db->prepare($sql);
+                if (!$stmt) return [];
+                $stmt->bind_param('i', $uid);
+                $stmt->execute();
+                $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                $stmt->close();
+                return $rows;
+            } catch (Exception $e) {
+                error_log("Clientarea query error: " . $e->getMessage());
+                return [];
+            }
+        };
+
         // 1. Fetch Services
-        $stmt = $mysqli->prepare("SELECT h.id, h.domain, h.domainstatus, h.amount, h.billingcycle, h.nextduedate, p.name as product_name FROM tblhosting h LEFT JOIN tblproducts p ON p.id = h.packageid WHERE h.userid = ? ORDER BY h.id DESC");
-        if ($stmt) {
-            $stmt->bind_param('i', $clientId);
-            $stmt->execute();
-            $services = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-            $stmt->close();
-        }
+        $services = $fetchRows($mysqli, "SELECT h.id, h.domain, h.domainstatus, h.amount, h.billingcycle, h.nextduedate, p.name as product_name FROM tblhosting h LEFT JOIN tblproducts p ON p.id = h.packageid WHERE h.userid = ? ORDER BY h.id DESC", $clientId);
 
         // 2. Fetch Domains
-        $stmt = $mysqli->prepare("SELECT id, domain, status, registrationdate, nextduedate, expirydate, recurringamount, registrar, dnsmanagement, idprotection, donotrenew FROM tbldomains WHERE userid = ? ORDER BY id DESC");
-        if ($stmt) {
-            $stmt->bind_param('i', $clientId);
-            $stmt->execute();
-            $domains = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-            $stmt->close();
-        }
+        $domains = $fetchRows($mysqli, "SELECT id, domain, status, registrationdate, nextduedate, expirydate, recurringamount, registrar, dnsmanagement, idprotection, donotrenew FROM tbldomains WHERE userid = ? ORDER BY id DESC", $clientId);
 
         // 3. Fetch Invoices
-        $stmt = $mysqli->prepare("SELECT id, invoicenum, date, duedate, total, status FROM tblinvoices WHERE userid = ? ORDER BY id DESC LIMIT 20");
-        if ($stmt) {
-            $stmt->bind_param('i', $clientId);
-            $stmt->execute();
-            $invoices = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-            $stmt->close();
-        }
+        $invoices = $fetchRows($mysqli, "SELECT id, invoicenum, date, duedate, total, status FROM tblinvoices WHERE userid = ? ORDER BY id DESC LIMIT 20", $clientId);
 
         // 4. Fetch Support Tickets
-        $stmt = $mysqli->prepare("SELECT id, tid, title, date, lastreply, status, urgency FROM tbltickets WHERE userid = ? ORDER BY lastreply DESC LIMIT 20");
-        if ($stmt) {
-            $stmt->bind_param('i', $clientId);
-            $stmt->execute();
-            $tickets = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-            $stmt->close();
-        }
+        $tickets = $fetchRows($mysqli, "SELECT id, tid, title, date, lastreply, status, urgency FROM tbltickets WHERE userid = ? ORDER BY lastreply DESC LIMIT 20", $clientId);
 
         // 5. Fetch Server Quotes & Enterprise RFQs
-        $quotes = [];
-        $stmt = $mysqli->prepare("SELECT id, subject, stage, validuntil, subtotal, total, proposal, customernotes, adminnotes, datecreated, lastmodified, datesent, dateaccepted FROM tblquotes WHERE userid = ? ORDER BY id DESC LIMIT 30");
-        if ($stmt) {
-            $stmt->bind_param('i', $clientId);
-            $stmt->execute();
-            $quotes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-            $stmt->close();
-        }
+        $quotes = $fetchRows($mysqli, "SELECT id, subject, stage, validuntil, subtotal, total, proposal, customernotes, adminnotes, datecreated, lastmodified, datesent, dateaccepted FROM tblquotes WHERE userid = ? ORDER BY id DESC LIMIT 30", $clientId);
 
         // 6. Fetch Client Profile Details
-        $stmt = $mysqli->prepare("SELECT id, firstname, lastname, companyname, email, phonenumber, address1, address2, city, state, postcode, country FROM tblclients WHERE id = ? LIMIT 1");
-        if ($stmt) {
-            $stmt->bind_param('i', $clientId);
-            $stmt->execute();
-            $profRes = $stmt->get_result();
-            if ($profRes && $profRow = $profRes->fetch_assoc()) {
-                $clientProfile = array_merge($clientProfile, $profRow);
-                if (empty($clientName) || $clientName === 'Client') {
-                    $clientName = trim(($profRow['firstname'] ?? '') . ' ' . ($profRow['lastname'] ?? ''));
-                    $_SESSION['cf_client_name'] = $clientName;
-                }
+        $profRows = $fetchRows($mysqli, "SELECT id, firstname, lastname, companyname, email, phonenumber, address1, address2, city, state, postcode, country FROM tblclients WHERE id = ? LIMIT 1", $clientId);
+        if (!empty($profRows[0])) {
+            $profRow = $profRows[0];
+            $clientProfile = array_merge($clientProfile, $profRow);
+            if (empty($clientName) || $clientName === 'Client') {
+                $clientName = trim(($profRow['firstname'] ?? '') . ' ' . ($profRow['lastname'] ?? ''));
+                $_SESSION['cf_client_name'] = $clientName;
             }
-            $stmt->close();
         }
 
         // Calculate counts
-        $statQuotesPending = 0;
-        $statQuotesDelivered = 0;
         foreach ($quotes as $q) {
             $st = strtolower($q['stage'] ?? '');
             if ($st === 'draft' || $st === 'on hold') $statQuotesPending++;
@@ -1006,6 +989,7 @@ if (!function_exists('getQuoteStageBadge')) {
                         </div>
 
                         <form method="POST" action="<?php echo $url; ?>clientarea.php?tab=profile" class="needs-validation">
+                            <?php echo cf_csrf_field(); ?>
                             <input type="hidden" name="action" value="update_profile">
 
                             <!-- BLOCK 1: PERSONAL & CONTACT INFORMATION -->
@@ -1153,7 +1137,7 @@ if (!function_exists('getQuoteStageBadge')) {
                                             <label class="cf-form-label-modern">New Password</label>
                                             <div class="cf-input-icon-wrap">
                                                 <i class="las la-key cf-input-icon"></i>
-                                                <input type="password" class="form-control cf-input-modern pe-5" id="profileNewPass" name="new_password" placeholder="Min. 6 characters">
+                                                <input type="password" class="form-control cf-input-modern pe-5" id="profileNewPass" name="new_password" placeholder="Min. 8 characters">
                                                 <button type="button" class="cf-pass-toggle-btn" onclick="togglePassVisibility('profileNewPass', 'eyeNewPass')" title="Show / Hide Password">
                                                     <i class="las la-eye" id="eyeNewPass"></i>
                                                 </button>
@@ -1170,7 +1154,7 @@ if (!function_exists('getQuoteStageBadge')) {
                                             </div>
                                         </div>
                                     </div>
-                                    <small class="text-muted fs-12 mt-2.5 d-block"><i class="las la-info-circle text-primary me-1"></i>Password must be at least 6 characters. Use letters, numbers, and symbols for best security.</small>
+                                    <small class="text-muted fs-12 mt-2.5 d-block"><i class="las la-info-circle text-primary me-1"></i>Password must be at least 8 characters. Use letters, numbers, and symbols for best security.</small>
                                 </div>
                             </div>
 

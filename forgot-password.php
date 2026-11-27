@@ -1,8 +1,9 @@
 <?php 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 include 'include/url.inc.php';
+require_once __DIR__ . '/include/csrf.inc.php';
+require_once __DIR__ . '/include/rate-limit.inc.php';
 require_once __DIR__ . '/api/whmcs.php';
 
 $error = '';
@@ -63,14 +64,19 @@ if (!empty($token) && !empty($email)) {
 // Handle Form Submissions
 // -------------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!cf_csrf_verify($_POST['csrf_token'] ?? '')) {
+        $error = 'Security token mismatch. Please refresh the page and try again.';
+    } elseif (!cf_rate_check('pw_reset', 5, 600)) {
+        $error = 'Too many password reset attempts. Please wait 10 minutes and try again.';
+    }
 
     // A. SET NEW PASSWORD (When Token is Valid)
-    if (isset($_POST['set_new_password']) && $tokenValid && $tokenUser) {
+    elseif (isset($_POST['set_new_password']) && $tokenValid && $tokenUser) {
         $newPass = trim($_POST['password'] ?? '');
         $confirm = trim($_POST['password_confirm'] ?? '');
 
-        if (empty($newPass) || strlen($newPass) < 6) {
-            $error = 'Your new password must be at least 6 characters in length.';
+        if (empty($newPass) || strlen($newPass) < 8) {
+            $error = 'Your new password must be at least 8 characters in length.';
         } elseif ($newPass !== $confirm) {
             $error = 'The passwords you entered do not match. Please try again.';
         } else {
@@ -110,6 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // B. REQUEST RESET LINK
     elseif (isset($_POST['request_reset'])) {
+        cf_rate_record_fail('pw_reset');
         $email = trim($_POST['email'] ?? '');
 
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -145,12 +152,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 require_once __DIR__ . '/include/email-service.php';
                                 $resetUrl = CloudFloxEmailService::getAbsoluteUrl('forgot-password?token=' . $generatedToken . '&email=' . urlencode($email));
                                 
-                                // Security: Only show demo reset shortcut on localhost development environment
-                                $isLocalDevHost = (
-                                    strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') !== false ||
-                                    strpos($_SERVER['HTTP_HOST'] ?? '', '127.0.0.1') !== false
-                                );
-                                if ($isLocalDevHost) {
+                                // Security: Only show demo reset shortcut on genuine local development environment
+                                if (function_exists('cf_is_local_dev') && cf_is_local_dev()) {
                                     $demoResetUrl = $resetUrl;
                                 }
 
@@ -271,6 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php if ($tokenValid): ?>
                             <!-- FORM A: SET NEW PASSWORD -->
                             <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="POST" id="cfSetPassForm" novalidate>
+                                <?php echo cf_csrf_field(); ?>
                                 <input type="hidden" name="set_new_password" value="1">
                                 <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
                                 <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>">
@@ -286,7 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             class="form-control pe-5" 
                                             id="newPassword" 
                                             name="password" 
-                                            placeholder="Min. 6 characters" 
+                                            placeholder="Min. 8 characters" 
                                             required 
                                             autofocus
                                         >
@@ -326,6 +330,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php else: ?>
                             <!-- FORM B: REQUEST RESET LINK -->
                             <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="POST" id="cfRequestResetForm" novalidate>
+                                <?php echo cf_csrf_field(); ?>
                                 <input type="hidden" name="request_reset" value="1">
 
                                 <div class="cf-minimal-input-wrap">
@@ -498,9 +503,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     const passVal = passInput ? passInput.value.trim() : '';
                     const confVal = confirmInput ? confirmInput.value.trim() : '';
 
-                    if (!passVal || passVal.length < 6) {
+                    if (!passVal || passVal.length < 8) {
                         e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(passInput, 'New password must be at least 6 characters long.', 'Password Required');
+                        if (window.cfToast) cfToast.highlightField(passInput, 'New password must be at least 8 characters long.', 'Password Required');
                         return false;
                     }
 

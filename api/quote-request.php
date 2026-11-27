@@ -11,13 +11,20 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/../include/env.inc.php';
+cf_secure_session_start();
 
 require_once __DIR__ . '/../include/email-service.php';
 require_once __DIR__ . '/../include/url.inc.php';
+require_once __DIR__ . '/../include/csrf.inc.php';
+require_once __DIR__ . '/../include/rate-limit.inc.php';
 require_once __DIR__ . '/whmcs.php';
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['status' => 'error', 'message' => 'Method not allowed.']);
+    exit;
+}
 
 // Accept both JSON payload and $_POST
 $rawInput = file_get_contents('php://input');
@@ -25,6 +32,19 @@ $data = json_decode($rawInput, true);
 if (!$data || !is_array($data)) {
     $data = $_POST;
 }
+
+if (!cf_csrf_verify_request($data)) {
+    http_response_code(403);
+    echo json_encode(['status' => 'error', 'message' => 'Security token mismatch. Please refresh and try again.']);
+    exit;
+}
+
+if (!cf_rate_check('quote_request', 10, 600)) {
+    http_response_code(429);
+    echo json_encode(['status' => 'error', 'message' => 'Too many quotation requests. Please wait a few minutes and try again.']);
+    exit;
+}
+cf_rate_record_fail('quote_request');
 
 // 1. Client Contact Details
 $firstName   = trim($data['firstname'] ?? '');
@@ -91,25 +111,28 @@ try {
     exit;
 }
 
-$clientId = (int)($_SESSION['cf_client_id'] ?? 0);
+$clientId = (!empty($_SESSION['cf_client_logged_in']) && !empty($_SESSION['cf_client_id']))
+    ? (int)$_SESSION['cf_client_id']
+    : 0;
 
+$existingAccountFound = false;
 if ($clientId <= 0) {
-    // Check if client exists by email
-    $chkStmt = $mysqli->prepare("SELECT id, firstname, lastname FROM tblclients WHERE email = ? LIMIT 1");
+    // Check if client exists by email; NEVER attach unauthenticated requests to an existing user's portal account
+    $chkStmt = $mysqli->prepare("SELECT id FROM tblclients WHERE email = ? LIMIT 1");
     if ($chkStmt) {
         $chkStmt->bind_param('s', $email);
         $chkStmt->execute();
         $res = $chkStmt->get_result();
-        if ($res && $row = $res->fetch_assoc()) {
-            $clientId = (int)$row['id'];
+        if ($res && $res->fetch_assoc()) {
+            $existingAccountFound = true;
         }
         $chkStmt->close();
     }
 }
 
-// If new customer, register client profile so they can track quote in portal
-if ($clientId <= 0) {
-    $tempPass = bin2hex(random_bytes(6)) . 'A1!';
+// If genuinely new customer, register client profile so they can track quote in portal
+if ($clientId <= 0 && !$existingAccountFound) {
+    $tempPass = bin2hex(random_bytes(8)) . 'A1!';
     $hashedPass = password_hash($tempPass, PASSWORD_DEFAULT);
     $today = date('Y-m-d');
 
@@ -127,7 +150,8 @@ if ($clientId <= 0) {
         $clientId = $regStmt->insert_id;
         $regStmt->close();
 
-        // Automatically log them in for instant client portal access
+        // Automatically log the newly created user in cleanly
+        session_regenerate_id(true);
         $_SESSION['cf_client_logged_in'] = true;
         $_SESSION['cf_client_id']        = $clientId;
         $_SESSION['cf_client_email']     = $email;

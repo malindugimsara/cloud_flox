@@ -6,18 +6,12 @@
  * instant live search filtering, rich tutorial article views, and WHMCS sync.
  */
 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 include 'include/url.inc.php';
 
 // Database connection to WHMCS
-$mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
-if ($mysqli->connect_error) {
-    $mysqli = null;
-} else {
-    $mysqli->set_charset('utf8mb4');
-}
+$mysqli = cf_get_db() ?: null;
 
 // Request parameters
 $catId     = intval($_GET['cat'] ?? 0);

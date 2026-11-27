@@ -8,9 +8,8 @@
  * 3. Set tailored pricing and formally deliver quotations to customers
  */
 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 
 include 'include/url.inc.php';
 require_once __DIR__ . '/include/csrf.inc.php';
@@ -40,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_access_key'])) 
         header("Location: " . $url . "admin-quotes");
         exit;
     } else {
+        cf_rate_record_fail('admin_login');
         $authError = 'Invalid Admin Access Key. Access restricted to authorized CloudFlox engineering.';
     }
 }
@@ -116,9 +116,11 @@ try {
     if ($mysqli->connect_error) {
         throw new Exception($mysqli->connect_error);
     }
-    $mysqli->set_charset('utf8');
-} catch (Exception $e) {
-    die("Database Connection Error: " . $e->getMessage());
+    $mysqli->set_charset('utf8mb4');
+} catch (Throwable $e) {
+    error_log("Admin quotes DB error: " . $e->getMessage());
+    http_response_code(503);
+    die("Database connection is currently unavailable. Please check local database configuration.");
 }
 
 // Fetch all quotes

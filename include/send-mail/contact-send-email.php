@@ -6,11 +6,11 @@ require "Exception.php";
 
 use PHPMailer\PHPMailer\PHPMailer;
 
-$name = $_POST["name"] ?? "";
-$email = $_POST["email"] ?? "";
-$phone = $_POST["phone"] ?? "";
-$subject = $_POST["subject"] ?? "";
-$message = $_POST["message"] ?? "";
+$name = trim($_POST["name"] ?? "");
+$email = trim($_POST["email"] ?? "");
+$phone = trim($_POST["phone"] ?? "");
+$subject = trim($_POST["subject"] ?? "");
+$message = trim($_POST["message"] ?? "");
 
 // Check if required fields are filled
 if ($name == "" || $email == "" || $subject == "" || $message == "") {
@@ -22,6 +22,14 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
 } else {
 
     require_once __DIR__ . '/../env.inc.php';
+    require_once __DIR__ . '/../rate-limit.inc.php';
+
+    if (!cf_rate_check('contact_mail', 5, 600)) {
+        echo "Too many contact requests. Please wait 10 minutes and try again.";
+        exit;
+    }
+    cf_rate_record_fail('contact_mail');
+
     $turnstileSecret = defined('CF_TURNSTILE_SECRET_KEY') ? CF_TURNSTILE_SECRET_KEY : (getenv('CLOUDFLARE_TURNSTILE_SECRET_KEY') ?: '');
     $turnstileResponse = $_POST['cf-turnstile-response'] ?? $_POST['g-recaptcha-response'] ?? '';
 
@@ -69,6 +77,15 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
         exit;
     }
 
+    $safeHeaderName    = str_replace(["\r", "\n"], '', $name);
+    $safeHeaderEmail   = str_replace(["\r", "\n"], '', $email);
+    $safeHeaderSubject = str_replace(["\r", "\n"], '', $subject);
+
+    $eName    = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+    $eEmail   = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+    $ePhone   = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
+    $eMessage = nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
+
     $mail = new PHPMailer;
     $mail->IsSMTP();
     $mail->Host = defined('CF_SMTP_HOST') ? CF_SMTP_HOST : 'mail.cloudflox.com';
@@ -79,18 +96,20 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
     $mail->Port = 465;
     $mail->Timeout = 10;
     $mail->CharSet = 'UTF-8';
-    $mail->SMTPOptions = [
-        'ssl' => [
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true
-        ]
-    ];
+    if (function_exists('cf_is_local_dev') && cf_is_local_dev()) {
+        $mail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            ]
+        ];
+    }
     $mail->setFrom('info@cloudflox.com', 'CloudFlox LLC Hosting');
-    $mail->addReplyTo($email, $name);
+    $mail->addReplyTo($safeHeaderEmail, $safeHeaderName);
     $mail->addAddress('info@cloudflox.com');
     $mail->isHTML(true);
-    $mail->Subject = $subject;
+    $mail->Subject = $safeHeaderSubject;
     $bodyContent = "
                  <div style='font-family: Arial, sans-serif; padding:20px; background:#f6f6f6;'>
             <div style='max-width:600px; margin:auto; background:#ffffff; border-radius:6px;'>
@@ -100,11 +119,11 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
                 </div>
 
                 <div style='padding:20px; color:#444444; font-size:14px;'>
-                    <p><strong>Name:</strong> {$name}</p>
-                    <p><strong>Email:</strong> {$email}</p>
-                    <p><strong>Phone:</strong> {$phone}</p>
+                    <p><strong>Name:</strong> {$eName}</p>
+                    <p><strong>Email:</strong> {$eEmail}</p>
+                    <p><strong>Phone:</strong> {$ePhone}</p>
                     <p><strong>Message:</strong></p>
-                    <p style='border-left:3px solid #dddddd; padding-left:10px;'>{$message}</p>
+                    <p style='border-left:3px solid #dddddd; padding-left:10px;'>{$eMessage}</p>
                 </div>
 
                 <div style='padding:10px; text-align:center; font-size:11px; color:#999999; border-top:1px solid #eeeeee;'>
@@ -117,7 +136,8 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
     $mail->Body  = $bodyContent;
 
     if (!$mail->send()) {
-        echo "Unable to deliver inquiry: " . $mail->ErrorInfo;
+        error_log('Contact mail error: ' . $mail->ErrorInfo);
+        echo "Unable to deliver inquiry at this moment. Please try again later.";
         exit;
     }
 
@@ -132,16 +152,18 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
     $clientMail->Port = 465;
     $clientMail->Timeout = 10;
     $clientMail->CharSet = 'UTF-8';
-    $clientMail->SMTPOptions = [
-        'ssl' => [
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true
-        ]
-    ];
+    if (function_exists('cf_is_local_dev') && cf_is_local_dev()) {
+        $clientMail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            ]
+        ];
+    }
     $clientMail->setFrom('info@cloudflox.com', 'CloudFlox LLC Hosting');
     $clientMail->addReplyTo('info@cloudflox.com', 'CloudFlox LLC Hosting');
-    $clientMail->addAddress($email);
+    $clientMail->addAddress($safeHeaderEmail);
     $clientMail->isHTML(true);
     $clientMail->Subject = 'Thank you for contacting CloudFlox Hosting';
     $bodyContent = " <div style='font-family: Arial, sans-serif; padding:20px; background:#f6f6f6;'>
@@ -152,7 +174,7 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
                 </div>
 
                 <div style='padding:20px; color:#444444; font-size:14px;'>
-                    <p>Dear {$name},</p>
+                    <p>Dear {$eName},</p>
 
                     <p>
                         Thank you for reaching out to <strong>CloudFlox Hosting</strong>.
@@ -160,7 +182,7 @@ if ($name == "" || $email == "" || $subject == "" || $message == "") {
                     </p>
 
                     <p><strong>Your Message:</strong></p>
-                    <p style='border-left:3px solid #dddddd; padding-left:10px;'>{$message}</p>
+                    <p style='border-left:3px solid #dddddd; padding-left:10px;'>{$eMessage}</p>
 
                     <p>
                         Kind regards,<br>

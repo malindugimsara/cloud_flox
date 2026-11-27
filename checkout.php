@@ -1,7 +1,6 @@
 <?php 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 include 'include/url.inc.php'; 
 require_once __DIR__ . '/api/whmcs-pricing.php';
 $whmcsDomains = WHMCSPricing::getDomainPricing();
@@ -1222,7 +1221,7 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                                                     </label>
                                                     <div class="position-relative">
                                                         <i class="las la-lock cf-input-icon"></i>
-                                                        <input type="password" class="form-control pe-5" id="pagePassword" name="password" placeholder="Min. 6 chars" required>
+                                                        <input type="password" class="form-control pe-5" id="pagePassword" name="password" placeholder="Min. 8 chars" required>
                                                         <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-secondary text-decoration-none pe-2.5" onclick="pageTogglePass('pagePassword', 'pageEyeReg')">
                                                             <i class="las la-eye fs-18" id="pageEyeReg"></i>
                                                         </button>
@@ -2856,8 +2855,8 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                     document.getElementById('pageCity').focus();
                     return;
                 }
-                if (!pass || pass.length < 6) {
-                    showAlert('Password must be at least 6 characters in length.');
+                if (!pass || pass.length < 8) {
+                    showAlert('Password must be at least 8 characters in length.');
                     document.getElementById('pagePassword').focus();
                     return;
                 }

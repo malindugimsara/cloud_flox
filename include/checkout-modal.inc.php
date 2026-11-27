@@ -349,7 +349,7 @@
                             <div class="col-12">
                                 <label class="form-label fs-12 fw-semibold text-slate-700 mb-1">Account Password <span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control" name="password" id="cfCustPassword" placeholder="Minimum 6 characters">
+                                    <input type="password" class="form-control" name="password" id="cfCustPassword" placeholder="Minimum 8 characters">
                                     <button type="button" class="btn btn-outline-secondary" onclick="cfTogglePasswordVisibility('cfCustPassword', 'cfPasswordEye')">
                                         <i class="las la-eye" id="cfPasswordEye"></i>
                                     </button>

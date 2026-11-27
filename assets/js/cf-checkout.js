@@ -466,8 +466,8 @@
                     showAlert('Please provide a phone number for billing verification.');
                     return;
                 }
-                if (!pass || pass.length < 6) {
-                    showAlert('Password must be at least 6 characters long.');
+                if (!pass || pass.length < 8) {
+                    showAlert('Password must be at least 8 characters long.');
                     return;
                 }
             }

@@ -32,6 +32,19 @@ if (!function_exists('cf_csrf_verify')) {
     }
 }
 
+if (!function_exists('cf_csrf_verify_request')) {
+    function cf_csrf_verify_request(array $data = []): bool {
+        $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        if ($token === '' && !empty($data['csrf_token'])) {
+            $token = (string)$data['csrf_token'];
+        }
+        if ($token === '' && !empty($_POST['csrf_token'])) {
+            $token = (string)$_POST['csrf_token'];
+        }
+        return cf_csrf_verify((string)$token);
+    }
+}
+
 /**
  * Rotate the CSRF token (call after a successful form action).
  */

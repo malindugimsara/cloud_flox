@@ -10,10 +10,10 @@
  * - Direct client reply posting and ticket closure
  */
 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 include 'include/url.inc.php';
+require_once __DIR__ . '/include/csrf.inc.php';
 require_once __DIR__ . '/api/config.php';
 require_once __DIR__ . '/api/whmcs.php';
 
@@ -29,12 +29,11 @@ $clientEmail = $_SESSION['cf_client_email'] ?? '';
 $clientName  = $_SESSION['cf_client_name'] ?? 'Client';
 
 // Database connection
-$mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
-if ($mysqli->connect_error) {
-    $mysqli = null;
-} else {
-    $mysqli->set_charset('utf8mb4');
-    @$mysqli->query("SET SESSION sql_mode = 'NO_ENGINE_SUBSTITUTION'");
+$mysqli = cf_get_db() ?: null;
+if ($mysqli) {
+    try {
+        @$mysqli->query("SET SESSION sql_mode = 'NO_ENGINE_SUBSTITUTION'");
+    } catch (Throwable $e) {}
 }
 
 // Ensure accurate client name and email from tblclients if session is incomplete
@@ -99,10 +98,67 @@ if (!function_exists('getTicketUrgencyBadge')) {
     }
 }
 
+// Helper: Validate and store optional ticket attachment safely
+if (!function_exists('cf_handle_ticket_attachment')) {
+    function cf_handle_ticket_attachment(): string {
+        if (empty($_FILES['attachment']['name']) || ($_FILES['attachment']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+            return '';
+        }
+        if (($_FILES['attachment']['size'] ?? 0) > 15 * 1024 * 1024) {
+            return '';
+        }
+        $origName = basename($_FILES['attachment']['name']);
+        $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
+        $allowedMap = [
+            'jpg'  => ['image/jpeg'],
+            'jpeg' => ['image/jpeg'],
+            'png'  => ['image/png'],
+            'gif'  => ['image/gif'],
+            'pdf'  => ['application/pdf'],
+            'txt'  => ['text/plain'],
+            'log'  => ['text/plain', 'application/octet-stream'],
+            'zip'  => ['application/zip', 'application/x-zip-compressed', 'application/octet-stream'],
+            'tar'  => ['application/x-tar', 'application/octet-stream'],
+            'gz'   => ['application/gzip', 'application/x-gzip', 'application/octet-stream']
+        ];
+        if (!isset($allowedMap[$ext])) {
+            return '';
+        }
+        if (function_exists('finfo_open')) {
+            $finfo = @finfo_open(FILEINFO_MIME_TYPE);
+            if ($finfo) {
+                $mime = @finfo_file($finfo, $_FILES['attachment']['tmp_name']);
+                @finfo_close($finfo);
+                if ($mime && !in_array($mime, $allowedMap[$ext], true)) {
+                    return '';
+                }
+            }
+        }
+        $uploadDir = __DIR__ . '/cfwhmcs/attachments/';
+        if (!is_dir($uploadDir)) {
+            @mkdir($uploadDir, 0750, true);
+        }
+        $safeBase = preg_replace('/[^a-zA-Z0-9_\.-]/', '', $origName);
+        if ($safeBase === '' || $safeBase === '.' || $safeBase === '..') {
+            $safeBase = 'attachment.' . $ext;
+        }
+        $safeFileName = time() . '_' . bin2hex(random_bytes(4)) . '_' . $safeBase;
+        if (@move_uploaded_file($_FILES['attachment']['tmp_name'], $uploadDir . $safeFileName)) {
+            return $safeFileName;
+        }
+        return '';
+    }
+}
+
 // =============================================================================
 // POST HANDLER 1: OPEN NEW TICKET
 // =============================================================================
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create_ticket') {
+    if (!cf_csrf_verify($_POST['csrf_token'] ?? '')) {
+        $_SESSION['ticket_flash_error'] = 'Security token mismatch. Please refresh the page and try again.';
+        header("Location: " . $url . "ticket?action=new");
+        exit;
+    }
     $deptId   = intval($_POST['department'] ?? 1);
     $urgency  = trim($_POST['urgency'] ?? 'Medium');
     $service  = trim($_POST['service'] ?? '');
@@ -127,23 +183,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
     $accessKey = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 8);
     $clientIp = $_SERVER['REMOTE_ADDR'] ?? '';
 
-    // Handle optional file attachment
-    $attachmentName = '';
-    if (!empty($_FILES['attachment']['name'])) {
-        $uploadDir = __DIR__ . '/cfwhmcs/attachments/';
-        if (!is_dir($uploadDir)) {
-            @mkdir($uploadDir, 0777, true);
-        }
-        $origName = basename($_FILES['attachment']['name']);
-        $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
-        $allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'txt', 'log', 'zip', 'tar', 'gz'];
-        if (in_array($ext, $allowedExts) && ($_FILES['attachment']['size'] ?? 0) <= 15 * 1024 * 1024) {
-            $safeFileName = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $origName);
-            if (@move_uploaded_file($_FILES['attachment']['tmp_name'], $uploadDir . $safeFileName)) {
-                $attachmentName = $safeFileName;
-            }
-        }
-    }
+    // Handle optional file attachment safely
+    $attachmentName = cf_handle_ticket_attachment();
 
     $newTicketId = 0;
     if ($mysqli) {
@@ -214,6 +255,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
 // =============================================================================
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && $_POST['action'] === 'reply_ticket') {
     $tId     = intval($_POST['ticket_id'] ?? 0);
+    if (!cf_csrf_verify($_POST['csrf_token'] ?? '')) {
+        $_SESSION['ticket_flash_error'] = 'Security token mismatch. Please refresh the page and try again.';
+        header("Location: " . $url . "ticket" . ($tId > 0 ? ("?id=" . $tId) : ""));
+        exit;
+    }
     $message = trim($_POST['message'] ?? '');
 
     if ($tId <= 0 || empty($message)) {
@@ -249,23 +295,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
         exit;
     }
 
-    // Handle optional file attachment
-    $attachmentName = '';
-    if (!empty($_FILES['attachment']['name'])) {
-        $uploadDir = __DIR__ . '/cfwhmcs/attachments/';
-        if (!is_dir($uploadDir)) {
-            @mkdir($uploadDir, 0777, true);
-        }
-        $origName = basename($_FILES['attachment']['name']);
-        $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
-        $allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'txt', 'log', 'zip', 'tar', 'gz'];
-        if (in_array($ext, $allowedExts) && ($_FILES['attachment']['size'] ?? 0) <= 15 * 1024 * 1024) {
-            $safeFileName = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $origName);
-            if (@move_uploaded_file($_FILES['attachment']['tmp_name'], $uploadDir . $safeFileName)) {
-                $attachmentName = $safeFileName;
-            }
-        }
-    }
+    // Handle optional file attachment safely
+    $attachmentName = cf_handle_ticket_attachment();
 
     $replyInserted = false;
     // Insert reply with all NOT NULL columns strictly supplied
@@ -322,6 +353,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
 // =============================================================================
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && $_POST['action'] === 'close_ticket') {
     $tId = intval($_POST['ticket_id'] ?? 0);
+    if (!cf_csrf_verify($_POST['csrf_token'] ?? '')) {
+        $_SESSION['ticket_flash_error'] = 'Security token mismatch. Please refresh the page and try again.';
+        header("Location: " . $url . "ticket" . ($tId > 0 ? ("?id=" . $tId) : ""));
+        exit;
+    }
     if ($tId > 0 && $mysqli) {
         try {
             $cStmt = $mysqli->prepare("UPDATE tbltickets SET status = 'Closed', updated_at = NOW() WHERE id = ? AND userid = ?");
@@ -799,6 +835,7 @@ if (!$currentTicket && $action !== 'new') {
                                 <?php endif; ?>
                             </div>
                             <form method="POST" action="<?php echo $url; ?>ticket" enctype="multipart/form-data">
+                                <?php echo cf_csrf_field(); ?>
                                 <input type="hidden" name="action" value="reply_ticket">
                                 <input type="hidden" name="ticket_id" value="<?php echo $currentTicket['id']; ?>">
 
@@ -875,6 +912,7 @@ if (!$currentTicket && $action !== 'new') {
                             <?php if (strtolower($currentTicket['status']) !== 'closed'): ?>
                                 <div class="pt-3 mt-3 border-top text-center">
                                     <form method="POST" action="<?php echo $url; ?>ticket" onsubmit="return confirm('Are you sure you want to close this support ticket?');">
+                                        <?php echo cf_csrf_field(); ?>
                                         <input type="hidden" name="action" value="close_ticket">
                                         <input type="hidden" name="ticket_id" value="<?php echo $currentTicket['id']; ?>">
                                         <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3.5 py-1.5 fw-semibold w-100">
@@ -920,6 +958,7 @@ if (!$currentTicket && $action !== 'new') {
                                 </div>
                             </div>
                             <form method="POST" action="<?php echo $url; ?>ticket" enctype="multipart/form-data">
+                                <?php echo cf_csrf_field(); ?>
                                 <input type="hidden" name="action" value="create_ticket">
 
                                 <div class="row g-3 cf-ticket-form-group">

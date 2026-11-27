@@ -6,16 +6,12 @@
  * to inspect, test, and verify active hosting packages, pricing tiers, and direct order links.
  */
 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 include 'include/url.inc.php';
 
-// Security: Restrict package inspector to local development environment or authenticated admin
-$isLocalDev = (
-    strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') !== false ||
-    strpos($_SERVER['HTTP_HOST'] ?? '', '127.0.0.1') !== false
-);
+// Security: Restrict package inspector to genuine local development environment or authenticated admin
+$isLocalDev = function_exists('cf_is_local_dev') && cf_is_local_dev();
 if (!$isLocalDev && empty($_SESSION['cf_admin_authenticated'])) {
     http_response_code(403);
     die("Access Denied: WHMCS Package inspector is disabled in production environments.");
@@ -36,19 +32,25 @@ if (file_exists($configFile)) {
     if (!empty($db_name)) $dbName = $db_name;
 }
 
-$mysqli = @new mysqli($dbHost, $dbUser, $dbPass, $dbName);
-if ($mysqli->connect_error) {
-    // Fallback to local root without password
-    $mysqli = @new mysqli('127.0.0.1', 'root', '', $dbName);
-}
-
+$mysqli = null;
 $dbConnected = false;
 $dbError = null;
-if ($mysqli && !$mysqli->connect_error) {
-    $mysqli->set_charset('utf8mb4');
-    $dbConnected = true;
-} else {
-    $dbError = $mysqli ? $mysqli->connect_error : 'Failed to instantiate mysqli';
+foreach ([[$dbHost, $dbUser, $dbPass], ['127.0.0.1', 'root', '']] as [$h, $u, $p]) {
+    try {
+        $candidate = @new mysqli($h, $u, $p, $dbName);
+        if ($candidate && !$candidate->connect_error) {
+            $candidate->set_charset('utf8mb4');
+            $mysqli = $candidate;
+            $dbConnected = true;
+            $dbError = null;
+            break;
+        }
+        if ($candidate && $candidate->connect_error) {
+            $dbError = $candidate->connect_error;
+        }
+    } catch (Throwable $e) {
+        $dbError = $e->getMessage();
+    }
 }
 
 // 1. Fetch Currencies

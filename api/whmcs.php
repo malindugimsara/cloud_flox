@@ -140,7 +140,7 @@ class WHMCSClient {
                     $s->execute();
                     $r = $s->get_result();
                     if ($row = $r->fetch_assoc()) {
-                        if (empty($row['password']) || password_verify($password, $row['password'])) {
+                        if (!empty($row['password']) && password_verify($password, $row['password'])) {
                             return [
                                 'result'   => 'success',
                                 'clientid' => $row['id']
@@ -171,8 +171,8 @@ class WHMCSClient {
         }
 
         $res = self::call('ValidateLogin', [
-            'email'    => $email,
-            'password' => $password
+            'email'     => $email,
+            'password2' => $password
         ]);
 
         return $res;
@@ -213,7 +213,7 @@ class WHMCSClient {
                             $s->execute();
                             $r = $s->get_result();
                             if ($row = $r->fetch_assoc()) {
-                                if (empty($row['password']) || password_verify($pass, $row['password'])) {
+                                if (!empty($row['password']) && password_verify($pass, $row['password'])) {
                                     return [
                                         'result'   => 'success',
                                         'clientid' => $row['id']

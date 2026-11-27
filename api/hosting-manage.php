@@ -10,13 +10,19 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/../include/env.inc.php';
+cf_secure_session_start();
 
+require_once __DIR__ . '/../include/csrf.inc.php';
 require_once __DIR__ . '/whmcs.php';
 
-// 1. Authentication Guard
+// 1. Method & CSRF Guard + Authentication Guard
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['status' => 'error', 'message' => 'Method not allowed.']);
+    exit;
+}
+
 $clientId = (int)($_SESSION['cf_client_id'] ?? 0);
 $isLoggedIn = !empty($_SESSION['cf_client_logged_in']) && $clientId > 0;
 
@@ -29,7 +35,7 @@ if (!$isLoggedIn) {
     exit;
 }
 
-// 2. Parse JSON or POST payload
+// 2. Parse JSON or POST payload (never accept $_GET mutations)
 $raw = file_get_contents('php://input');
 $data = [];
 if (!empty($raw)) {
@@ -38,7 +44,13 @@ if (!empty($raw)) {
         $data = $decoded;
     }
 }
-$data = array_merge($_GET, $_POST, $data);
+$data = array_merge($_POST, $data);
+
+if (!cf_csrf_verify_request($data)) {
+    http_response_code(403);
+    echo json_encode(['status' => 'error', 'message' => 'Security token mismatch. Please refresh the page.']);
+    exit;
+}
 
 $action    = trim($data['action'] ?? '');
 $serviceId = (int)($data['service_id'] ?? 0);
@@ -113,8 +125,8 @@ try {
         curl_setopt_array($ch, [
             CURLOPT_URL            => "https://$serverHost:2087/json-api/create_user_session?api.version=1&user=" . urlencode($username) . "&service=cpaneld",
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => !(function_exists('cf_is_local_dev') && cf_is_local_dev()),
+            CURLOPT_SSL_VERIFYHOST => (function_exists('cf_is_local_dev') && cf_is_local_dev()) ? 0 : 2,
             CURLOPT_TIMEOUT        => 4,
             CURLOPT_HTTPHEADER     => [
                 "Authorization: whm $whmUser:$whmToken"
@@ -233,10 +245,11 @@ try {
     }
 
 } catch (Exception $e) {
+    error_log('Hosting manage API error: ' . $e->getMessage());
     http_response_code(500);
     echo json_encode([
         'status'  => 'error',
-        'message' => 'Internal server error: ' . $e->getMessage()
+        'message' => 'Internal server error. Please try again shortly.'
     ]);
     exit;
 }

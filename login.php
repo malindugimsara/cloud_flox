@@ -1,7 +1,6 @@
 <?php 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 include 'include/url.inc.php';
 require_once __DIR__ . '/include/csrf.inc.php';
 require_once __DIR__ . '/include/rate-limit.inc.php';

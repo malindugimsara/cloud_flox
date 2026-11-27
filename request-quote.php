@@ -1,7 +1,6 @@
 <?php 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 include 'include/url.inc.php';
 require_once __DIR__ . '/api/config.php';
 require_once __DIR__ . '/api/whmcs-pricing.php';

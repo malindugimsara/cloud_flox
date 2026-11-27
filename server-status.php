@@ -7,30 +7,28 @@
  * Integrated with WHMCS tblnetworkissues & tblservers.
  */
 
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_start();
-}
+require_once __DIR__ . '/include/env.inc.php';
+cf_secure_session_start();
 include 'include/url.inc.php';
 
 // Database connection to WHMCS
-$mysqli = @new mysqli(CF_DB_HOST, CF_DB_USER, CF_DB_PASS, CF_DB_NAME, (int)CF_DB_PORT);
-if ($mysqli->connect_error) {
-    $mysqli = null;
-} else {
-    $mysqli->set_charset('utf8mb4');
-}
+$mysqli = cf_get_db() ?: null;
 
 // Fetch active network issues / maintenance notices
 $activeIncidents = [];
 $pastIncidents   = [];
 if ($mysqli) {
-    $actRes = $mysqli->query("SELECT * FROM tblnetworkissues WHERE status NOT IN ('Resolved', 'Scheduled') ORDER BY startdate DESC LIMIT 10");
-    if ($actRes) {
-        $activeIncidents = $actRes->fetch_all(MYSQLI_ASSOC);
-    }
-    $pastRes = $mysqli->query("SELECT * FROM tblnetworkissues WHERE status = 'Resolved' ORDER BY enddate DESC LIMIT 5");
-    if ($pastRes) {
-        $pastIncidents = $pastRes->fetch_all(MYSQLI_ASSOC);
+    try {
+        $actRes = $mysqli->query("SELECT * FROM tblnetworkissues WHERE status NOT IN ('Resolved', 'Scheduled') ORDER BY startdate DESC LIMIT 10");
+        if ($actRes) {
+            $activeIncidents = $actRes->fetch_all(MYSQLI_ASSOC);
+        }
+        $pastRes = $mysqli->query("SELECT * FROM tblnetworkissues WHERE status = 'Resolved' ORDER BY enddate DESC LIMIT 5");
+        if ($pastRes) {
+            $pastIncidents = $pastRes->fetch_all(MYSQLI_ASSOC);
+        }
+    } catch (Throwable $e) {
+        error_log("Server status query error: " . $e->getMessage());
     }
 }
 
