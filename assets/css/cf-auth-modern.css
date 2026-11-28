@@ -1,0 +1,1194 @@
+/* ==========================================================================
+   CloudFlox Next-Gen Modern Split-Card Auth Page Styles
+   Clean White Canvas + Single Unified Sliding/Flipping Hero Showcase
+   Eliminates duplicate panels & 2s delay. Seamless 3D Book Page Flip.
+   ========================================================================== */
+
+:root {
+    --cf-auth-bg: #ffffff;
+    --cf-auth-card-bg: #ffffff;
+    --cf-auth-primary: #ff6600;
+    --cf-auth-primary-hover: #ff5200;
+    --cf-auth-primary-glow: rgba(255, 102, 0, 0.25);
+    --cf-auth-navy: #031846;
+    --cf-auth-text-dark: #0f172a;
+    --cf-auth-text-muted: #64748b;
+    --cf-auth-border: #e2e8f0;
+}
+
+/* Page canvas with clean light / pure white modern background */
+body.cf-modern-auth-body {
+    background-color: #ffffff !important;
+    background-image: 
+        radial-gradient(circle at 10% 15%, rgba(241, 245, 249, 0.9) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(255, 102, 0, 0.04) 0%, transparent 40%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    color: var(--cf-auth-text-dark);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Main Outer Wrapper with 3D Perspective */
+.cf-modern-auth-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    perspective: 2600px;
+}
+
+/* Back navigation link above card */
+.cf-modern-auth-topbar {
+    width: 100%;
+    max-width: 1120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 0 4px;
+}
+
+.cf-modern-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #475569;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    box-shadow: 0 2px 5px -1px rgba(15, 23, 42, 0.06);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cf-modern-back-btn:hover {
+    color: var(--cf-auth-primary);
+    background: #ffffff;
+    border-color: var(--cf-auth-primary);
+    box-shadow: 0 4px 14px -2px rgba(255, 102, 0, 0.2);
+    transform: translateX(-3px);
+}
+
+.cf-modern-help-link {
+    color: #64748b;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cf-modern-help-link:hover {
+    color: var(--cf-auth-primary);
+}
+
+/* ==========================================================================
+   AUTHENTIC 3D HARDCOVER BOOK ARCHITECTURE (CENTER SPINE + TURNING LEAF)
+   True physical book turning: pinned to center spine at 50%, no sliding.
+   ========================================================================== */
+.cf-modern-auth-card {
+    width: 100%;
+    max-width: 1140px;
+    min-height: 670px;
+    background: var(--cf-auth-card-bg);
+    border-radius: 24px;
+    position: relative;
+    transform-style: preserve-3d;
+    box-shadow: 
+        0 30px 70px -15px rgba(15, 23, 42, 0.12),
+        0 10px 25px -5px rgba(15, 23, 42, 0.04),
+        0 0 0 1.5px #edf2f7;
+}
+
+/* Central physical spine binding of the hardcover book */
+.cf-book-spine {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    background: linear-gradient(90deg, 
+        rgba(15, 23, 42, 0.04) 0%, 
+        rgba(15, 23, 42, 0.16) 45%, 
+        rgba(15, 23, 42, 0.22) 50%, 
+        rgba(15, 23, 42, 0.16) 55%, 
+        rgba(15, 23, 42, 0.04) 100%
+    );
+    z-index: 15;
+    pointer-events: none;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   BASE PAGES: SIGN IN (LEFT HALF 50%) & SIGN UP (RIGHT HALF 50%)
+   -------------------------------------------------------------------------- */
+.cf-panel-signin {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    min-height: 670px;
+    background: #ffffff;
+    border-radius: 24px 0 0 24px;
+    padding: 30px 42px 20px 42px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 85vh;
+    z-index: 5;
+    transition: opacity 0.3s ease;
+}
+
+.cf-panel-signup {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    min-height: 670px;
+    background: #ffffff;
+    border-radius: 0 24px 24px 0;
+    padding: 30px 40px 20px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 85vh;
+    z-index: 5;
+    transition: opacity 0.3s ease;
+}
+
+/* Custom Slim Scrollbars for Panels - Perfectly Contained Inside Rounded Border */
+.cf-panel-signin::-webkit-scrollbar,
+.cf-panel-signup::-webkit-scrollbar {
+    width: 6px;
+}
+.cf-panel-signin::-webkit-scrollbar-thumb,
+.cf-panel-signup::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+.cf-panel-signin::-webkit-scrollbar-thumb:hover,
+.cf-panel-signup::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+.cf-panel-signin::-webkit-scrollbar-track,
+.cf-panel-signup::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   THE 3D TURNING BOOK PAGE (LEAF)
+   Hinged directly at the center spine (left: 50%, transform-origin: left center)
+   Swings through 180 degrees of true 3D space.
+   -------------------------------------------------------------------------- */
+.cf-book-leaf {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    min-height: 670px;
+    transform-origin: left center; /* Fixed firmly to the book binding */
+    transform-style: preserve-3d;
+    z-index: 25;
+    will-change: transform, box-shadow;
+    pointer-events: none;
+}
+
+/* Common styling for both faces of the turning leaf */
+.cf-leaf-face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background-color: #031238;
+    background-image: url('../imgs/banners/login_bg.webp');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    color: #ffffff;
+    padding: 44px 38px 32px 38px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    box-sizing: border-box;
+    pointer-events: auto;
+}
+
+.cf-leaf-face::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(ellipse 90% 65% at 20% 20%, rgba(2, 9, 28, 0.92) 0%, rgba(3, 15, 46, 0.75) 50%, rgba(3, 15, 46, 0.3) 100%),
+        linear-gradient(
+            180deg, 
+            rgba(2, 9, 28, 0.90) 0%, 
+            rgba(2, 12, 38, 0.65) 35%, 
+            rgba(3, 18, 56, 0.20) 65%, 
+            rgba(2, 9, 28, 0.85) 100%
+        );
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* FRONT FACE (Visible when page lies on the RIGHT half - Sign In Mode) */
+.cf-leaf-front {
+    border-radius: 0 24px 24px 0;
+    transform: rotateY(0deg);
+    box-shadow: -10px 0 35px rgba(0, 0, 0, 0.25);
+}
+
+/* BACK FACE (Visible when page turns and lies on the LEFT half - Sign Up Mode) */
+.cf-leaf-back {
+    border-radius: 24px 0 0 24px;
+    transform: rotateY(180deg);
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.25);
+}
+
+/* Dynamic 3D Lighting Sheen on the turning leaf */
+.cf-leaf-lighting {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   STATIC MODES
+   -------------------------------------------------------------------------- */
+/* MODE 1: SIGN IN (Leaf lies flat on the Right side) */
+.cf-mode-signin #bookLeaf {
+    transform: rotateY(0deg);
+}
+.cf-mode-signin .cf-panel-signin {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 10;
+}
+.cf-mode-signin .cf-panel-signup {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* MODE 2: SIGN UP (Leaf lies flat on the Left side) */
+.cf-mode-signup #bookLeaf {
+    transform: rotateY(-180deg);
+}
+.cf-mode-signup .cf-panel-signin {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+.cf-mode-signup .cf-panel-signup {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+/* --------------------------------------------------------------------------
+   TRUE 3D BOOK PAGE TURN ANIMATIONS (KEYFRAME ARC WITH NATURAL BEND)
+   -------------------------------------------------------------------------- */
+/* Turning from Right to Left: Sign In -> Sign Up */
+.cf-flipping-to-signup #bookLeaf {
+    animation: naturalBookTurnToLeft 0.76s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.cf-flipping-to-signup .cf-panel-signup {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 5 !important;
+}
+.cf-flipping-to-signup .cf-panel-signin {
+    opacity: 1 !important;
+    z-index: 4 !important;
+}
+
+.cf-flipping-to-signup .cf-leaf-front .cf-leaf-lighting {
+    opacity: 1;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 45%, rgba(0,0,0,0.35) 100%);
+}
+.cf-flipping-to-signup .cf-leaf-back .cf-leaf-lighting {
+    opacity: 1;
+    background: linear-gradient(-90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 45%, rgba(0,0,0,0.35) 100%);
+}
+
+@keyframes naturalBookTurnToLeft {
+    0% {
+        transform: rotateY(0deg);
+        box-shadow: -10px 0 35px rgba(0, 0, 0, 0.25);
+    }
+    22% {
+        /* Outer edge lifts up, natural slight diagonal bend */
+        transform: rotateY(-36deg) rotateZ(1.5deg) scale(0.985);
+        box-shadow: -28px 15px 50px rgba(0, 0, 0, 0.40);
+    }
+    50% {
+        /* Vertical edge-on passing over center spine */
+        transform: rotateY(-90deg) rotateZ(0deg) scale(0.97);
+        box-shadow: 0px 25px 65px rgba(0, 0, 0, 0.50);
+    }
+    78% {
+        /* Descending smoothly onto left base */
+        transform: rotateY(-150deg) rotateZ(-1.2deg) scale(0.985);
+        box-shadow: 28px 15px 50px rgba(0, 0, 0, 0.40);
+    }
+    100% {
+        /* Settles flat on left base */
+        transform: rotateY(-180deg) rotateZ(0deg) scale(1);
+        box-shadow: 10px 0 35px rgba(0, 0, 0, 0.25);
+    }
+}
+
+/* Turning from Left to Right: Sign Up -> Sign In */
+.cf-flipping-to-signin #bookLeaf {
+    animation: naturalBookTurnToRight 0.76s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.cf-flipping-to-signin .cf-panel-signin {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 5 !important;
+}
+.cf-flipping-to-signin .cf-panel-signup {
+    opacity: 1 !important;
+    z-index: 4 !important;
+}
+
+.cf-flipping-to-signin .cf-leaf-back .cf-leaf-lighting {
+    opacity: 1;
+    background: linear-gradient(-90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 45%, rgba(0,0,0,0.35) 100%);
+}
+.cf-flipping-to-signin .cf-leaf-front .cf-leaf-lighting {
+    opacity: 1;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 45%, rgba(0,0,0,0.35) 100%);
+}
+
+@keyframes naturalBookTurnToRight {
+    0% {
+        transform: rotateY(-180deg);
+        box-shadow: 10px 0 35px rgba(0, 0, 0, 0.25);
+    }
+    22% {
+        /* Outer edge lifts up from left side */
+        transform: rotateY(-144deg) rotateZ(-1.5deg) scale(0.985);
+        box-shadow: 28px 15px 50px rgba(0, 0, 0, 0.40);
+    }
+    50% {
+        /* Vertical edge-on passing over center spine */
+        transform: rotateY(-90deg) rotateZ(0deg) scale(0.97);
+        box-shadow: 0px 25px 65px rgba(0, 0, 0, 0.50);
+    }
+    78% {
+        /* Descending smoothly onto right base */
+        transform: rotateY(-30deg) rotateZ(1.2deg) scale(0.985);
+        box-shadow: -28px 15px 50px rgba(0, 0, 0, 0.40);
+    }
+    100% {
+        /* Settles flat on right base */
+        transform: rotateY(0deg) rotateZ(0deg) scale(1);
+        box-shadow: -10px 0 35px rgba(0, 0, 0, 0.25);
+    }
+}
+
+/* ==========================================================================
+   BRAND, HEADERS & TYPOGRAPHY
+   ========================================================================== */
+.cf-modern-brand-wrap {
+    display: inline-block;
+    margin-bottom: 16px;
+    text-decoration: none;
+}
+
+.cf-modern-brand-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.cf-modern-brand-img {
+    height: 38px;
+    width: auto;
+    max-width: 210px;
+    object-fit: contain;
+    display: block;
+}
+
+.cf-modern-brand-slogan {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    display: block;
+}
+
+.cf-modern-form-heading {
+    margin-bottom: 16px;
+}
+
+.cf-modern-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--cf-auth-text-dark);
+    letter-spacing: -0.02em;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+}
+
+.cf-modern-subtitle {
+    font-size: 13.5px;
+    color: var(--cf-auth-text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   INPUTS & FORM GROUPS
+   ========================================================================== */
+.cf-modern-input-group {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.cf-modern-input-group.mb-compact {
+    margin-bottom: 11px;
+}
+
+.cf-modern-input-group .cf-input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 18px;
+    pointer-events: none;
+    transition: color 0.2s ease;
+    z-index: 2;
+}
+
+.cf-modern-input {
+    width: 100%;
+    height: 48px;
+    border-radius: 12px;
+    border: 1.5px solid #75b0fe;
+    background: #eff6ff;
+    color: var(--cf-auth-text-dark);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 16px 0 44px;
+    transition: all 0.22s ease;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.cf-modern-input.cf-input-sm {
+    height: 44px;
+    font-size: 13.5px;
+    border-radius: 10px;
+}
+
+.cf-modern-input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.cf-modern-input:focus {
+    border-color: var(--cf-auth-primary);
+    box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.14);
+    background: #ffffff;
+}
+
+.cf-modern-input:focus + .cf-input-icon,
+.cf-modern-input-group:focus-within .cf-input-icon {
+    color: var(--cf-auth-primary);
+}
+
+.cf-modern-input.has-toggle {
+    padding-right: 46px;
+}
+
+.cf-toggle-password-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: color 0.2s;
+    z-index: 2;
+}
+
+.cf-toggle-password-btn:hover {
+    color: var(--cf-auth-primary);
+}
+
+.cf-modern-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+select.cf-modern-input {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 38px;
+    cursor: pointer;
+}
+
+.cf-modern-options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 13px;
+}
+
+.cf-modern-forgot-link {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.cf-modern-forgot-link:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+.cf-modern-remember-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #475569;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    margin: 0;
+}
+
+.cf-modern-checkbox {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    accent-color: var(--cf-auth-primary);
+    cursor: pointer;
+    margin: 0;
+}
+
+.cf-modern-terms-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+    font-size: 12.5px;
+    color: #64748b;
+    line-height: 1.45;
+}
+
+.cf-modern-terms-wrap a {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.cf-modern-terms-wrap a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   BUTTONS & BADGES
+   ========================================================================== */
+.cf-modern-submit-btn {
+    width: 100%;
+    height: 48px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff6600 0%, #ff4d00 100%);
+    border: none;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 8px 22px -3px rgba(255, 102, 0, 0.42);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cf-modern-submit-btn:hover {
+    background: linear-gradient(135deg, #ff7417 0%, #ff5d0f 100%);
+    transform: translateY(-1.5px);
+    box-shadow: 0 12px 28px -3px rgba(255, 102, 0, 0.52);
+    color: #ffffff;
+}
+
+.cf-modern-submit-btn:hover .cf-btn-arrow {
+    transform: translateX(4px);
+}
+
+.cf-modern-submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 14px rgba(255, 102, 0, 0.35);
+}
+
+.cf-btn-arrow {
+    transition: transform 0.22s ease;
+}
+
+.cf-modern-submit-btn.disabled,
+.cf-modern-submit-btn:disabled {
+    opacity: 0.75;
+    pointer-events: none;
+}
+
+.cf-modern-security-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: #94a3b8;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.cf-modern-security-badge i {
+    color: #10b981;
+}
+
+.cf-modern-signup-wrap {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--cf-auth-text-muted);
+}
+
+.cf-modern-signup-link,
+.cf-modern-signin-link {
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 4px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cf-modern-signup-link:hover,
+.cf-modern-signin-link:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   REGISTRATION GROUPED SECTION CARDS
+   ========================================================================== */
+.cf-form-section-card {
+    background: #ecf0f5;
+    border: 1.5px solid #edf2f7;
+    border-radius: 16px;
+    padding: 15px 16px 12px 16px;
+    margin-bottom: 14px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.cf-form-section-card:hover,
+.cf-form-section-card:focus-within {
+    border-color: #cbd5e1;
+    background: #ffffff;
+    box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05);
+}
+
+.cf-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 13px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.cf-section-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: rgba(255, 102, 0, 0.1);
+    color: var(--cf-auth-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.cf-form-section-card:focus-within .cf-section-badge {
+    background: var(--cf-auth-primary);
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(255, 102, 0, 0.3);
+}
+
+.cf-section-header-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.cf-section-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--cf-auth-text-dark);
+    line-height: 1.2;
+}
+
+.cf-section-subtitle {
+    font-size: 11px;
+    color: var(--cf-auth-text-muted);
+    line-height: 1.3;
+    margin-top: 2px;
+}
+
+.cf-section-step {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.cf-form-section-card:focus-within .cf-section-step {
+    background: rgba(255, 102, 0, 0.12);
+    color: var(--cf-auth-primary);
+}
+
+.cf-strength-wrap {
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.cf-strength-bar {
+    height: 4px;
+    width: 100%;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+}
+
+.cf-strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.cf-strength-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+/* Left Bottom Footer */
+.cf-modern-left-footer {
+    background: transparent !important;
+    background-color: transparent !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding-top: 12px !important;
+    margin-top: auto !important;
+    border-top: 1px solid #f1f5f9 !important;
+    flex-shrink: 0 !important;
+}
+
+.cf-modern-copyright {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* ==========================================================================
+   HERO SHOWCASE PANEL CONTENTS
+   ========================================================================== */
+/* ==========================================================================
+   ENHANCED HERO HEADLINE, TAG BADGE & RADIANT TYPOGRAPHY
+   ========================================================================== */
+.cf-modern-hero-headline {
+    position: relative;
+    z-index: 2;
+    max-width: 500px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 22px;
+    padding: 22px 24px;
+    box-shadow: 
+        0 20px 45px -10px rgba(0, 0, 0, 0.55),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+/* Frosted glass category tag badge */
+.cf-hero-tag-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.cf-hero-tag-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff6600;
+    box-shadow: 0 0 8px #ff6600;
+}
+
+.cf-hero-tag-icon {
+    font-size: 14px;
+    color: #ffaa00;
+}
+
+/* Title container */
+.cf-hero-title {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.cf-title-line-1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    display: block;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.cf-title-gradient {
+    font-weight: 900;
+    color: #ff6600;
+    background: linear-gradient(135deg, #ffaa33 0%, #ff6600 45%, #ff4500 100%);
+    -webkit-background-clip: text;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 20px rgba(255, 102, 0, 0.6));
+    display: inline-block;
+}
+
+.cf-title-line-2 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    display: block;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.cf-title-line-3 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    display: block;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.cf-title-dot {
+    color: #ff6600;
+    display: inline-block;
+    filter: drop-shadow(0 0 8px rgba(255, 102, 0, 0.9));
+}
+
+/* Supporting sub-text */
+.cf-hero-subtitle {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #cbd5e1;
+    margin: 12px 0 0 0;
+    font-weight: 500;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+.cf-modern-hero-spacer {
+    flex: 1;
+    min-height: 100px;
+    position: relative;
+    z-index: 2;
+}
+
+.cf-modern-pills-row {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.cf-modern-glass-pill {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 14px;
+    padding: 10px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cf-modern-glass-pill:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.45);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    color: #ffffff;
+}
+
+.cf-modern-pill-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.cf-modern-pill-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.25;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (Tablets & Mobile Phones)
+   ========================================================================== */
+@media (max-width: 991.98px) {
+    .cf-modern-auth-card {
+        flex-direction: column !important;
+        max-width: 580px;
+        min-height: auto;
+        border-radius: 20px;
+        display: flex !important;
+    }
+
+    .cf-book-spine {
+        display: none !important;
+    }
+
+    .cf-book-leaf {
+        position: relative !important;
+        width: 100% !important;
+        min-height: 380px !important;
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+        animation: none !important;
+        order: 2 !important;
+        pointer-events: auto !important;
+    }
+
+    .cf-leaf-back {
+        display: none !important;
+    }
+
+    .cf-leaf-front {
+        position: relative !important;
+        width: 100% !important;
+        min-height: 380px !important;
+        border-radius: 0 0 20px 20px !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .cf-panel-signin,
+    .cf-panel-signup {
+        position: relative !important;
+        width: 100% !important;
+        min-height: auto !important;
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+        order: 1 !important;
+        border-radius: 20px 20px 0 0 !important;
+    }
+
+    .cf-mode-signin .cf-panel-signin {
+        display: flex !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        padding: 34px 28px 24px 28px;
+    }
+
+    .cf-mode-signin .cf-panel-signup {
+        display: none !important;
+    }
+
+    .cf-mode-signup .cf-panel-signin {
+        display: none !important;
+    }
+
+    .cf-mode-signup .cf-panel-signup {
+        display: flex !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        padding: 32px 24px 24px 24px;
+        max-height: none;
+    }
+
+    .cf-modern-hero-headline {
+        padding: 16px 16px !important;
+        border-radius: 16px !important;
+    }
+
+    .cf-title-line-1,
+    .cf-title-line-2,
+    .cf-title-line-3 {
+        font-size: 24px !important;
+    }
+
+    .cf-hero-subtitle {
+        font-size: 12px !important;
+        margin-top: 8px !important;
+    }
+
+    .cf-hero-tag-badge {
+        font-size: 9.5px !important;
+        padding: 3px 8px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .cf-modern-hero-spacer {
+        min-height: 120px;
+    }
+
+    .cf-modern-pills-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .cf-modern-glass-pill {
+        padding: 8px 12px;
+    }
+
+    .cf-modern-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cf-modern-auth-wrapper {
+        padding: 16px 12px;
+    }
+
+    .cf-panel-signin {
+        padding: 24px 18px 20px 18px !important;
+    }
+
+    .cf-panel-signup {
+        padding: 24px 16px 20px 16px !important;
+    }
+
+    .cf-panel-hero {
+        padding: 26px 18px !important;
+        min-height: 340px !important;
+    }
+
+    .cf-modern-title {
+        font-size: 24px;
+    }
+
+    .cf-modern-options-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .cf-modern-left-footer {
+        flex-direction: column;
+        gap: 14px;
+        align-items: center;
+        text-align: center;
+    }
+}

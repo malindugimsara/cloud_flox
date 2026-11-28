@@ -119,7 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         cf_rate_record_fail('pw_reset');
         $email = trim($_POST['email'] ?? '');
 
-        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!cf_verify_turnstile($_POST['cf-turnstile-response'] ?? '')) {
+            $error = 'Please complete the security verification challenge and try again.';
+        } elseif (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = 'Please enter a valid email address.';
         } else {
             $foundUser = false;
@@ -353,6 +355,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <small class="cf-auth-input-helper">We will send instructions to this address if it is registered.</small>
                                 </div>
 
+                                <?php if (defined('CF_TURNSTILE_SITE_KEY') && CF_TURNSTILE_SITE_KEY !== ''): ?>
+                                <div class="d-flex justify-content-center mb-3">
+                                    <div class="cf-turnstile" id="cfResetTurnstile" data-sitekey="<?php echo htmlspecialchars(CF_TURNSTILE_SITE_KEY); ?>" data-theme="light"></div>
+                                </div>
+                                <?php endif; ?>
+
                                 <div class="cf-auth-btn-wrap">
                                     <button type="submit" class="cf-minimal-cta-btn" id="btnSubmitReset">
                                         <span class="btn-text">
@@ -523,6 +531,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         });
     </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
 

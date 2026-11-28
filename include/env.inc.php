@@ -267,3 +267,79 @@ if (!function_exists('cf_invoice_token')) {
         return substr(hash_hmac('sha256', "inv|{$invoiceId}|{$userId}", $keyMaterial), 0, 32);
     }
 }
+
+/**
+ * Verify a Cloudflare Turnstile response token via siteverify API.
+ * Returns true if CF_TURNSTILE_SECRET_KEY is not configured.
+ */
+if (!function_exists('cf_verify_turnstile')) {
+    function cf_verify_turnstile(?string $token): bool {
+        $secret = defined('CF_TURNSTILE_SECRET_KEY') ? trim((string)CF_TURNSTILE_SECRET_KEY) : '';
+        if ($secret === '') {
+            return true;
+        }
+        $token = trim((string)$token);
+        if ($token === '') {
+            return false;
+        }
+
+        $verifyUrl = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+        $payload = [
+            'secret'   => $secret,
+            'response' => $token,
+            'remoteip' => $_SERVER['REMOTE_ADDR'] ?? ''
+        ];
+
+        $raw = false;
+        if (function_exists('curl_init')) {
+            $ch = curl_init($verifyUrl);
+            if ($ch) {
+                curl_setopt_array($ch, [
+                    CURLOPT_POST           => true,
+                    CURLOPT_POSTFIELDS     => http_build_query($payload),
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_TIMEOUT        => 10,
+                    CURLOPT_SSL_VERIFYPEER => true
+                ]);
+                $raw = curl_exec($ch);
+                curl_close($ch);
+            }
+        } else {
+            $ctx = stream_context_create([
+                'http' => [
+                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method'  => 'POST',
+                    'content' => http_build_query($payload),
+                    'timeout' => 10
+                ]
+            ]);
+            $raw = @file_get_contents($verifyUrl, false, $ctx);
+        }
+
+        if (!$raw) {
+            return false;
+        }
+        $decoded = json_decode($raw, true);
+        return is_array($decoded) && !empty($decoded['success']);
+    }
+}
+
+/**
+ * Check whether an email belongs to a common disposable/temporary email provider.
+ */
+if (!function_exists('cf_is_disposable_email')) {
+    function cf_is_disposable_email(string $email): bool {
+        $at = strrpos($email, '@');
+        if ($at === false) {
+            return false;
+        }
+        $domain = strtolower(trim(substr($email, $at + 1)));
+        static $blocked = [
+            'mailinator.com', 'tempmail.com', 'temp-mail.org', 'guerrillamail.com',
+            '10minutemail.com', 'yopmail.com', 'throwawaymail.com', 'trashmail.com',
+            'sharklasers.com', 'getnada.com', 'dispostable.com', 'maildrop.cc',
+            'fakeinbox.com', 'mintemail.com', 'tempr.email', 'burnermail.io'
+        ];
+        return in_array($domain, $blocked, true);
+    }
+}

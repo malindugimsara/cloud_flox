@@ -14,6 +14,7 @@ require_once __DIR__ . '/include/env.inc.php';
 cf_secure_session_start();
 include 'include/url.inc.php';
 require_once __DIR__ . '/include/csrf.inc.php';
+require_once __DIR__ . '/include/rate-limit.inc.php';
 require_once __DIR__ . '/api/config.php';
 require_once __DIR__ . '/api/whmcs.php';
 
@@ -159,6 +160,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['action']) && 
         header("Location: " . $url . "ticket?action=new");
         exit;
     }
+    if (!cf_rate_check('create_ticket', 5, 600)) {
+        $_SESSION['ticket_flash_error'] = 'Too many support tickets submitted. Please wait a few minutes before creating another ticket.';
+        header("Location: " . $url . "ticket?action=new");
+        exit;
+    }
+    cf_rate_record_fail('create_ticket');
     $deptId   = intval($_POST['department'] ?? 1);
     $urgency  = trim($_POST['urgency'] ?? 'Medium');
     $service  = trim($_POST['service'] ?? '');

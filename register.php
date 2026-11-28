@@ -9,21 +9,100 @@ require_once __DIR__ . '/api/whmcs.php';
 $error = '';
 $success = '';
 
-// If already logged in, jump directly to clientarea
-if (!empty($_SESSION['cf_client_logged_in'])) {
+// Check if user is already authenticated
+$isLoggedIn = !empty($_SESSION['cf_client_logged_in']);
+$clientEmail = $_SESSION['cf_client_email'] ?? '';
+$clientName  = $_SESSION['cf_client_name'] ?? '';
+
+// If already logged in and not explicitly requesting to stay, redirect to clientarea
+if ($isLoggedIn && !isset($_GET['stay'])) {
     header("Location: " . $url . "clientarea");
     exit;
 }
 
+// Default page mode: register.php defaults to 'signup'
+$defaultMode = 'signup';
+$initialMode = isset($_GET['mode']) ? (($_GET['mode'] === 'signin') ? 'signin' : 'signup') : $defaultMode;
+
+// Process Login Form Submission (if user flipped to sign in and submitted)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit'])) {
+    $initialMode = 'signin';
+    $email    = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    $remember = !empty($_POST['rememberme']);
+
+    if (!cf_csrf_verify($_POST['csrf_token'] ?? '')) {
+        $error = 'Security token mismatch. Please refresh the page and try again.';
+    } elseif (!cf_rate_check('login')) {
+        $error = 'Too many sign-in attempts from your IP. Please wait 5 minutes and try again.';
+    } elseif (empty($email) || empty($password)) {
+        $error = 'Please enter both your email address and password to sign in.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Please enter a valid email address.';
+    } else {
+        $authRes = WHMCSClient::validateLogin($email, $password);
+
+        if (!empty($authRes['result']) && $authRes['result'] === 'success') {
+            $clientId = $authRes['clientid'] ?? 1;
+            $userName = '';
+
+            $details = WHMCSClient::call('GetClientsDetails', ['clientid' => $clientId]);
+            if (!empty($details['client'])) {
+                $c = $details['client'];
+                $userName = trim(($c['firstname'] ?? '') . ' ' . ($c['lastname'] ?? ''));
+            }
+            if (empty($userName)) {
+                $userName = explode('@', $email)[0];
+            }
+
+            session_regenerate_id(true);
+            cf_rate_clear('login');
+
+            $_SESSION['cf_client_logged_in'] = true;
+            $_SESSION['cf_client_id']        = $clientId;
+            $_SESSION['cf_client_email']     = $email;
+            $_SESSION['cf_client_name']      = $userName;
+
+            $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+            if ($remember) {
+                setcookie('cf_remember_email', $email, [
+                    'expires'  => time() + (86400 * 30),
+                    'path'     => '/',
+                    'secure'   => $isHttps,
+                    'httponly' => true,
+                    'samesite' => 'Lax'
+                ]);
+            } else {
+                setcookie('cf_remember_email', '', [
+                    'expires'  => time() - 3600,
+                    'path'     => '/',
+                    'secure'   => $isHttps,
+                    'httponly' => true,
+                    'samesite' => 'Lax'
+                ]);
+            }
+
+            $redirect = !empty($_GET['redirect']) ? trim($_GET['redirect']) : 'clientarea';
+            if (preg_match('#^https?://#i', $redirect) || strpos($redirect, '//') === 0 || strpos($redirect, '\\') !== false) {
+                $redirect = 'clientarea';
+            }
+            header("Location: " . $url . ltrim($redirect, '/'));
+            exit;
+        } else {
+            $error = !empty($authRes['message']) ? $authRes['message'] : 'Invalid email or password. Please verify your credentials and try again.';
+            cf_rate_record_fail('login');
+        }
+    }
+}
+
 // Process Registration Form Submission (Matching WHMCS Lagom2 Register Schema)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
-    // 1. Personal Information
+    $initialMode = 'signup';
     $firstname   = trim($_POST['firstname'] ?? '');
     $lastname    = trim($_POST['lastname'] ?? '');
     $email       = trim($_POST['email'] ?? '');
     $phonenumber = trim($_POST['phonenumber'] ?? '');
 
-    // 2. Billing Address
     $companyname = trim($_POST['companyname'] ?? '');
     $address1    = trim($_POST['address1'] ?? '');
     $address2    = trim($_POST['address2'] ?? '');
@@ -32,7 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
     $postcode    = trim($_POST['postcode'] ?? '');
     $country     = trim($_POST['country'] ?? 'LK');
 
-    // 3. Account Security
     $password    = trim($_POST['password'] ?? '');
     $confirm     = trim($_POST['password_confirm'] ?? '');
     $agree       = !empty($_POST['agree_terms']);
@@ -80,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
 
         if ($accountExists) {
             cf_rate_record_fail('register');
-            $error = 'An account with this email address already exists. Please <a href="' . $url . 'login" class="alert-link text-decoration-underline fw-bold">Sign In here</a>.';
+            $error = 'An account with this email address already exists. Please sign in with your credentials.';
         } else {
             // 2. Register via WHMCS Client Bridge
             $clientPayload = [
@@ -119,10 +197,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                     }
                 } catch (Exception $e) {}
 
-                // Regenerate session ID to mitigate session fixation attacks
                 session_regenerate_id(true);
 
-                // Automatically log the new user in
                 $_SESSION['cf_client_logged_in'] = true;
                 $_SESSION['cf_client_id']        = $clientId;
                 $_SESSION['cf_client_email']     = $email;
@@ -136,6 +212,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
         }
     }
 }
+
+// Prefill remembered email if available
+$savedEmail = $_COOKIE['cf_remember_email'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
@@ -152,452 +231,582 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
     <!-- SEO Meta -->
     <meta name="description" content="Register for a CloudFlox client account. Deploy high-speed cloud instances, register domains, manage DNS zones, and access 24/7 expert support.">
     <meta name="robots" content="noindex, follow">
-    <link rel="canonical" href="https://cloudflox.com/register">
+    <link rel="canonical" href="<?php echo $url; ?>register">
 
     <!-- =========== CSS Area =========== -->
     <?php include 'include/css.inc.php'; ?>
+    <link rel="stylesheet" href="<?php echo $url; ?>assets/css/cf-auth-modern.css?v=<?php echo filemtime(__DIR__ . '/assets/css/cf-auth-modern.css'); ?>">
     <!-- =========== CSS Area =========== -->
 </head>
 
-<body class="pure-white-theme cf-auth-page cf-checkout-page">
+<body class="cf-modern-auth-body">
 
-    <!-- =========== Dedicated Minimalist Auth Header Area =========== -->
-    <?php include 'include/auth-header.inc.php'; ?>
-    <!-- =========== Dedicated Minimalist Auth Header Area =========== -->
+    <!-- Preloader & CSRF Security Token Setup -->
+    <script>
+        window.CF_BASE_URL = <?php echo json_encode($url); ?>;
+        window.CF_CSRF_TOKEN = <?php echo json_encode(cf_csrf_token()); ?>;
+        (function() {
+            if (window._cfFetchCsrfPatched || !window.fetch) return;
+            window._cfFetchCsrfPatched = true;
+            var origFetch = window.fetch.bind(window);
+            window.fetch = function(input, init) {
+                init = init || {};
+                var urlStr = (typeof input === 'string') ? input : (input && input.url ? input.url : '');
+                var isSameOrigin = !/^https?:\/\//i.test(urlStr) || urlStr.indexOf(window.location.origin) === 0;
+                var method = (init.method || (input && input.method) || 'GET').toUpperCase();
+                if (isSameOrigin && method !== 'GET' && method !== 'HEAD' && window.CF_CSRF_TOKEN) {
+                    var headers = new Headers(init.headers || (input && input.headers) || {});
+                    if (!headers.has('X-CSRF-Token')) {
+                        headers.set('X-CSRF-Token', window.CF_CSRF_TOKEN);
+                    }
+                    init = Object.assign({}, init, {
+                        headers: headers
+                    });
+                }
+                return origFetch(input, init);
+            };
+        })();
+    </script>
 
-    <!-- =========================================================================
-         2. AUTH MAIN SECTION (Minimalistic, Highly Focused)
-         ========================================================================= -->
-    <section class="cf-auth-page-wrap py-4 py-lg-5">
-        <div class="container cf-auth-container">
+    <!-- Main Centered Authentication Wrapper -->
+    <main class="cf-modern-auth-wrapper">
 
-            <div class="row g-4 g-xl-5 justify-content-center align-items-start">
-                
-                <!-- LEFT COLUMN: REGISTRATION FORM (col-lg-7 col-xl-7) -->
-                <div class="col-12 col-lg-7 col-xl-7">
-                    <div class="cf-step-card-box cf-auth-card-box">
-                        
-                        <!-- Mode Switcher Tabs (Short, Punchy, Focused) -->
-                        <div class="cf-auth-tabs-wrap">
-                            <a href="<?php echo $url; ?>login" class="cf-auth-tab-btn">
-                                <i class="las la-sign-in-alt"></i> Sign In
-                            </a>
-                            <a href="<?php echo $url; ?>register" class="cf-auth-tab-btn active">
-                                <i class="las la-user-plus"></i> Create Account
-                            </a>
+        <!-- Top Minimal Navigation -->
+        <nav class="cf-modern-auth-topbar" aria-label="Auth Navigation">
+            <a href="<?php echo $url; ?>" class="cf-modern-back-btn" title="Return to CloudFlox Homepage">
+                <i class="las la-arrow-left"></i>
+                <span>Back to Website</span>
+            </a>
+            <a href="<?php echo $url; ?>contact-us" class="cf-modern-help-link">
+                <i class="las la-question-circle me-1"></i> Need Help?
+            </a>
+        </nav>
+
+        <!-- Unified Dual-Panel Card: Authentic 3D Book with Center Spine -->
+        <div class="cf-modern-auth-card <?php echo ($initialMode === 'signin') ? 'cf-mode-signin' : 'cf-mode-signup'; ?>" id="authCard">
+
+            <!-- Center Book Spine Binding -->
+            <div class="cf-book-spine" aria-hidden="true"></div>
+
+            <!-- =========================================================================
+                 PANEL 1: SIGN IN FORM (ON THE LEFT SIDE)
+                 ========================================================================= -->
+            <section class="cf-panel-signin" aria-labelledby="signinHeading">
+                <div>
+                    <!-- Brand Area -->
+                    <a href="<?php echo $url; ?>" class="cf-modern-brand-wrap" title="CloudFlox Home">
+                        <div class="cf-modern-brand-content">
+                            <img 
+                                src="<?php echo $url; ?>assets/imgs/logos/cloud-flox-main.webp" 
+                                alt="Cloud Flox" 
+                                class="cf-modern-brand-img"
+                                height="40"
+                                onerror="this.style.display='none'; document.getElementById('cfFallbackBrandIn').style.display='flex';"
+                            >
+                            <div id="cfFallbackBrandIn" style="display:none; align-items:center; gap:10px;">
+                                <span style="font-size: 22px; font-weight: 800;"><span style="color: #ff6600;">Cloud</span> <span style="color: #0b2256;">Flox</span></span>
+                            </div>
+                            <span class="cf-modern-brand-slogan">Fast | Secure | Reliable</span>
                         </div>
+                    </a>
 
-                        <!-- Card Heading Wrap -->
-                        <div class="cf-auth-heading-wrap">
-                            <div class="cf-auth-badge">
-                                <span class="cf-pulse-dot-blue"></span>
-                                <span>Instant Account Setup</span>
-                            </div>
-                            <h2 class="cf-auth-title">Get Started in 60 Seconds</h2>
-                            <p class="cf-auth-subtitle">Create your CloudFlox profile to deploy high-speed cloud infrastructure.</p>
-                        </div>
-
-                        <!-- Error Alert Banner -->
-                        <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger d-flex align-items-center gap-2 mb-4 rounded-3 shadow-sm py-3 px-3 fs-13" role="alert">
-                                <i class="las la-exclamation-circle fs-18 flex-shrink-0 text-danger"></i>
-                                <div><?php echo $error; ?></div>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Success Alert Banner -->
-                        <?php if (!empty($success)): ?>
-                            <div class="alert alert-success d-flex align-items-center gap-2 mb-4 rounded-3 shadow-sm py-3 px-3 fs-13" role="alert">
-                                <i class="las la-check-circle fs-18 flex-shrink-0 text-success"></i>
-                                <div><?php echo htmlspecialchars($success); ?></div>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Registration Form (Full WHMCS Lagom2 Schema) -->
-                        <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="POST" id="cfRegisterForm" novalidate>
-                            <input type="hidden" name="register_submit" value="1">
-                            <?php echo cf_csrf_field(); ?>
-
-                            <!-- 1. PERSONAL INFORMATION -->
-                            <div class="cf-form-section-block">
-                                <div class="cf-form-section-header-box">
-                                    <div class="cf-form-section-step-num">
-                                        <i class="las la-user-circle"></i>
-                                    </div>
-                                    <div class="cf-form-section-title-wrap">
-                                        <h4>1. Personal Information</h4>
-                                        <p>Your primary identity, contact email and phone number</p>
-                                    </div>
-                                </div>
-                                <div class="row g-3 mb-3">
-                                    <div class="col-sm-6">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regFirstName" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                First Name <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <i class="las la-user cf-input-icon"></i>
-                                                <input 
-                                                    type="text" 
-                                                    class="form-control" 
-                                                    id="regFirstName" 
-                                                    name="firstname" 
-                                                    placeholder="John" 
-                                                    value="<?php echo htmlspecialchars($_POST['firstname'] ?? ''); ?>" 
-                                                    required 
-                                                    autofocus
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regLastName" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                Last Name <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <i class="las la-user cf-input-icon"></i>
-                                                <input 
-                                                    type="text" 
-                                                    class="form-control" 
-                                                    id="regLastName" 
-                                                    name="lastname" 
-                                                    placeholder="Doe" 
-                                                    value="<?php echo htmlspecialchars($_POST['lastname'] ?? ''); ?>" 
-                                                    required
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3">
-                                    <div class="col-sm-6">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regEmail" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                Email Address <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <i class="las la-envelope cf-input-icon"></i>
-                                                <input 
-                                                    type="email" 
-                                                    class="form-control" 
-                                                    id="regEmail" 
-                                                    name="email" 
-                                                    placeholder="name@example.com" 
-                                                    value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" 
-                                                    required
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regPhone" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                Phone Number <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <i class="las la-phone cf-input-icon"></i>
-                                                <input 
-                                                    type="tel" 
-                                                    class="form-control" 
-                                                    id="regPhone" 
-                                                    name="phonenumber" 
-                                                    placeholder="+94 77 123 4567" 
-                                                    value="<?php echo htmlspecialchars($_POST['phonenumber'] ?? ''); ?>" 
-                                                    required
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 2. BILLING ADDRESS -->
-                            <div class="cf-form-section-block">
-                                <div class="cf-form-section-header-box">
-                                    <div class="cf-form-section-step-num">
-                                        <i class="las la-map-marker-alt"></i>
-                                    </div>
-                                    <div class="cf-form-section-title-wrap">
-                                        <h4>2. Billing Address</h4>
-                                        <p>Business entity and verified location for cloud services &amp; invoices</p>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3 mb-3">
-                                    <div class="col-sm-6">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regCompany" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                Company Name <span class="text-muted fw-normal fs-11">(Optional)</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <i class="las la-building cf-input-icon"></i>
-                                                <input 
-                                                    type="text" 
-                                                    class="form-control" 
-                                                    id="regCompany" 
-                                                    name="companyname" 
-                                                    placeholder="Company / Business Name" 
-                                                    value="<?php echo htmlspecialchars($_POST['companyname'] ?? ''); ?>"
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regCountry" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                Country <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <i class="las la-globe cf-input-icon"></i>
-                                                <select class="form-select" id="regCountry" name="country" required>
-                                                    <option value="LK" <?php echo (($_POST['country'] ?? 'LK') === 'LK') ? 'selected' : ''; ?>>Sri Lanka</option>
-                                                    <option value="US" <?php echo (($_POST['country'] ?? '') === 'US') ? 'selected' : ''; ?>>United States</option>
-                                                    <option value="GB" <?php echo (($_POST['country'] ?? '') === 'GB') ? 'selected' : ''; ?>>United Kingdom</option>
-                                                    <option value="AU" <?php echo (($_POST['country'] ?? '') === 'AU') ? 'selected' : ''; ?>>Australia</option>
-                                                    <option value="CA" <?php echo (($_POST['country'] ?? '') === 'CA') ? 'selected' : ''; ?>>Canada</option>
-                                                    <option value="IN" <?php echo (($_POST['country'] ?? '') === 'IN') ? 'selected' : ''; ?>>India</option>
-                                                    <option value="SG" <?php echo (($_POST['country'] ?? '') === 'SG') ? 'selected' : ''; ?>>Singapore</option>
-                                                    <option value="AE" <?php echo (($_POST['country'] ?? '') === 'AE') ? 'selected' : ''; ?>>United Arab Emirates</option>
-                                                    <option value="DE" <?php echo (($_POST['country'] ?? '') === 'DE') ? 'selected' : ''; ?>>Germany</option>
-                                                    <option value="FR" <?php echo (($_POST['country'] ?? '') === 'FR') ? 'selected' : ''; ?>>France</option>
-                                                    <option value="MY" <?php echo (($_POST['country'] ?? '') === 'MY') ? 'selected' : ''; ?>>Malaysia</option>
-                                                    <option value="JP" <?php echo (($_POST['country'] ?? '') === 'JP') ? 'selected' : ''; ?>>Japan</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3 mb-3">
-                                    <div class="col-sm-6">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regAddress1" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                Street Address <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <i class="las la-home cf-input-icon"></i>
-                                                <input 
-                                                    type="text" 
-                                                    class="form-control" 
-                                                    id="regAddress1" 
-                                                    name="address1" 
-                                                    placeholder="123 Main Street" 
-                                                    value="<?php echo htmlspecialchars($_POST['address1'] ?? ''); ?>" 
-                                                    required
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regAddress2" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                Street Address 2 <span class="text-muted fw-normal fs-11">(Optional)</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <i class="las la-map-pin cf-input-icon"></i>
-                                                <input 
-                                                    type="text" 
-                                                    class="form-control" 
-                                                    id="regAddress2" 
-                                                    name="address2" 
-                                                    placeholder="Apt, Suite, Building" 
-                                                    value="<?php echo htmlspecialchars($_POST['address2'] ?? ''); ?>"
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3">
-                                    <div class="col-sm-4">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regCity" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                City <span class="text-danger">*</span>
-                                            </label>
-                                            <input 
-                                                type="text" 
-                                                class="form-control px-3" 
-                                                id="regCity" 
-                                                name="city" 
-                                                placeholder="Colombo" 
-                                                value="<?php echo htmlspecialchars($_POST['city'] ?? ''); ?>" 
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regState" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                State / Region
-                                            </label>
-                                            <input 
-                                                type="text" 
-                                                class="form-control px-3" 
-                                                id="regState" 
-                                                name="state" 
-                                                placeholder="Western" 
-                                                value="<?php echo htmlspecialchars($_POST['state'] ?? ''); ?>"
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regPostcode" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                Postcode / ZIP
-                                            </label>
-                                            <input 
-                                                type="text" 
-                                                class="form-control px-3" 
-                                                id="regPostcode" 
-                                                name="postcode" 
-                                                placeholder="00100" 
-                                                value="<?php echo htmlspecialchars($_POST['postcode'] ?? ''); ?>"
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 3. ACCOUNT SECURITY -->
-                            <div class="cf-form-section-block">
-                                <div class="cf-form-section-header-box">
-                                    <div class="cf-form-section-step-num">
-                                        <i class="las la-shield-alt"></i>
-                                    </div>
-                                    <div class="cf-form-section-title-wrap">
-                                        <h4>3. Account Security</h4>
-                                        <p>Create a secure password to protect your client portal</p>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3">
-                                    <div class="col-sm-6">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regPassword" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                Password <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <i class="las la-lock cf-input-icon"></i>
-                                                <input 
-                                                    type="password" 
-                                                    class="form-control pe-5" 
-                                                    id="regPassword" 
-                                                    name="password" 
-                                                    placeholder="Min. 8 chars" 
-                                                    required
-                                                >
-                                                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-secondary text-decoration-none pe-2.5" id="toggleRegPasswordBtn" aria-label="Toggle password visibility">
-                                                    <i class="las la-eye fs-18" id="toggleRegPasswordIcon"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="cf-minimal-input-wrap mb-0">
-                                            <label for="regConfirm" class="form-label fs-13 fw-bold text-slate-800 mb-2">
-                                                Confirm Password <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="position-relative">
-                                                <i class="las la-check-double cf-input-icon"></i>
-                                                <input 
-                                                    type="password" 
-                                                    class="form-control" 
-                                                    id="regConfirm" 
-                                                    name="password_confirm" 
-                                                    placeholder="Repeat password" 
-                                                    required
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Terms & Conditions Checkbox -->
-                            <div class="cf-minimal-check-wrap">
-                                <input class="form-check-input" type="checkbox" id="agreeTermsCheck" name="agree_terms" required checked>
-                                <label class="form-check-label fs-12.5" for="agreeTermsCheck">
-                                    I agree to CloudFlox <a href="<?php echo $url; ?>terms" target="_blank" class="text-primary text-decoration-none hover-underline">Terms of Service</a> &amp; <a href="<?php echo $url; ?>privacy" target="_blank" class="text-primary text-decoration-none hover-underline">Privacy Policy</a>
-                                </label>
-                            </div>
-
-                            <!-- Primary Action CTA Button (Clearly Highlighted!) -->
-                            <div class="cf-auth-btn-wrap">
-                                <button type="submit" class="cf-minimal-cta-btn" id="btnSubmitRegister">
-                                    <span class="btn-text">
-                                        Create Account &amp; Deploy <i class="las la-arrow-right ms-2 fs-16"></i>
-                                    </span>
-                                    <span class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
-                                </button>
-                            </div>
-
-                        </form>
-
-                        <!-- Bottom Link -->
-                        <div class="cf-auth-footer-link">
-                            <span>Already have a CloudFlox account?</span>
-                            <a href="<?php echo $url; ?>login">
-                                Sign In &rarr;
-                            </a>
-                        </div>
-
+                    <!-- Sign In Headings -->
+                    <div class="cf-modern-form-heading">
+                        <h2 class="cf-modern-title" id="signinHeading">Sign In</h2>
+                        <p class="cf-modern-subtitle">Welcome back! Please login to your account.</p>
                     </div>
+
+                    <!-- Alerts: Error / Success for Sign In -->
+                    <?php if (!empty($error) && $initialMode === 'signin'): ?>
+                        <div class="alert alert-danger d-flex align-items-center gap-2 mb-3 rounded-3 py-2 px-3 fs-13" role="alert">
+                            <i class="las la-exclamation-circle fs-18 flex-shrink-0 text-danger"></i>
+                            <div><?php echo htmlspecialchars($error); ?></div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($success) && $initialMode === 'signin'): ?>
+                        <div class="alert alert-success d-flex align-items-center gap-2 mb-3 rounded-3 py-2 px-3 fs-13" role="alert">
+                            <i class="las la-check-circle fs-18 flex-shrink-0 text-success"></i>
+                            <div><?php echo htmlspecialchars($success); ?></div>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Sign In Form -->
+                    <form action="<?php echo $url; ?>login" method="POST" id="cfLoginForm" novalidate>
+                        <input type="hidden" name="login_submit" value="1">
+                        <?php echo cf_csrf_field(); ?>
+
+                        <!-- Email Input Group -->
+                        <div class="cf-modern-input-group">
+                            <i class="las la-envelope cf-input-icon"></i>
+                            <input
+                                type="email"
+                                class="cf-modern-input"
+                                id="loginEmail"
+                                name="email"
+                                placeholder="Email Address"
+                                value="<?php echo htmlspecialchars($_POST['email'] ?? $savedEmail); ?>"
+                                required>
+                        </div>
+
+                        <!-- Password Input Group -->
+                        <div class="cf-modern-input-group">
+                            <i class="las la-lock cf-input-icon"></i>
+                            <input
+                                type="password"
+                                class="cf-modern-input has-toggle"
+                                id="loginPassword"
+                                name="password"
+                                placeholder="Password"
+                                required>
+                            <button type="button" class="cf-toggle-password-btn" id="togglePasswordBtn" aria-label="Toggle password visibility">
+                                <i class="las la-eye" id="togglePasswordIcon"></i>
+                            </button>
+                        </div>
+
+                        <!-- Options: Forgot Password & Remember Me -->
+                        <div class="cf-modern-options-row">
+                            <a href="<?php echo $url; ?>forgot-password" class="cf-modern-forgot-link">
+                                Forgot Password?
+                            </a>
+                            <label class="cf-modern-remember-label" for="rememberMeCheck">
+                                <input
+                                    type="checkbox"
+                                    class="cf-modern-checkbox"
+                                    id="rememberMeCheck"
+                                    name="rememberme"
+                                    <?php echo !empty($savedEmail) ? 'checked' : ''; ?>>
+                                <span>Remember Me</span>
+                            </label>
+                        </div>
+
+                        <!-- Primary CTA Submit Button with interactive arrow -->
+                        <button type="submit" class="cf-modern-submit-btn" id="btnSubmitLogin">
+                            <span class="btn-text">
+                                Sign In
+                                <i class="las la-arrow-right ms-2 fs-16 cf-btn-arrow"></i>
+                            </span>
+                            <span class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
+                        </button>
+
+                        <!-- Trust / Encryption Badge -->
+                        <div class="cf-modern-security-badge">
+                            <i class="las la-shield-alt fs-15 text-success"></i>
+                            <span>256-Bit SSL Encrypted &bull; Fast &amp; Secure Sign In</span>
+                        </div>
+
+                        <!-- Sign Up Switcher Link -->
+                        <div class="cf-modern-signup-wrap">
+                            <span>Don't have an account?</span>
+                            <a href="<?php echo $url; ?>register" class="cf-modern-signup-link" id="triggerSignUpFlip">
+                                Sign Up
+                            </a>
+                        </div>
+                    </form>
                 </div>
 
-                <!-- RIGHT COLUMN: MINIMALISTIC ONBOARDING SHOWCASE (col-lg-5 col-xl-5) -->
-                <div class="col-12 col-lg-5 col-xl-5">
-                    <div class="cf-sidebar-summary-card cf-auth-showcase-card text-center sticky-top" style="top: 88px;">
-                        
-                        <!-- 3D Cloud Registration Visual Showcase -->
-                        <div class="cf-auth-side-img-wrap">
-                            <img src="<?php echo $url ?? ''; ?>assets/imgs/banners/auth-register-portal.webp" alt="CloudFlox Registration" class="cf-auth-side-img img-fluid">
+                <!-- Footer -->
+                <div class="cf-modern-left-footer">
+                    <span class="cf-modern-copyright">&copy; <?php echo date('Y'); ?> CloudFlox LLC. All rights reserved. Engineered for modern cloud performance.</span>
+                </div>
+            </section>
+
+            <!-- =========================================================================
+                 PANEL 2: SIGN UP FORM (ON THE RIGHT SIDE - 3 ORGANIZED GROUPS)
+                 ========================================================================= -->
+            <section class="cf-panel-signup" aria-labelledby="registerHeading">
+                <div>
+                    <!-- Brand Area -->
+                    <a href="<?php echo $url; ?>" class="cf-modern-brand-wrap" title="CloudFlox Home">
+                        <div class="cf-modern-brand-content">
+                            <img 
+                                src="<?php echo $url; ?>assets/imgs/logos/cloud-flox-main.webp" 
+                                alt="Cloud Flox" 
+                                class="cf-modern-brand-img"
+                                height="40"
+                                onerror="this.style.display='none'; document.getElementById('cfFallbackBrandUp').style.display='flex';"
+                            >
+                            <div id="cfFallbackBrandUp" style="display:none; align-items:center; gap:10px;">
+                                <span style="font-size: 20px; font-weight: 800;"><span style="color: #ff6600;">Cloud</span> <span style="color: #0b2256;">Flox</span></span>
+                            </div>
+                            <span class="cf-modern-brand-slogan">Fast | Secure | Reliable</span>
+                        </div>
+                    </a>
+
+                    <!-- Sign Up Headings -->
+                    <div class="cf-modern-form-heading">
+                        <h1 class="cf-modern-title" id="registerHeading">Create Account</h1>
+                        <p class="cf-modern-subtitle">Deploy high-speed cloud infrastructure in 60 seconds.</p>
+                    </div>
+
+                    <!-- Alerts: Error / Success for Sign Up -->
+                    <?php if (!empty($error) && $initialMode === 'signup'): ?>
+                        <div class="alert alert-danger d-flex align-items-center gap-2 mb-3 rounded-3 py-2 px-3 fs-13" role="alert">
+                            <i class="las la-exclamation-circle fs-18 flex-shrink-0 text-danger"></i>
+                            <div><?php echo $error; ?></div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($success) && $initialMode === 'signup'): ?>
+                        <div class="alert alert-success d-flex align-items-center gap-2 mb-3 rounded-3 py-2 px-3 fs-13" role="alert">
+                            <i class="las la-check-circle fs-18 flex-shrink-0 text-success"></i>
+                            <div><?php echo htmlspecialchars($success); ?></div>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Registration Form -->
+                    <form action="<?php echo $url; ?>register" method="POST" id="cfRegisterForm" novalidate>
+                        <input type="hidden" name="register_submit" value="1">
+                        <?php echo cf_csrf_field(); ?>
+
+                        <!-- GROUP 1: PERSONAL DETAILS -->
+                        <div class="cf-form-section-card">
+                            <div class="cf-section-header">
+                                <div class="cf-section-badge">
+                                    <i class="las la-user"></i>
+                                </div>
+                                <div class="cf-section-header-meta">
+                                    <span class="cf-section-title">1. Personal Profile</span>
+                                    <span class="cf-section-subtitle">Your identity and primary contact details</span>
+                                </div>
+                                <span class="cf-section-step">Step 1</span>
+                            </div>
+
+                            <div class="cf-modern-grid-2">
+                                <div class="cf-modern-input-group mb-compact">
+                                    <i class="las la-user cf-input-icon"></i>
+                                    <input
+                                        type="text"
+                                        class="cf-modern-input cf-input-sm"
+                                        id="regFirstName"
+                                        name="firstname"
+                                        placeholder="First Name *"
+                                        value="<?php echo htmlspecialchars($_POST['firstname'] ?? ''); ?>"
+                                        required
+                                        autofocus>
+                                </div>
+                                <div class="cf-modern-input-group mb-compact">
+                                    <i class="las la-user cf-input-icon"></i>
+                                    <input
+                                        type="text"
+                                        class="cf-modern-input cf-input-sm"
+                                        id="regLastName"
+                                        name="lastname"
+                                        placeholder="Last Name *"
+                                        value="<?php echo htmlspecialchars($_POST['lastname'] ?? ''); ?>"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div class="cf-modern-grid-2">
+                                <div class="cf-modern-input-group mb-compact">
+                                    <i class="las la-envelope cf-input-icon"></i>
+                                    <input
+                                        type="email"
+                                        class="cf-modern-input cf-input-sm"
+                                        id="regEmail"
+                                        name="email"
+                                        placeholder="Email Address *"
+                                        value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>"
+                                        required>
+                                </div>
+                                <div class="cf-modern-input-group mb-compact">
+                                    <i class="las la-phone cf-input-icon"></i>
+                                    <input
+                                        type="tel"
+                                        class="cf-modern-input cf-input-sm"
+                                        id="regPhone"
+                                        name="phonenumber"
+                                        placeholder="Phone Number *"
+                                        value="<?php echo htmlspecialchars($_POST['phonenumber'] ?? ''); ?>"
+                                        required>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Focused Portal Title & Description -->
-                        <div class="cf-auth-portal-badge badge-green">
-                            <span class="badge-dot"></span>
-                            <span>Instant Activation</span>
-                        </div>
-                        <h3 class="cf-auth-portal-title">CloudFlox Registration</h3>
-                        <p class="cf-auth-portal-desc">Create your account to deploy NVMe servers, register domains &amp; scale instantly.</p>
+                        <!-- GROUP 2: BILLING & LOCATION -->
+                        <div class="cf-form-section-card">
+                            <div class="cf-section-header">
+                                <div class="cf-section-badge">
+                                    <i class="las la-map-marker-alt"></i>
+                                </div>
+                                <div class="cf-section-header-meta">
+                                    <span class="cf-section-title">2. Billing &amp; Location</span>
+                                    <span class="cf-section-subtitle">Address details for automated invoicing</span>
+                                </div>
+                                <span class="cf-section-step">Step 2</span>
+                            </div>
 
-                        <!-- 3 Sleek Trust Badges -->
-                        <div class="cf-auth-trust-pills">
-                            <span class="cf-auth-trust-pill">
-                                <i class="las la-bolt icon-speed"></i> 60-Sec Deploy
-                            </span>
-                            <span class="cf-auth-trust-pill">
-                                <i class="las la-lock icon-ssl"></i> Free SSL / DNS
-                            </span>
-                            <span class="cf-auth-trust-pill">
-                                <i class="las la-shield-alt icon-sla"></i> 99.99% SLA
-                            </span>
+                            <div class="cf-modern-grid-2">
+                                <div class="cf-modern-input-group mb-compact">
+                                    <i class="las la-home cf-input-icon"></i>
+                                    <input
+                                        type="text"
+                                        class="cf-modern-input cf-input-sm"
+                                        id="regAddress1"
+                                        name="address1"
+                                        placeholder="Street Address *"
+                                        value="<?php echo htmlspecialchars($_POST['address1'] ?? ''); ?>"
+                                        required>
+                                </div>
+                                <div class="cf-modern-input-group mb-compact">
+                                    <i class="las la-city cf-input-icon"></i>
+                                    <input
+                                        type="text"
+                                        class="cf-modern-input cf-input-sm"
+                                        id="regCity"
+                                        name="city"
+                                        placeholder="City *"
+                                        value="<?php echo htmlspecialchars($_POST['city'] ?? ''); ?>"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div class="cf-modern-grid-2">
+                                <div class="cf-modern-input-group mb-compact">
+                                    <i class="las la-globe cf-input-icon"></i>
+                                    <select class="cf-modern-input cf-input-sm" id="regCountry" name="country" required>
+                                        <option value="LK" <?php echo (($_POST['country'] ?? 'LK') === 'LK') ? 'selected' : ''; ?>>Sri Lanka</option>
+                                        <option value="US" <?php echo (($_POST['country'] ?? '') === 'US') ? 'selected' : ''; ?>>United States</option>
+                                        <option value="GB" <?php echo (($_POST['country'] ?? '') === 'GB') ? 'selected' : ''; ?>>United Kingdom</option>
+                                        <option value="AU" <?php echo (($_POST['country'] ?? '') === 'AU') ? 'selected' : ''; ?>>Australia</option>
+                                        <option value="CA" <?php echo (($_POST['country'] ?? '') === 'CA') ? 'selected' : ''; ?>>Canada</option>
+                                        <option value="IN" <?php echo (($_POST['country'] ?? '') === 'IN') ? 'selected' : ''; ?>>India</option>
+                                        <option value="SG" <?php echo (($_POST['country'] ?? '') === 'SG') ? 'selected' : ''; ?>>Singapore</option>
+                                        <option value="AE" <?php echo (($_POST['country'] ?? '') === 'AE') ? 'selected' : ''; ?>>United Arab Emirates</option>
+                                        <option value="DE" <?php echo (($_POST['country'] ?? '') === 'DE') ? 'selected' : ''; ?>>Germany</option>
+                                        <option value="FR" <?php echo (($_POST['country'] ?? '') === 'FR') ? 'selected' : ''; ?>>France</option>
+                                    </select>
+                                </div>
+                                <div class="cf-modern-input-group mb-compact">
+                                    <i class="las la-map-pin cf-input-icon"></i>
+                                    <input
+                                        type="text"
+                                        class="cf-modern-input cf-input-sm"
+                                        id="regState"
+                                        name="state"
+                                        placeholder="State / Region (Optional)"
+                                        value="<?php echo htmlspecialchars($_POST['state'] ?? ''); ?>">
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Minimal 1-Line Support Link -->
-                        <div class="cf-auth-side-footer-link">
-                            <span>Questions before joining?</span>
-                            <a href="<?php echo $url; ?>contact-us">
-                                Contact Sales &rarr;
+                        <!-- GROUP 3: SECURITY CREDENTIALS -->
+                        <div class="cf-form-section-card">
+                            <div class="cf-section-header">
+                                <div class="cf-section-badge">
+                                    <i class="las la-shield-alt"></i>
+                                </div>
+                                <div class="cf-section-header-meta">
+                                    <span class="cf-section-title">3. Security Credentials</span>
+                                    <span class="cf-section-subtitle">Create a strong password to protect your servers</span>
+                                </div>
+                                <span class="cf-section-step">Step 3</span>
+                            </div>
+
+                            <div class="cf-modern-grid-2">
+                                <div class="cf-modern-input-group mb-compact">
+                                    <i class="las la-lock cf-input-icon"></i>
+                                    <input
+                                        type="password"
+                                        class="cf-modern-input cf-input-sm has-toggle"
+                                        id="regPassword"
+                                        name="password"
+                                        placeholder="Password (Min. 8 chars) *"
+                                        required>
+                                    <button type="button" class="cf-toggle-password-btn" id="toggleRegPasswordBtn" aria-label="Toggle password visibility">
+                                        <i class="las la-eye" id="toggleRegPasswordIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="cf-modern-input-group mb-compact">
+                                    <i class="las la-check-double cf-input-icon"></i>
+                                    <input
+                                        type="password"
+                                        class="cf-modern-input cf-input-sm"
+                                        id="regConfirm"
+                                        name="password_confirm"
+                                        placeholder="Confirm Password *"
+                                        required>
+                                </div>
+                            </div>
+
+                            <!-- Live Password Strength Meter -->
+                            <div class="cf-strength-wrap">
+                                <div class="cf-strength-bar">
+                                    <div class="cf-strength-fill" id="passStrengthFill"></div>
+                                </div>
+                                <div class="cf-strength-info">
+                                    <span id="passStrengthText">Password strength</span>
+                                    <span>Min. 8 characters</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms & Conditions Checkbox -->
+                        <div class="cf-modern-terms-wrap">
+                            <input class="cf-modern-checkbox" type="checkbox" id="agreeTermsCheck" name="agree_terms" required checked>
+                            <label for="agreeTermsCheck" class="m-0">
+                                I agree to the CloudFlox <a href="<?php echo $url; ?>terms-of-service" target="_blank">Terms of Service</a> &amp; <a href="<?php echo $url; ?>privacy-policy" target="_blank">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <?php if (defined('CF_TURNSTILE_SITE_KEY') && CF_TURNSTILE_SITE_KEY !== ''): ?>
+                        <div class="d-flex justify-content-center mb-2">
+                            <div class="cf-turnstile" data-sitekey="<?php echo htmlspecialchars(CF_TURNSTILE_SITE_KEY); ?>" data-theme="light"></div>
+                        </div>
+                        <?php endif; ?>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="cf-modern-submit-btn" id="btnSubmitRegister">
+                            <span class="btn-text">
+                                Create Account &amp; Deploy
+                                <i class="las la-arrow-right ms-2 fs-16 cf-btn-arrow"></i>
+                            </span>
+                            <span class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
+                        </button>
+
+                        <!-- Trust Badge -->
+                        <div class="cf-modern-security-badge">
+                            <i class="las la-shield-alt fs-15 text-success"></i>
+                            <span>256-Bit SSL Encrypted &bull; 99.99% Uptime Guarantee</span>
+                        </div>
+
+                        <!-- Sign In Switcher Link -->
+                        <div class="cf-modern-signup-wrap">
+                            <span>Already have an account?</span>
+                            <a href="<?php echo $url; ?>login" class="cf-modern-signin-link" id="triggerSignInFlip">
+                                Sign In
                             </a>
                         </div>
+                    </form>
+                </div>
 
+                <!-- Footer -->
+                <div class="cf-modern-left-footer">
+                    <span class="cf-modern-copyright">&copy; <?php echo date('Y'); ?> CloudFlox LLC. All rights reserved. Engineered for modern cloud performance.</span>
+                </div>
+            </section>
+
+            <!-- =========================================================================
+                 THE 3D TURNING BOOK PAGE (LEAF)
+                 Pivots on the center spine like a real physical hardcover book!
+                 ========================================================================= -->
+            <div class="cf-book-leaf" id="bookLeaf" aria-label="Cloud Infrastructure Showcase">
+
+                <!-- FRONT FACE (Visible when page lies on the RIGHT half - Sign In Mode) -->
+                <div class="cf-leaf-face cf-leaf-front">
+                    <!-- Headline -->
+                    <div class="cf-modern-hero-headline">
+                        <div class="cf-hero-tag-badge">
+                            <span class="cf-hero-tag-dot"></span>
+                            <i class="las la-bolt cf-hero-tag-icon"></i>
+                            <span>Enterprise Cloud Platform</span>
+                        </div>
+                        <h2 class="cf-hero-title">
+                            <span class="cf-title-line-1">Next-Gen <span class="cf-title-gradient">Cloud Hosting</span></span>
+                            <span class="cf-title-line-2">&amp; Domains<span class="cf-title-dot">.</span></span>
+                        </h2>
+                        <p class="cf-hero-subtitle">
+                            High-performance NVMe virtual machines, instant domain provisioning, and ultra-reliable cloud networking.
+                        </p>
                     </div>
+
+                    <!-- Center Spacer -->
+                    <div class="cf-modern-hero-spacer"></div>
+
+                    <!-- Bottom 3 Frosted Glass Feature Pills -->
+                    <div class="cf-modern-pills-row">
+                        <div class="cf-modern-glass-pill" title="Ultra-fast NVMe enterprise solid state drives">
+                            <div class="cf-modern-pill-icon">
+                                <i class="las la-tachometer-alt"></i>
+                            </div>
+                            <div class="cf-modern-pill-text">
+                                High-Speed<br>NVMe Storage
+                            </div>
+                        </div>
+
+                        <div class="cf-modern-glass-pill" title="Instant registration with DNS management">
+                            <div class="cf-modern-pill-icon">
+                                <i class="las la-globe"></i>
+                            </div>
+                            <div class="cf-modern-pill-text">
+                                Instant Domain<br>Registration
+                            </div>
+                        </div>
+
+                        <div class="cf-modern-glass-pill" title="24/7/365 dedicated technical support engineering">
+                            <div class="cf-modern-pill-icon">
+                                <i class="las la-headset"></i>
+                            </div>
+                            <div class="cf-modern-pill-text">
+                                24/7 Expert<br>Support
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Sheen Overlay -->
+                    <div class="cf-leaf-lighting"></div>
+                </div>
+
+                <!-- BACK FACE (Visible when page turns and lies on the LEFT half - Sign Up Mode) -->
+                <div class="cf-leaf-face cf-leaf-back">
+                    <!-- Headline -->
+                    <div class="cf-modern-hero-headline">
+                        <div class="cf-hero-tag-badge">
+                            <span class="cf-hero-tag-dot"></span>
+                            <i class="las la-bolt cf-hero-tag-icon"></i>
+                            <span>Enterprise Cloud Platform</span>
+                        </div>
+                        <h2 class="cf-hero-title">
+                            <span class="cf-title-line-1">Next-Gen <span class="cf-title-gradient">Cloud Hosting</span></span>
+                            <span class="cf-title-line-2">&amp; Domains<span class="cf-title-dot">.</span></span>
+                        </h2>
+                        <p class="cf-hero-subtitle">
+                            High-performance NVMe virtual machines, instant domain provisioning, and ultra-reliable cloud networking.
+                        </p>
+                    </div>
+
+                    <!-- Center Spacer -->
+                    <div class="cf-modern-hero-spacer"></div>
+
+                    <!-- Bottom 3 Frosted Glass Feature Pills -->
+                    <div class="cf-modern-pills-row">
+                        <div class="cf-modern-glass-pill" title="Ultra-fast NVMe enterprise solid state drives">
+                            <div class="cf-modern-pill-icon">
+                                <i class="las la-tachometer-alt"></i>
+                            </div>
+                            <div class="cf-modern-pill-text">
+                                High-Speed<br>NVMe Storage
+                            </div>
+                        </div>
+
+                        <div class="cf-modern-glass-pill" title="Instant registration with DNS management">
+                            <div class="cf-modern-pill-icon">
+                                <i class="las la-globe"></i>
+                            </div>
+                            <div class="cf-modern-pill-text">
+                                Instant Domain<br>Registration
+                            </div>
+                        </div>
+
+                        <div class="cf-modern-glass-pill" title="24/7/365 dedicated technical support engineering">
+                            <div class="cf-modern-pill-icon">
+                                <i class="las la-headset"></i>
+                            </div>
+                            <div class="cf-modern-pill-text">
+                                24/7 Expert<br>Support
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Sheen Overlay -->
+                    <div class="cf-leaf-lighting"></div>
                 </div>
 
             </div>
 
         </div>
-    </section>
-
-    <!-- =========== Footer Area =========== -->
-    <?php 
-    $hide_footer_cta = true;
-    include 'include/footer.inc.php'; 
-    ?>
-    <!-- =========== Footer Area =========== -->
+    </main>
 
     <!-- =========== Javascript Area =========== -->
     <?php include 'include/js.inc.php'; ?>
@@ -608,20 +817,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
             // Trigger toast notification on server-side error or success
             <?php if (!empty($error)): ?>
                 if (window.cfToast) {
-                    cfToast.error(<?php echo json_encode($error); ?>, 'Registration Error');
+                    cfToast.error(<?php echo json_encode($error); ?>, 'Authentication Notice');
                 }
             <?php endif; ?>
 
             <?php if (!empty($success)): ?>
                 if (window.cfToast) {
-                    cfToast.success(<?php echo json_encode($success); ?>, 'Account Created');
+                    cfToast.success(<?php echo json_encode($success); ?>, 'Success');
                 }
             <?php endif; ?>
 
-            // Password Visibility Toggle
-            const toggleBtn = document.getElementById('toggleRegPasswordBtn');
-            const passInput = document.getElementById('regPassword');
-            const eyeIcon   = document.getElementById('toggleRegPasswordIcon');
+            // Password Visibility Toggle for Sign In
+            const toggleBtn = document.getElementById('togglePasswordBtn');
+            const passInput = document.getElementById('loginPassword');
+            const eyeIcon   = document.getElementById('togglePasswordIcon');
 
             if (toggleBtn && passInput && eyeIcon) {
                 toggleBtn.addEventListener('click', function() {
@@ -632,76 +841,231 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                 });
             }
 
-            // Client-side Validation & Toast Feedback
-            const regForm = document.getElementById('cfRegisterForm');
-            const submitBtn = document.getElementById('btnSubmitRegister');
+            // Password Visibility Toggle for Sign Up
+            const toggleRegBtn = document.getElementById('toggleRegPasswordBtn');
+            const passRegInput = document.getElementById('regPassword');
+            const eyeRegIcon   = document.getElementById('toggleRegPasswordIcon');
 
-            const firstNameInput = document.getElementById('regFirstName');
-            const lastNameInput  = document.getElementById('regLastName');
-            const emailInput     = document.getElementById('regEmail');
-            const phoneInput     = document.getElementById('regPhone');
-            const addressInput   = document.getElementById('regAddress1');
-            const cityInput      = document.getElementById('regCity');
-            const confirmInput   = document.getElementById('regConfirm');
-            const agreeCheck     = document.getElementById('agreeTermsCheck');
+            if (toggleRegBtn && passRegInput && eyeRegIcon) {
+                toggleRegBtn.addEventListener('click', function() {
+                    const isPass = passRegInput.getAttribute('type') === 'password';
+                    passRegInput.setAttribute('type', isPass ? 'text' : 'password');
+                    eyeRegIcon.classList.toggle('la-eye', !isPass);
+                    eyeRegIcon.classList.toggle('la-eye-slash', isPass);
+                });
+            }
 
-            if (regForm && submitBtn) {
-                regForm.addEventListener('submit', function(e) {
-                    if (firstNameInput && !firstNameInput.value.trim()) {
-                        e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(firstNameInput, 'Please enter your first name.', 'First Name Required');
-                        return false;
+            // Live Password Strength Meter
+            const strengthFill = document.getElementById('passStrengthFill');
+            const strengthText = document.getElementById('passStrengthText');
+
+            if (passRegInput && strengthFill && strengthText) {
+                passRegInput.addEventListener('input', function() {
+                    const val = this.value;
+                    let score = 0;
+                    if (val.length >= 8) score++;
+                    if (/[A-Z]/.test(val)) score++;
+                    if (/[0-9]/.test(val)) score++;
+                    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+                    if (!val) {
+                        strengthFill.style.width = '0%';
+                        strengthText.textContent = 'Password strength';
+                        strengthText.style.color = '#94a3b8';
+                    } else if (val.length < 8) {
+                        strengthFill.style.width = '25%';
+                        strengthFill.style.backgroundColor = '#ef4444';
+                        strengthText.textContent = 'Too Short (Min. 8 chars)';
+                        strengthText.style.color = '#ef4444';
+                    } else if (score <= 2) {
+                        strengthFill.style.width = '50%';
+                        strengthFill.style.backgroundColor = '#f97316';
+                        strengthText.textContent = 'Fair';
+                        strengthText.style.color = '#f97316';
+                    } else if (score === 3) {
+                        strengthFill.style.width = '75%';
+                        strengthFill.style.backgroundColor = '#eab308';
+                        strengthText.textContent = 'Good';
+                        strengthText.style.color = '#eab308';
+                    } else {
+                        strengthFill.style.width = '100%';
+                        strengthFill.style.backgroundColor = '#10b981';
+                        strengthText.textContent = 'Strong & Secure';
+                        strengthText.style.color = '#10b981';
                     }
+                });
+            }
 
-                    if (lastNameInput && !lastNameInput.value.trim()) {
-                        e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(lastNameInput, 'Please enter your last name.', 'Last Name Required');
-                        return false;
-                    }
+            // =================================================================
+            // TRUE PHYSICAL 3D BOOK PAGE TURN (PIVOTED ON CENTER SPINE)
+            // =================================================================
+            const authCard      = document.getElementById('authCard');
+            const triggerSignUp = document.getElementById('triggerSignUpFlip');
+            const triggerSignIn = document.getElementById('triggerSignInFlip');
+            let isFlipping      = false;
 
+            function flipToSignUp(e) {
+                if (e && e.preventDefault) e.preventDefault();
+                if (isFlipping || authCard.classList.contains('cf-mode-signup')) return;
+                isFlipping = true;
+
+                // Turn page from Right to Left (hinged at center spine)
+                authCard.classList.remove('cf-flipping-to-signin');
+                authCard.classList.add('cf-flipping-to-signup');
+
+                setTimeout(function() {
+                    authCard.classList.remove('cf-mode-signin');
+                    authCard.classList.add('cf-mode-signup');
+                    authCard.classList.remove('cf-flipping-to-signup');
+                    isFlipping = false;
+                }, 750);
+
+                if (window.history && window.history.pushState) {
+                    window.history.pushState({ mode: 'signup' }, 'Create Account', '<?php echo $url; ?>register');
+                }
+                document.title = 'Create Your Account — CloudFlox Cloud Infrastructure';
+            }
+
+            function flipToSignIn(e) {
+                if (e && e.preventDefault) e.preventDefault();
+                if (isFlipping || authCard.classList.contains('cf-mode-signin')) return;
+                isFlipping = true;
+
+                // Turn page from Left to Right (hinged at center spine)
+                authCard.classList.remove('cf-flipping-to-signup');
+                authCard.classList.add('cf-flipping-to-signin');
+
+                setTimeout(function() {
+                    authCard.classList.remove('cf-mode-signup');
+                    authCard.classList.add('cf-mode-signin');
+                    authCard.classList.remove('cf-flipping-to-signin');
+                    isFlipping = false;
+                }, 750);
+
+                if (window.history && window.history.pushState) {
+                    window.history.pushState({ mode: 'signin' }, 'Sign In', '<?php echo $url; ?>login');
+                }
+                document.title = 'Sign In — CloudFlox Cloud Infrastructure';
+            }
+
+            if (triggerSignUp) triggerSignUp.addEventListener('click', flipToSignUp);
+            if (triggerSignIn) triggerSignIn.addEventListener('click', flipToSignIn);
+
+            // Handle browser Back / Forward buttons
+            window.addEventListener('popstate', function(e) {
+                const path = window.location.pathname;
+                if (path.indexOf('register') !== -1 || (e.state && e.state.mode === 'signup')) {
+                    flipToSignUp();
+                } else {
+                    flipToSignIn();
+                }
+            });
+
+            // Client-side Validation: Sign In Form
+            const loginForm      = document.getElementById('cfLoginForm');
+            const submitLoginBtn = document.getElementById('btnSubmitLogin');
+            const emailInput     = document.getElementById('loginEmail');
+
+            if (loginForm && submitLoginBtn) {
+                loginForm.addEventListener('submit', function(e) {
                     const emailVal = emailInput ? emailInput.value.trim() : '';
+                    const passVal  = passInput ? passInput.value.trim() : '';
+
                     if (!emailVal) {
                         e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(emailInput, 'Please enter your email address.', 'Email Required');
+                        if (window.cfToast) cfToast.highlightField(emailInput, 'Please enter your email address to sign in.', 'Email Required');
                         return false;
                     }
 
                     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!emailPattern.test(emailVal)) {
                         e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(emailInput, 'Please enter a valid email address (e.g. name@example.com).', 'Invalid Email');
+                        if (window.cfToast) cfToast.highlightField(emailInput, 'Please enter a valid email address.', 'Invalid Email');
                         return false;
                     }
 
-                    if (phoneInput && !phoneInput.value.trim()) {
+                    if (!passVal) {
                         e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(phoneInput, 'Please enter your phone number.', 'Phone Required');
+                        if (window.cfToast) cfToast.highlightField(passInput, 'Please enter your account password to sign in.', 'Password Required');
                         return false;
                     }
 
-                    if (addressInput && !addressInput.value.trim()) {
+                    const spinner = submitLoginBtn.querySelector('.spinner-border');
+                    if (spinner) spinner.classList.remove('d-none');
+                    submitLoginBtn.classList.add('disabled');
+                    submitLoginBtn.style.opacity = '0.85';
+                });
+            }
+
+            // Client-side Validation: Sign Up Form
+            const regForm       = document.getElementById('cfRegisterForm');
+            const submitRegBtn  = document.getElementById('btnSubmitRegister');
+            const fNameInput    = document.getElementById('regFirstName');
+            const lNameInput    = document.getElementById('regLastName');
+            const regMailInput  = document.getElementById('regEmail');
+            const regPhoneInput = document.getElementById('regPhone');
+            const regAddrInput  = document.getElementById('regAddress1');
+            const regCityInput  = document.getElementById('regCity');
+            const regConfInput  = document.getElementById('regConfirm');
+            const agreeCheck    = document.getElementById('agreeTermsCheck');
+
+            if (regForm && submitRegBtn) {
+                regForm.addEventListener('submit', function(e) {
+                    if (fNameInput && !fNameInput.value.trim()) {
                         e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(addressInput, 'Please enter your street address.', 'Address Required');
+                        if (window.cfToast) cfToast.highlightField(fNameInput, 'Please enter your first name.', 'First Name Required');
                         return false;
                     }
 
-                    if (cityInput && !cityInput.value.trim()) {
+                    if (lNameInput && !lNameInput.value.trim()) {
                         e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(cityInput, 'Please enter your city.', 'City Required');
+                        if (window.cfToast) cfToast.highlightField(lNameInput, 'Please enter your last name.', 'Last Name Required');
                         return false;
                     }
 
-                    const passVal = passInput ? passInput.value.trim() : '';
+                    const regEmailVal = regMailInput ? regMailInput.value.trim() : '';
+                    if (!regEmailVal) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(regMailInput, 'Please enter your email address.', 'Email Required');
+                        return false;
+                    }
+
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(regEmailVal)) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(regMailInput, 'Please enter a valid email address.', 'Invalid Email');
+                        return false;
+                    }
+
+                    if (regPhoneInput && !regPhoneInput.value.trim()) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(regPhoneInput, 'Please enter your phone number.', 'Phone Required');
+                        return false;
+                        }
+
+                    if (regAddrInput && !regAddrInput.value.trim()) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(regAddrInput, 'Please enter your street address.', 'Address Required');
+                        return false;
+                    }
+
+                    if (regCityInput && !regCityInput.value.trim()) {
+                        e.preventDefault();
+                        if (window.cfToast) cfToast.highlightField(regCityInput, 'Please enter your city.', 'City Required');
+                        return false;
+                    }
+
+                    const passVal = passRegInput ? passRegInput.value.trim() : '';
                     if (!passVal || passVal.length < 8) {
                         e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(passInput, 'Password must be at least 8 characters long.', 'Password Required');
+                        if (window.cfToast) cfToast.highlightField(passRegInput, 'Password must be at least 8 characters long.', 'Password Required');
                         return false;
                     }
 
-                    const confirmVal = confirmInput ? confirmInput.value.trim() : '';
+                    const confirmVal = regConfInput ? regConfInput.value.trim() : '';
                     if (passVal !== confirmVal) {
                         e.preventDefault();
-                        if (window.cfToast) cfToast.highlightField(confirmInput, 'Passwords do not match. Please verify your password.', 'Password Mismatch');
+                        if (window.cfToast) cfToast.highlightField(regConfInput, 'Passwords do not match.', 'Password Mismatch');
                         return false;
                     }
 
@@ -711,14 +1075,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_submit'])) {
                         return false;
                     }
 
-                    const spinner = submitBtn.querySelector('.spinner-border');
+                    const spinner = submitRegBtn.querySelector('.spinner-border');
                     if (spinner) spinner.classList.remove('d-none');
-                    submitBtn.classList.add('disabled');
-                    submitBtn.style.opacity = '0.85';
+                    submitRegBtn.classList.add('disabled');
+                    submitRegBtn.style.opacity = '0.85';
                 });
             }
         });
     </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 
 </html>

@@ -969,6 +969,12 @@ if ($isLoggedIn && $clientId > 0) {
                             <!-- Validation Alert Box -->
                             <div class="alert alert-danger d-none fs-13 py-2.5 px-3 mb-3 border-0 rounded-3 shadow-xs" id="rfqAlertBox"></div>
 
+                            <?php if (defined('CF_TURNSTILE_SITE_KEY') && CF_TURNSTILE_SITE_KEY !== ''): ?>
+                            <div class="d-flex justify-content-center mb-3">
+                                <div class="cf-turnstile" id="cfRfqTurnstile" data-sitekey="<?php echo htmlspecialchars(CF_TURNSTILE_SITE_KEY); ?>" data-theme="light"></div>
+                            </div>
+                            <?php endif; ?>
+
                             <!-- Submit Button -->
                             <button type="submit" class="cf-rfq-btn-submit" id="btnSubmitRfq">
                                 <span class="btn-text">
@@ -1136,6 +1142,10 @@ if ($isLoggedIn && $clientId > 0) {
                 phone: phone,
                 country: document.getElementById('rfqCountry').value
             };
+            const rfqTsEl = document.querySelector('#cfRfqForm [name="cf-turnstile-response"]');
+            if (rfqTsEl && rfqTsEl.value) {
+                payload['cf-turnstile-response'] = rfqTsEl.value;
+            }
 
             fetch('api/quote-request.php', {
                 method: 'POST',
@@ -1170,6 +1180,9 @@ if ($isLoggedIn && $clientId > 0) {
                         </div>
                     `;
                 } else {
+                    if (typeof turnstile !== 'undefined' && typeof turnstile.reset === 'function') {
+                        try { turnstile.reset('#cfRfqTurnstile'); } catch(e) {}
+                    }
                     alertBox.textContent = data.message || 'Failed to submit quotation request. Please try again.';
                     alertBox.classList.remove('d-none');
                 }
@@ -1187,6 +1200,7 @@ if ($isLoggedIn && $clientId > 0) {
         // Init
         document.addEventListener('DOMContentLoaded', updateSummary);
     </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
 

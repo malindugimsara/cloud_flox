@@ -39,9 +39,16 @@ if (!cf_csrf_verify_request($data)) {
     exit;
 }
 
-if (!cf_rate_check('quote_request', 10, 600)) {
+if (!cf_rate_check('quote_request', 4, 600)) {
     http_response_code(429);
     echo json_encode(['status' => 'error', 'message' => 'Too many quotation requests. Please wait a few minutes and try again.']);
+    exit;
+}
+
+$turnstileToken = $data['cf-turnstile-response'] ?? $data['turnstile_token'] ?? '';
+if (!cf_verify_turnstile($turnstileToken)) {
+    cf_rate_record_fail('quote_request');
+    echo json_encode(['status' => 'error', 'message' => 'Please complete the security verification check and try again.']);
     exit;
 }
 cf_rate_record_fail('quote_request');
@@ -91,6 +98,10 @@ if (empty($firstName) || empty($lastName)) {
 }
 if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo json_encode(['status' => 'error', 'message' => 'Please provide a valid business email address.']);
+    exit;
+}
+if (cf_is_disposable_email($email)) {
+    echo json_encode(['status' => 'error', 'message' => 'Disposable or temporary email addresses are not permitted.']);
     exit;
 }
 if (empty($phone)) {

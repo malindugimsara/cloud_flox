@@ -533,6 +533,10 @@
         const formData = new FormData(document.getElementById('cfCheckoutForm'));
         const payload = {};
         formData.forEach((val, key) => { payload[key] = val; });
+        const modalTsEl = document.querySelector('#cfCheckoutModal [name="cf-turnstile-response"]');
+        if (modalTsEl && modalTsEl.value) {
+            payload['cf-turnstile-response'] = modalTsEl.value;
+        }
 
         fetch('api/checkout.php', {
             method: 'POST',
@@ -569,6 +573,9 @@
                     item.classList.add('completed');
                 });
             } else {
+                if (typeof turnstile !== 'undefined' && typeof turnstile.reset === 'function') {
+                    try { turnstile.reset('#cfModalOrderTurnstile'); } catch (e) {}
+                }
                 showAlert(data.message || 'An error occurred while creating your order. Please try again.');
             }
         })

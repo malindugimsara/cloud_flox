@@ -305,6 +305,25 @@ if ($action === 'login') {
 // ACTION: REGISTER NEW ACCOUNT
 // =========================================================================
 if ($action === 'register') {
+    if (!cf_rate_check('register', 3, 600)) {
+        http_response_code(429);
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Too many registration attempts from your IP. Please wait 10 minutes and try again.'
+        ]);
+        exit;
+    }
+
+    $turnstileToken = $data['cf-turnstile-response'] ?? $data['turnstile_token'] ?? '';
+    if (!cf_verify_turnstile($turnstileToken)) {
+        cf_rate_record_fail('register');
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Please complete the security verification check and try again.'
+        ]);
+        exit;
+    }
+
     $firstName   = trim($data['firstname'] ?? '');
     $lastName    = trim($data['lastname'] ?? '');
     $email       = trim($data['email'] ?? '');
@@ -330,6 +349,14 @@ if ($action === 'register') {
         echo json_encode([
             'status'  => 'error',
             'message' => 'Please provide a valid email address.'
+        ]);
+        exit;
+    }
+    if (cf_is_disposable_email($email)) {
+        cf_rate_record_fail('register');
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Disposable or temporary email addresses are not permitted.'
         ]);
         exit;
     }
@@ -443,6 +470,7 @@ if ($action === 'register') {
 
     // Set authenticated session
     session_regenerate_id(true);
+    cf_rate_record_fail('register');
     $_SESSION['cf_client_logged_in'] = true;
     $_SESSION['cf_client_id']        = $clientId;
     $_SESSION['cf_client_email']     = $email;
@@ -742,7 +770,26 @@ if ($hasHosting) {
 
 $totalPrice = $planPrice + $domainFee;
 
-// 2. Customer Account Handling (Already Authenticated vs Log In vs Create Account)
+// 2. Customer Account Handling & Anti-Abuse Verification
+if (!cf_rate_check('checkout_order', 3, 600)) {
+    http_response_code(429);
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'Too many order requests from your IP. Please wait 10 minutes and try again.'
+    ]);
+    exit;
+}
+
+$orderTurnstileToken = $data['cf-turnstile-response'] ?? $data['turnstile_token'] ?? '';
+if (!cf_verify_turnstile($orderTurnstileToken)) {
+    cf_rate_record_fail('checkout_order');
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'Please complete the security verification check before placing your order.'
+    ]);
+    exit;
+}
+
 $clientId = (!empty($_SESSION['cf_client_logged_in']) && !empty($_SESSION['cf_client_id']))
     ? (int)$_SESSION['cf_client_id']
     : 0;
@@ -816,10 +863,26 @@ if (!$clientId) {
             ]);
             exit;
         }
+        if (!cf_rate_check('register', 3, 600)) {
+            http_response_code(429);
+            echo json_encode([
+                'status'  => 'error',
+                'message' => 'Too many registration attempts from your IP. Please wait 10 minutes and try again.'
+            ]);
+            exit;
+        }
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo json_encode([
                 'status'  => 'error',
                 'message' => 'Please enter a valid email address.'
+            ]);
+            exit;
+        }
+        if (cf_is_disposable_email($email)) {
+            cf_rate_record_fail('register');
+            echo json_encode([
+                'status'  => 'error',
+                'message' => 'Disposable or temporary email addresses are not permitted.'
             ]);
             exit;
         }
@@ -955,6 +1018,79 @@ if ($domainType === 'register') {
 // Supplying 'owndomain' causes WHMCS to treat it as a domain registration and fail with:
 // "Invalid TLD/Registration Period Supplied for Domain Registration".
 
+// 3.5. Per-User Anti-Fake-Order Guards (Unpaid Invoices, Pending Orders, Closed Account, Duplicate Cooldown)
+$guardDb = function_exists('cf_get_db') ? cf_get_db() : false;
+if ($guardDb && (int)$clientId > 0) {
+    try {
+        $cid = (int)$clientId;
+
+        // A. Block closed accounts
+        if ($stCli = $guardDb->prepare("SELECT status FROM tblclients WHERE id = ? LIMIT 1")) {
+            $stCli->bind_param('i', $cid);
+            $stCli->execute();
+            $cliRow = $stCli->get_result()->fetch_assoc();
+            $stCli->close();
+            if ($cliRow && strtolower((string)($cliRow['status'] ?? '')) === 'closed') {
+                echo json_encode([
+                    'status'  => 'error',
+                    'message' => 'Your account is currently closed. Please contact support for assistance.'
+                ]);
+                exit;
+            }
+        }
+
+        // B. Limit unpaid invoices per client (max 3 open unpaid invoices)
+        if ($stInv = $guardDb->prepare("SELECT COUNT(*) AS cnt FROM tblinvoices WHERE userid = ? AND LOWER(status) = 'unpaid'")) {
+            $stInv->bind_param('i', $cid);
+            $stInv->execute();
+            $unpaidCnt = (int)($stInv->get_result()->fetch_assoc()['cnt'] ?? 0);
+            $stInv->close();
+            if ($unpaidCnt >= 3) {
+                echo json_encode([
+                    'status'  => 'error',
+                    'message' => 'You currently have ' . $unpaidCnt . ' unpaid invoices. Please pay or cancel an existing invoice in your Client Area before placing a new order.'
+                ]);
+                exit;
+            }
+        }
+
+        // C. Limit pending orders created within the last 24 hours per client
+        if ($stOrd = $guardDb->prepare("SELECT COUNT(*) AS cnt FROM tblorders WHERE userid = ? AND LOWER(status) = 'pending' AND date >= DATE_SUB(NOW(), INTERVAL 24 HOUR)")) {
+            $stOrd->bind_param('i', $cid);
+            $stOrd->execute();
+            $pending24h = (int)($stOrd->get_result()->fetch_assoc()['cnt'] ?? 0);
+            $stOrd->close();
+            if ($pending24h >= 3) {
+                echo json_encode([
+                    'status'  => 'error',
+                    'message' => 'You have reached the maximum pending order limit for 24 hours. Please settle your existing pending orders first.'
+                ]);
+                exit;
+            }
+        }
+
+        // D. Duplicate domain cooldown (prevent rapid duplicate orders for same domain within 10 minutes)
+        if (!empty($fullDomain)) {
+            $likeDomain = '%' . strtolower($fullDomain) . '%';
+            if ($stDup = $guardDb->prepare("SELECT COUNT(*) AS cnt FROM tblinvoices i INNER JOIN tblinvoiceitems ii ON ii.invoiceid = i.id WHERE i.userid = ? AND LOWER(i.status) = 'unpaid' AND i.created_at >= DATE_SUB(NOW(), INTERVAL 10 MINUTE) AND LOWER(ii.description) LIKE ?")) {
+                $stDup->bind_param('is', $cid, $likeDomain);
+                $stDup->execute();
+                $dupCnt = (int)($stDup->get_result()->fetch_assoc()['cnt'] ?? 0);
+                $stDup->close();
+                if ($dupCnt > 0) {
+                    echo json_encode([
+                        'status'  => 'error',
+                        'message' => 'A pending order for ' . htmlspecialchars($fullDomain) . ' was already created recently. Please complete payment from your unpaid invoice.'
+                    ]);
+                    exit;
+                }
+            }
+        }
+    } catch (Throwable $e) {
+        error_log('Checkout anti-abuse guard error: ' . $e->getMessage());
+    }
+}
+
 // 4. Create Order in WHMCS
 $orderResult = WHMCSClient::createOrder($orderPayload);
 
@@ -985,6 +1121,10 @@ if (empty($orderResult['orderid'])) {
 
 $orderId   = $orderResult['orderid'];
 $invoiceId = 0;
+cf_rate_record_fail('checkout_order');
+if (!empty($accountAction) && $accountAction === 'register') {
+    cf_rate_record_fail('register');
+}
 
 // If local database is connected, insert genuine order, hosting, domain, and invoice records
 try {

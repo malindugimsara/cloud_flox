@@ -1290,6 +1290,11 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php if (defined('CF_TURNSTILE_SITE_KEY') && CF_TURNSTILE_SITE_KEY !== ''): ?>
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <div class="cf-turnstile" id="cfPageRegTurnstile" data-sitekey="<?php echo htmlspecialchars(CF_TURNSTILE_SITE_KEY); ?>" data-theme="light"></div>
+                                        </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
 
@@ -1391,6 +1396,12 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                                     <span>•</span>
                                     <span><i class="las la-bolt text-warning me-1"></i> 60-Sec Activation</span>
                                 </div>
+
+                                <?php if (defined('CF_TURNSTILE_SITE_KEY') && CF_TURNSTILE_SITE_KEY !== ''): ?>
+                                <div class="d-flex justify-content-center mb-3">
+                                    <div class="cf-turnstile" id="cfPageOrderTurnstile" data-sitekey="<?php echo htmlspecialchars(CF_TURNSTILE_SITE_KEY); ?>" data-theme="light"></div>
+                                </div>
+                                <?php endif; ?>
 
                                 <!-- Step 4 Navigation Buttons -->
                                 <div class="d-flex justify-content-between align-items-center gap-3 pt-2 border-top flex-wrap">
@@ -2868,6 +2879,9 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
 
                 setLoading(true);
 
+                const regTsEl = document.querySelector('#paneAccountRegister [name="cf-turnstile-response"]');
+                const regTurnstileToken = regTsEl ? regTsEl.value : '';
+
                 fetch('api/checkout.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -2885,7 +2899,8 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                         state: stateName,
                         postcode: postcode,
                         password: pass,
-                        password_confirm: conf
+                        password_confirm: conf,
+                        'cf-turnstile-response': regTurnstileToken
                     })
                 })
                 .then(res => res.json())
@@ -3128,6 +3143,10 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
             payload.account_action = state.accountAction;
             payload.paymentmethod = state.paymentMethod;
             payload.client_id = userSession.clientId;
+            const orderTsEl = document.querySelector('#stepBox4 [name="cf-turnstile-response"]');
+            if (orderTsEl && orderTsEl.value) {
+                payload['cf-turnstile-response'] = orderTsEl.value;
+            }
 
             fetch('api/checkout.php', {
                 method: 'POST',
@@ -3151,6 +3170,9 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
                         return;
                     }
                 } else {
+                    if (typeof turnstile !== 'undefined' && typeof turnstile.reset === 'function') {
+                        try { turnstile.reset('#cfPageOrderTurnstile'); } catch(e) {}
+                    }
                     showAlert(data.message || 'An error occurred while creating your order.');
                 }
             })
@@ -3193,5 +3215,6 @@ if ($hasDomainPreselected && empty($initialPrice) && !empty($initialDomain)) {
     })();
     </script>
 
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>

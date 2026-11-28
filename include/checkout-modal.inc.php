@@ -472,6 +472,12 @@
                         <span><i class="las la-shield-alt text-primary"></i> 30-Day Money-Back Guarantee</span>
                     </div>
 
+                    <?php if (defined('CF_TURNSTILE_SITE_KEY') && CF_TURNSTILE_SITE_KEY !== ''): ?>
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="cf-turnstile" id="cfModalOrderTurnstile" data-sitekey="<?php echo htmlspecialchars(CF_TURNSTILE_SITE_KEY); ?>" data-theme="light"></div>
+                    </div>
+                    <?php endif; ?>
+
                     <!-- Step 3 Navigation / Submit -->
                     <div class="cf-step-nav-footer d-flex gap-2 mt-3 pt-1">
                         <button type="button" class="btn btn-outline-secondary py-2 fs-14 fw-semibold" style="flex: 1; color: #0F172A !important;" onclick="cfGoToStep(2)">
@@ -537,3 +543,6 @@
 
     </div>
 </div>
+<?php if (defined('CF_TURNSTILE_SITE_KEY') && CF_TURNSTILE_SITE_KEY !== ''): ?>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<?php endif; ?>

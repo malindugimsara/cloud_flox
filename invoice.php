@@ -655,7 +655,7 @@ function parseInvoiceItemDescription($rawDesc, $itemType = '', $notes = '') {
         /* Invoice Paper Sheet - Matching Official Quotation & Invoice Standard */
         .cf-invoice-sheet {
             background: #FFFFFF !important;
-            border: 1px solid #E2E8F0 !important;
+            border: none !important;
             border-radius: 12px !important;
             box-shadow: 0 4px 28px rgba(15, 23, 42, 0.05) !important;
             padding: 24px 30px 18px !important;
